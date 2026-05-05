@@ -382,13 +382,21 @@ export default function Home() {
             ) : null}
 
             <div className="grid gap-7 xl:grid-cols-2">
-              {otherProjects.map((project, index) => (
-                <ProjectCard
-                  key={project.title}
-                  {...project}
-                  delay={index * 0.08}
-                />
-              ))}
+              {otherProjects.map((project, index) =>
+                project.slug === "bytedance-ai-procurement-tools" ? (
+                  <ProjectCard
+                    key={project.title}
+                    {...project}
+                    delay={index * 0.08}
+                  />
+                ) : (
+                  <ProjectCard
+                    key={project.title}
+                    {...project}
+                    delay={index * 0.08}
+                  />
+                ),
+              )}
             </div>
           </div>
         </AnimatedSection>

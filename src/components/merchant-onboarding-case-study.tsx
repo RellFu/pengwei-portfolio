@@ -7,15 +7,26 @@ import {
   BadgeAlert,
   Bot,
   BrainCircuit,
+  Building2,
   CheckCircle2,
   CircleHelp,
+  Clock3,
   Database,
+  FileSearch,
+  FileStack,
   Link2,
   MessageCircleMore,
+  MessageSquareQuote,
+  MessagesSquare,
+  PictureInPicture2,
   Plus,
+  ShieldCheck,
   RefreshCcw,
   ScanText,
   ScanSearch,
+  ScrollText,
+  Target,
+  Tags,
   Sparkles,
   UserRound,
   Waypoints,
@@ -23,9 +34,7 @@ import {
   X,
 } from "lucide-react";
 import {
-  CapabilityChip,
   GlassSurface,
-  MetricCard,
   SectionLabel,
   WarmSurface,
 } from "@/components/design-system";
@@ -100,6 +109,91 @@ const stabilityChips = [
   { label: "异常兜底", icon: BadgeAlert },
 ];
 
+const evaluationDimensions = [
+  {
+    title: "回复质量",
+    items: ["语言自然", "语种混杂", "参数暴露", "幻觉情况"],
+  },
+  {
+    title: "QA 问答",
+    items: ["1:1 提问", "混合提问", "模糊语义", "变形问"],
+  },
+  {
+    title: "流程执行",
+    items: ["前向流程", "后向流程", "流程拉回", "字段收集"],
+  },
+  {
+    title: "多模态理解",
+    items: ["图文混发", "多图理解", "OCR", "伪造识别"],
+  },
+  {
+    title: "系统一致性",
+    items: ["CRM", "工具调用", "前后台", "BD 回应"],
+  },
+];
+
+const reviewLoop = ["定位问题", "分析根因", "修复 Bug", "复测", "回到定位问题"];
+
+const heroBubbles = [
+  {
+    text: "你好，请告诉我的店铺名称",
+    className: "right-8 top-4 md:right-10 md:top-2",
+    delayClassName: "animate-[heroBubble_8s_ease-in-out_infinite]",
+  },
+  {
+    text: "你有哪些入驻方面的问题？",
+    className: "left-0 top-28 md:left-8 md:top-32",
+    delayClassName: "animate-[heroBubble_8s_ease-in-out_infinite_1.6s]",
+  },
+  {
+    text: "请上传你的门头图",
+    className: "right-0 top-52 md:right-2 md:top-56",
+    delayClassName: "animate-[heroBubble_8s_ease-in-out_infinite_3.2s]",
+  },
+  {
+    text: "请上传菜单图片",
+    className: "right-2 bottom-10 md:right-4 md:bottom-12",
+    delayClassName: "animate-[heroBubble_8s_ease-in-out_infinite_4.8s]",
+  },
+  {
+    text: "我来帮你检查资料",
+    className: "left-0 bottom-6 md:left-6 md:bottom-14",
+    delayClassName: "animate-[heroBubble_8s_ease-in-out_infinite_6.4s]",
+  },
+];
+
+const sessionPipeline = [
+  { label: "Session ID 拉取", icon: FileStack },
+  { label: "ETL 清洗", icon: Wrench },
+  { label: "状态补齐", icon: RefreshCcw },
+  { label: "LLM 分类", icon: Bot },
+  { label: "自动报告", icon: ScrollText },
+];
+
+const attributionSources = [
+  {
+    label: "被动触达",
+    value: "12,558",
+    percent: "64.7%",
+    width: "64.7%",
+    color: "bg-orange-400",
+  },
+  {
+    label: "主动点击",
+    value: "1,477",
+    percent: "26.9%",
+    width: "26.9%",
+    color: "bg-amber-400",
+  },
+  {
+    label: "表单页挽留",
+    value: "390",
+    percent: "8.4%",
+    width: "8.4%",
+    color: "bg-orange-200",
+  },
+];
+
 function ResponsibilityCard({
   title,
   description,
@@ -109,7 +203,12 @@ function ResponsibilityCard({
   title: string;
   description: string;
   expandable?: boolean;
-  variant?: "default" | "market-insight" | "agent-workflow";
+  variant?:
+    | "default"
+    | "market-insight"
+    | "agent-workflow"
+    | "agent-evaluation"
+    | "data-analytics";
 }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -290,6 +389,189 @@ function ResponsibilityCard({
                     </p>
                   </div>
                 </div>
+              ) : variant === "agent-evaluation" ? (
+                <div className="mx-auto flex w-full max-w-4xl flex-col items-start space-y-5 text-left">
+                  <div className="w-full">
+                    <h4 className="text-lg font-semibold text-amber-950 sm:text-xl">
+                      评测体系设计
+                    </h4>
+                    <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+                      {evaluationDimensions.map((group, index) => {
+                        const icons = [
+                          MessageSquareQuote,
+                          MessagesSquare,
+                          Waypoints,
+                          PictureInPicture2,
+                          ShieldCheck,
+                        ];
+                        const Icon = icons[index];
+
+                        return (
+                          <div
+                            key={group.title}
+                            className="rounded-[1rem] border border-orange-100/90 bg-white/82 px-3 py-3 shadow-[0_10px_20px_rgba(180,83,9,0.05)]"
+                          >
+                            <div className="flex items-center gap-2 text-amber-950">
+                              <Icon className="h-4 w-4 text-orange-600" />
+                              <h5 className="text-[14px] font-semibold">{group.title}</h5>
+                            </div>
+                            <div className="mt-3 grid w-full grid-cols-2 gap-2">
+                              {group.items.map((item) => (
+                                <span
+                                  key={item}
+                                  className="rounded-full border border-orange-200/80 bg-orange-50/60 px-2.5 py-1 text-center text-[11px] font-medium text-stone-700"
+                                >
+                                  {item}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="w-full">
+                    <h4 className="text-lg font-semibold text-amber-950 sm:text-xl">
+                      AI 自动巡检
+                    </h4>
+                    <p className="mt-3 max-w-3xl text-[13px] leading-6 text-stone-600 sm:text-[14px] sm:leading-7">
+                      主导设计自动巡检 Agent，定义评测口径，自动识别异常会话，实现用 AI 检 AI。
+                    </p>
+                    <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)] lg:items-stretch">
+                      <div className="rounded-[1.15rem] border border-orange-100/90 bg-white/82 p-4 shadow-[0_10px_20px_rgba(180,83,9,0.05)]">
+                        <div className="rounded-[0.95rem] bg-orange-50/60 px-3 py-2.5">
+                          <p className="flex items-center gap-1.5 text-[12px] font-medium text-stone-500">
+                            <UserRound className="h-3.5 w-3.5 text-orange-500" />
+                            用户
+                          </p>
+                          <p className="mt-1 text-[13px] leading-6 text-stone-700">
+                            我想找一下你们这边的顾问。
+                          </p>
+                        </div>
+                        <div className="mt-3 rounded-[0.95rem] border border-orange-100/80 bg-white px-3 py-2.5">
+                          <p className="flex items-center gap-1.5 text-[12px] font-medium text-stone-500">
+                            <Bot className="h-3.5 w-3.5 text-orange-500" />
+                            Agent
+                          </p>
+                          <p className="mt-1 text-[13px] leading-6 text-stone-700">
+                            我理解你的心情，但是请先上传菜单照片。
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="rounded-[1.15rem] border border-orange-100/90 bg-white/82 p-4 shadow-[0_10px_20px_rgba(180,83,9,0.05)]">
+                        <h5 className="text-[15px] font-semibold text-amber-950">
+                          AI 巡检结果
+                        </h5>
+                        <div className="mt-3 space-y-2 text-[13px] leading-6 text-stone-700">
+                          <p>未正确理解用户诉求</p>
+                          <p>未触发兜底机制</p>
+                          <p>应提供客服电话但未给出</p>
+                          <p className="font-semibold text-orange-700">
+                            风险等级：中
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div className="w-full">
+                    <h4 className="text-lg font-semibold text-amber-950 sm:text-xl">
+                      Bad Case 归因
+                    </h4>
+                    <p className="mt-3 max-w-3xl text-[13px] leading-6 text-stone-600 sm:text-[14px] sm:leading-7">
+                      将问题从表层现象进一步归因到 Prompt、知识库、Agent 路由、OCR、多模态处理或后台系统链路。
+                    </p>
+                  </div>
+
+                  <div className="w-full">
+                    <h4 className="text-lg font-semibold text-amber-950 sm:text-xl">
+                      研发复盘闭环
+                    </h4>
+                    <p className="mt-3 max-w-3xl text-[13px] leading-6 text-stone-600 sm:text-[14px] sm:leading-7">
+                      独立组织每周 Bad Case 复盘，结合 session、traceId 与异常归因，引导研发定位问题、修复与复测。
+                    </p>
+                  </div>
+                </div>
+              ) : variant === "data-analytics" ? (
+                <div className="mx-auto flex w-full max-w-4xl flex-col items-start space-y-5 text-left">
+                  <div className="w-full">
+                    <h4 className="text-lg font-semibold text-amber-950 sm:text-xl">
+                      会话数据分析
+                    </h4>
+                    <p className="mt-3 max-w-3xl text-[13px] leading-6 text-stone-600 sm:text-[14px] sm:leading-7">
+                      独立开发会话级分析脚本，分析用户和Agent的会话数据以定位用户卡点，推进功能优化。
+                    </p>
+                    <div className="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-3 text-[13px] font-medium text-amber-950">
+                      {sessionPipeline.map((item, index) => {
+                        const Icon = item.icon;
+
+                        return (
+                          <div key={item.label} className="flex items-center gap-3">
+                            <div className="flex items-center gap-2 rounded-full border border-orange-200/80 bg-white/84 px-3 py-2 shadow-[0_10px_20px_rgba(180,83,9,0.04)]">
+                              <Icon className="h-4 w-4 text-orange-600" />
+                              <span>{item.label}</span>
+                            </div>
+                            {index < sessionPipeline.length - 1 ? (
+                              <span className="text-orange-400">→</span>
+                            ) : null}
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    <div className="mt-5 rounded-[1.15rem] border border-orange-100/90 bg-white/82 p-4 shadow-[0_10px_20px_rgba(180,83,9,0.05)]">
+                      <h5 className="text-[15px] font-semibold text-amber-950">
+                        数据洞察
+                      </h5>
+                      <p className="mt-3 text-[13px] leading-6 text-stone-600 sm:text-[14px] sm:leading-7">
+                        门头图AI审核被拒率高达50%
+                        <span className="mx-1 text-orange-400">→</span>
+                        放宽OCR容错
+                        <span className="mx-1 text-orange-400">→</span>
+                        商家入驻完成率从21.9%提升至76.6%
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="w-full">
+                    <h4 className="text-lg font-semibold text-amber-950 sm:text-xl">
+                      官网入口埋点归因
+                    </h4>
+                    <p className="mt-3 max-w-3xl text-[13px] leading-6 text-stone-600 sm:text-[14px] sm:leading-7">
+                      与数据产品经理协作定义官网入口埋点，分析用户行为以优化功能
+                    </p>
+
+                    <div className="mt-5 rounded-[1.15rem] border border-orange-100/90 bg-white/82 p-4 shadow-[0_10px_20px_rgba(180,83,9,0.05)]">
+                      <h5 className="text-[15px] font-semibold text-amber-950">
+                        来源拆分（UV）
+                      </h5>
+                      <div className="mt-3 overflow-hidden rounded-full bg-orange-100/70">
+                        <div className="flex h-3 w-full">
+                          {attributionSources.map((item) => (
+                            <div
+                              key={item.label}
+                              className={item.color}
+                              style={{ width: item.width }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      <div className="mt-4 grid gap-2 sm:grid-cols-3">
+                        {attributionSources.map((item) => (
+                          <div key={item.label} className="flex items-center gap-2 text-[12px] text-stone-700">
+                            <span className={`h-2.5 w-2.5 rounded-full ${item.color}`} />
+                            <span className="font-medium text-amber-950">{item.label}</span>
+                            <span>{item.value}</span>
+                            <span className="text-stone-500">({item.percent})</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               ) : (
                 <div className="mx-auto flex w-full max-w-4xl flex-col items-start space-y-5 text-left">
                   <div className="w-full">
@@ -393,11 +675,8 @@ function ResponsibilityCard({
 export function MerchantOnboardingCaseStudy({
   project,
 }: MerchantOnboardingCaseStudyProps) {
-  const heroMetrics = project.metrics.slice(0, 4);
-  const tags = project.tags ?? project.capabilities;
   const problemCards = project.problemCards ?? [];
   const responsibilities = project.responsibilities ?? [];
-  const resultCards = project.resultCards ?? [];
   const productDecisionCards = project.productDecisionCards ?? [];
   const capabilityCards = project.capabilityCards ?? [];
   const funnelSteps = project.funnelSteps ?? [];
@@ -407,9 +686,10 @@ export function MerchantOnboardingCaseStudy({
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(251,146,60,0.16),transparent_28%),radial-gradient(circle_at_top_right,rgba(245,158,11,0.1),transparent_22%),linear-gradient(180deg,#fff8ef_0%,#fff3df_42%,#ffe8ca_100%)]" />
       <div className="absolute left-0 top-0 -z-10 h-[24rem] w-[24rem] rounded-full bg-orange-300/20 blur-3xl" />
       <div className="absolute right-0 top-20 -z-10 h-[20rem] w-[20rem] rounded-full bg-amber-200/30 blur-3xl" />
+      <div className="absolute right-16 top-12 -z-10 h-72 w-72 rounded-full bg-orange-200/25 blur-3xl" />
 
-      <div className="mx-auto flex w-full max-w-7xl flex-col px-6 pb-24 pt-8 sm:px-8 lg:px-12">
-        <div className="mb-10">
+      <div className="mx-auto flex w-full max-w-7xl flex-col px-6 pb-16 pt-6 sm:px-8 lg:px-12">
+        <div className="mb-7">
           <Link
             href="/"
             className="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-white/80 px-4 py-2.5 text-sm font-medium text-stone-600 shadow-[0_8px_24px_rgba(180,83,9,0.06)] transition hover:border-orange-300 hover:text-orange-800"
@@ -419,49 +699,67 @@ export function MerchantOnboardingCaseStudy({
           </Link>
         </div>
 
-        <section className="grid gap-8 lg:grid-cols-[minmax(0,1.02fr)_minmax(320px,0.98fr)] lg:items-start">
-          <div className="max-w-4xl">
-            <SectionLabel className="inline-flex rounded-full border border-orange-300/70 bg-orange-100 px-4 py-2 text-xs font-medium tracking-[0.18em] text-orange-800">
-              {project.type}
-            </SectionLabel>
-            <h1 className="mt-6 text-4xl font-semibold tracking-tight text-amber-950 sm:text-5xl md:text-6xl md:leading-[1.04]">
-              {project.title}
+        <section className="grid items-center gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+          <div className="max-w-2xl">
+            <h1 className="mt-4 text-4xl font-semibold tracking-tight text-amber-950 sm:text-5xl md:text-6xl md:leading-[1.04]">
+              <span className="block">DiDi Food Agent</span>
+              <span className="block">重构商家入驻体验</span>
             </h1>
-            <p className="mt-5 max-w-3xl text-xl leading-8 text-stone-700 md:text-2xl">
-              {project.subtitle}
+            <p className="mt-5 max-w-xl text-base leading-8 text-stone-600 md:text-lg">
+              DiDi Food Agent 基于 WhatsApp 与 Multi-Agent 协同，将原本依赖表单填写和人工跟进的流程，重构为对话式入驻、资料识别、实时答疑与审核推进的一体化体验。
             </p>
-            <p className="mt-6 max-w-3xl text-base leading-8 text-stone-600 md:text-lg">
-              {project.heroDescription}
-            </p>
+          </div>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              {tags.map((tag) => (
-                <CapabilityChip key={tag}>{tag}</CapabilityChip>
+          <div className="relative flex min-h-[430px] items-center justify-center lg:min-h-[500px]">
+            <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(251,146,60,0.16),transparent_44%),radial-gradient(circle_at_72%_28%,rgba(245,158,11,0.08),transparent_18%)]" />
+            <div className="relative h-[420px] w-full max-w-[720px]">
+              <div className="absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.98)_0%,rgba(255,248,239,0.94)_48%,rgba(255,248,239,0)_72%)] shadow-[0_0_90px_rgba(251,146,60,0.22)]" />
+              <div className="absolute left-1/2 top-1/2 h-[338px] w-[338px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-orange-200/45 animate-[heroPulse_6s_ease-in-out_infinite]" />
+              <div className="absolute left-1/2 top-1/2 h-[278px] w-[278px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-orange-300/70 bg-[radial-gradient(circle,rgba(255,255,255,0.96),rgba(255,246,234,0.92))] shadow-[0_26px_80px_rgba(251,146,60,0.14)]" />
+              <div className="absolute left-1/2 top-1/2 h-[242px] w-[242px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-orange-200/70 bg-[radial-gradient(circle,rgba(255,255,255,0.98),rgba(255,247,237,0.96))] shadow-[inset_0_0_28px_rgba(251,146,60,0.08)]" />
+
+              <div className="absolute left-1/2 top-1/2 flex w-[240px] -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center">
+                <img
+                  src="/icon/DiDi_Logo.svg"
+                  alt="DiDi"
+                  className="h-12 w-auto"
+                />
+                <h3 className="mt-4 text-[2rem] font-semibold tracking-tight text-amber-950">
+                  外卖商家端
+                </h3>
+                <p className="mt-2 text-lg font-medium text-stone-600">智能入驻助手</p>
+              </div>
+
+              <div className="absolute left-[18%] top-[18%] h-3 w-3 rounded-full bg-orange-200/80 animate-[heroGlow_7s_ease-in-out_infinite]" />
+              <div className="absolute right-[14%] top-[24%] h-5 w-5 rounded-full bg-orange-200/70 animate-[heroGlow_8s_ease-in-out_infinite_1s]" />
+              <div className="absolute left-[22%] bottom-[20%] h-4 w-4 rounded-full bg-orange-100/90 animate-[heroGlow_7.5s_ease-in-out_infinite_2s]" />
+              <div className="absolute right-[18%] bottom-[14%] h-6 w-6 rounded-full bg-orange-100/80 animate-[heroGlow_8.2s_ease-in-out_infinite_1.7s]" />
+
+              {heroBubbles.map((bubble) => (
+                <div
+                  key={bubble.text}
+                  className={`absolute max-w-[280px] rounded-[1.35rem] border border-orange-100/80 bg-white/92 px-5 py-4 text-[15px] font-medium leading-6 text-amber-950 shadow-[0_18px_40px_rgba(120,53,15,0.08)] ${bubble.className} ${bubble.delayClassName}`}
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <span>{bubble.text}</span>
+                    <span className="mt-1 flex shrink-0 gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-orange-400 animate-[heroDot_1.1s_ease-in-out_infinite]" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-orange-400 animate-[heroDot_1.1s_ease-in-out_infinite_0.18s]" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-orange-400 animate-[heroDot_1.1s_ease-in-out_infinite_0.36s]" />
+                    </span>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
-
-          <GlassSurface className="p-6">
-            <SectionLabel>核心指标</SectionLabel>
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              {heroMetrics.map((metric) => (
-                <MetricCard
-                  key={metric.label}
-                  value={metric.value}
-                  label={metric.label}
-                  emphasis="primary"
-                />
-              ))}
-            </div>
-          </GlassSurface>
         </section>
 
-        <div className="mt-18 grid gap-7">
+        <div className="mt-12 grid gap-7">
           <section>
             <div className="max-w-3xl">
               <SectionLabel>一、业务问题</SectionLabel>
-              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-amber-950 md:text-4xl">
-                业务问题：商家入驻流程长、理解成本高、注册后流失明显
+              <h2 className="mt-4 text-[2rem] font-semibold tracking-tight text-amber-950 md:whitespace-nowrap md:text-[2.5rem] md:leading-[1.02]">
+                痛点：商家入驻流程长、理解成本高、注册后流失明显
               </h2>
             </div>
 
@@ -475,28 +773,6 @@ export function MerchantOnboardingCaseStudy({
                 </GlassSurface>
               ))}
             </div>
-
-            <WarmSurface className="mt-6 p-6">
-              <SectionLabel>简化漏斗</SectionLabel>
-              <div className="relative mt-6">
-                <div className="absolute left-[1.1rem] top-3 bottom-3 w-px bg-gradient-to-b from-orange-300 via-orange-200 to-orange-100 lg:left-10 lg:right-10 lg:top-[1.1rem] lg:bottom-auto lg:h-px lg:w-auto lg:bg-gradient-to-r" />
-                <div className="grid gap-5 lg:grid-cols-6 lg:gap-3">
-                {funnelSteps.map((step, index) => (
-                  <div
-                    key={step}
-                    className="relative grid grid-cols-[2.2rem_1fr] items-center gap-3 lg:grid-cols-1 lg:justify-items-center lg:text-center"
-                  >
-                    <div className="relative z-10 flex h-9 w-9 items-center justify-center rounded-full border border-orange-200 bg-white text-sm font-semibold text-orange-700 shadow-[0_8px_18px_rgba(180,83,9,0.08)] transition-transform duration-200 group-hover:scale-[1.02]">
-                      {index + 1}
-                    </div>
-                    <span className="relative z-10 text-sm font-medium leading-6 text-amber-950 lg:max-w-[7.5rem]">
-                      {step}
-                    </span>
-                  </div>
-                ))}
-                </div>
-              </div>
-            </WarmSurface>
           </section>
 
           <BeforeAfterSection
@@ -509,7 +785,7 @@ export function MerchantOnboardingCaseStudy({
           <section>
             <div className="max-w-3xl">
               <SectionLabel>四、我的产品职责</SectionLabel>
-              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-amber-950 md:text-4xl">
+              <h2 className="mt-4 text-[2rem] font-semibold tracking-tight text-amber-950 md:text-[2.5rem] md:leading-[1.02]">
                 从竞品洞察到 Agent 迭代
               </h2>
             </div>
@@ -522,11 +798,17 @@ export function MerchantOnboardingCaseStudy({
                   description={item.description}
                   expandable={
                     item.title === "市场洞察与方案定义" ||
-                    item.title === "Multi-Agent 产品流程设计"
+                    item.title === "Multi-Agent 产品流程设计" ||
+                    item.title === "Agent 评测与 Bad Case 分析" ||
+                    item.title === "数据分析与埋点监控"
                   }
                   variant={
                     item.title === "Multi-Agent 产品流程设计"
                       ? "agent-workflow"
+                      : item.title === "Agent 评测与 Bad Case 分析"
+                        ? "agent-evaluation"
+                      : item.title === "数据分析与埋点监控"
+                        ? "data-analytics"
                       : item.title === "市场洞察与方案定义"
                         ? "market-insight"
                         : "default"
@@ -539,78 +821,156 @@ export function MerchantOnboardingCaseStudy({
           <section>
             <div className="max-w-3xl">
               <SectionLabel>五、核心数据结果</SectionLabel>
-              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-amber-950 md:text-4xl">
-                核心结果：效率、转化与审核质量同步提升
+              <h2 className="mt-4 text-[2rem] font-semibold tracking-tight text-amber-950 md:text-[2.5rem]">
+                效率、转化与审核质量同步提升
               </h2>
+              <p className="mt-3 text-[15px] leading-7 text-stone-600 md:text-[15px] md:leading-7">
+                从自然入驻到流失召回，再到 AI 预审，关键链路均验证有效。
+              </p>
             </div>
 
-            <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-              {resultCards.map((item) => (
-                <WarmSurface key={item.title} className="rounded-[1.8rem] p-6">
-                  <SectionLabel>{item.category}</SectionLabel>
-                  <p className="mt-5 text-4xl font-semibold tracking-tight text-amber-950">
-                    {item.value}
-                  </p>
-                  <h3 className="mt-4 text-xl font-semibold text-amber-950">
-                    {item.title}
+            <WarmSurface className="mt-6 overflow-hidden rounded-[2rem] border border-orange-200/80 p-0">
+              <div className="grid lg:grid-cols-2">
+                <div className="p-6 md:p-7">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-orange-100 px-3 py-1.5 text-sm font-medium text-orange-700">
+                    <Clock3 className="h-4 w-4" />
+                    效率提升
+                  </div>
+                  <h3 className="mt-4 text-[1.65rem] font-semibold text-amber-950 md:text-[1.9rem]">
+                    平均入驻耗时下降
                   </h3>
-                  <p className="mt-4 text-sm leading-7 text-stone-600">
-                    {item.description}
+                  <p className="mt-3 text-[3.6rem] font-semibold tracking-tight text-orange-600 md:text-[4rem]">
+                    69.53%
                   </p>
-                </WarmSurface>
-              ))}
-            </div>
-          </section>
+                </div>
 
-          <section>
-            <div className="max-w-3xl">
-              <SectionLabel>六、产品与 UX 设计决策</SectionLabel>
-              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-amber-950 md:text-4xl">
-                产品与 UX 设计：降低认知负担，而不是简单替代表单
-              </h2>
-            </div>
-
-            <div className="mt-8 grid gap-5 md:grid-cols-2">
-              {productDecisionCards.map((item) => (
-                <GlassSurface key={item.title} className="rounded-[1.8rem] p-6">
-                  <h3 className="text-xl font-semibold text-amber-950">{item.title}</h3>
-                  <p className="mt-4 text-sm leading-7 text-stone-600">
-                    {item.description}
-                  </p>
-                </GlassSurface>
-              ))}
-            </div>
-          </section>
-
-          <section>
-            <div className="max-w-3xl">
-              <SectionLabel>七、架构沉淀与复盘</SectionLabel>
-              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-amber-950 md:text-4xl">
-                {project.reflectionTitle}
-              </h2>
-            </div>
-
-            <div className="mt-8 grid gap-5 lg:grid-cols-3">
-              {capabilityCards.map((item) => (
-                <WarmSurface key={item.title} className="rounded-[1.8rem] p-6">
-                  <h3 className="text-xl font-semibold text-amber-950">{item.title}</h3>
-                  <p className="mt-4 text-sm leading-7 text-stone-600">
-                    {item.description}
-                  </p>
-                </WarmSurface>
-              ))}
-            </div>
-
-            <GlassSurface className="mt-6 p-7">
-              <SectionLabel>复盘</SectionLabel>
-              <div className="mt-5 flex gap-3">
-                <Sparkles className="mt-1 h-5 w-5 shrink-0 text-orange-500" />
-                <p className="max-w-4xl text-base leading-8 text-stone-600 md:text-lg">
-                  {project.reflection}
-                </p>
+                <div className="border-t border-orange-100/80 p-6 lg:border-l lg:border-t-0 md:p-7">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-orange-100 px-3 py-1.5 text-sm font-medium text-orange-700">
+                    <Waypoints className="h-4 w-4" />
+                    转化提升
+                  </div>
+                  <h3 className="mt-4 text-[1.65rem] font-semibold text-amber-950 md:text-[1.9rem]">
+                    从商机创建到审核通过率
+                  </h3>
+                  <div className="mt-4 flex items-center gap-3 text-[2.8rem] font-semibold tracking-tight md:text-[3.4rem]">
+                    <span className="text-amber-950">55.48%</span>
+                    <span className="flex items-center text-2xl font-normal text-orange-400 md:text-3xl">
+                      →
+                    </span>
+                    <span className="text-orange-600">78.46%</span>
+                  </div>
+                </div>
               </div>
-            </GlassSurface>
+            </WarmSurface>
+
+            <div className="mt-4 grid gap-4 lg:grid-cols-2">
+              <GlassSurface className="rounded-[1.9rem] p-5 md:p-6">
+                <div className="flex items-start justify-between gap-6">
+                  <div>
+                    <div className="inline-flex items-center gap-2 rounded-full bg-orange-100 px-3 py-1.5 text-sm font-medium text-orange-700">
+                      <RefreshCcw className="h-4 w-4" />
+                      低意愿流失召回
+                    </div>
+                    <p className="mt-4 text-[3.4rem] font-semibold tracking-tight text-orange-600 md:text-[4rem]">
+                      51.47%
+                    </p>
+                    <p className="mt-2 text-[2rem] font-semibold text-orange-600">+30.84pp</p>
+                  </div>
+                  <div className="hidden min-w-[220px] flex-1 lg:flex lg:items-center lg:justify-center lg:translate-y-10">
+                    <div className="flex h-32 items-end justify-center gap-5">
+                      <div className="flex flex-col items-center gap-2">
+                        <span className="text-sm text-stone-500">20.63%</span>
+                        <div className="h-12 w-14 rounded-t-2xl bg-orange-200/70" />
+                        <span className="text-sm text-stone-600">传统召回</span>
+                      </div>
+                      <div className="relative flex flex-col items-center gap-2">
+                        <span className="absolute -left-10 top-0 text-4xl text-orange-300">↗</span>
+                        <span className="text-sm text-stone-500">51.47%</span>
+                        <div className="h-24 w-14 rounded-t-2xl bg-orange-500/85" />
+                        <span className="text-sm text-stone-600">AI 召回</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </GlassSurface>
+
+              <GlassSurface className="rounded-[1.9rem] p-5 md:p-6">
+                <div className="flex items-start justify-between gap-6">
+                  <div>
+                    <div className="inline-flex items-center gap-2 rounded-full bg-orange-100 px-3 py-1.5 text-sm font-medium text-orange-700">
+                      <CheckCircle2 className="h-4 w-4" />
+                      AI 预审有效
+                    </div>
+                    <p className="mt-4 text-[3.4rem] font-semibold tracking-tight text-orange-600 md:text-[4rem]">
+                      97.6%
+                    </p>
+                    <p className="mt-3 text-base font-medium text-amber-950 md:text-lg">
+                      AI 预审后人工通过率
+                    </p>
+                  </div>
+                  <div className="hidden min-w-[220px] flex-1 lg:flex lg:items-center lg:justify-center lg:translate-y-10">
+                    <div className="relative mx-auto h-32 w-full max-w-[260px] overflow-hidden rounded-[1.4rem] border border-orange-100/80 bg-orange-50/40 p-4">
+                      <div className="absolute left-10 right-4 top-8 h-px bg-orange-100" />
+                      <div className="absolute left-10 right-4 top-16 h-px bg-orange-100" />
+                      <div className="absolute left-10 right-4 top-24 h-px bg-orange-100" />
+                      <div className="absolute left-1 top-1/2 -translate-y-1/2 text-[10px] font-medium text-stone-400">
+                        95%
+                      </div>
+                      <svg viewBox="0 0 220 120" className="absolute bottom-4 left-10 right-4 top-4 h-[calc(100%-2rem)] w-[calc(100%-3.5rem)]">
+                        <polyline
+                          fill="none"
+                          stroke="rgba(249,115,22,0.75)"
+                          strokeWidth="3"
+                          points="0,70 40,54 80,63 120,50 160,62 220,55"
+                        />
+                        {[0, 40, 80, 120, 160, 220].map((x, idx) => {
+                          const y = [70, 54, 63, 50, 62, 55][idx];
+                          return <circle key={x} cx={x} cy={y} r="4" fill="rgba(249,115,22,0.9)" />;
+                        })}
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </GlassSurface>
+            </div>
+
+            <WarmSurface className="mt-4 rounded-[1.8rem] p-0">
+              <div className="grid divide-y divide-orange-100/80 lg:grid-cols-3 lg:divide-x lg:divide-y-0">
+                <div className="flex items-center gap-4 px-5 py-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-100 text-orange-600">
+                    <UserRound className="h-5 w-5" />
+                  </div>
+                  <p className="text-base font-medium text-amber-950 md:text-lg">
+                    <span className="mr-2 text-[2.6rem] font-semibold tracking-tight text-orange-600 md:text-[3rem]">
+                      3318
+                    </span>
+                    家商户覆盖
+                  </p>
+                </div>
+                <div className="flex items-center gap-4 px-5 py-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-100 text-orange-600">
+                    <Building2 className="h-5 w-5" />
+                  </div>
+                  <p className="text-base font-medium text-amber-950 md:text-lg">
+                    核心城市
+                    <span className="mx-2 text-[2.6rem] font-semibold tracking-tight text-orange-600 md:text-[3rem]">
+                      50%
+                    </span>
+                    灰度放量
+                  </p>
+                </div>
+                <div className="flex items-center gap-4 px-5 py-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-100 text-orange-600">
+                    <CheckCircle2 className="h-5 w-5" />
+                  </div>
+                  <p className="text-base font-medium text-amber-950 md:text-lg">
+                    已进入真实业务流量验证
+                  </p>
+                </div>
+              </div>
+            </WarmSurface>
           </section>
+
         </div>
       </div>
     </main>

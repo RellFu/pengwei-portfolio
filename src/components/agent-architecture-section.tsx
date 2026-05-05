@@ -314,49 +314,47 @@ export function AgentArchitectureSection() {
   return (
     <section>
       <div className="max-w-5xl">
-        <SectionLabel className="inline-flex rounded-full border border-orange-300/70 bg-orange-100 px-3 py-1.5 text-[11px] font-medium tracking-[0.18em] text-orange-800">
+        <SectionLabel>
           三、Multi-Agent 产品架构
         </SectionLabel>
-        <h2 className="mt-2 text-[1.55rem] font-semibold tracking-tight text-amber-950 md:text-[2.15rem] md:leading-[1.02]">
+        <h2 className="mt-2 text-[2rem] font-semibold tracking-tight text-amber-950 md:text-[2.5rem] md:leading-[1.02]">
           从对话入口到业务闭环的 <span className="text-orange-600">Multi-Agent</span> 架构
         </h2>
-        <p className="mt-1 max-w-5xl text-[13px] leading-5 text-stone-600">
+        <p className="mt-3 max-w-5xl text-[15px] leading-7 text-stone-600 md:text-base">
           主控 Agent 调度多个专业 Agent，入口、能力层与闭环层共同支撑完整产品架构。
         </p>
       </div>
 
-      <WarmSurface className="relative mt-2.5 overflow-hidden p-2.5">
-        <div className="space-y-2">
-          <LayerFrame title="入口层" subtitle="渠道与触达">
-            <SectionShell>
-        <div className="grid gap-1.5 md:grid-cols-3 xl:grid-cols-6">
-                {entryModules.map((module) => (
-                  <IconChip
-                    key={module.label}
-                    label={module.label}
-                    icon={module.icon}
-                    imageSrc={module.imageSrc}
-                    customIcon={module.customIcon}
-                    imageClassName={module.imageClassName}
-                  />
-                ))}
-              </div>
-            </SectionShell>
-          </LayerFrame>
+      <div className="mt-6 space-y-2">
+        <LayerFrame title="入口层" subtitle="渠道与触达">
+          <SectionShell>
+            <div className="grid gap-1.5 md:grid-cols-3 xl:grid-cols-6">
+              {entryModules.map((module) => (
+                <IconChip
+                  key={module.label}
+                  label={module.label}
+                  icon={module.icon}
+                  imageSrc={module.imageSrc}
+                  customIcon={module.customIcon}
+                  imageClassName={module.imageClassName}
+                />
+              ))}
+            </div>
+          </SectionShell>
+        </LayerFrame>
 
-          <LayerFrame title="Agent 应用层" subtitle="核心协同" emphasis>
-            <MasterAgentCore />
-          </LayerFrame>
+        <LayerFrame title="Agent 应用层" subtitle="核心协同" emphasis>
+          <MasterAgentCore />
+        </LayerFrame>
 
-          <LayerFrame title="能力支撑层" subtitle="基础设施">
-            <CapabilityBand />
-          </LayerFrame>
+        <LayerFrame title="能力支撑层" subtitle="基础设施">
+          <CapabilityBand />
+        </LayerFrame>
 
-          <LayerFrame title="合规与数据闭环" subtitle="风控与集成">
-            <CloseLoopBand />
-          </LayerFrame>
-        </div>
-      </WarmSurface>
+        <LayerFrame title="合规与数据闭环" subtitle="风控与集成">
+          <CloseLoopBand />
+        </LayerFrame>
+      </div>
     </section>
   );
 }

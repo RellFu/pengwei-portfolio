@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { ByteDanceAiToolsCaseStudy } from "@/components/bytedance-ai-tools-case-study";
 import { CaseStudyPage } from "@/components/case-study-page";
 import { MerchantOnboardingCaseStudy } from "@/components/merchant-onboarding-case-study";
 import { featuredProjects, projectMap } from "@/data/projects";
@@ -42,6 +43,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   if (slug === "ai-merchant-onboarding-agent") {
     return <MerchantOnboardingCaseStudy project={project} />;
+  }
+
+  if (slug === "bytedance-ai-procurement-tools") {
+    return <ByteDanceAiToolsCaseStudy project={project} />;
   }
 
   return <CaseStudyPage project={project} />;
