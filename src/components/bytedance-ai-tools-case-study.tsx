@@ -3,9 +3,12 @@
 import Link from "next/link";
 import {
   ArrowLeft,
+  CircleAlert,
   BadgeCheck,
   BarChart3,
   Bot,
+  Building2,
+  Code2,
   Boxes,
   Database,
   FileSearch,
@@ -18,6 +21,7 @@ import {
   ShieldCheck,
   Sparkles,
   Tags,
+  UserRound,
 } from "lucide-react";
 import {
   CapabilityChip,
@@ -50,38 +54,53 @@ const overviewTags = ["更高效", "更可控", "更可追溯", "可复用"];
 
 const problemCards = [
   {
-    title: "商品命名不统一",
+    title: "成熟先例少",
     description:
-      "多来源商品名称混乱，标准缺失，影响检索、去重与业务分析准确性。",
+      "AI 采购缺少成熟先例，需要从真实流程中拆场景，定义边界并验证可行性。",
     icon: Tags,
   },
   {
-    title: "比价总结依赖人工",
+    title: "数据链路复杂",
     description:
-      "历史报价分散在表格和记录中，人工整理耗时长，容易遗漏关键信息。",
+      "报价、历史轮次和合同数据分散，字段口径不统一，影响检索与分析质量。",
     icon: BarChart3,
   },
   {
-    title: "价格咨询缺少依据",
+    title: "输出风险高",
     description:
-      "同类合作案例难以快速检索，价格建议缺乏证据支撑，难以统一和复用。",
+      "价格和供应商信息高度敏感，AI 结果一旦误判，会影响采购决策和业务复盘。",
     icon: FolderSearch2,
   },
 ];
 
 const toolProjects = [
   {
-    title: "项目一：采购商品标准化匹配系统",
+    title: "项目一：艺人价格咨询 Agent",
     summary:
-      "基于 RAG 架构，搭建标准SKU 映射知识库，自动完成商品标准化匹配与结果写回。",
-    problem: "供应商给出的的商品命名不统一，SKU管理混乱，影响检索与业务分析。",
-    solution: "RAG 检索 + 规则打分 + LLM 匹配，输出标准化结果并自动写回。",
+      "基于历史合作案例与结构化价格信息，构建面向采购场景的艺人价格咨询 Agent。用户输入艺人、平台、活动形式及时长等需求后，系统自动召回相似案例，返回参考价格区间、案例依据与风险提示，帮助采购更快完成初步报价判断。",
+    problem:
+      "艺人报价案例分散在历史合作记录中，缺少统一检索与横向对比能力。采购在输入艺人、活动形式、平台及时长等需求后，仍需要人工翻查相似案例，判断成本高，报价咨询效率低。",
+    solution:
+      "围绕艺人名称、平台、活动类型、时长、城市等级与历史合作价格等关键信息，构建价格咨询 Agent。用户输入需求后，系统自动召回相似案例，提取价格区间与关键条件，并返回参考报价及依据。",
     result:
-      "支持批量自动化运行，按评分规则区分匹中与未匹中，结果可复核可追溯。",
+      "将原本依赖人工检索和经验判断的流程，升级为可快速查询、可解释的价格参考能力。报价咨询效率提升 10倍+，相似案例覆盖准确率 90%+，输出结果可解释、可复用，帮助采购更快完成初步报价判断。",
+    chips: [],
+    previewType: "agent" as const,
+  },
+  {
+    title: "项目二：商品信息整理系统",
+    summary:
+      "基于 RAG 架构，搭建标准 SKU 映射知识库，自动完成商品标准化匹配与结果回写。",
+    problem:
+      "供应商出库记录和商品信息格式不统一，商品名称、单位、规格、价格字段经常混乱；同一商品可能存在多种表达方式，采购和数据同学需要人工逐条归类、匹配标准 SKU，耗时长且容易出错。",
+    solution:
+      "搭建标准 SKU / 食材映射知识库，将原始商品行拆解为结构化字段，通过知识库检索召回候选，再结合规则打分和 LLM 语义判断完成标准化匹配；低分结果不直接入表，最终将原始记录、匹配分和标准商品字段回写到多维表格。",
+    result:
+      "将混乱商品记录转化为可统计、可比价、可追溯的标准化数据，减少人工逐条整理成本，支持后续入口率统计、成本分析和供应商比价。",
     previewType: "matching" as const,
   },
   {
-    title: "项目二：供应商比价 AI Summary",
+    title: "项目三：供应商比价 AI Summary",
     summary:
       "基于 RAG + 结构化报价数据，自动生成带 evidence 的供应商比价总结与谈判建议。",
     problem:
@@ -92,46 +111,32 @@ const toolProjects = [
       "系统从流程工具升级为数据分析与谈判辅助工具，减少人工写总结和找异常的成本；PE1 / PE2 分开评测，MOS 目标准确率不低于 90%。",
     previewType: "summary" as const,
   },
-  {
-    title: "项目三：艺人价格咨询 Agent",
-    summary:
-      "基于 RAG 检索历史案例，提供证据支撑的价格建议与参考。",
-    problem: "历史案例分散，难以快速找到可参考的价格与合作条件。",
-    solution: "RAG 检索相似案例 + 案例提取 + 可解释建议输出。",
-    result: "大幅提升咨询响应效率与覆盖准确率，输出可解释可复用。",
-    chips: [
-      "10倍+ 响应效率",
-      "90%+ 案例覆盖准确率",
-      "100% 可解释输出",
-    ],
-    previewType: "agent" as const,
-  },
 ];
 
 const methodCards = [
   {
-    title: "业务流程拆解",
+    title: "业务理解先行",
     description:
-      "从采购执行链路中拆解检索、匹配、判断、输出和回写等关键环节。",
+      "先和采购相关业务方对齐真实流程，理解报价和比价等规则，再把模糊诉求转成清晰的 AI 产品任务。",
+    icon: PackageSearch,
+  },
+  {
+    title: "从需求到可用工具",
+    description:
+      "将业务方需求拆成具体处理逻辑，独立交付可用工具，而非停留在原型阶段。",
     icon: Boxes,
   },
   {
-    title: "RAG 与知识库设计",
+    title: "代码驱动交付",
     description:
-      "围绕 SKU、报价和历史案例构建检索策略，提升召回与匹配准确率。",
-    icon: FileSearch,
+      "用 Python、JavaScript 完成结构化数据处理、JSON 拆解、规则判断和结果写回，让 AI 能力直接接入真实采购分析流程。",
+    icon: Code2,
   },
   {
-    title: "结构化输出与阈值控制",
+    title: "AI 工具协同开发",
     description:
-      "统一输出字段和格式，结合阈值控制与人工兜底，提升结果可控性。",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Workflow 产品化",
-    description:
-      "将 AI 能力封装为可批处理、可回写、可复核的业务工作流。",
-    icon: Database,
+      "结合 Codex，Cursor 等 coding 工具快速开发和调试，在产品判断与工程实现之间缩短交付周期，提升小团队落地效率。",
+    icon: Bot,
   },
 ];
 
@@ -169,104 +174,103 @@ const matchingSteps = [
 
 function MatchingPreview() {
   return (
-    <GlassSurface className="rounded-[1.6rem] border-orange-100/80 p-4 shadow-[0_18px_50px_rgba(180,83,9,0.08)]">
-      <div className="grid gap-3 sm:grid-cols-6">
-        {matchingSteps.map((step, index) => {
-          const Icon = step.icon;
+    <GlassSurface className="h-full rounded-[1.6rem] border-orange-100/80 p-4 shadow-[0_18px_50px_rgba(180,83,9,0.08)]">
+      <div className="space-y-4">
+        <div className="rounded-[1.25rem] border border-orange-100 bg-orange-50/60 p-4">
+          <p className="text-[11px] font-medium tracking-[0.16em] text-orange-700">
+            工作流
+          </p>
+          <div className="mt-3 grid gap-3 sm:grid-cols-6">
+            {matchingSteps.map((step, index) => {
+              const Icon = step.icon;
 
-          return (
-            <div key={step.label} className="relative rounded-[1rem] border border-orange-100 bg-orange-50/72 px-3 py-3 text-center">
-              <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-xl bg-white text-orange-600 shadow-[0_8px_16px_rgba(180,83,9,0.06)]">
-                <Icon className="h-4 w-4" />
-              </div>
-              <p className="mt-2 text-[12px] font-semibold text-amber-950">{step.label}</p>
-              {index < matchingSteps.length - 1 ? (
-                <div className="pointer-events-none absolute -right-3 top-1/2 hidden -translate-y-1/2 text-orange-300 sm:block">
-                  <ArrowRight className="h-4 w-4" />
+              return (
+                <div key={step.label} className="relative rounded-[1rem] border border-orange-100 bg-white/88 px-3 py-3 text-center">
+                  <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-xl bg-orange-50 text-orange-600 shadow-[0_8px_16px_rgba(180,83,9,0.06)]">
+                    <Icon className="h-4 w-4" />
+                  </div>
+                  <p className="mt-2 text-[12px] font-semibold text-amber-950">{step.label}</p>
+                  {index < matchingSteps.length - 1 ? (
+                    <div className="pointer-events-none absolute -right-3 top-1/2 hidden -translate-y-1/2 text-orange-300 sm:block">
+                      <ArrowRight className="h-4 w-4" />
+                    </div>
+                  ) : null}
                 </div>
-              ) : null}
-            </div>
-          );
-        })}
-      </div>
+              );
+            })}
+          </div>
 
-      <div className="mt-4 rounded-[1.1rem] border border-dashed border-orange-200 bg-orange-50/55 px-3 py-2 text-[11px] leading-5 text-stone-600">
-        <span className="font-medium text-orange-700">规则打分：</span>
-        通过 prompt 定义相似度评分规则，并按分值区分匹中与未匹中。
-      </div>
+          <div className="mt-4 rounded-[1.1rem] border border-dashed border-orange-200 bg-white/88 px-3 py-2 text-[11px] leading-5 text-stone-600">
+            <span className="font-medium text-orange-700">规则打分：</span>
+            通过 prompt 定义相似度评分规则，并按分值区分匹中与未匹中。
+          </div>
+        </div>
 
-      <div className="mt-4 grid gap-3 lg:grid-cols-[1fr_auto_1.14fr] lg:items-center">
-        <div>
-          <p className="mb-2 text-[11px] font-medium tracking-[0.16em] text-orange-700">
-            原始商品数据
-          </p>
-          <div className="overflow-hidden rounded-[1.05rem] border border-orange-100 bg-[linear-gradient(180deg,rgba(255,247,237,0.96),rgba(255,237,213,0.78))]">
-            <div className="grid grid-cols-[1.72fr_0.28fr] gap-1 border-b border-orange-100 px-3 py-2 text-[10px] font-medium text-stone-500">
-              <span>商品名称（原始）</span>
-              <span>单价</span>
-            </div>
-            {[
-              ["旺旺 黑米雪饼 原味 425g 家庭装", "13"],
-              ["盼盼 薄脆饼干 早餐代餐糕点 海盐味 600g/箱", "23"],
-              ["无穷烤鸡翅根 蜂蜜味 20g*20个/盒", "44"],
-              ["格力高 百醇巧克力味 48g*5条", "23"],
-            ].map((row, index) => (
-              <div
-                key={row[0]}
-                className={`grid grid-cols-[1.72fr_0.28fr] gap-1 px-3 py-2 text-[10px] leading-4 text-stone-600 ${
-                  index < 3 ? "border-b border-orange-100" : ""
-                }`}
-              >
-                <span>{row[0]}</span>
-                <span>{row[1]}</span>
+        <div className="grid gap-3 lg:grid-cols-[0.88fr_1.12fr] lg:items-center">
+          <div>
+            <p className="mb-2 text-[11px] font-medium tracking-[0.16em] text-orange-700">
+              原始商品数据
+            </p>
+            <div className="overflow-hidden rounded-[1.05rem] border border-orange-100 bg-white/88">
+              <div className="grid grid-cols-[minmax(0,1fr)_3rem] gap-1 border-b border-orange-100 px-3 py-2 text-[10px] font-medium text-stone-500">
+                <span className="min-w-0">原始商品名称</span>
+                <span>单价</span>
               </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="mx-auto flex items-center justify-center text-orange-400">
-          <div className="flex items-center gap-0.5">
-            <span className="h-0.5 w-3 rounded-full bg-orange-300 animate-[heroFloat_1.1s_ease-in-out_infinite]" />
-            <ArrowRight className="h-8 w-8 animate-[heroFloat_1.1s_ease-in-out_infinite]" />
-            <span className="h-0.5 w-3 rounded-full bg-orange-300 animate-[heroFloat_1.1s_ease-in-out_infinite]" />
-          </div>
-        </div>
-
-        <div>
-          <p className="mb-2 text-[11px] font-medium tracking-[0.16em] text-orange-700">
-            AI 匹配结果
-          </p>
-          <div className="overflow-hidden rounded-[1.05rem] border border-orange-200 bg-[linear-gradient(180deg,rgba(255,244,229,0.92),rgba(255,233,200,0.78))] shadow-[0_10px_28px_rgba(180,83,9,0.08)]">
-            <div className="grid grid-cols-[0.64fr_1.58fr_0.38fr_0.7fr] gap-1 border-b border-orange-100 px-3 py-2 text-[10px] font-medium text-stone-500">
-              <span>状态</span>
-              <span>标准商品名</span>
-              <span>匹配分</span>
-              <span>编码</span>
-            </div>
-            {[
-              ["匹中", "旺旺 黑米雪饼 原味 425g 家庭装", "100", "100215967295", "text-green-600"],
-              ["匹中", "盼盼 薄脆饼干 平海苔味 600g/箱", "80", "10042066802", "text-green-600"],
-              ["匹中", "无穷烤鸡翅根 蜂蜜味 20g*20个/盒", "60", "100271642222", "text-green-600"],
-              ["未匹中", "格力高 百醇巧克力味 48g*5条", "0", "—", "text-red-500"],
-            ].map((row, index) => (
-              <div
-                key={row[1]}
-                className={`grid grid-cols-[0.64fr_1.58fr_0.38fr_0.7fr] gap-1 px-3 py-2 text-[10px] leading-4 text-stone-600 ${
-                  index < 3 ? "border-b border-orange-100" : ""
-                }`}
-              >
-                <span className={`flex items-center font-semibold ${row[4]}`}>{row[0]}</span>
-                <span>{row[1]}</span>
-                <span
-                  className={`flex items-center font-semibold ${
-                    row[2] === "0" ? "text-red-500" : "text-orange-600"
+              {[
+                ["原味旺旺雪饼435克黑米家庭团聚送亲戚", "13"],
+                ["早餐糕点盼盼薄脆饼干海盐口味600g/箱", "23"],
+                ["无穷牌蜂蜜味烤鸡翅根20g*20个/盒", "44"],
+                ["格力高 百醇巧克力味 48g*5条", "23"],
+              ].map((row, index) => (
+                <div
+                  key={row[0]}
+                  className={`grid grid-cols-[minmax(0,1fr)_3rem] gap-1 px-3 py-2 text-[10px] leading-4 text-stone-600 ${
+                    index < 3 ? "border-b border-orange-100" : ""
                   }`}
                 >
-                  {row[2]}
-                </span>
-                <span className="flex items-center">{row[3]}</span>
+                  <span className="min-w-0">{row[0]}</span>
+                  <span>{row[1]}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <p className="mb-2 text-[11px] font-medium tracking-[0.16em] text-orange-700">
+              AI 匹配结果
+            </p>
+            <div className="overflow-hidden rounded-[1.05rem] border border-orange-200 bg-white/88 shadow-[0_10px_28px_rgba(180,83,9,0.08)]">
+              <div className="grid grid-cols-[2.75rem_minmax(0,1fr)_3rem_3.5rem] gap-1 border-b border-orange-100 px-3 py-2 text-[10px] font-medium text-stone-500">
+                <span>状态</span>
+                <span className="min-w-0">标准商品名</span>
+                <span>匹配分</span>
+                <span>编码</span>
               </div>
-            ))}
+              {[
+                ["匹中", "旺旺 黑米雪饼 原味 425g 家庭装", "100", "423", "text-green-600"],
+                ["匹中", "盼盼 薄脆饼干 平海苔味 600g/箱", "80", "563", "text-green-600"],
+                ["匹中", "无穷烤鸡翅根 蜂蜜味 20g*20个/盒", "60", "629", "text-green-600"],
+                ["未匹中", "格力高 百醇巧克力味 48g*5条", "0", "—", "text-red-500"],
+              ].map((row, index) => (
+                <div
+                  key={row[1]}
+                  className={`grid grid-cols-[2.75rem_minmax(0,1fr)_3rem_3.5rem] gap-1 px-3 py-2 text-[10px] leading-4 text-stone-600 ${
+                    index < 3 ? "border-b border-orange-100" : ""
+                  }`}
+                >
+                  <span className={`flex items-center font-semibold ${row[4]}`}>{row[0]}</span>
+                  <span className="min-w-0">{row[1]}</span>
+                  <span
+                    className={`flex items-center font-semibold ${
+                      row[2] === "0" ? "text-red-500" : "text-orange-600"
+                    }`}
+                  >
+                    {row[2]}
+                  </span>
+                  <span className="flex items-center">{row[3]}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -277,7 +281,7 @@ function MatchingPreview() {
 
 function SummaryPreview() {
   return (
-    <GlassSurface className="overflow-hidden rounded-[1.7rem] border-orange-100/80 p-4 shadow-[0_18px_50px_rgba(180,83,9,0.08)]">
+    <GlassSurface className="h-full overflow-hidden rounded-[1.7rem] border-orange-100/80 p-4 shadow-[0_18px_50px_rgba(180,83,9,0.08)]">
       <div className="space-y-4">
         <div className="rounded-[1.25rem] border border-orange-100 bg-orange-50/70 p-4">
           <div className="grid gap-3 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
@@ -354,23 +358,9 @@ function SummaryPreview() {
               输出结果
             </p>
             <div className="mt-3 rounded-[1rem] border border-orange-100 bg-white/88 p-4">
-              <div>
-                <p className="text-[11px] font-medium tracking-[0.16em] text-orange-700">
-                  PE1 价格总结
-                </p>
-                <ul className="mt-3 space-y-2 text-[11px] leading-5 text-stone-600">
-                  <li>供应商 B 报价最低，A 交付周期更短。</li>
-                </ul>
-              </div>
-
-              <div className="mt-4 border-t border-orange-100 pt-4">
-                <p className="text-[11px] font-medium tracking-[0.16em] text-orange-700">
-                  PE2 谈判建议
-                </p>
-                <ul className="mt-3 space-y-2 text-[11px] leading-5 text-stone-600">
-                  <li>优先推进供应商 B，A 可作为备选，注意关注异常价格与交付周期。</li>
-                </ul>
-              </div>
+              <p className="text-[11px] leading-6 text-stone-600">
+                供应商 B 报价最低，A 交付周期更短。建议优先推进供应商 B，A 可作为备选，注意关注异常价格与交付周期。
+              </p>
             </div>
           </div>
         </div>
@@ -401,37 +391,75 @@ function SummaryPreview() {
 }
 
 function AgentPreview() {
+  const userQuery =
+    "如果请傅鹏伟参加抖音年度哈哈大会讲5分钟脱口秀，近期参考价是？";
+
+  const peerCases = [
+    ["案例 A", "¥180k - ¥220k", "线下活动 / 5min / 脱口秀表演"],
+    ["案例 B", "¥210k - ¥240k", "品牌晚会 / 8min / 开场脱口秀"],
+  ];
+
   return (
-    <GlassSurface className="overflow-hidden rounded-[1.7rem] border-orange-100/80 p-4 shadow-[0_18px_50px_rgba(180,83,9,0.08)]">
-      <SectionLabel className="text-[11px]">ARTIST PRICE AGENT</SectionLabel>
-      <div className="mt-4 space-y-3">
-        <div className="ml-auto max-w-[88%] rounded-[1.2rem] border border-orange-100 bg-orange-50/80 px-4 py-3 text-[12px] leading-6 text-stone-600">
-          某艺人在一线城市音乐节的合作报价大概在哪个区间？
+    <GlassSurface className="h-full overflow-hidden rounded-[1.7rem] border-orange-100/80 p-4 shadow-[0_12px_30px_rgba(180,83,9,0.05)]">
+      <div className="space-y-4">
+        <div className="rounded-[1.2rem] border border-orange-200 bg-orange-50/75 px-4 py-3 shadow-[0_6px_16px_rgba(120,53,15,0.04)]">
+          <div className="flex items-center gap-3 text-[12px] leading-6 text-stone-700">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-orange-50 text-orange-600">
+              <UserRound className="h-4 w-4" />
+            </div>
+            <span className="flex-1 font-medium text-amber-950">{userQuery}</span>
+          </div>
         </div>
-        <div className="max-w-[94%] rounded-[1.2rem] border border-orange-100 bg-white/88 px-4 py-3">
+
+        <div className="rounded-[1.2rem] border border-orange-100 bg-orange-50/50 p-4">
           <div className="flex items-center gap-2 text-sm font-semibold text-amber-950">
-            <ScanSearch className="h-4 w-4 text-orange-500" />
-            检索到相似案例
+            <Bot className="h-4 w-4 text-orange-600" />
+            Agent 分析结果
           </div>
-          <div className="mt-3 grid gap-2">
-            {[
-              ["案例 A", "¥180k - ¥220k", "音乐节 / 一线城市"],
-              ["案例 B", "¥210k - ¥240k", "品牌活动 / 一线城市"],
-              ["案例 C", "¥190k - ¥230k", "演出季 / 新歌宣发"],
-            ].map((row) => (
-              <div
-                key={row[0]}
-                className="grid grid-cols-[0.72fr_0.86fr_1fr] gap-2 rounded-[0.95rem] bg-orange-50/65 px-3 py-2 text-[11px] text-stone-600"
-              >
-                <span className="font-medium text-amber-950">{row[0]}</span>
-                <span>{row[1]}</span>
-                <span className="truncate">{row[2]}</span>
+            <div className="mt-3 space-y-3">
+            <div className="rounded-[1rem] border border-orange-100 bg-white/90 p-4">
+              <div className="text-[12px] font-semibold text-amber-950">艺人基本信息</div>
+              <p className="mt-3 text-[11px] leading-5 text-stone-600">
+                傅鹏伟，中国内地脱口秀演员。代表作有《需求评审睡着了》《我和研发做兄弟》等，还参加过《乘风破浪的AI产品实习生》等综艺；
+              </p>
+              <p className="mt-2 text-[11px] leading-5 text-stone-600">
+                参考定级定价：抖音粉丝量为296.49万，话题播放量为207.65亿，定级为A
+              </p>
+            </div>
+
+            <div className="rounded-[1rem] border border-orange-100 bg-white/90 p-4">
+              <div className="text-[12px] font-semibold text-amber-950">同级案例表单</div>
+              <div className="mt-3 grid gap-2">
+                {peerCases.map((row) => (
+                  <div
+                    key={row[0]}
+                    className="grid grid-cols-[0.72fr_0.86fr_1fr] gap-2 rounded-[0.95rem] border border-orange-100 bg-orange-50/45 px-3 py-2 text-[11px] text-stone-600"
+                  >
+                    <span className="font-medium text-amber-950">{row[0]}</span>
+                    <span>{row[1]}</span>
+                    <span className="truncate">{row[2]}</span>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <div className="mt-3 rounded-[1rem] border border-orange-100 bg-white/80 px-3 py-3 text-[12px] leading-6 text-stone-600">
-            建议参考区间为 <span className="font-semibold text-orange-600">¥200k - ¥230k</span>，
-            依据是相似活动类型、城市等级与艺人近一年合作记录。
+            </div>
+
+            <div className="rounded-[1rem] border border-orange-100 bg-white/90 px-4 py-4 text-[12px] leading-6 text-stone-600">
+              <p className="font-medium text-amber-950">建议结果</p>
+              <p className="mt-3">
+                建议参考区间为 <span className="font-semibold text-orange-600">¥200k - ¥230k</span>，
+                依据是近 3 个月参考案例生成。
+              </p>
+            </div>
+
+            <div className="rounded-[1rem] border border-amber-200 bg-amber-50/70 px-4 py-4 text-[12px] leading-6 text-stone-600 shadow-[0_6px_16px_rgba(180,83,9,0.04)]">
+              <div className="flex items-center gap-2 font-medium text-amber-950">
+                <CircleAlert className="h-4 w-4 text-amber-600" />
+                舆论预警
+              </div>
+              <p className="mt-3">
+                近期傅鹏伟在某场直播中坦言“产品经理可以完全代替研发”，引发公众舆论；且在 2025 年被媒体爆出在公司和运营 leader 有严重矛盾，被怀疑是人品问题，请注意合作舆情风险。
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -475,49 +503,85 @@ export function ByteDanceAiToolsCaseStudy({
           </Link>
         </div>
 
-        <section className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start">
+        <section className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_480px] lg:items-center">
           <div className="max-w-4xl">
             <h1 className="text-4xl font-semibold tracking-tight text-amber-950 sm:text-5xl md:text-6xl md:leading-[1.04]">
-              ByteDance AI Tools：把采购流程转化为可复用的 AI Workflow
+              ByteDance PSAI
+              <br />
+              赋能采购决策流程
             </h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-stone-600 md:text-xl">
-              针对字节跳动采购与业务决策场景，围绕商品标准化、供应商比价与艺人价格咨询三类高人工成本流程，独立设计并落地
-              3 个从 0 到 1 的 AI 工具，让流程更高效、决策更可控、结果更可追溯。
+              面向字节采购业务中的商品匹配、比价总结和价格咨询场景，实现 3 个 AI 工具的产品设计与工程落地，将高人工成本流程转化为更高效、更稳定的 AI 工作流。
             </p>
           </div>
 
-          <GlassSurface className="p-6">
-            <SectionLabel>三个 AI 工具概览</SectionLabel>
-            <div className="mt-5 grid gap-3">
-              {overviewCards.map((card) => {
-                const Icon = card.icon;
+          <div className="relative min-h-[420px]">
+            <div className="absolute inset-0 -z-10 rounded-[2.4rem] bg-[radial-gradient(circle_at_50%_50%,rgba(60,140,255,0.10),transparent_34%),radial-gradient(circle_at_18%_22%,rgba(251,146,60,0.12),transparent_24%),radial-gradient(circle_at_82%_78%,rgba(120,230,221,0.16),transparent_26%)]" />
+            <div className="absolute left-1/2 top-1/2 h-[360px] w-[360px] -translate-x-1/2 -translate-y-1/2">
+              <div className="h-full w-full animate-[byteTrackSpin_32s_linear_infinite] rounded-full border border-[#D6E7FF]/90" />
+            </div>
+            <div className="absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2">
+              <div className="h-full w-full animate-[byteTrackSpinReverse_36s_linear_infinite] rounded-full border border-[#E6F0FF]/95" />
+            </div>
 
-                return (
-                  <div
-                    key={card.title}
-                    className="rounded-[1.5rem] border border-orange-100 bg-white/80 p-4"
-                  >
-                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-orange-50 text-orange-600">
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <p className="mt-4 text-lg font-semibold text-amber-950">
-                      {card.title}
-                    </p>
-                    <p className="mt-2 text-sm leading-7 text-stone-600">
-                      {card.description}
-                    </p>
+            <GlassSurface className="absolute left-1/2 top-1/2 flex w-[260px] -translate-x-1/2 -translate-y-1/2 flex-col items-center rounded-[2rem] border-white/80 bg-white/90 px-7 py-7 text-center shadow-[0_28px_70px_rgba(120,53,15,0.10),0_18px_50px_rgba(60,140,255,0.12)]">
+              <img
+                src="/ByteDance_logo_English.svg"
+                alt="ByteDance"
+                className="h-14 w-auto"
+              />
+              <h3 className="mt-4 text-[2rem] font-semibold tracking-tight text-amber-950">
+                Procurement
+              </h3>
+              <p className="mt-2 text-lg font-medium text-stone-600">
+                采购 AI 工具矩阵
+              </p>
+            </GlassSurface>
+
+            <div className="pointer-events-none absolute inset-0">
+              <div className="absolute left-1 top-9 rounded-[1.2rem] border border-[#3C8CFF]/15 bg-white/90 px-4 py-3 shadow-[0_16px_34px_rgba(120,53,15,0.08)]">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#EEF4FF] text-[#3C8CFF]">
+                    <Tags className="h-4 w-4" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold text-amber-950">商品信息整理</p>
                   </div>
-                );
-              })}
+                </div>
+              </div>
+
+              <div className="absolute -right-1 top-16 rounded-[1.2rem] border border-[#3C8CFF]/15 bg-white/90 px-4 py-3 shadow-[0_16px_34px_rgba(120,53,15,0.08)]">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#EEF4FF] text-[#3C8CFF]">
+                    <Building2 className="h-4 w-4" />
+                  </span>
+                  <div>
+                    <p className="mt-1 text-sm font-semibold text-amber-950">供应商比价</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="absolute bottom-10 left-6 rounded-[1.2rem] border border-[#3C8CFF]/15 bg-white/90 px-4 py-3 shadow-[0_16px_34px_rgba(120,53,15,0.08)]">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#EEF4FF] text-[#3C8CFF]">
+                    <Bot className="h-4 w-4" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold text-amber-950">价格咨询Agent</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="mt-5 flex flex-wrap gap-2">
-              {overviewTags.map((tag) => (
-                <CapabilityChip key={tag} className="bg-orange-50/75">
-                  {tag}
-                </CapabilityChip>
-              ))}
+
+            <div className="absolute left-1/2 top-1/2 h-[360px] w-[360px] -translate-x-1/2 -translate-y-1/2">
+              <div className="relative h-full w-full animate-[byteTrackSpin_32s_linear_infinite]">
+              <div className="absolute left-[20%] top-[18%] h-2.5 w-2.5 rounded-full bg-[#8EC5FF]/65" />
+              <div className="absolute right-[18%] top-[26%] h-3 w-3 rounded-full bg-[#7DB7FF]/55" />
+              <div className="absolute right-[22%] bottom-[18%] h-2.5 w-2.5 rounded-full bg-[#5AA8FF]/55" />
+              <div className="absolute left-[18%] bottom-[24%] h-3 w-3 rounded-full bg-[#00C8D2]/35" />
+              </div>
             </div>
-          </GlassSurface>
+          </div>
         </section>
 
         <div className="mt-16 grid gap-8">
@@ -525,20 +589,15 @@ export function ByteDanceAiToolsCaseStudy({
             <div className="max-w-4xl">
               <SectionLabel>一、业务问题</SectionLabel>
               <h2 className="mt-4 text-[2rem] font-semibold tracking-tight text-amber-950 md:text-[2.5rem] md:leading-[1.02]">
-                采购数据分散、命名混乱、人工判断成本高
+                采购场景复杂、数据敏感、AI 输出稳定性要求高
               </h2>
             </div>
 
             <div className="mt-8 grid gap-5 lg:grid-cols-3">
               {problemCards.map((item) => {
-                const Icon = item.icon;
-
                 return (
                   <GlassSurface key={item.title} className="rounded-[1.8rem] p-6">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-50 text-orange-600">
-                      <Icon className="h-6 w-6" />
-                    </div>
-                    <h3 className="mt-5 text-xl font-semibold text-amber-950">
+                    <h3 className="text-xl font-semibold text-amber-950">
                       {item.title}
                     </h3>
                     <p className="mt-4 text-sm leading-7 text-stone-600">
@@ -554,24 +613,28 @@ export function ByteDanceAiToolsCaseStudy({
             <div className="max-w-4xl">
               <SectionLabel>二、三个从 0 到 1 的 AI 工具</SectionLabel>
               <h2 className="mt-4 text-[2rem] font-semibold tracking-tight text-amber-950 md:text-[2.5rem] md:leading-[1.02]">
-                围绕采购场景拆出 3 个可复用的 AI Workflow
+                3 个 AI 工具赋能采购决策流程
               </h2>
               <p className="mt-3 text-[15px] leading-7 text-stone-600">
-                围绕采购数据标准化、比价总结和价格咨询三个场景，分别设计可批处理、可追溯、可复用的 AI Workflow。
+                从艺人价格咨询、商品标准化到供应商比价，用 AI 降低人工成本，提升采购判断效率与结果一致性。
               </p>
             </div>
 
             <div className="mt-8 grid gap-6">
               {toolProjects.map((item) => (
                 <WarmSurface key={item.title} className="p-5 sm:p-6 lg:p-7">
+                  {(() => {
+                    const shouldAdjustTextGroup = item.previewType !== "matching";
+
+                    return (
                   <div
                     className={`grid gap-6 lg:items-start ${
-                      "lg:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)]"
+                      "lg:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)] lg:items-stretch"
                     }`}
                   >
-                    <div>
+                    <div className="flex h-full flex-col">
                       <h3 className="text-[1.75rem] font-semibold tracking-tight text-amber-950">
-                        {item.previewType === "matching" ? "项目一：商品信息整理系统" : item.title}
+                        {item.title}
                       </h3>
                       <p className="mt-3 text-base leading-8 text-stone-600">
                         {item.previewType === "summary"
@@ -579,13 +642,15 @@ export function ByteDanceAiToolsCaseStudy({
                           : item.summary}
                       </p>
 
-                      <div className="mt-6 space-y-3">
+                      <div className={shouldAdjustTextGroup ? "mt-8 space-y-3 lg:mt-9" : "mt-6 space-y-3"}>
                         <div className="rounded-[1.35rem] border border-orange-100 bg-white/82 p-4">
                           <p className="text-[11px] font-semibold tracking-[0.18em] text-orange-700">
                             PROBLEM
                           </p>
                           <p className="mt-2 text-sm leading-7 text-stone-600">
-                            寻源系统原本更偏报价和谈判流程管理，采购员仍需要手动查看报价表、历史轮次和异常价格，再整理比价结论，耗时且容易遗漏关键变化。
+                            {item.previewType === "matching" || item.previewType === "agent"
+                              ? item.problem
+                              : "寻源系统原本更偏报价和谈判流程管理，采购员仍需要手动查看报价表、历史轮次和异常价格，再整理比价结论，耗时且容易遗漏关键变化。"}
                           </p>
                         </div>
                         <div className="rounded-[1.35rem] border border-orange-100 bg-white/82 p-4">
@@ -593,7 +658,9 @@ export function ByteDanceAiToolsCaseStudy({
                             SOLUTION
                           </p>
                           <p className="mt-2 text-sm leading-7 text-stone-600">
-                            参与上下文设计与输出约束，将输入拆成比价模板、本次比价指标、历史报价轮次和价格详情数据四类，让 LLM 在明确数据协议下生成 PE1 客观总结与 PE2 谈判建议。
+                            {item.previewType === "matching" || item.previewType === "agent"
+                              ? item.solution
+                              : "参与上下文设计与输出约束，将输入拆成比价模板、本次比价指标、历史报价轮次和价格详情数据四类，让 LLM 在明确数据协议下生成 PE1 客观总结与 PE2 谈判建议。"}
                           </p>
                         </div>
                         <div className="rounded-[1.35rem] border border-orange-100 bg-white/82 p-4">
@@ -601,7 +668,9 @@ export function ByteDanceAiToolsCaseStudy({
                             RESULT
                           </p>
                           <p className="mt-2 text-sm leading-7 text-stone-600">
-                            系统从流程工具升级为数据分析与谈判辅助工具，可自动生成当前价格总结、多轮报价变化总结和谈判建议；PE1 和 PE2 分开评测，MOS 目标准确率不低于 90%。
+                            {item.previewType === "matching" || item.previewType === "agent"
+                              ? item.result
+                              : "系统从流程工具升级为数据分析与谈判辅助工具，可自动生成当前价格总结、多轮报价变化总结和谈判建议；PE1 和 PE2 分开评测，MOS 目标准确率不低于 90%。"}
                           </p>
                         </div>
                       </div>
@@ -620,10 +689,12 @@ export function ByteDanceAiToolsCaseStudy({
                       )}
                     </div>
 
-                    <div className={item.previewType === "matching" ? "mt-2 lg:mt-12" : ""}>
+                    <div className="h-full">
                       <ToolPreview type={item.previewType} />
                     </div>
                   </div>
+                    );
+                  })()}
                 </WarmSurface>
               ))}
             </div>
@@ -633,8 +704,11 @@ export function ByteDanceAiToolsCaseStudy({
             <div className="max-w-4xl">
               <SectionLabel>三、方法沉淀</SectionLabel>
               <h2 className="mt-4 text-[2rem] font-semibold tracking-tight text-amber-950 md:text-[2.5rem] md:leading-[1.02]">
-                从数据整理到决策支持的 AI 产品方法
+                从业务理解到 AI 产品交付
               </h2>
+              <p className="mt-3 text-[15px] leading-7 text-stone-600">
+                在采购这种高专业度场景中，把业务问题拆成 AI 工作流，并用代码交付团队可直接使用的工具。
+              </p>
             </div>
 
             <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
@@ -658,37 +732,27 @@ export function ByteDanceAiToolsCaseStudy({
             </div>
           </section>
 
-          <section>
-            <div className="max-w-4xl">
-              <SectionLabel>四、核心结果</SectionLabel>
-              <h2 className="mt-4 text-[2rem] font-semibold tracking-tight text-amber-950 md:text-[2.5rem] md:leading-[1.02]">
-                效率、准确率与可追溯性同步提升
-              </h2>
-            </div>
-
-            <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-              {resultCards.map((card) => (
-                <MetricCard
-                  key={card.title}
-                  value={card.value}
-                  label={
-                    <span className="space-y-1">
-                      <span className="block text-sm font-semibold tracking-normal text-amber-950">
-                        {card.title}
-                      </span>
-                      <span className="block text-[12px] leading-6 text-stone-500">
-                        {card.description}
-                      </span>
-                    </span>
-                  }
-                  emphasis="primary"
-                  className="rounded-[1.7rem] p-5"
-                />
-              ))}
-            </div>
-          </section>
         </div>
       </div>
+      <style jsx>{`
+        @keyframes byteTrackSpin {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+
+        @keyframes byteTrackSpinReverse {
+          from {
+            transform: rotate(360deg);
+          }
+          to {
+            transform: rotate(0deg);
+          }
+        }
+      `}</style>
     </main>
   );
 }

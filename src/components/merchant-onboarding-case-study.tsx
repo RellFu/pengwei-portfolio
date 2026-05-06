@@ -141,11 +141,6 @@ const heroBubbles = [
     delayClassName: "animate-[heroBubble_8s_ease-in-out_infinite]",
   },
   {
-    text: "你有哪些入驻方面的问题？",
-    className: "left-0 top-28 md:left-8 md:top-32",
-    delayClassName: "animate-[heroBubble_8s_ease-in-out_infinite_1.6s]",
-  },
-  {
     text: "请上传你的门头图",
     className: "right-0 top-52 md:right-2 md:top-56",
     delayClassName: "animate-[heroBubble_8s_ease-in-out_infinite_3.2s]",
@@ -153,12 +148,12 @@ const heroBubbles = [
   {
     text: "请上传菜单图片",
     className: "right-2 bottom-10 md:right-4 md:bottom-12",
-    delayClassName: "animate-[heroBubble_8s_ease-in-out_infinite_4.8s]",
+    delayClassName: "animate-[heroBubble_8s_ease-in-out_infinite_1.6s]",
   },
   {
     text: "我来帮你检查资料",
     className: "left-0 bottom-6 md:left-6 md:bottom-14",
-    delayClassName: "animate-[heroBubble_8s_ease-in-out_infinite_6.4s]",
+    delayClassName: "animate-[heroBubble_8s_ease-in-out_infinite_0.8s]",
   },
 ];
 
