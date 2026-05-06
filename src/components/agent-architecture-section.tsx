@@ -13,7 +13,7 @@ import {
   FileSearch,
   Globe,
   GitBranch,
-  Languages,
+  Image as ImageIcon,
   Layers3,
   MessageCircleMore,
   Smartphone,
@@ -59,7 +59,7 @@ const entryModules: readonly IconModule[] = [
   },
   { label: "商家 App", icon: Smartphone },
   { label: "BD 入口", icon: QrCode },
-  { label: "多模态交互", icon: Languages },
+  { label: "多模态交互", icon: ImageIcon },
   { label: "请求路由", icon: Route },
 ] as const;
 

@@ -82,7 +82,7 @@ const byteDanceProject = featuredProjects.find(
 export default function Home() {
   return (
     <main className="relative overflow-hidden">
-      <div className="absolute inset-x-0 top-0 -z-10 h-[calc(100vh+28rem)] bg-[radial-gradient(circle_at_top_left,rgba(251,146,60,0.28),transparent_34%),radial-gradient(circle_at_top_right,rgba(245,158,11,0.18),transparent_28%),linear-gradient(180deg,rgba(255,248,239,0.98)_0%,rgba(255,243,223,0.92)_48%,rgba(255,242,225,0.88)_72%,rgba(255,248,239,0.72)_100%)]" />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(251,146,60,0.28),transparent_34%),radial-gradient(circle_at_top_right,rgba(245,158,11,0.18),transparent_28%),linear-gradient(180deg,rgba(255,248,239,0.98)_0%,rgba(255,243,223,0.92)_48%,rgba(255,242,225,0.88)_72%,rgba(255,248,239,0.72)_100%)]" />
       <div className="absolute inset-x-0 top-0 -z-10 h-[48rem] animate-[pulse_9s_ease-in-out_infinite] bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.9),transparent_22%),radial-gradient(circle_at_70%_18%,rgba(251,146,60,0.18),transparent_24%)] blur-3xl" />
 
       <section className="mx-auto flex min-h-[720px] w-full max-w-6xl flex-col px-6 pb-10 pt-6 sm:px-8 lg:min-h-[760px] lg:px-12">
@@ -232,7 +232,7 @@ export default function Home() {
                     icon: Heart,
                   },
                   {
-                    text: "IELTS 7.5 / CET-6 / CET-4",
+                    text: "雅思 7.5 / 大学英语四六级",
                     icon: MessagesSquare,
                   },
                 ].map((item, index) => {
@@ -282,7 +282,7 @@ export default function Home() {
                       href={`/projects/${merchantOnboardingProject.slug}`}
                       className="inline-flex items-center justify-center rounded-full bg-orange-500 px-6 py-3.5 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(249,115,22,0.24)] transition hover:bg-orange-400"
                     >
-                      查看项目详情
+                      查看详情
                     </Link>
                   </div>
                 </div>
@@ -306,7 +306,7 @@ export default function Home() {
                       href={`/projects/${byteDanceProject.slug}`}
                       className="inline-flex items-center justify-center rounded-full bg-orange-500 px-6 py-3.5 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(249,115,22,0.24)] transition hover:bg-orange-400"
                     >
-                      查看项目详情
+                      查看详情
                     </Link>
                   </div>
                 </div>
