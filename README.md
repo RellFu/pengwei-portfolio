@@ -1,36 +1,127 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pengwei Portfolio
 
-## Getting Started
+个人作品集网站，基于 Next.js App Router 构建，当前已连接 GitHub 与 Vercel 自动部署。
 
-First, run the development server:
+## Current Status
+
+- GitHub repo: `https://github.com/RellFu/pengwei-portfolio`
+- Deploy flow: push to `main` -> Vercel auto deploy
+- Latest confirmed deployed commit: `5cf4c50`
+- Production deployment status: `Ready`
+
+## Tech Stack
+
+- Next.js 16
+- React 19
+- Tailwind CSS 4
+- lucide-react
+
+## Local Development
+
+安装依赖并启动本地环境：
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+默认访问：
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+生产构建检查：
 
-## Learn More
+```bash
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Key Paths
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Homepage: `src/app/page.tsx`
+- Global layout + metadata: `src/app/layout.tsx`
+- Public assets: `public/`
+- School logos source: `school_logos/`
+- Portrait source: `AIheadshot/`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Important Runtime Assets
 
-## Deploy on Vercel
+这些资源已经在项目正式路径中，被网站运行直接使用：
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `public/ByteDance_logo_English.svg`
+- `public/id_card.png`
+- `public/menu.png`
+- `public/store_front.png`
+- `public/pw-favicon.ico`
+- `public/pw-favicon-16x16.png`
+- `public/pw-favicon-32x32.png`
+- `public/apple-touch-icon.png`
+- `public/android-chrome-192x192.png`
+- `public/android-chrome-512x512.png`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+只要 GitHub 仓库里这些文件还在，线上网站就不依赖当前这台电脑。
+
+## Safe Handoff Before Returning This Computer
+
+在清空本地文件前，先确认以下事项：
+
+1. GitHub 仓库代码已 push
+2. Vercel 最新部署状态为 `Ready`
+3. GitHub / Vercel 账号使用的是自己长期可访问的邮箱
+4. 已保存 GitHub 和 Vercel 的 2FA 恢复信息
+5. 需要保留的未跟踪素材已备份到网盘或其他仓库
+
+## Untracked Local Folders
+
+当前本地存在未跟踪目录：
+
+- `bytedance_logo/`
+- `case-studies/`
+- `chat_image/`
+- `didi_demo/`
+- `example/`
+- `favicon/`
+- `issue/`
+
+这些目录**不会影响当前线上网站运行**，但其中部分可能是后续复用素材。
+
+建议：
+
+- 先备份再删：
+  - `bytedance_logo/`
+  - `chat_image/`
+  - `favicon/`
+- 可以直接删除：
+  - `case-studies/`
+  - `didi_demo/`
+  - `example/`
+  - `issue/`
+  - 所有 `.DS_Store`
+
+## Moving to a New Computer
+
+未来换电脑后，按以下步骤继续维护：
+
+```bash
+git clone https://github.com/RellFu/pengwei-portfolio.git
+cd pengwei-portfolio
+npm install
+npm run dev
+```
+
+修改完成后：
+
+```bash
+git add .
+git commit -m "your update message"
+git push origin main
+```
+
+Vercel 会自动重新部署。
+
+## Notes
+
+- 当前首页已支持中英文切换
+- 详情页暂未做完整双语
+- 线上网站不依赖本地 dev 服务持续运行
