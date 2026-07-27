@@ -66,11 +66,11 @@ const entryModules: readonly IconModule[] = [
 const capabilityGroups = [
   {
     title: "Agent Orchestration & KB",
-    modules: ["Prompt", "State-driven", "Flow Orchestration", "Query Classification", "Issue Management", "Glossary"],
+    modules: ["Prompt", "State-driven", "Orchestration", "Query Routing", "Issue Mgmt", "Glossary"],
   },
   {
     title: "AI Tools & Capabilities",
-    modules: ["OCR", "Multilingual", "Memory Management", "Resume", "RAG", "CoT", "API Calls"],
+    modules: ["OCR", "Multilingual", "Memory Mgmt", "Resume", "RAG", "CoT", "API Calls"],
   },
 ];
 
@@ -260,7 +260,7 @@ function MasterAgentCore() {
 function CapabilityBand() {
   return (
     <SectionShell>
-      <div className="grid gap-2">
+      <div className="grid gap-2 xl:grid-cols-2">
         {capabilityGroups.map((group, index) => (
           <div
             key={group.title}
