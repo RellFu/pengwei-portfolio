@@ -54,62 +54,62 @@ type ChatMessage =
     };
 
 const legacyFields: LegacyField[] = [
-  { type: "select", label: "国家", value: "墨西哥" },
-  { type: "select", label: "城市", value: "墨西哥城" },
-  { type: "select", label: "业务类型", value: "餐饮" },
-  { type: "select", label: "门店数量", value: "1" },
-  { type: "input", label: "门店名称", value: "阿伟墨西哥卷饼店" },
-  { type: "input", label: "门店地址", value: "墨西哥城热那亚街 13 号" },
-  { type: "map", label: "地图定位" },
-  { type: "input", label: "主营品类", value: "墨西哥菜" },
-  { type: "select", label: "线下订单量", value: "请选择" },
-  { type: "upload", label: "门头照片" },
-  { type: "upload", label: "菜单照片" },
+  { type: "select", label: "Country", value: "Mexico" },
+  { type: "select", label: "City", value: "Mexico City" },
+  { type: "select", label: "Business Type", value: "Food & Beverage" },
+  { type: "select", label: "Number of Stores", value: "1" },
+  { type: "input", label: "Store Name", value: "Awei's Taqueria" },
+  { type: "input", label: "Store Address", value: "13 Génova St, Mexico City" },
+  { type: "map", label: "Map Location" },
+  { type: "input", label: "Main Category", value: "Mexican" },
+  { type: "select", label: "Offline Order Volume", value: "Please select" },
+  { type: "upload", label: "Storefront Photo" },
+  { type: "upload", label: "Menu Photo" },
   {
     type: "upload",
-    label: "地址证明",
-    helper: "需要上传证明",
+    label: "Proof of Address",
+    helper: "Proof required",
   },
-  { type: "button", label: "提交审核" },
+  { type: "button", label: "Submit for Review" },
 ];
 
 const legacyHints = [
-  "流程繁琐",
-  "无实时预审",
-  "无法解答商家入驻问题",
-  "吓退没有入驻经验的商户",
+  "Tedious process",
+  "No real-time pre-check",
+  "Can't answer onboarding questions",
+  "Scares off inexperienced merchants",
 ];
 
 const chatMessages: ChatMessage[] = [
   {
     side: "ai",
-    content: "您好，欢迎入驻。接下来我会一步一步协助您完成店铺信息提交。",
+    content: "Hello and welcome. I'll help you submit your store information step by step.",
   },
-  { side: "ai", content: "请先告诉我您的店铺名称。" },
-  { side: "merchant", content: "阿伟墨西哥卷饼店" },
-  { side: "ai", content: "请发送您的门店地址。" },
-  { side: "merchant", content: "墨西哥城热那亚街 13 号", kind: "location" },
-  { side: "ai", content: "请上传门头照片，确保店名清晰可见。" },
-  { side: "merchant", content: "发送了门头照", kind: "upload" },
+  { side: "ai", content: "First, please tell me your store name." },
+  { side: "merchant", content: "Awei's Taqueria" },
+  { side: "ai", content: "Please send your store address." },
+  { side: "merchant", content: "13 Génova St, Mexico City", kind: "location" },
+  { side: "ai", content: "Please upload a storefront photo with the store name clearly visible." },
+  { side: "merchant", content: "Sent storefront photo", kind: "upload" },
   {
     side: "ai",
-    content: "请继续上传菜单照片，确保菜品和价格清晰。",
+    content: "Now please upload a menu photo with dishes and prices clearly shown.",
   },
-  { side: "merchant", content: "发送了菜单照片", kind: "upload" },
+  { side: "merchant", content: "Sent menu photo", kind: "upload" },
   {
     side: "ai",
     content:
-      "我已识别到：店铺名称为阿伟墨西哥卷饼店，主营品类为墨西哥菜。请确认是否正确。",
+      "I've recognized: store name Awei's Taqueria, main category Mexican. Please confirm this is correct.",
   },
-  { side: "merchant", content: "正确" },
+  { side: "merchant", content: "Correct" },
   {
     side: "ai",
-    content: "请上传身份证明，用于完成身份验证。",
+    content: "Please upload an ID document to complete identity verification.",
   },
-  { side: "merchant", content: "发送了证件信息", kind: "upload" },
-  { side: "ai", content: "资料已收集完成，是否提交审核？" },
-  { side: "merchant", content: "提交审核" },
-  { side: "ai", content: "提交成功。审核结果将在 1—3 个工作日内通知您。" },
+  { side: "merchant", content: "Sent ID document", kind: "upload" },
+  { side: "ai", content: "All documents collected. Submit for review?" },
+  { side: "merchant", content: "Submit for review" },
+  { side: "ai", content: "Submitted successfully. You'll be notified of the result within 1–3 business days." },
 ];
 
 function FormFieldMock({
@@ -131,7 +131,7 @@ function FormFieldMock({
           <div className="absolute bottom-[24%] right-[22%] h-6 w-10 rounded-full border border-slate-300/60 bg-white/55" />
           <div className="pointer-events-none absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/92 px-2 py-1 text-[11px] text-orange-700 shadow-sm">
             <MapPin className="h-3.5 w-3.5" />
-            已定位
+            Located
           </div>
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-orange-500 drop-shadow-[0_8px_18px_rgba(249,115,22,0.24)]">
             <MapPin className="h-7 w-7 fill-orange-500 stroke-white stroke-[1.5]" />
@@ -151,7 +151,7 @@ function FormFieldMock({
               <Upload className="h-4 w-4" />
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-medium text-stone-700">上传材料</p>
+              <p className="text-sm font-medium text-stone-700">Upload file</p>
               {field.helper ? (
                 <p className="text-xs text-stone-400">{field.helper}</p>
               ) : null}
@@ -177,7 +177,7 @@ function FormFieldMock({
     <div className="space-y-2">
       <p className="text-xs font-medium text-stone-500">{field.label}</p>
       <div className="flex items-center justify-between rounded-2xl border border-stone-200 bg-white px-3 py-3 text-sm text-stone-700">
-        <span className={field.value === "请选择" ? "text-stone-400" : ""}>
+        <span className={field.value === "Please select" ? "text-stone-400" : ""}>
           {field.value}
         </span>
         {field.type === "select" ? (
@@ -189,9 +189,9 @@ function FormFieldMock({
 }
 
 function UploadBubble({ content }: { content: string }) {
-  const mediaType = content.includes("门头")
+  const mediaType = content.includes("storefront")
     ? "storefront"
-    : content.includes("菜单")
+    : content.includes("menu")
       ? "menu"
       : "document";
   const imageSrc =
@@ -202,10 +202,10 @@ function UploadBubble({ content }: { content: string }) {
         : "/id_card.png";
   const imageAlt =
     mediaType === "storefront"
-      ? "门头照片"
+      ? "Storefront photo"
       : mediaType === "menu"
-        ? "菜单照片"
-        : "证件信息";
+        ? "Menu photo"
+        : "ID document";
 
   return (
     <div className="inline-flex w-[15.5rem] overflow-hidden rounded-2xl border border-orange-100 bg-white text-stone-700 shadow-[0_8px_20px_rgba(180,83,9,0.08)]">
@@ -229,10 +229,10 @@ function UploadBubble({ content }: { content: string }) {
         </div>
         <div className="absolute bottom-3 right-3 rounded-full bg-white/90 px-2 py-1 text-[10px] font-medium text-stone-500 shadow-sm">
           {mediaType === "storefront"
-            ? "门头照片"
+            ? "Storefront photo"
             : mediaType === "menu"
-              ? "菜单照片"
-              : "证件信息"}
+              ? "Menu photo"
+              : "ID document"}
         </div>
       </div>
     </div>
@@ -254,7 +254,7 @@ function LocationBubble({ content }: { content: string }) {
           <MapPinned className="h-8 w-8 fill-orange-500 stroke-white stroke-[1.4]" />
         </div>
         <div className="absolute left-3 top-3 rounded-full bg-white/90 px-2 py-1 text-[10px] font-medium text-orange-700 shadow-sm">
-          已分享位置
+          Location shared
         </div>
       </div>
       <div className="flex items-center gap-3 px-3 py-3">
@@ -263,7 +263,7 @@ function LocationBubble({ content }: { content: string }) {
         </div>
         <div className="min-w-0">
           <p className="truncate text-sm font-medium text-stone-700">{content}</p>
-          <p className="mt-0.5 text-xs text-stone-400">位置消息</p>
+          <p className="mt-0.5 text-xs text-stone-400">Location message</p>
         </div>
       </div>
     </div>
@@ -312,7 +312,7 @@ function LegacyFormSimulator() {
     <GlassSurface className="overflow-hidden rounded-[1.9rem] p-0">
       <div className="border-b border-orange-100 px-5 py-4">
         <SectionLabel>
-          Before: <span className="font-semibold text-amber-950">传统表单入驻</span>
+          Before: <span className="font-semibold text-amber-950">Traditional Form Onboarding</span>
         </SectionLabel>
       </div>
 
@@ -347,7 +347,7 @@ function LegacyFormSimulator() {
                 <Frown className="h-4 w-4" />
               </div>
               <p className="text-xs font-medium tracking-[0.16em] text-orange-700">
-                用户体验不佳
+                Poor user experience
               </p>
             </div>
             <div className="flex flex-col gap-2">
@@ -412,7 +412,7 @@ function AgentChatSimulator() {
     <WarmSurface className="rounded-[1.9rem] p-0">
       <div className="border-b border-orange-100 px-5 py-4">
         <SectionLabel>
-          After: <span className="font-semibold text-amber-950">AI 对话式入驻</span>
+          After: <span className="font-semibold text-amber-950">AI Conversational Onboarding</span>
         </SectionLabel>
       </div>
 
@@ -447,7 +447,7 @@ function AgentChatSimulator() {
               >
                 <div className="inline-flex items-center gap-2 rounded-full border border-orange-100 bg-white px-3 py-2 text-xs text-stone-400">
                   <MessageCircle className="h-3.5 w-3.5" />
-                  正在输入...
+                  Typing...
                 </div>
               </motion.div>
             ) : null}
@@ -465,7 +465,7 @@ export function BeforeAfterSection({
   return (
     <section>
       <div className="max-w-3xl">
-        <SectionLabel>二、Before / After 流程重构</SectionLabel>
+        <SectionLabel>2. Before / After Flow Redesign</SectionLabel>
         <h2 className="mt-4 text-3xl font-semibold tracking-tight text-amber-950 md:text-4xl">
           {title}
         </h2>

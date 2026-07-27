@@ -42,7 +42,7 @@ export function CaseStudyPage({ project }: CaseStudyPageProps) {
             className="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-white/80 px-4 py-2.5 text-sm font-medium text-stone-600 shadow-[0_8px_24px_rgba(180,83,9,0.06)] transition hover:border-orange-300 hover:text-orange-800"
           >
             <ArrowLeft className="h-4 w-4" />
-            返回首页
+            Back to Home
           </Link>
         </div>
 
@@ -121,7 +121,7 @@ export function CaseStudyPage({ project }: CaseStudyPageProps) {
               <div>
                 <SectionLabel>PRODUCT SOLUTION</SectionLabel>
                 <h2 className="mt-5 text-2xl font-semibold tracking-tight text-amber-950 md:text-3xl">
-                  把 AI 能力组织成可上线、可解释、可优化的产品结构。
+                  Organizing AI capabilities into a product structure that can be launched, explained, and optimized.
                 </h2>
                 <p className="mt-5 text-base leading-8 text-stone-600">
                   {project.solution}
@@ -148,7 +148,7 @@ export function CaseStudyPage({ project }: CaseStudyPageProps) {
             <div className="max-w-3xl">
               <SectionLabel>AI WORKFLOW / ARCHITECTURE</SectionLabel>
               <h2 className="mt-5 text-2xl font-semibold tracking-tight text-amber-950 md:text-3xl">
-                面向产品系统的流程分层，而不是单点模型调用。
+                A layered flow for a product system, not a single model call.
               </h2>
             </div>
 

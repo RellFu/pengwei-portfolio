@@ -69,234 +69,234 @@ export type CaseStudyProject = {
 export const featuredProjects: CaseStudyProject[] = [
   {
     slug: "ai-merchant-onboarding-agent",
-    title: "AI 商家入驻助手",
-    type: "Multi-Agent / AI 产品工作流",
+    title: "AI Merchant Onboarding Assistant",
+    type: "Multi-Agent / AI Product Workflow",
     summary:
-      "基于 WhatsApp 和 Multi-Agent，将海外商家入驻从传统表单流程重构为对话式资料收集、问答、审核跟进和召回工作流。",
+      "Built on WhatsApp and a multi-agent workflow, this rebuilt overseas merchant onboarding from a traditional form flow into a conversational experience for data collection, Q&A, review follow-up, and re-engagement.",
     subtitle:
-      "用 Multi-Agent 将墨西哥商家入驻流程从表单填写重构为对话式 AI 工作流",
+      "Using multi-agent orchestration to turn merchant onboarding in Mexico from form-filling into a conversational AI workflow",
     heroDescription:
-      "我参与面向海外商家的入驻 AI 助手产品设计与迭代，围绕注册后流失、资料提交复杂、审核理解成本高等问题，将原本依赖表单填写和人工解释的入驻链路，升级为基于 WhatsApp 的对话式入驻、资料识别、问答引导、审核跟进和召回流程。",
+      "I helped design and iterate an onboarding AI assistant for overseas merchants. Facing post-signup drop-off, complex document submission, and high review-comprehension costs, we upgraded an onboarding path that once relied on forms and manual explanation into a WhatsApp-based flow for conversational onboarding, document recognition, guided Q&A, review follow-up, and re-engagement.",
     overview:
-      "这是一个真实业务场景里的 AI Agent 产品案例。项目面对的是海外商家入驻流程复杂、注册后流失高、审核沟通成本高的问题。方案不是简单增加聊天机器人，而是将原本由商家自己理解平台规则的表单式入驻链路，重构为由 Multi-Agent 协同驱动的对话式 AI 工作流。",
+      "This is a real-world AI agent product case. The project tackled a complex overseas merchant onboarding flow with high post-signup drop-off and costly review communication. Rather than simply bolting on a chatbot, we rebuilt the form-based onboarding path—where merchants had to interpret platform rules themselves—into a conversational AI workflow driven by coordinated multi-agent orchestration.",
     problem:
-      "商家注册后容易流失，原因包括表单填写负担重、资料提交复杂、审核要求理解成本高，以及补件和状态跟进不清晰。",
+      "Merchants tend to drop off after signup because of a heavy form-filling burden, complex document submission, a high cost to understand review requirements, and unclear resubmission and status follow-up.",
     role:
-      "我参与了产品方案设计、Agent 场景设计、评测体系构建、Bad Case 分析、会话 ETL 数据分析与迭代判断，目标是把 AI 能力转化为可落地、可评测、可迭代的商家入驻产品流程。",
+      "I contributed to product solution design, agent scenario design, evaluation framework, bad-case analysis, and conversation ETL data analysis and iteration decisions, with the goal of turning AI capabilities into a merchant onboarding flow that is deployable, measurable, and iterable.",
     solution:
-      "设计对话式入驻流程，由主控 Agent 协调入驻 Agent、问答 Agent、审核跟进 Agent 和召回能力，结合 OCR、资料识别、系统回写和数据分析，推动商家从注册继续走向提审和上线。",
+      "Designed a conversational onboarding flow in which a master agent coordinates the onboarding agent, Q&A agent, review follow-up agent, and re-engagement capability. Combined with OCR, document recognition, system write-back, and data analysis, it moves merchants from signup toward review submission and go-live.",
     capabilities: [
       "Multi-Agent",
       "WhatsApp",
-      "商家入驻",
+      "Merchant Onboarding",
       "OCR",
       "QA Agent",
-      "ETL 分析",
-      "转化漏斗",
+      "ETL Analysis",
+      "Conversion Funnel",
     ],
     metrics: [
-      { label: "平均入驻耗时下降", value: "69.53%" },
-      { label: "AI 预审后人工通过率", value: "97.6%" },
-      { label: "AI 召回提审转化率", value: "78.39%" },
-      { label: "核心城市灰度放量", value: "50%" },
+      { label: "Reduction in avg. onboarding time", value: "69.53%" },
+      { label: "Manual pass rate after AI pre-check", value: "97.6%" },
+      { label: "AI re-engagement submission rate", value: "78.39%" },
+      { label: "Gray rollout in core cities", value: "50%" },
     ],
     impact: [
-      "平均入驻耗时下降 69.53%，显著压缩商家从注册到资料提交的完成周期。",
-      "AI 预审后人工通过率达到 97.6%，降低无效提审和反复补件。",
-      "AI 召回提审转化率达到 78.39%，高于标准召回流程的 64.65%。",
-      "项目在核心城市实现 50% 灰度放量，进入真实业务流量验证。",
+      "Reduced average onboarding time by 69.53%, significantly shortening the cycle from signup to document submission.",
+      "Reached a 97.6% manual pass rate after AI pre-check, reducing invalid submissions and repeated resubmissions.",
+      "Achieved a 78.39% AI re-engagement submission rate, above the 64.65% of the standard re-engagement flow.",
+      "Reached 50% gray rollout in core cities, entering validation on real business traffic.",
     ],
     architecture: [
       {
-        title: "WhatsApp 入口",
-        description: "商家通过熟悉的沟通渠道进入入驻流程，降低启动门槛。",
+        title: "WhatsApp Entry Point",
+        description: "Merchants enter the onboarding flow through a familiar channel, lowering the barrier to start.",
       },
       {
-        title: "主控 Agent",
-        description: "识别商家意图和当前状态，将任务分发给不同业务 Agent。",
+        title: "Master Agent",
+        description: "Recognizes merchant intent and current status, then routes tasks to the right business agents.",
       },
       {
-        title: "入驻 Agent",
-        description: "通过对话方式收集门店、法人、菜单、证件等必要信息。",
+        title: "Onboarding Agent",
+        description: "Collects required information—store, legal entity, menu, documents—through conversation.",
       },
       {
-        title: "材料识别",
-        description: "结合图片上传和 OCR，降低商家手动填写和重复确认成本。",
+        title: "Document Recognition",
+        description: "Combines image upload and OCR to reduce manual entry and repeated confirmation for merchants.",
       },
       {
-        title: "问答 Agent",
-        description: "回答入驻相关问题，并在问答后将商家引导回主流程。",
+        title: "Q&A Agent",
+        description: "Answers onboarding-related questions and guides merchants back to the main flow afterward.",
       },
       {
-        title: "审核跟进 Agent",
+        title: "Review Follow-up Agent",
         description:
-          "围绕审核状态、缺失材料、补件要求和重新提交进行引导。",
+          "Guides merchants through review status, missing documents, resubmission requirements, and re-submission.",
       },
       {
-        title: "系统回写",
+        title: "System Write-back",
         description:
-          "将会话结果和结构化信息同步回业务系统，保证前后端状态一致。",
+          "Syncs conversation results and structured information back to business systems, keeping front- and back-end state consistent.",
       },
       {
-        title: "数据分析与迭代",
+        title: "Analytics & Iteration",
         description:
-          "通过 ETL 和漏斗指标分析已读、回复、失败、完成率等问题，支持持续优化。",
+          "Analyzes read, reply, failure, and completion rates via ETL and funnel metrics to support continuous optimization.",
       },
     ],
     keyDecisions: [
-      "降低认知负担：把一次性填写大量字段，改为按步骤对话引导，让商家一次只处理一个明确任务。",
-      "渐进式信息披露：不在一开始暴露所有材料和字段要求，而是在当前步骤需要时再询问和解释。",
-      "信任感与可解释反馈：通过预审、缺失材料提示和补件引导，让商家知道为什么没有通过、下一步应该做什么。",
-      "数据驱动迭代：通过已读率、回复率、发送失败率、资料完成率和审核通过率，判断问题出在触达、理解、材料还是流程本身。",
+      "Reduce cognitive load: replace one-time entry of many fields with step-by-step conversational guidance, so merchants handle one clear task at a time.",
+      "Progressive disclosure: instead of exposing all document and field requirements upfront, ask and explain only when the current step requires it.",
+      "Trust and explainable feedback: through pre-check, missing-document prompts, and resubmission guidance, merchants understand why they didn't pass and what to do next.",
+      "Data-driven iteration: use read rate, reply rate, send-failure rate, document-completion rate, and review pass rate to tell whether the issue is reach, comprehension, documents, or the flow itself.",
     ],
     reflection:
-      "这个项目让我意识到，AI 产品的价值不在于给原有流程增加一个聊天入口，而在于围绕用户意图、业务状态、系统能力和可量化指标重新设计完整流程。对于业务场景里的 Agent 来说，关键不只是回答正确，而是能把用户持续引导到任务完成，并让业务系统状态同步更新。",
-    reflectionTitle: "从单点功能到可复用的 AI 入驻框架",
+      "This project made me realize that the value of an AI product is not in adding a chat entry point to an existing flow, but in redesigning the entire flow around user intent, business state, system capabilities, and measurable metrics. For an agent in a business scenario, what matters is not only answering correctly, but continuously guiding the user to task completion while keeping the business system's state in sync.",
+    reflectionTitle: "From a single feature to a reusable AI onboarding framework",
     tags: [
       "Multi-Agent",
       "WhatsApp",
-      "商家入驻",
+      "Merchant Onboarding",
       "OCR",
       "QA Agent",
-      "ETL 分析",
-      "转化漏斗",
+      "ETL Analysis",
+      "Conversion Funnel",
     ],
     problemCards: [
       {
-        title: "表单填写负担重",
+        title: "Heavy form-filling burden",
         description:
-          "商家需要在多个页面填写结构化信息、上传材料，并理解不同字段要求，入驻过程对新商家不够友好。",
+          "Merchants had to fill structured information across multiple pages, upload documents, and interpret different field requirements—an onboarding process that isn't friendly to new merchants.",
       },
       {
-        title: "审核沟通成本高",
+        title: "High review communication cost",
         description:
-          "商家经常需要理解缺失材料、审核状态、补件要求和重新提交方式，人工解释成本较高。",
+          "Merchants often needed to understand missing documents, review status, resubmission requirements, and how to re-submit—driving up the cost of manual explanation.",
       },
       {
-        title: "注册后转化流失",
+        title: "Post-signup conversion drop-off",
         description:
-          "部分商家完成初始注册后，没有继续完成资料提交和审核，导致注册到提审之间存在明显漏斗损耗。",
+          "Some merchants completed initial signup but never finished document submission and review, causing clear funnel loss between signup and review submission.",
       },
     ],
     funnelSteps: [
-      "访问",
-      "注册",
-      "填写门店信息",
-      "提交审核",
-      "审核通过",
-      "上线",
+      "Visit",
+      "Sign Up",
+      "Enter Store Info",
+      "Submit for Review",
+      "Approved",
+      "Go Live",
     ],
     beforeAfterItems: [
       {
-        before: "商家自己理解表单字段",
-        after: "AI 分步骤引导商家完成",
+        before: "Merchants interpret form fields themselves",
+        after: "AI guides merchants step by step",
       },
       {
-        before: "一次性暴露大量信息要求",
-        after: "按当前任务逐步询问",
+        before: "All requirements exposed at once",
+        after: "Ask step by step based on the current task",
       },
       {
-        before: "材料问题依赖人工解释",
-        after: "AI 识别材料并提示补件",
+        before: "Document issues rely on manual explanation",
+        after: "AI recognizes documents and prompts for resubmission",
       },
       {
-        before: "问答和主流程割裂",
-        after: "QA 后自动拉回入驻流程",
+        before: "Q&A disconnected from the main flow",
+        after: "Automatically pulls back to onboarding after Q&A",
       },
       {
-        before: "审核状态感知弱",
-        after: "Agent 跟进审核与补件",
+        before: "Weak awareness of review status",
+        after: "Agent follows up on review and resubmission",
       },
       {
-        before: "数据问题事后排查",
-        after: "ETL 持续分析流失与异常",
+        before: "Data issues investigated after the fact",
+        after: "ETL continuously analyzes drop-off and anomalies",
       },
     ],
     responsibilities: [
       {
-        title: "市场洞察与方案定义",
+        title: "Market Insight & Solution Definition",
         description:
-          "围绕墨西哥商家入驻场景，结合本地商家画像、现有 BD 入驻痛点和竞品 Agent 能力，判断 AI 如何降低入驻门槛，并转化为产品设计依据。",
+          "For the Mexico merchant onboarding scenario, combined local merchant profiles, existing BD onboarding pain points, and competitor agent capabilities to judge how AI could lower the onboarding barrier, then turned that into a basis for product design.",
       },
       {
-        title: "Multi-Agent 产品流程设计",
+        title: "Multi-Agent Product Flow Design",
         description:
-          "参与设计商家入驻中的 Multi-Agent 协同流程，让主控 Agent 能够根据商家意图和进度，调度不同业务 Agent 完成入驻。",
+          "Helped design the multi-agent collaboration flow for merchant onboarding, letting the master agent orchestrate different business agents based on merchant intent and progress.",
       },
       {
-        title: "Agent 评测与 Bad Case 分析",
+        title: "Agent Evaluation & Bad Case Analysis",
         description:
-          "设计 Agent 评测体系，结合人工样本与 AI 巡检评估问答表现和流程稳定性，独立组织 Bad Case 复盘周会，引导研发定位问题。",
+          "Designed the agent evaluation framework, assessing Q&A performance and flow stability with a mix of human samples and AI monitoring. Independently ran weekly bad-case reviews and guided engineering to locate issues.",
       },
       {
-        title: "数据分析与埋点监控",
+        title: "Data Analysis & Event Tracking",
         description:
-          "独立开发 session 数据分析脚本，自动化生成分析报告；同时参与官网入口埋点设计，建立指标口径，让功能迭代能够基于数据推进。",
+          "Independently built session data analysis scripts that automatically generate reports. Also helped design event tracking for the website entry point and defined metric standards, so feature iteration could be driven by data.",
       },
     ],
     resultCards: [
       {
-        category: "效率",
+        category: "Efficiency",
         value: "69.53%",
-        title: "平均入驻耗时下降",
-        description: "将商家从注册到资料提交的完成周期显著压缩。",
+        title: "Reduction in avg. onboarding time",
+        description: "Significantly shortened the cycle from signup to document submission.",
       },
       {
-        category: "转化",
+        category: "Conversion",
         value: "78.39%",
-        title: "AI 召回提审转化率",
-        description: "相比标准召回流程 64.65%，AI 召回在提审转化上表现更优。",
+        title: "AI re-engagement submission rate",
+        description: "Compared with the 64.65% of the standard flow, AI re-engagement performed better on submission conversion.",
       },
       {
-        category: "审核质量",
+        category: "Review Quality",
         value: "97.6%",
-        title: "AI 预审后人工通过率",
-        description: "AI 预审帮助商家提前发现材料和信息问题，降低无效提审。",
+        title: "Manual pass rate after AI pre-check",
+        description: "AI pre-check helped merchants catch document and information issues early, reducing invalid submissions.",
       },
       {
-        category: "业务验证",
+        category: "Business Validation",
         value: "50%",
-        title: "核心城市灰度放量",
-        description: "项目进入真实业务流量验证，而非停留在 Demo 阶段。",
+        title: "Gray rollout in core cities",
+        description: "The project entered validation on real business traffic rather than staying at the demo stage.",
       },
     ],
     productDecisionCards: [
       {
-        title: "降低认知负担",
+        title: "Reduce cognitive load",
         description:
-          "把一次性填写大量字段，改为按步骤对话引导，让商家一次只处理一个明确任务。",
+          "Replace one-time entry of many fields with step-by-step conversational guidance, so merchants handle one clear task at a time.",
       },
       {
-        title: "渐进式信息披露",
+        title: "Progressive disclosure",
         description:
-          "不在一开始暴露所有材料和字段要求，而是在当前步骤需要时再询问和解释。",
+          "Instead of exposing all document and field requirements upfront, ask and explain only when the current step requires it.",
       },
       {
-        title: "信任感与可解释反馈",
+        title: "Trust and explainable feedback",
         description:
-          "通过预审、缺失材料提示和补件引导，让商家知道为什么没有通过、下一步应该做什么。",
+          "Through pre-check, missing-document prompts, and resubmission guidance, merchants understand why they didn't pass and what to do next.",
       },
       {
-        title: "数据驱动迭代",
+        title: "Data-driven iteration",
         description:
-          "通过已读率、回复率、发送失败率、资料完成率和审核通过率，判断问题出在触达、理解、材料还是流程本身。",
+          "Use read rate, reply rate, send-failure rate, document-completion rate, and review pass rate to tell whether the issue is reach, comprehension, documents, or the flow itself.",
       },
     ],
     capabilityCards: [
       {
-        title: "Agent 编排能力",
+        title: "Agent orchestration",
         description:
-          "通过主控 Agent 协调入驻、问答、审核跟进、召回等业务 Agent，支持复杂商家状态下的任务分发。",
+          "The master agent coordinates onboarding, Q&A, review follow-up, and re-engagement agents, supporting task routing across complex merchant states.",
       },
       {
-        title: "材料理解能力",
+        title: "Document understanding",
         description:
-          "结合 OCR、图片识别、知识库问答和结构化提取，让 AI 能处理门店照片、菜单、证件和补充材料等非结构化输入。",
+          "Combining OCR, image recognition, knowledge-base Q&A, and structured extraction, the AI handles unstructured input such as storefront photos, menus, documents, and supplementary materials.",
       },
       {
-        title: "业务系统联动能力",
+        title: "Business system integration",
         description:
-          "将 AI 会话结果、商家状态和业务系统流程打通，使 Agent 不只是回答问题，而是推动入驻流程继续向前。",
+          "Connects AI conversation results, merchant state, and business system flows, so the agent not only answers questions but keeps pushing the onboarding flow forward.",
       },
     ],
   },
@@ -305,15 +305,15 @@ export const featuredProjects: CaseStudyProject[] = [
     title: "ByteDance AI Tools",
     type: "RAG / LLM Workflow / Procurement AI",
     summary:
-      "围绕商品标准化、供应商比价与艺人价格咨询，落地 3 个从 0 到 1 的 AI 工具，将采购整理、比价和咨询流程产品化。",
+      "Around product normalization, supplier price comparison, and talent pricing consultation, I shipped three 0-to-1 AI tools that productized procurement cleanup, comparison, and consultation workflows.",
     overview:
-      "围绕采购与业务决策场景，把高人工成本的整理、比价和咨询工作拆成 3 个独立 AI 工具，并沉淀为可复用的 RAG + LLM Workflow。",
+      "Around procurement and business-decision scenarios, I broke high-labor cleanup, comparison, and consultation work into three independent AI tools, distilled into reusable RAG + LLM workflows.",
     problem:
-      "采购数据分散、命名混乱、人工判断成本高，导致整理效率、判断一致性和决策可追溯性都受到影响。",
+      "Procurement data was scattered and inconsistently named, and manual judgment was costly—hurting cleanup efficiency, decision consistency, and traceability.",
     role:
-      "独立设计并推进 3 个从 0 到 1 的 AI 工具，从问题抽象、检索与输出设计，到 Workflow 产品化与结果验证。",
+      "Independently designed and drove three 0-to-1 AI tools, from problem abstraction, retrieval, and output design to workflow productization and result validation.",
     solution:
-      "将商品标准化、供应商比价与艺人价格咨询拆分为可检索、可结构化、可复用的 AI Workflow，并分别提供批处理、evidence 输出和可解释建议能力。",
+      "Split product normalization, supplier price comparison, and talent pricing consultation into retrievable, structured, reusable AI workflows, each offering batch processing, evidence-backed output, and explainable recommendations respectively.",
     capabilities: [
       "RAG",
       "Structured JSON",
@@ -322,56 +322,56 @@ export const featuredProjects: CaseStudyProject[] = [
       "Operational Tooling",
     ],
     metrics: [
-      { label: "匹配准确率", value: "96.45%+" },
-      { label: "效率提升", value: "数十倍" },
-      { label: "可追溯输出", value: "100%" },
-      { label: "咨询效率", value: "10倍+" },
+      { label: "Matching accuracy", value: "96.45%+" },
+      { label: "Efficiency gain", value: "Tens of x" },
+      { label: "Traceable output", value: "100%" },
+      { label: "Consultation efficiency", value: "10x+" },
     ],
     impact: [
-      "围绕商品标准化、供应商比价和艺人价格咨询分别落地 3 个 AI 工具。",
-      "将 RAG 检索、结构化输出、阈值控制与 evidence 绑定设计为稳定工作流。",
-      "把采购判断从高成本人工整理升级为更高效、更可控、更可追溯的流程。",
-      "沉淀出一套可迁移的 Procurement AI Workflow 方法。",
+      "Shipped three AI tools for product normalization, supplier price comparison, and talent pricing consultation.",
+      "Designed RAG retrieval, structured output, threshold control, and evidence binding into stable workflows.",
+      "Upgraded procurement judgment from high-cost manual cleanup to a more efficient, controllable, and traceable process.",
+      "Distilled a transferable procurement AI workflow methodology.",
     ],
     architecture: [
       {
-        title: "商品标准化匹配",
+        title: "Product Normalization Matching",
         description:
-          "围绕 SKU 映射与命名标准构建检索与匹配逻辑，输出结构化标准结果。",
+          "Built retrieval and matching logic around SKU mapping and naming standards, outputting structured standardized results.",
       },
       {
-        title: "供应商比价 AI",
+        title: "Supplier Comparison AI",
         description:
-          "将历史报价与结构化条款比对结合，输出带 evidence 的比价总结。",
+          "Combined historical quotes with structured-term comparison to output evidence-backed comparison summaries.",
       },
       {
-        title: "艺人价格咨询 Agent",
+        title: "Talent Pricing Consultation Agent",
         description:
-          "检索相似历史案例并生成可解释的价格建议，支持快速咨询与复用。",
+          "Retrieves similar historical cases and generates explainable pricing recommendations, supporting fast consultation and reuse.",
       },
     ],
     keyDecisions: [
-      "优先把业务场景拆成可复用 Workflow，而不是做一个泛化的大模型入口。",
-      "坚持 evidence 绑定和结构化输出，保证关键结论可复核、可追踪。",
-      "从 0 到 1 的设计同时考虑批处理、回写与人工兜底，降低上线后不确定性。",
+      "Prioritize breaking business scenarios into reusable workflows rather than building one generic LLM entry point.",
+      "Insist on evidence binding and structured output to keep key conclusions verifiable and traceable.",
+      "Design 0-to-1 tools with batch processing, write-back, and human fallback in mind to reduce post-launch uncertainty.",
     ],
     reflection:
-      "这组项目进一步验证了我的一个判断：AI 产品的价值不只在于回答得像不像人，而在于是否能把检索、判断、输出和复核组织成可复用的业务工作流。",
+      "This set of projects further validated a belief of mine: the value of an AI product lies not in how human-like the answers sound, but in whether it can organize retrieval, judgment, output, and review into reusable business workflows.",
   },
   {
     slug: "policy-news-rag-assistant",
-    title: "政策新闻选题 RAG 助手",
-    type: "独立 AI 项目 / RAG / 评测",
+    title: "Policy News Topic RAG Assistant",
+    type: "Independent AI Project / RAG / Evaluation",
     summary:
-      "围绕海南自贸港政策报道，构建证据约束的选题助手，并通过检索校验与降级逻辑提升生成可靠性。",
+      "For policy coverage of the Hainan Free Trade Port, built an evidence-constrained topic assistant and improved generation reliability through retrieval verification and fallback logic.",
     overview:
-      "这是一个偏研究与产品验证结合的案例，目标不是单纯生成选题，而是让政策新闻建议具备证据约束、质量验证和可回退的工作机制。",
+      "This case blends research and product validation. The goal was not simply to generate topics, but to give policy-news suggestions evidence constraints, quality verification, and a fallback mechanism.",
     problem:
-      "政策报道选题需要同时兼顾时效性、可信度和引用依据，单纯生成容易出现无证据支撑或质量波动。",
+      "Policy-coverage topics must balance timeliness, credibility, and citation basis; pure generation easily produces unsupported claims or inconsistent quality.",
     role:
-      "独立负责任务定义、RAG 工作流设计、评测框架构建、检索配置比较与输出可靠性验证。",
+      "Independently owned task definition, RAG workflow design, evaluation framework, retrieval configuration comparison, and output reliability validation.",
     solution:
-      "搭建包含检索、重排、生成、验证和降级的分层流程，让选题建议建立在明确证据和可回退机制之上。",
+      "Built a layered pipeline of retrieval, reranking, generation, verification, and fallback, so topic suggestions rest on explicit evidence and a fallback mechanism.",
     capabilities: [
       "RAG Evaluation",
       "Citation Binding",
@@ -380,41 +380,41 @@ export const featuredProjects: CaseStudyProject[] = [
       "Latency Analysis",
     ],
     metrics: [
-      { label: "引用覆盖率", value: "100%" },
-      { label: "Gold 任务集", value: "50 条" },
-      { label: "流程层级", value: "5 层" },
-      { label: "评测重点", value: "时延 + 质量" },
+      { label: "Citation coverage", value: "100%" },
+      { label: "Gold task set", value: "50 tasks" },
+      { label: "Pipeline layers", value: "5 layers" },
+      { label: "Evaluation focus", value: "Latency + Quality" },
     ],
     impact: [
-      "设计检索、重排、生成、校验、降级的完整工作流。",
-      "实现证据绑定与引用过滤，确保输出有据可依。",
-      "实现任务级 100% 引用覆盖率。",
-      "构建 Gold Task Set、无检索基线、开发集调优、向量配置对比与时延分析体系。",
+      "Designed a complete workflow of retrieval, reranking, generation, verification, and fallback.",
+      "Implemented evidence binding and citation filtering to ensure outputs are grounded.",
+      "Achieved 100% citation coverage at the task level.",
+      "Built a Gold Task Set, a no-retrieval baseline, dev-set tuning, vector-config comparison, and latency analysis.",
     ],
     architecture: [
       {
-        title: "检索与重排",
+        title: "Retrieval & Reranking",
         description:
-          "先召回政策相关资料，再通过重排保证进入生成环节的是更高相关度、更适合引用的内容。",
+          "First recall policy-relevant materials, then rerank to ensure the content entering generation is higher-relevance and better suited for citation.",
       },
       {
-        title: "生成与校验",
+        title: "Generation & Verification",
         description:
-          "生成阶段要求绑定证据来源，同时在后置校验阶段筛除不充分或不可信的结论。",
+          "Generation requires binding to evidence sources, while a post-verification stage filters out insufficient or untrustworthy conclusions.",
       },
       {
-        title: "降级与评测闭环",
+        title: "Fallback & Evaluation Loop",
         description:
-          "当证据不足时主动降级，避免强行输出；同时通过 Gold Task Set 和对比实验评估质量与时延。",
+          "When evidence is insufficient, proactively fall back instead of forcing output; evaluate quality and latency via a Gold Task Set and comparison experiments.",
       },
     ],
     keyDecisions: [
-      "把证据绑定作为输出要求的一部分，而不是事后补充参考来源。",
-      "在生成流程中显式加入验证与降级机制，以可靠性优先于流畅度。",
-      "通过无检索基线和配置对比来判断 RAG 设计是否真的带来增益。",
+      "Make evidence binding part of the output requirement, not an afterthought that appends references later.",
+      "Explicitly add verification and fallback into the generation pipeline, prioritizing reliability over fluency.",
+      "Use a no-retrieval baseline and configuration comparison to judge whether the RAG design truly adds value.",
     ],
     reflection:
-      "这个项目让我更确认，做 RAG 产品不能只看回答是否顺滑，还要看证据是否站得住、失败时是否能优雅降级，以及评测是否能支持持续迭代。",
+      "This project further confirmed that building a RAG product isn't just about whether the answer reads smoothly—it's about whether the evidence holds up, whether it degrades gracefully on failure, and whether the evaluation can support continuous iteration.",
   },
 ];
 

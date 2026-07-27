@@ -23,12 +23,12 @@ export async function generateMetadata({
 
   if (!project) {
     return {
-      title: "项目未找到 | 傅鹏威作品集",
+      title: "Project Not Found | Pengwei Fu Portfolio",
     };
   }
 
   return {
-    title: `${project.title} | 傅鹏威作品集`,
+    title: `${project.title} | Pengwei Fu Portfolio`,
     description: project.summary,
   };
 }

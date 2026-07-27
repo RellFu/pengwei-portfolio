@@ -53,47 +53,47 @@ const entryModules: readonly IconModule[] = [
     ),
   },
   {
-    label: "官网",
+    label: "Website",
     imageSrc: "/icon/DiDi_symbol.svg",
     imageClassName: "h-4 w-4",
   },
-  { label: "商家 App", icon: Smartphone },
-  { label: "BD 入口", icon: QrCode },
-  { label: "多模态交互", icon: ImageIcon },
-  { label: "请求路由", icon: Route },
+  { label: "Merchant App", icon: Smartphone },
+  { label: "BD Entry", icon: QrCode },
+  { label: "Multimodal Input", icon: ImageIcon },
+  { label: "Request Routing", icon: Route },
 ] as const;
 
 const capabilityGroups = [
   {
-    title: "Agent 编排与知识库",
-    modules: ["Prompt", "状态驱动", "流程编排", "Query分类", "问题管理", "术语库"],
+    title: "Agent Orchestration & KB",
+    modules: ["Prompt", "State-driven", "Flow Orchestration", "Query Classification", "Issue Management", "Glossary"],
   },
   {
-    title: "AI 工具与能力",
-    modules: ["OCR", "多语言", "记忆管理", "断点连续", "RAG", "CoT", "API 调用"],
+    title: "AI Tools & Capabilities",
+    modules: ["OCR", "Multilingual", "Memory Mgmt", "Resume", "RAG", "CoT", "API Calls"],
   },
 ];
 
 const businessAgents = [
-  "商家入驻 Agent",
-  "审核 Agent",
-  "商机推进 Agent",
-  "智能问答 Agent",
-  "招商 Agent",
-  "经营 Agent",
-  "智能评估 Agent",
+  "Onboarding Agent",
+  "Review Agent",
+  "Opportunity Agent",
+  "Q&A Agent",
+  "Acquisition Agent",
+  "Operations Agent",
+  "Evaluation Agent",
   "Worker Agent+",
 ];
 
 const closeLoopModules = [
-  { label: "风控策略", icon: ShieldCheck },
-  { label: "人工介入", icon: UserRound },
-  { label: "审计追踪", icon: FileSearch },
-  { label: "系统回写", icon: DatabaseZap },
-  { label: "状态同步", icon: TimerReset },
-  { label: "ETL 分析", icon: BarChart3 },
-  { label: "Agent 看板", icon: LayoutDashboard },
-  { label: "LLMOps 评估", icon: CircleGauge },
+  { label: "Risk Control", icon: ShieldCheck },
+  { label: "Human Intervention", icon: UserRound },
+  { label: "Audit Trail", icon: FileSearch },
+  { label: "System Write-back", icon: DatabaseZap },
+  { label: "State Sync", icon: TimerReset },
+  { label: "ETL Analysis", icon: BarChart3 },
+  { label: "Agent Dashboard", icon: LayoutDashboard },
+  { label: "LLMOps Eval", icon: CircleGauge },
 ] as const;
 
 function SideLabel({
@@ -228,10 +228,10 @@ function MasterAgentCore() {
             <div className="flex h-6.5 w-6.5 items-center justify-center rounded-full bg-orange-100 text-orange-700">
               <Layers3 className="h-4 w-4" />
             </div>
-            <p className="text-sm font-semibold leading-none text-amber-950">主控 Agent</p>
+            <p className="text-sm font-semibold leading-none text-amber-950">Master Agent</p>
           </div>
           <p className="mt-1 text-[11px] leading-none text-stone-500">
-            意图识别 · 状态判断 · 任务分发
+            Intent recognition · State judgment · Task routing
           </p>
         </div>
       </div>
@@ -315,18 +315,18 @@ export function AgentArchitectureSection() {
     <section>
       <div className="max-w-5xl">
         <SectionLabel>
-          三、Multi-Agent 产品架构
+          3. Multi-Agent Product Architecture
         </SectionLabel>
         <h2 className="mt-2 text-[2rem] font-semibold tracking-tight text-amber-950 md:text-[2.5rem] md:leading-[1.02]">
-          从对话入口到业务闭环的 <span className="text-orange-600">Multi-Agent</span> 架构
+          A <span className="text-orange-600">Multi-Agent</span> architecture from conversation entry to business loop
         </h2>
         <p className="mt-3 max-w-5xl text-[15px] leading-7 text-stone-600 md:text-base">
-          主控 Agent 调度多个专业 Agent，入口、能力层与闭环层共同支撑完整产品架构。
+          A master agent orchestrates multiple specialized agents; the entry, capability, and loop layers together support the full product architecture.
         </p>
       </div>
 
       <div className="mt-6 space-y-2">
-        <LayerFrame title="入口层" subtitle="渠道与触达">
+        <LayerFrame title="Entry Layer" subtitle="Channels & Reach">
           <SectionShell>
             <div className="grid gap-1.5 md:grid-cols-3 xl:grid-cols-6">
               {entryModules.map((module) => (
@@ -343,15 +343,15 @@ export function AgentArchitectureSection() {
           </SectionShell>
         </LayerFrame>
 
-        <LayerFrame title="Agent 应用层" subtitle="核心协同" emphasis>
+        <LayerFrame title="Agent Layer" subtitle="Core Orchestration" emphasis>
           <MasterAgentCore />
         </LayerFrame>
 
-        <LayerFrame title="能力支撑层" subtitle="基础设施">
+        <LayerFrame title="Capability Layer" subtitle="Infrastructure">
           <CapabilityBand />
         </LayerFrame>
 
-        <LayerFrame title="合规与数据闭环" subtitle="风控与集成">
+        <LayerFrame title="Compliance & Data Loop" subtitle="Risk & Integration">
           <CloseLoopBand />
         </LayerFrame>
       </div>

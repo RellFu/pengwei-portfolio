@@ -44,7 +44,7 @@ export function ProjectCard({
       <Link
         href={`/projects/${slug}`}
         className="block"
-        aria-label={`查看项目详情：${title}`}
+        aria-label={`View project details: ${title}`}
       >
         <div className="absolute inset-x-0 top-0 h-28 bg-[linear-gradient(180deg,rgba(255,237,213,0.7),rgba(255,255,255,0))]" />
 

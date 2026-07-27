@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "傅鹏伟 | AI 产品作品集",
+  title: "Pengwei Fu | AI Product Portfolio",
   description:
-    "傅鹏伟的 AI 产品作品集，聚焦智能体工作流、RAG 系统、ETL 分析与数据驱动的产品设计。",
+    "Pengwei Fu's AI product portfolio, focused on agent workflows, RAG systems, ETL analytics, and data-driven product design.",
   icons: {
     icon: [
       { url: "/pw-favicon.ico" },
@@ -32,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN" className="h-full antialiased">
+    <html lang="en" className="h-full antialiased">
       <body className="min-h-full flex flex-col bg-background text-foreground">
         {children}
       </body>

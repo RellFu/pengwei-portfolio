@@ -45,13 +45,13 @@ export function MerchantCaseStudyCard({
 
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               <div className="rounded-[1.5rem] border border-orange-100 bg-white/76 p-5">
-                <SectionLabel>问题</SectionLabel>
+                <SectionLabel>Problem</SectionLabel>
                 <p className="mt-3 text-sm leading-7 text-stone-600">
                   {project.problem}
                 </p>
               </div>
               <WarmSurface className="rounded-[1.5rem] p-5 shadow-none">
-                <SectionLabel>方案</SectionLabel>
+                <SectionLabel>Solution</SectionLabel>
                 <p className="mt-3 text-sm leading-7 text-stone-600">
                   {project.solution}
                 </p>
@@ -59,9 +59,9 @@ export function MerchantCaseStudyCard({
             </div>
 
             <div className="mt-4 rounded-[1.5rem] border border-orange-100 bg-orange-50/70 p-5">
-              <SectionLabel>效果</SectionLabel>
+              <SectionLabel>Result</SectionLabel>
               <p className="mt-3 text-sm leading-7 text-stone-600">
-                平均入驻耗时下降 69.53%，AI 预审后人工通过率达到 97.6%，AI 召回提审转化率达到 78.39%，高于标准召回流程的 64.65%，并在核心城市实现 50% 灰度放量。
+                Average onboarding time down 69.53%; manual pass rate after AI pre-check reached 97.6%; AI re-engagement submission rate reached 78.39%, above the 64.65% of the standard flow; with 50% gray rollout in core cities.
               </p>
             </div>
 
@@ -78,7 +78,7 @@ export function MerchantCaseStudyCard({
                 href={`/projects/${project.slug}`}
                 className="inline-flex items-center gap-2 rounded-full bg-orange-500 px-6 py-3.5 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(249,115,22,0.24)] transition hover:bg-orange-400"
               >
-                查看案例
+                View Case Study
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>

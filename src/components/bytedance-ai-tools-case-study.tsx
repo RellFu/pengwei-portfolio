@@ -34,108 +34,108 @@ import type { CaseStudyProject } from "@/data/projects";
 
 const overviewCards = [
   {
-    title: "商品标准化匹配",
-    description: "统一商品命名，写回结构化结果",
+    title: "Product Normalization",
+    description: "Unify product naming, write back structured results",
     icon: Tags,
   },
   {
-    title: "供应商比价 AI",
-    description: "生成可追溯的比价总结",
+    title: "Supplier Comparison AI",
+    description: "Generate traceable comparison summaries",
     icon: Landmark,
   },
   {
-    title: "艺人价格咨询 Agent",
-    description: "检索历史案例，提供价格建议",
+    title: "Talent Pricing Agent",
+    description: "Retrieve historical cases, provide pricing advice",
     icon: Bot,
   },
 ];
 
-const overviewTags = ["更高效", "更可控", "更可追溯", "可复用"];
+const overviewTags = ["More efficient", "More controllable", "More traceable", "Reusable"];
 
 const problemCards = [
   {
-    title: "成熟先例少",
+    title: "Few mature precedents",
     description:
-      "AI 采购缺少成熟先例，需要从真实流程中拆场景，定义边界并验证可行性。",
+      "AI procurement lacks mature precedents; scenarios must be carved out of real workflows, with boundaries defined and feasibility validated.",
     icon: Tags,
   },
   {
-    title: "数据链路复杂",
+    title: "Complex data pipeline",
     description:
-      "报价、历史轮次和合同数据分散，字段口径不统一，影响检索与分析质量。",
+      "Quotes, historical rounds, and contract data are scattered with inconsistent field definitions, hurting retrieval and analysis quality.",
     icon: BarChart3,
   },
   {
-    title: "输出风险高",
+    title: "High output risk",
     description:
-      "价格和供应商信息高度敏感，AI 结果一旦误判，会影响采购决策和业务复盘。",
+      "Price and supplier information are highly sensitive; a wrong AI result can affect procurement decisions and business reviews.",
     icon: FolderSearch2,
   },
 ];
 
 const toolProjects = [
   {
-    title: "项目一：艺人价格咨询 Agent",
+    title: "Project 1: Talent Pricing Agent",
     summary:
-      "基于历史合作案例与结构化价格信息，构建面向采购场景的艺人价格咨询 Agent。用户输入艺人、平台、活动形式及时长等需求后，系统自动召回相似案例，返回参考价格区间、案例依据与风险提示，帮助采购更快完成初步报价判断。",
+      "Built a talent pricing consultation agent for procurement, based on historical collaboration cases and structured price information. After a user enters the talent, platform, activity format, and duration, the system automatically recalls similar cases and returns a reference price range, case basis, and risk alerts—helping procurement reach an initial pricing judgment faster.",
     problem:
-      "艺人报价案例分散在历史合作记录中，缺少统一检索与横向对比能力。采购在输入艺人、活动形式、平台及时长等需求后，仍需要人工翻查相似案例，判断成本高，报价咨询效率低。",
+      "Talent quote cases were scattered across historical collaboration records with no unified retrieval or cross-comparison. After entering the talent, activity format, platform, and duration, procurement still had to manually dig through similar cases—high judgment cost, low consultation efficiency.",
     solution:
-      "围绕艺人名称、平台、活动类型、时长、城市等级与历史合作价格等关键信息，构建价格咨询 Agent。用户输入需求后，系统自动召回相似案例，提取价格区间与关键条件，并返回参考报价及依据。",
+      "Built the pricing agent around key information such as talent name, platform, activity type, duration, city tier, and historical collaboration price. After the user enters requirements, the system automatically recalls similar cases, extracts price ranges and key conditions, and returns a reference quote with its basis.",
     result:
-      "将原本依赖人工检索和经验判断的流程，升级为可快速查询、可解释的价格参考能力。报价咨询效率提升 10倍+，相似案例覆盖准确率 90%+，输出结果可解释、可复用，帮助采购更快完成初步报价判断。",
+      "Upgraded a process that relied on manual retrieval and gut judgment into a fast, explainable price-reference capability. Consultation efficiency improved 10x+, with 90%+ coverage accuracy on similar cases; outputs are explainable and reusable, helping procurement reach an initial pricing judgment faster.",
     chips: [],
     previewType: "agent" as const,
   },
   {
-    title: "项目二：商品信息整理系统",
+    title: "Project 2: Product Information Cleanup System",
     summary:
-      "基于 RAG 架构，搭建标准 SKU 映射知识库，自动完成商品标准化匹配与结果回写。",
+      "Built a standard SKU mapping knowledge base on a RAG architecture to automatically perform product normalization matching and write back results.",
     problem:
-      "供应商出库记录和商品信息格式不统一，商品名称、单位、规格、价格字段经常混乱；同一商品可能存在多种表达方式，采购和数据同学需要人工逐条归类、匹配标准 SKU，耗时长且容易出错。",
+      "Supplier outbound records and product information were inconsistently formatted, with frequently messy name, unit, spec, and price fields; the same product could be expressed many ways, forcing procurement and data teammates to manually categorize and match standard SKUs one by one—slow and error-prone.",
     solution:
-      "搭建标准 SKU / 食材映射知识库，将原始商品行拆解为结构化字段，通过知识库检索召回候选，再结合规则打分和 LLM 语义判断完成标准化匹配；低分结果不直接入表，最终将原始记录、匹配分和标准商品字段回写到多维表格。",
+      "Built a standard SKU / ingredient mapping knowledge base, decomposed raw product rows into structured fields, recalled candidates via knowledge-base retrieval, then combined rule-based scoring with LLM semantic judgment to complete normalization matching; low-score results don't enter the table directly, and the raw record, match score, and standard product fields are written back to a multi-dimensional table.",
     result:
-      "将混乱商品记录转化为可统计、可比价、可追溯的标准化数据，减少人工逐条整理成本，支持后续入口率统计、成本分析和供应商比价。",
+      "Turned messy product records into standardized data that is countable, comparable, and traceable, reducing manual line-by-line cleanup and supporting downstream entry-rate statistics, cost analysis, and supplier comparison.",
     previewType: "matching" as const,
   },
   {
-    title: "项目三：供应商比价 AI Summary",
+    title: "Project 3: Supplier Comparison AI Summary",
     summary:
-      "基于 RAG + 结构化报价数据，自动生成带 evidence 的供应商比价总结与谈判建议。",
+      "Automatically generates evidence-backed supplier comparison summaries and negotiation advice, based on RAG + structured quote data.",
     problem:
-      "寻源系统原本更像报价和谈判流程工具，采购员需要自己查看报价表、历史轮次和异常价格，再人工整理比价结论，耗时且容易遗漏。",
+      "The sourcing system was more of a quoting and negotiation workflow tool; buyers had to review quote tables, historical rounds, and anomalous prices themselves, then manually compile comparison conclusions—time-consuming and easy to miss things.",
     solution:
-      "将输入拆成比价模板、本次比价指标、历史报价轮次和价格详情数据四类上下文，让 LLM 在明确数据协议下生成 PE1 客观总结与 PE2 谈判建议。",
+      "Split the input into four context types—comparison template, current comparison metrics, historical quote rounds, and price detail data—so the LLM generates a PE1 objective summary and PE2 negotiation advice under a clear data protocol.",
     result:
-      "系统从流程工具升级为数据分析与谈判辅助工具，减少人工写总结和找异常的成本；PE1 / PE2 分开评测，MOS 目标准确率不低于 90%。",
+      "Upgraded the system from a workflow tool into a data-analysis and negotiation-assist tool, cutting the cost of manually writing summaries and hunting anomalies; PE1 and PE2 are evaluated separately, with an MOS target accuracy of no less than 90%.",
     previewType: "summary" as const,
   },
 ];
 
 const methodCards = [
   {
-    title: "业务理解先行",
+    title: "Business understanding first",
     description:
-      "先和采购相关业务方对齐真实流程，理解报价和比价等规则，再把模糊诉求转成清晰的 AI 产品任务。",
+      "Align with procurement stakeholders on the real workflow, understand quoting and comparison rules, then turn vague asks into clear AI product tasks.",
     icon: PackageSearch,
   },
   {
-    title: "从需求到可用工具",
+    title: "From requirements to usable tools",
     description:
-      "将业务方需求拆成具体处理逻辑，独立交付可用工具，而非停留在原型阶段。",
+      "Break stakeholder needs into concrete processing logic and independently deliver usable tools, rather than stopping at the prototype stage.",
     icon: Boxes,
   },
   {
-    title: "代码驱动交付",
+    title: "Code-driven delivery",
     description:
-      "用 Python、JavaScript 完成结构化数据处理、JSON 拆解、规则判断和结果写回，让 AI 能力直接接入真实采购分析流程。",
+      "Use Python and JavaScript for structured data processing, JSON parsing, rule-based judgment, and result write-back, plugging AI capabilities directly into the real procurement analysis workflow.",
     icon: Code2,
   },
   {
-    title: "AI 工具协同开发",
+    title: "AI-assisted development",
     description:
-      "结合 Codex，Cursor 等 coding 工具快速开发和调试，在产品判断与工程实现之间缩短交付周期，提升小团队落地效率。",
+      "Used coding tools like Codex and Cursor for fast development and debugging, shortening the delivery cycle between product judgment and engineering, and boosting a small team's execution efficiency.",
     icon: Bot,
   },
 ];
@@ -143,33 +143,33 @@ const methodCards = [
 const resultCards = [
   {
     value: "96.45%+",
-    title: "匹配准确率",
-    description: "商品标准化匹配准确率显著提升。",
+    title: "Matching accuracy",
+    description: "Significant improvement in product normalization matching accuracy.",
   },
   {
-    value: "数十倍",
-    title: "效率提升",
-    description: "从小时级人工整理压缩到自动化秒级处理。",
+    value: "Tens of x",
+    title: "Efficiency gain",
+    description: "Compressed hours of manual cleanup into automated second-level processing.",
   },
   {
     value: "100%",
-    title: "可追溯输出",
-    description: "核心结论绑定 evidence，支持复核与审计。",
+    title: "Traceable output",
+    description: "Core conclusions bound to evidence, supporting review and audit.",
   },
   {
-    value: "10倍+",
-    title: "咨询效率",
-    description: "艺人价格咨询响应效率大幅提升。",
+    value: "10x+",
+    title: "Consultation efficiency",
+    description: "Major improvement in talent pricing consultation response efficiency.",
   },
 ];
 
 const matchingSteps = [
-  { label: "原始商品行", icon: PackageSearch },
-  { label: "结构化处理", icon: Database },
-  { label: "知识库检索", icon: FileSearch },
-  { label: "规则打分", icon: ShieldCheck },
-  { label: "LLM 匹配", icon: Sparkles },
-  { label: "结果写回", icon: BadgeCheck },
+  { label: "Raw Product Row", icon: PackageSearch },
+  { label: "Structured Processing", icon: Database },
+  { label: "KB Retrieval", icon: FileSearch },
+  { label: "Rule Scoring", icon: ShieldCheck },
+  { label: "LLM Matching", icon: Sparkles },
+  { label: "Result Write-back", icon: BadgeCheck },
 ];
 
 function MatchingPreview() {
@@ -178,7 +178,7 @@ function MatchingPreview() {
       <div className="space-y-4">
         <div className="rounded-[1.25rem] border border-orange-100 bg-orange-50/60 p-4">
           <p className="text-[11px] font-medium tracking-[0.16em] text-orange-700">
-            工作流
+            Workflow
           </p>
           <div className="mt-3 grid gap-3 sm:grid-cols-6">
             {matchingSteps.map((step, index) => {
@@ -201,26 +201,26 @@ function MatchingPreview() {
           </div>
 
           <div className="mt-4 rounded-[1.1rem] border border-dashed border-orange-200 bg-white/88 px-3 py-2 text-[11px] leading-5 text-stone-600">
-            <span className="font-medium text-orange-700">规则打分：</span>
-            通过 prompt 定义相似度评分规则，并按分值区分匹中与未匹中。
+            <span className="font-medium text-orange-700">Rule Scoring: </span>
+            Define similarity scoring rules via prompt, and separate matched vs. unmatched by score.
           </div>
         </div>
 
         <div className="grid gap-3 lg:grid-cols-[0.88fr_1.12fr] lg:items-center">
           <div>
             <p className="mb-2 text-[11px] font-medium tracking-[0.16em] text-orange-700">
-              原始商品数据
+              Raw Product Data
             </p>
             <div className="overflow-hidden rounded-[1.05rem] border border-orange-100 bg-white/88">
               <div className="grid grid-cols-[minmax(0,1fr)_3rem] gap-1 border-b border-orange-100 px-3 py-2 text-[10px] font-medium text-stone-500">
-                <span className="min-w-0">原始商品名称</span>
-                <span>单价</span>
+                <span className="min-w-0">Raw Product Name</span>
+                <span>Price</span>
               </div>
               {[
-                ["原味旺旺雪饼435克黑米家庭团聚送亲戚", "13"],
-                ["早餐糕点盼盼薄脆饼干海盐口味600g/箱", "23"],
-                ["无穷牌蜂蜜味烤鸡翅根20g*20个/盒", "44"],
-                ["格力高 百醇巧克力味 48g*5条", "23"],
+                ["Want Want Rice Crackers Original 435g Black Rice Family Pack for Gifting", "13"],
+                ["Pan Pan Breakfast Crispy Crackers Sea Salt 600g/case", "23"],
+                ["Wuqiong Roasted Chicken Wings Honey 20g*20pcs/box", "44"],
+                ["Glico Pocky Chocolate 48g*5 sticks", "23"],
               ].map((row, index) => (
                 <div
                   key={row[0]}
@@ -237,20 +237,20 @@ function MatchingPreview() {
 
           <div>
             <p className="mb-2 text-[11px] font-medium tracking-[0.16em] text-orange-700">
-              AI 匹配结果
+              AI Matching Result
             </p>
             <div className="overflow-hidden rounded-[1.05rem] border border-orange-200 bg-white/88 shadow-[0_10px_28px_rgba(180,83,9,0.08)]">
               <div className="grid grid-cols-[2.75rem_minmax(0,1fr)_3rem_3.5rem] gap-1 border-b border-orange-100 px-3 py-2 text-[10px] font-medium text-stone-500">
-                <span>状态</span>
-                <span className="min-w-0">标准商品名</span>
-                <span>匹配分</span>
-                <span>编码</span>
+                <span>Status</span>
+                <span className="min-w-0">Standard Name</span>
+                <span>Score</span>
+                <span>Code</span>
               </div>
               {[
-                ["匹中", "旺旺 黑米雪饼 原味 425g 家庭装", "100", "423", "text-green-600"],
-                ["匹中", "盼盼 薄脆饼干 平海苔味 600g/箱", "80", "563", "text-green-600"],
-                ["匹中", "无穷烤鸡翅根 蜂蜜味 20g*20个/盒", "60", "629", "text-green-600"],
-                ["未匹中", "格力高 百醇巧克力味 48g*5条", "0", "—", "text-red-500"],
+                ["Matched", "Want Want Black Rice Crackers Original 425g Family Pack", "100", "423", "text-green-600"],
+                ["Matched", "Pan Pan Crispy Crackers Seaweed 600g/case", "80", "563", "text-green-600"],
+                ["Matched", "Wuqiong Roasted Chicken Wings Honey 20g*20pcs/box", "60", "629", "text-green-600"],
+                ["Unmatched", "Glico Pocky Chocolate 48g*5 sticks", "0", "—", "text-red-500"],
               ].map((row, index) => (
                 <div
                   key={row[1]}
@@ -287,14 +287,14 @@ function SummaryPreview() {
           <div className="grid gap-3 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
             <div>
               <p className="text-[11px] font-medium tracking-[0.16em] text-orange-700">
-                输入
+                Input
               </p>
               <div className="mt-3 grid gap-2">
                 {[
-                  ["比价模板", "报价维度 / 对比口径"],
-                  ["本次比价指标", "价格 / 交付 / 风险"],
-                  ["历史报价轮次", "多轮报价记录"],
-                  ["价格详情", "异常价格与明细"],
+                  ["Comparison Template", "Quote dimensions / comparison basis"],
+                  ["Comparison Metrics", "Price / Delivery / Risk"],
+                  ["Historical Quote Rounds", "Multi-round quote records"],
+                  ["Price Details", "Anomalous prices & line items"],
                 ].map((row) => (
                   <div
                     key={row[0]}
@@ -309,12 +309,12 @@ function SummaryPreview() {
 
             <div>
               <p className="text-[11px] font-medium tracking-[0.16em] text-orange-700">
-                输出
+                Output
               </p>
               <div className="mt-3 grid gap-2">
                 {[
-                  ["PE1 总结", "客观总结"],
-                  ["PE2 建议", "谈判建议"],
+                  ["PE1 Summary", "Objective summary"],
+                  ["PE2 Advice", "Negotiation advice"],
                 ].map((row) => (
                   <div
                     key={row[0]}
@@ -334,13 +334,13 @@ function SummaryPreview() {
         <div className="grid gap-3 lg:grid-cols-[0.35fr_0.65fr] lg:gap-8 lg:items-start">
           <div className="rounded-[1.25rem] border border-orange-100 bg-orange-50/65 p-4">
             <p className="text-[11px] font-medium tracking-[0.16em] text-orange-700">
-              输入示例
+              Input Example
             </p>
             <div className="mt-3 space-y-2">
               {[
-                ["供应商 A", "¥128,000"],
-                ["供应商 B", "¥121,500"],
-                ["供应商 C", "¥136,000"],
+                ["Supplier A", "¥128,000"],
+                ["Supplier B", "¥121,500"],
+                ["Supplier C", "¥136,000"],
               ].map((row) => (
                 <div
                   key={row[0]}
@@ -355,11 +355,11 @@ function SummaryPreview() {
 
           <div className="rounded-[1.25rem] border border-orange-100 bg-orange-50/70 p-4">
             <p className="text-[11px] font-medium tracking-[0.16em] text-orange-700">
-              输出结果
+              Output Result
             </p>
             <div className="mt-3 rounded-[1rem] border border-orange-100 bg-white/88 p-4">
               <p className="text-[11px] leading-6 text-stone-600">
-                供应商 B 报价最低，A 交付周期更短。建议优先推进供应商 B，A 可作为备选，注意关注异常价格与交付周期。
+                Supplier B has the lowest quote; A has a shorter delivery cycle. Recommend prioritizing Supplier B with A as backup; watch for anomalous prices and delivery timelines.
               </p>
             </div>
           </div>
@@ -367,13 +367,13 @@ function SummaryPreview() {
 
         <div className="rounded-[1.2rem] border border-orange-100 bg-white/82 p-3">
           <p className="text-[11px] font-medium tracking-[0.16em] text-orange-700">
-            评估与保障
+            Evaluation & Safeguards
           </p>
           <div className="mt-3 grid gap-2 md:grid-cols-3">
             {[
-              ["PE1", "仅总结，不给建议"],
-              ["PE2", "仅基于价格详情给建议"],
-              ["MOS", "置信度 / 完整性 / 格式"],
+              ["PE1", "Summary only, no advice"],
+              ["PE2", "Advice based only on price details"],
+              ["MOS", "Confidence / Completeness / Format"],
             ].map((item) => (
               <div
                 key={item[0]}
@@ -392,11 +392,11 @@ function SummaryPreview() {
 
 function AgentPreview() {
   const userQuery =
-    "如果请傅鹏伟参加抖音年度哈哈大会讲5分钟脱口秀，近期参考价是？";
+    "If we invited Pengwei Fu to perform a 5-minute standup set at Douyin's annual comedy gala, what's a recent reference price?";
 
   const peerCases = [
-    ["案例 A", "¥180k - ¥220k", "线下活动 / 5min / 脱口秀表演"],
-    ["案例 B", "¥210k - ¥240k", "品牌晚会 / 8min / 开场脱口秀"],
+    ["Case A", "¥180k - ¥220k", "Offline event / 5min / standup performance"],
+    ["Case B", "¥210k - ¥240k", "Brand gala / 8min / opening standup"],
   ];
 
   return (
@@ -414,21 +414,21 @@ function AgentPreview() {
         <div className="rounded-[1.2rem] border border-orange-100 bg-orange-50/50 p-4">
           <div className="flex items-center gap-2 text-sm font-semibold text-amber-950">
             <Bot className="h-4 w-4 text-orange-600" />
-            Agent 分析结果
+            Agent Analysis
           </div>
             <div className="mt-3 space-y-3">
             <div className="rounded-[1rem] border border-orange-100 bg-white/90 p-4">
-              <div className="text-[12px] font-semibold text-amber-950">艺人基本信息</div>
+              <div className="text-[12px] font-semibold text-amber-950">Talent Profile</div>
               <p className="mt-3 text-[11px] leading-5 text-stone-600">
-                傅鹏伟，中国内地脱口秀演员。代表作有《需求评审睡着了》《我和研发做兄弟》等，还参加过《乘风破浪的AI产品实习生》等综艺；
+                Pengwei Fu, a mainland Chinese standup comedian. Known for sets like &ldquo;Falling Asleep in the Requirements Review&rdquo; and &ldquo;Bros with the Engineers,&rdquo; and appearances on variety shows such as &ldquo;Riding the Winds and Waves: AI Product Interns.&rdquo;
               </p>
               <p className="mt-2 text-[11px] leading-5 text-stone-600">
-                参考定级定价：抖音粉丝量为296.49万，话题播放量为207.65亿，定级为A
+                Reference tier/pricing: 2.9649M Douyin followers, 20.765B topic views, rated Tier A.
               </p>
             </div>
 
             <div className="rounded-[1rem] border border-orange-100 bg-white/90 p-4">
-              <div className="text-[12px] font-semibold text-amber-950">同级案例表单</div>
+              <div className="text-[12px] font-semibold text-amber-950">Comparable Cases</div>
               <div className="mt-3 grid gap-2">
                 {peerCases.map((row) => (
                   <div
@@ -444,20 +444,20 @@ function AgentPreview() {
             </div>
 
             <div className="rounded-[1rem] border border-orange-100 bg-white/90 px-4 py-4 text-[12px] leading-6 text-stone-600">
-              <p className="font-medium text-amber-950">建议结果</p>
+              <p className="font-medium text-amber-950">Recommendation</p>
               <p className="mt-3">
-                建议参考区间为 <span className="font-semibold text-orange-600">¥200k - ¥230k</span>，
-                依据是近 3 个月参考案例生成。
+                Suggested reference range: <span className="font-semibold text-orange-600">¥200k - ¥230k</span>,
+                based on comparable cases from the last 3 months.
               </p>
             </div>
 
             <div className="rounded-[1rem] border border-amber-200 bg-amber-50/70 px-4 py-4 text-[12px] leading-6 text-stone-600 shadow-[0_6px_16px_rgba(180,83,9,0.04)]">
               <div className="flex items-center gap-2 font-medium text-amber-950">
                 <CircleAlert className="h-4 w-4 text-amber-600" />
-                舆论预警
+                Public Sentiment Alert
               </div>
               <p className="mt-3">
-                近期傅鹏伟在某场直播中坦言“产品经理可以完全代替研发”，引发公众舆论；且在 2025 年被媒体爆出在公司和运营 leader 有严重矛盾，被怀疑是人品问题，请注意合作舆情风险。
+                Recently, in a livestream, Pengwei Fu openly claimed that &ldquo;product managers can fully replace engineers,&rdquo; sparking public controversy; he was also reported in 2025 to have had a serious conflict with an operations lead at his company, raising questions about his character. Please note the reputational risk of collaboration.
               </p>
             </div>
           </div>
@@ -499,7 +499,7 @@ export function ByteDanceAiToolsCaseStudy({
             className="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-white/80 px-4 py-2.5 text-sm font-medium text-stone-600 shadow-[0_8px_24px_rgba(180,83,9,0.06)] transition hover:border-orange-300 hover:text-orange-800"
           >
             <ArrowLeft className="h-4 w-4" />
-            返回首页
+            Back to Home
           </Link>
         </div>
 
@@ -508,10 +508,10 @@ export function ByteDanceAiToolsCaseStudy({
             <h1 className="text-4xl font-semibold tracking-tight text-amber-950 sm:text-5xl md:text-6xl md:leading-[1.04]">
               ByteDance PSAI
               <br />
-              赋能采购决策流程
+              Empowering Procurement Decisions
             </h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-stone-600 md:text-xl">
-              面向字节采购业务中的商品匹配、比价总结和价格咨询场景，实现 3 个 AI 工具的产品设计与工程落地，将高人工成本流程转化为更高效、更稳定的 AI 工作流。
+              For product matching, comparison summaries, and pricing consultation in ByteDance procurement, delivered the product design and engineering of three AI tools, turning high-labor processes into more efficient, more stable AI workflows.
             </p>
           </div>
 
@@ -534,7 +534,7 @@ export function ByteDanceAiToolsCaseStudy({
                 Procurement
               </h3>
               <p className="mt-2 text-lg font-medium text-stone-600">
-                采购 AI 工具矩阵
+                Procurement AI Tool Matrix
               </p>
             </GlassSurface>
 
@@ -545,7 +545,7 @@ export function ByteDanceAiToolsCaseStudy({
                     <Tags className="h-4 w-4" />
                   </span>
                   <div>
-                    <p className="text-sm font-semibold text-amber-950">商品信息整理</p>
+                    <p className="text-sm font-semibold text-amber-950">Product Cleanup</p>
                   </div>
                 </div>
               </div>
@@ -556,7 +556,7 @@ export function ByteDanceAiToolsCaseStudy({
                     <Building2 className="h-4 w-4" />
                   </span>
                   <div>
-                    <p className="mt-1 text-sm font-semibold text-amber-950">供应商比价</p>
+                    <p className="mt-1 text-sm font-semibold text-amber-950">Supplier Comparison</p>
                   </div>
                 </div>
               </div>
@@ -567,7 +567,7 @@ export function ByteDanceAiToolsCaseStudy({
                     <Bot className="h-4 w-4" />
                   </span>
                   <div>
-                    <p className="text-sm font-semibold text-amber-950">价格咨询Agent</p>
+                    <p className="text-sm font-semibold text-amber-950">Pricing Agent</p>
                   </div>
                 </div>
               </div>
@@ -587,9 +587,9 @@ export function ByteDanceAiToolsCaseStudy({
         <div className="mt-16 grid gap-8">
           <section>
             <div className="max-w-4xl">
-              <SectionLabel>一、业务问题</SectionLabel>
+              <SectionLabel>1. Business Problem</SectionLabel>
               <h2 className="mt-4 text-[2rem] font-semibold tracking-tight text-amber-950 md:text-[2.5rem] md:leading-[1.02]">
-                采购场景复杂、数据敏感、AI 输出稳定性要求高
+                Complex procurement scenarios, sensitive data, high demands on AI output stability
               </h2>
             </div>
 
@@ -611,12 +611,12 @@ export function ByteDanceAiToolsCaseStudy({
 
           <section>
             <div className="max-w-4xl">
-              <SectionLabel>二、三个从 0 到 1 的 AI 工具</SectionLabel>
+              <SectionLabel>2. Three 0-to-1 AI Tools</SectionLabel>
               <h2 className="mt-4 text-[2rem] font-semibold tracking-tight text-amber-950 md:text-[2.5rem] md:leading-[1.02]">
-                3 个 AI 工具赋能采购决策流程
+                Three AI tools empowering procurement decisions
               </h2>
               <p className="mt-3 text-[15px] leading-7 text-stone-600">
-                从艺人价格咨询、商品标准化到供应商比价，用 AI 降低人工成本，提升采购判断效率与结果一致性。
+                From talent pricing to product normalization to supplier comparison, using AI to lower labor cost and improve the efficiency and consistency of procurement judgment.
               </p>
             </div>
 
@@ -638,7 +638,7 @@ export function ByteDanceAiToolsCaseStudy({
                       </h3>
                       <p className="mt-3 text-base leading-8 text-stone-600">
                         {item.previewType === "summary"
-                          ? "面向寻源比价场景，将报价表、历史轮次和价格明细转化为AI 总结能力，辅助采购员快速形成比价判断。"
+                          ? "For sourcing and comparison, turns quote tables, historical rounds, and price details into AI summary capability, helping buyers quickly form a comparison judgment."
                           : item.summary}
                       </p>
 
@@ -650,7 +650,7 @@ export function ByteDanceAiToolsCaseStudy({
                           <p className="mt-2 text-sm leading-7 text-stone-600">
                             {item.previewType === "matching" || item.previewType === "agent"
                               ? item.problem
-                              : "寻源系统原本更偏报价和谈判流程管理，采购员仍需要手动查看报价表、历史轮次和异常价格，再整理比价结论，耗时且容易遗漏关键变化。"}
+                              : "The sourcing system leaned toward quoting and negotiation workflow management; buyers still had to manually review quote tables, historical rounds, and anomalous prices, then compile comparison conclusions—time-consuming and easy to miss key changes."}
                           </p>
                         </div>
                         <div className="rounded-[1.35rem] border border-orange-100 bg-white/82 p-4">
@@ -660,7 +660,7 @@ export function ByteDanceAiToolsCaseStudy({
                           <p className="mt-2 text-sm leading-7 text-stone-600">
                             {item.previewType === "matching" || item.previewType === "agent"
                               ? item.solution
-                              : "参与上下文设计与输出约束，将输入拆成比价模板、本次比价指标、历史报价轮次和价格详情数据四类，让 LLM 在明确数据协议下生成 PE1 客观总结与 PE2 谈判建议。"}
+                              : "Contributed to context design and output constraints, splitting input into four types—comparison template, current comparison metrics, historical quote rounds, and price detail data—so the LLM generates a PE1 objective summary and PE2 negotiation advice under a clear data protocol."}
                           </p>
                         </div>
                         <div className="rounded-[1.35rem] border border-orange-100 bg-white/82 p-4">
@@ -670,7 +670,7 @@ export function ByteDanceAiToolsCaseStudy({
                           <p className="mt-2 text-sm leading-7 text-stone-600">
                             {item.previewType === "matching" || item.previewType === "agent"
                               ? item.result
-                              : "系统从流程工具升级为数据分析与谈判辅助工具，可自动生成当前价格总结、多轮报价变化总结和谈判建议；PE1 和 PE2 分开评测，MOS 目标准确率不低于 90%。"}
+                              : "Upgraded the system from a workflow tool into a data-analysis and negotiation-assist tool that auto-generates current-price summaries, multi-round change summaries, and negotiation advice; PE1 and PE2 are evaluated separately, with an MOS target accuracy of no less than 90%."}
                           </p>
                         </div>
                       </div>
@@ -702,12 +702,12 @@ export function ByteDanceAiToolsCaseStudy({
 
           <section>
             <div className="max-w-4xl">
-              <SectionLabel>三、方法沉淀</SectionLabel>
+              <SectionLabel>3. Methodology</SectionLabel>
               <h2 className="mt-4 text-[2rem] font-semibold tracking-tight text-amber-950 md:text-[2.5rem] md:leading-[1.02]">
-                从业务理解到 AI 产品交付
+                From business understanding to AI product delivery
               </h2>
               <p className="mt-3 text-[15px] leading-7 text-stone-600">
-                在采购这种高专业度场景中，把业务问题拆成 AI 工作流，并用代码交付团队可直接使用的工具。
+                In a highly specialized domain like procurement, break business problems into AI workflows and deliver ready-to-use tools to the team through code.
               </p>
             </div>
 

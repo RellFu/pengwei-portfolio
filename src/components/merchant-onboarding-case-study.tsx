@@ -47,14 +47,14 @@ type MerchantOnboardingCaseStudyProps = {
 };
 
 const competitorResearchDetails = [
-  "多模态提交",
-  "OCR 识别",
-  "实时预审",
-  "流程拉回",
-  "断点续接",
-  "知识库答疑",
-  "进度查看",
-  "流失召回",
+  "Multimodal submission",
+  "OCR recognition",
+  "Real-time pre-check",
+  "Flow pull-back",
+  "Resume from breakpoint",
+  "Knowledge-base Q&A",
+  "Progress tracking",
+  "Drop-off re-engagement",
 ];
 
 const competitorLogos = [
@@ -62,126 +62,126 @@ const competitorLogos = [
   { name: "Rappi", src: "/logos/Rappi_logo.svg" },
   { name: "Keeta", src: "/logos/Keeta_logo.png" },
   { name: "iFood", src: "/logos/IFood_logo.svg" },
-  { name: "淘宝闪购", src: "/logos/Taobaoshangou.svg" },
-  { name: "美团", src: "/logos/meituan.webp" },
+  { name: "Taobao Instant", src: "/logos/Taobaoshangou.svg" },
+  { name: "Meituan", src: "/logos/meituan.webp" },
 ];
 
 const workflowSteps = [
-  { title: "WhatsApp 触达", icon: MessageCircleMore },
-  { title: "对话式 AI 引导", icon: Bot },
-  { title: "资料 AI 识别", icon: ScanText },
-  { title: "智能预审纠错", icon: CheckCircle2 },
-  { title: "实时答疑", icon: CircleHelp },
-  { title: "数据回写 CRM", icon: Database },
+  { title: "WhatsApp Reach", icon: MessageCircleMore },
+  { title: "Conversational AI Guidance", icon: Bot },
+  { title: "AI Document Recognition", icon: ScanText },
+  { title: "Smart Pre-check & Correction", icon: CheckCircle2 },
+  { title: "Real-time Q&A", icon: CircleHelp },
+  { title: "Write Back to CRM", icon: Database },
 ];
 
 const agentCards = [
   {
-    title: "商家入驻 Agent",
-    description: "资料收集与流程引导",
+    title: "Onboarding Agent",
+    description: "Data collection and flow guidance",
     icon: UserRound,
   },
   {
-    title: "入驻预审 Agent",
-    description: "预审纠错与补件提醒",
+    title: "Pre-check Agent",
+    description: "Pre-check correction and resubmission reminders",
     icon: ScanSearch,
   },
   {
-    title: "智能问答 Agent",
-    description: "实时答疑并回拉主流程",
+    title: "Q&A Agent",
+    description: "Real-time answers, pulling back to the main flow",
     icon: MessageCircleMore,
   },
   {
-    title: "商机推进 Agent",
-    description: "中断识别与召回推进",
+    title: "Opportunity Agent",
+    description: "Interruption detection and re-engagement",
     icon: Waypoints,
   },
 ];
 
 const agentCapabilityChips = [
-  { label: "上下文记忆", icon: BrainCircuit },
-  { label: "工具调用", icon: Wrench },
-  { label: "结果回写", icon: Database },
+  { label: "Context Memory", icon: BrainCircuit },
+  { label: "Tool Calling", icon: Wrench },
+  { label: "Result Write-back", icon: Database },
 ];
 const stabilityChips = [
-  { label: "断点续接", icon: Link2 },
-  { label: "流程回拉", icon: RefreshCcw },
-  { label: "异常兜底", icon: BadgeAlert },
+  { label: "Resume from Breakpoint", icon: Link2 },
+  { label: "Flow Pull-back", icon: RefreshCcw },
+  { label: "Error Fallback", icon: BadgeAlert },
 ];
 
 const evaluationDimensions = [
   {
-    title: "回复质量",
-    items: ["语言自然", "语种混杂", "参数暴露", "幻觉情况"],
+    title: "Reply Quality",
+    items: ["Natural language", "Language mixing", "Parameter leakage", "Hallucination"],
   },
   {
-    title: "QA 问答",
-    items: ["1:1 提问", "混合提问", "模糊语义", "变形问"],
+    title: "Q&A",
+    items: ["1:1 questions", "Mixed questions", "Ambiguous intent", "Rephrased questions"],
   },
   {
-    title: "流程执行",
-    items: ["前向流程", "后向流程", "流程拉回", "字段收集"],
+    title: "Flow Execution",
+    items: ["Forward flow", "Backward flow", "Flow pull-back", "Field collection"],
   },
   {
-    title: "多模态理解",
-    items: ["图文混发", "多图理解", "OCR", "伪造识别"],
+    title: "Multimodal Understanding",
+    items: ["Text + image", "Multi-image", "OCR", "Forgery detection"],
   },
   {
-    title: "系统一致性",
-    items: ["CRM", "工具调用", "前后台", "BD 回应"],
+    title: "System Consistency",
+    items: ["CRM", "Tool calling", "Front/back office", "BD response"],
   },
 ];
 
-const reviewLoop = ["定位问题", "分析根因", "修复 Bug", "复测", "回到定位问题"];
+const reviewLoop = ["Locate issue", "Analyze root cause", "Fix bug", "Retest", "Back to locating"];
 
 const heroBubbles = [
   {
-    text: "你好，请告诉我的店铺名称",
+    text: "Hi, please tell me your store name",
     className: "right-8 top-4 md:right-10 md:top-2",
     delayClassName: "animate-[heroBubble_8s_ease-in-out_infinite]",
   },
   {
-    text: "请上传你的门头图",
+    text: "Please upload your storefront photo",
     className: "right-0 top-52 md:right-2 md:top-56",
     delayClassName: "animate-[heroBubble_8s_ease-in-out_infinite_3.2s]",
   },
   {
-    text: "请上传菜单图片",
+    text: "Please upload your menu photo",
     className: "right-2 bottom-10 md:right-4 md:bottom-12",
     delayClassName: "animate-[heroBubble_8s_ease-in-out_infinite_1.6s]",
   },
   {
-    text: "我来帮你检查资料",
+    text: "Let me help check your documents",
     className: "left-0 bottom-6 md:left-6 md:bottom-14",
     delayClassName: "animate-[heroBubble_8s_ease-in-out_infinite_0.8s]",
   },
 ];
 
 const sessionPipeline = [
-  { label: "Session ID 拉取", icon: FileStack },
-  { label: "ETL 清洗", icon: Wrench },
-  { label: "状态补齐", icon: RefreshCcw },
-  { label: "LLM 分类", icon: Bot },
-  { label: "自动报告", icon: ScrollText },
+  { label: "Fetch Session ID", icon: FileStack },
+  { label: "ETL Cleaning", icon: Wrench },
+  { label: "State Completion", icon: RefreshCcw },
+  { label: "LLM Classification", icon: Bot },
+  { label: "Auto Report", icon: ScrollText },
 ];
 
 const attributionSources = [
   {
-    label: "被动触达",
+    label: "Passive reach",
     value: "12,558",
     percent: "64.7%",
     width: "64.7%",
     color: "bg-orange-400",
   },
   {
-    label: "主动点击",
+    label: "Active click",
     value: "1,477",
     percent: "26.9%",
     width: "26.9%",
     color: "bg-amber-400",
   },
   {
-    label: "表单页挽留",
+    label: "Form-page retention",
     value: "390",
     percent: "8.4%",
     width: "8.4%",
@@ -242,7 +242,7 @@ function ResponsibilityCard({
       >
         <button
           type="button"
-          aria-label="关闭详情"
+          aria-label="Close details"
           onClick={() => setExpanded(false)}
           className={`absolute inset-0 bg-[rgba(66,39,18,0.18)] backdrop-blur-md transition duration-300 ${
             expanded ? "opacity-100" : "opacity-0"
@@ -259,7 +259,7 @@ function ResponsibilityCard({
           >
             <button
               type="button"
-              aria-label="关闭详情"
+              aria-label="Close details"
               onClick={() => setExpanded(false)}
               className="absolute right-6 top-6 flex h-8 w-8 items-center justify-center rounded-full bg-orange-500 text-white transition hover:scale-[1.03]"
             >
@@ -271,7 +271,7 @@ function ResponsibilityCard({
                 <div className="mx-auto flex w-full max-w-4xl flex-col items-start space-y-5 text-left">
                   <div className="w-full">
                     <h4 className="text-lg font-semibold text-amber-950 sm:text-xl">
-                      AI 入驻链路重构
+                      AI Onboarding Flow Redesign
                     </h4>
                     <div className="mt-4 grid grid-cols-3 items-start gap-x-2 gap-y-3 md:grid-cols-6 md:gap-x-3">
                       {workflowSteps.map((step, index) => {
@@ -300,16 +300,16 @@ function ResponsibilityCard({
 
                   <div className="w-full">
                     <h4 className="text-lg font-semibold text-amber-950 sm:text-xl">
-                      Multi-Agent 协同调度
+                      Multi-Agent Orchestration
                     </h4>
                     <div className="mt-4 space-y-4">
                       <div className="mx-auto max-w-3xl rounded-[1.15rem] border border-orange-100/90 bg-white/88 px-4 py-2.5 text-center shadow-[0_10px_20px_rgba(180,83,9,0.05)]">
                         <div>
                           <h5 className="text-base font-semibold text-amber-950 sm:text-lg">
-                            主控 Agent
+                            Master Agent
                           </h5>
                           <p className="mt-1 text-[13px] leading-5 text-stone-600">
-                            识别商家意图，结合当前进度拆解任务，并路由到对应业务 Agent。
+                            Recognizes merchant intent, breaks down tasks based on current progress, and routes to the right business agent.
                           </p>
                         </div>
                       </div>
@@ -357,30 +357,30 @@ function ResponsibilityCard({
 
                   <div>
                     <h4 className="text-lg font-semibold text-amber-950 sm:text-xl">
-                      设计价值
+                      Design Value
                     </h4>
                     <p className="mt-3 text-[13px] leading-6 text-stone-600 sm:text-[14px] sm:leading-7">
-                      将 Agent 从单轮问答升级为
+                      Upgrades the agent from single-turn Q&A into a
                       <span className="mx-1 font-semibold text-orange-700">
-                        流程执行层
+                        flow-execution layer
                       </span>
-                      ，让它能够
+                      , enabling it to
                       <span className="mx-1 font-semibold text-orange-700">
-                        理解商家状态
+                        understand merchant state
                       </span>
-                      、
+                      ,
                       <span className="mx-1 font-semibold text-orange-700">
-                        路由任务
+                        route tasks
                       </span>
-                      、
+                      ,
                       <span className="mx-1 font-semibold text-orange-700">
-                        调用能力
+                        call capabilities
                       </span>
-                      ，并
+                      , and
                       <span className="mx-1 font-semibold text-orange-700">
-                        持续推进入驻完成
+                        keep driving onboarding to completion
                       </span>
-                      。
+                      .
                     </p>
                   </div>
                 </div>
@@ -388,7 +388,7 @@ function ResponsibilityCard({
                 <div className="mx-auto flex w-full max-w-4xl flex-col items-start space-y-5 text-left">
                   <div className="w-full">
                     <h4 className="text-lg font-semibold text-amber-950 sm:text-xl">
-                      评测体系设计
+                      Evaluation Framework Design
                     </h4>
                     <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
                       {evaluationDimensions.map((group, index) => {
@@ -428,20 +428,20 @@ function ResponsibilityCard({
 
                   <div className="w-full">
                     <h4 className="text-lg font-semibold text-amber-950 sm:text-xl">
-                      AI 自动巡检
+                      AI Automated Monitoring
                     </h4>
                     <p className="mt-3 max-w-3xl text-[13px] leading-6 text-stone-600 sm:text-[14px] sm:leading-7">
-                      主导设计自动巡检 Agent，定义评测口径，自动识别异常会话，实现用 AI 检 AI。
+                      Led the design of an automated monitoring agent, defined evaluation standards, and automatically flagged abnormal conversations—using AI to inspect AI.
                     </p>
                     <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)] lg:items-stretch">
                       <div className="rounded-[1.15rem] border border-orange-100/90 bg-white/82 p-4 shadow-[0_10px_20px_rgba(180,83,9,0.05)]">
                         <div className="rounded-[0.95rem] bg-orange-50/60 px-3 py-2.5">
                           <p className="flex items-center gap-1.5 text-[12px] font-medium text-stone-500">
                             <UserRound className="h-3.5 w-3.5 text-orange-500" />
-                            用户
+                            User
                           </p>
                           <p className="mt-1 text-[13px] leading-6 text-stone-700">
-                            我想找一下你们这边的顾问。
+                            I&apos;d like to reach one of your consultants.
                           </p>
                         </div>
                         <div className="mt-3 rounded-[0.95rem] border border-orange-100/80 bg-white px-3 py-2.5">
@@ -450,21 +450,21 @@ function ResponsibilityCard({
                             Agent
                           </p>
                           <p className="mt-1 text-[13px] leading-6 text-stone-700">
-                            我理解你的心情，但是请先上传菜单照片。
+                            I understand how you feel, but please upload your menu photo first.
                           </p>
                         </div>
                       </div>
 
                       <div className="rounded-[1.15rem] border border-orange-100/90 bg-white/82 p-4 shadow-[0_10px_20px_rgba(180,83,9,0.05)]">
                         <h5 className="text-[15px] font-semibold text-amber-950">
-                          AI 巡检结果
+                          AI Monitoring Result
                         </h5>
                         <div className="mt-3 space-y-2 text-[13px] leading-6 text-stone-700">
-                          <p>未正确理解用户诉求</p>
-                          <p>未触发兜底机制</p>
-                          <p>应提供客服电话但未给出</p>
+                          <p>Failed to correctly understand the user&apos;s request</p>
+                          <p>Did not trigger the fallback mechanism</p>
+                          <p>Should have provided a support phone number but didn&apos;t</p>
                           <p className="font-semibold text-orange-700">
-                            风险等级：中
+                            Risk level: Medium
                           </p>
                         </div>
                       </div>
@@ -474,19 +474,19 @@ function ResponsibilityCard({
 
                   <div className="w-full">
                     <h4 className="text-lg font-semibold text-amber-950 sm:text-xl">
-                      Bad Case 归因
+                      Bad Case Attribution
                     </h4>
                     <p className="mt-3 max-w-3xl text-[13px] leading-6 text-stone-600 sm:text-[14px] sm:leading-7">
-                      将问题从表层现象进一步归因到 Prompt、知识库、Agent 路由、OCR、多模态处理或后台系统链路。
+                      Traced issues from surface symptoms down to root causes in the prompt, knowledge base, agent routing, OCR, multimodal processing, or back-end system chain.
                     </p>
                   </div>
 
                   <div className="w-full">
                     <h4 className="text-lg font-semibold text-amber-950 sm:text-xl">
-                      研发复盘闭环
+                      Engineering Review Loop
                     </h4>
                     <p className="mt-3 max-w-3xl text-[13px] leading-6 text-stone-600 sm:text-[14px] sm:leading-7">
-                      独立组织每周 Bad Case 复盘，结合 session、traceId 与异常归因，引导研发定位问题、修复与复测。
+                      Independently ran weekly bad-case reviews, combining session, traceId, and anomaly attribution to guide engineering through locating, fixing, and retesting.
                     </p>
                   </div>
                 </div>
@@ -494,10 +494,10 @@ function ResponsibilityCard({
                 <div className="mx-auto flex w-full max-w-4xl flex-col items-start space-y-5 text-left">
                   <div className="w-full">
                     <h4 className="text-lg font-semibold text-amber-950 sm:text-xl">
-                      会话数据分析
+                      Conversation Data Analysis
                     </h4>
                     <p className="mt-3 max-w-3xl text-[13px] leading-6 text-stone-600 sm:text-[14px] sm:leading-7">
-                      独立开发会话级分析脚本，分析用户和Agent的会话数据以定位用户卡点，推进功能优化。
+                      Independently built session-level analysis scripts to analyze user and agent conversation data, locate where users got stuck, and drive feature optimization.
                     </p>
                     <div className="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-3 text-[13px] font-medium text-amber-950">
                       {sessionPipeline.map((item, index) => {
@@ -519,29 +519,29 @@ function ResponsibilityCard({
 
                     <div className="mt-5 rounded-[1.15rem] border border-orange-100/90 bg-white/82 p-4 shadow-[0_10px_20px_rgba(180,83,9,0.05)]">
                       <h5 className="text-[15px] font-semibold text-amber-950">
-                        数据洞察
+                        Data Insight
                       </h5>
                       <p className="mt-3 text-[13px] leading-6 text-stone-600 sm:text-[14px] sm:leading-7">
-                        门头图AI审核被拒率高达50%
+                        Storefront-photo AI rejection rate as high as 50%
                         <span className="mx-1 text-orange-400">→</span>
-                        放宽OCR容错
+                        loosened OCR tolerance
                         <span className="mx-1 text-orange-400">→</span>
-                        商家入驻完成率从21.9%提升至76.6%
+                        merchant onboarding completion rate rose from 21.9% to 76.6%
                       </p>
                     </div>
                   </div>
 
                   <div className="w-full">
                     <h4 className="text-lg font-semibold text-amber-950 sm:text-xl">
-                      官网入口埋点归因
+                      Website Entry Event-Tracking Attribution
                     </h4>
                     <p className="mt-3 max-w-3xl text-[13px] leading-6 text-stone-600 sm:text-[14px] sm:leading-7">
-                      与数据产品经理协作定义官网入口埋点，分析用户行为以优化功能
+                      Collaborated with the data PM to define event tracking for the website entry point, analyzing user behavior to optimize features.
                     </p>
 
                     <div className="mt-5 rounded-[1.15rem] border border-orange-100/90 bg-white/82 p-4 shadow-[0_10px_20px_rgba(180,83,9,0.05)]">
                       <h5 className="text-[15px] font-semibold text-amber-950">
-                        来源拆分（UV）
+                        Source Breakdown (UV)
                       </h5>
                       <div className="mt-3 overflow-hidden rounded-full bg-orange-100/70">
                         <div className="flex h-3 w-full">
@@ -571,19 +571,19 @@ function ResponsibilityCard({
                 <div className="mx-auto flex w-full max-w-4xl flex-col items-start space-y-5 text-left">
                   <div className="w-full">
                     <h4 className="text-lg font-semibold text-amber-950 sm:text-xl">
-                      本地场景洞察
+                      Local Scenario Insight
                     </h4>
                     <p className="mt-4 max-w-3xl text-[13px] leading-6 text-stone-600 sm:text-[14px] sm:leading-7">
-                      墨西哥商家以中小家庭餐厅为主，数字化能力有限，复杂表单和人工跟进容易造成入驻流失。
+                      Merchants in Mexico are mostly small family restaurants with limited digital capability, where complex forms and manual follow-up easily cause onboarding drop-off.
                     </p>
                   </div>
 
                   <div className="w-full">
                     <h4 className="text-lg font-semibold text-amber-950 sm:text-xl">
-                      竞品能力参考
+                      Competitor Capability Reference
                     </h4>
                     <p className="mt-4 max-w-3xl text-[13px] leading-6 text-stone-600 sm:text-[14px] sm:leading-7">
-                      横向参考
+                      Benchmarked
                     </p>
                     <div className="mt-3 grid max-w-4xl grid-cols-3 gap-3 sm:grid-cols-6">
                       {competitorLogos.map((item) => (
@@ -600,7 +600,7 @@ function ResponsibilityCard({
                       ))}
                     </div>
                     <p className="mt-4 max-w-3xl text-[13px] leading-6 text-stone-600 sm:text-[14px] sm:leading-7">
-                      的商家入驻链路，重点分析：
+                      merchant onboarding flows, focusing on:
                     </p>
                     <div className="mt-4 grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-4">
                       {competitorResearchDetails.map((item) => (
@@ -616,44 +616,44 @@ function ResponsibilityCard({
 
                   <div className="w-full">
                     <h4 className="text-lg font-semibold text-amber-950 sm:text-xl">
-                      核心判断
+                      Core Judgment
                     </h4>
                     <div className="mt-4 max-w-3xl space-y-3 text-[13px] leading-6 text-stone-600 sm:text-[14px] sm:leading-7">
                       <p>
                         <span className="mr-2 font-semibold text-amber-950">1.</span>
-                        墨西哥商家入驻需要
+                        Merchant onboarding in Mexico needs an
                         <span className="mx-1 font-semibold text-orange-700">
                           AI Agent
                         </span>
-                        降低
+                        to lower the barrier of
                         <span className="mx-1 font-semibold text-orange-700">
-                          资料提交
+                          document submission
                         </span>
-                        与
+                        and
                         <span className="mx-1 font-semibold text-orange-700">
-                          流程理解门槛
+                          flow comprehension
                         </span>
-                        。
+                        .
                       </p>
                       <p>
                         <span className="mr-2 font-semibold text-amber-950">2.</span>
-                        Agent 更适合嵌入
+                        The agent fits better embedded in
                         <span className="mx-1 font-semibold text-orange-700">WhatsApp</span>
-                        ，复用
-                        <span className="mx-1 font-semibold text-orange-700">图片上传</span>
-                        、
-                        <span className="mx-1 font-semibold text-orange-700">即时消息</span>
-                        、
-                        <span className="mx-1 font-semibold text-orange-700">会话触达</span>
-                        和
-                        <span className="mx-1 font-semibold text-orange-700">用户熟悉度</span>
-                        优势。
+                        , reusing its advantages in
+                        <span className="mx-1 font-semibold text-orange-700">image upload</span>
+                        ,
+                        <span className="mx-1 font-semibold text-orange-700">instant messaging</span>
+                        ,
+                        <span className="mx-1 font-semibold text-orange-700">conversational reach</span>
+                        , and
+                        <span className="mx-1 font-semibold text-orange-700">user familiarity</span>
+                        .
                       </p>
                       <p>
                         <span className="mr-2 font-semibold text-amber-950">3.</span>
-                        自由对话容易造成
-                        <span className="mx-1 font-semibold text-orange-700">流程发散</span>
-                        ，因此更依赖意图识别、上下文记忆与异常兜底。
+                        Free-form conversation easily causes
+                        <span className="mx-1 font-semibold text-orange-700">flow divergence</span>
+                        , so it relies more on intent recognition, context memory, and error fallback.
                       </p>
                     </div>
                   </div>
@@ -690,7 +690,7 @@ export function MerchantOnboardingCaseStudy({
             className="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-white/80 px-4 py-2.5 text-sm font-medium text-stone-600 shadow-[0_8px_24px_rgba(180,83,9,0.06)] transition hover:border-orange-300 hover:text-orange-800"
           >
             <ArrowLeft className="h-4 w-4" />
-            返回首页
+            Back to Home
           </Link>
         </div>
 
@@ -698,10 +698,10 @@ export function MerchantOnboardingCaseStudy({
           <div className="max-w-2xl">
             <h1 className="mt-4 text-4xl font-semibold tracking-tight text-amber-950 sm:text-5xl md:text-6xl md:leading-[1.04]">
               <span className="block">DiDi Food Agent</span>
-              <span className="block">重构商家入驻体验</span>
+              <span className="block">Rebuilding Merchant Onboarding</span>
             </h1>
             <p className="mt-5 max-w-xl text-base leading-8 text-stone-600 md:text-lg">
-              DiDi Food Agent 基于 WhatsApp 与 Multi-Agent 协同，将原本依赖表单填写和人工跟进的流程，重构为对话式入驻、资料识别、实时答疑与审核推进的一体化体验。
+              Built on WhatsApp and multi-agent collaboration, DiDi Food Agent rebuilds a flow that once relied on form-filling and manual follow-up into an integrated experience of conversational onboarding, document recognition, real-time Q&A, and review progression.
             </p>
           </div>
 
@@ -720,9 +720,9 @@ export function MerchantOnboardingCaseStudy({
                   className="h-12 w-auto"
                 />
                 <h3 className="mt-4 text-[2rem] font-semibold tracking-tight text-amber-950">
-                  外卖商家端
+                  Merchant Side
                 </h3>
-                <p className="mt-2 text-lg font-medium text-stone-600">智能入驻助手</p>
+                <p className="mt-2 text-lg font-medium text-stone-600">Smart Onboarding Assistant</p>
               </div>
 
               <div className="absolute left-[18%] top-[18%] h-3 w-3 rounded-full bg-orange-200/80 animate-[heroGlow_7s_ease-in-out_infinite]" />
@@ -752,9 +752,9 @@ export function MerchantOnboardingCaseStudy({
         <div className="mt-12 grid gap-7">
           <section>
             <div className="max-w-3xl">
-              <SectionLabel>一、业务问题</SectionLabel>
+              <SectionLabel>1. Business Problem</SectionLabel>
               <h2 className="mt-4 text-[2rem] font-semibold tracking-tight text-amber-950 md:whitespace-nowrap md:text-[2.5rem] md:leading-[1.02]">
-                痛点：商家入驻流程长、理解成本高、注册后流失明显
+                Pain points: long onboarding, high comprehension cost, clear post-signup drop-off
               </h2>
             </div>
 
@@ -771,17 +771,17 @@ export function MerchantOnboardingCaseStudy({
           </section>
 
           <BeforeAfterSection
-            title="从“商家理解平台”到“AI 理解商家”"
-            description="让 AI 成为贴心客服，读懂商家的当前进度、辅助审核资料状态和跟进下一步任务，帮助入驻流程从被动填写变成主动推进。"
+            title={"From “merchants understand the platform” to “AI understands merchants”"}
+            description="Let AI act as a thoughtful assistant that reads the merchant's current progress, helps review document status, and follows up on the next task—turning onboarding from passive form-filling into active progression."
           />
 
           <AgentArchitectureSection />
 
           <section>
             <div className="max-w-3xl">
-              <SectionLabel>四、我的产品职责</SectionLabel>
+              <SectionLabel>4. My Product Responsibilities</SectionLabel>
               <h2 className="mt-4 text-[2rem] font-semibold tracking-tight text-amber-950 md:text-[2.5rem] md:leading-[1.02]">
-                从竞品洞察到 Agent 迭代
+                From competitor insight to agent iteration
               </h2>
             </div>
 
@@ -792,19 +792,19 @@ export function MerchantOnboardingCaseStudy({
                   title={item.title}
                   description={item.description}
                   expandable={
-                    item.title === "市场洞察与方案定义" ||
-                    item.title === "Multi-Agent 产品流程设计" ||
-                    item.title === "Agent 评测与 Bad Case 分析" ||
-                    item.title === "数据分析与埋点监控"
+                    item.title === "Market Insight & Solution Definition" ||
+                    item.title === "Multi-Agent Product Flow Design" ||
+                    item.title === "Agent Evaluation & Bad Case Analysis" ||
+                    item.title === "Data Analysis & Event Tracking"
                   }
                   variant={
-                    item.title === "Multi-Agent 产品流程设计"
+                    item.title === "Multi-Agent Product Flow Design"
                       ? "agent-workflow"
-                      : item.title === "Agent 评测与 Bad Case 分析"
+                      : item.title === "Agent Evaluation & Bad Case Analysis"
                         ? "agent-evaluation"
-                      : item.title === "数据分析与埋点监控"
+                      : item.title === "Data Analysis & Event Tracking"
                         ? "data-analytics"
-                      : item.title === "市场洞察与方案定义"
+                      : item.title === "Market Insight & Solution Definition"
                         ? "market-insight"
                         : "default"
                   }
@@ -815,12 +815,12 @@ export function MerchantOnboardingCaseStudy({
 
           <section>
             <div className="max-w-3xl">
-              <SectionLabel>五、核心数据结果</SectionLabel>
+              <SectionLabel>5. Core Data Results</SectionLabel>
               <h2 className="mt-4 text-[2rem] font-semibold tracking-tight text-amber-950 md:text-[2.5rem]">
-                效率、转化与审核质量同步提升
+                Efficiency, conversion, and review quality improved together
               </h2>
               <p className="mt-3 text-[15px] leading-7 text-stone-600 md:text-[15px] md:leading-7">
-                从自然入驻到流失召回，再到 AI 预审，关键链路均验证有效。
+                From organic onboarding to drop-off re-engagement to AI pre-check, the key paths were all validated as effective.
               </p>
             </div>
 
@@ -829,10 +829,10 @@ export function MerchantOnboardingCaseStudy({
                 <div className="p-6 md:p-7">
                   <div className="inline-flex items-center gap-2 rounded-full bg-orange-100 px-3 py-1.5 text-sm font-medium text-orange-700">
                     <Clock3 className="h-4 w-4" />
-                    效率提升
+                    Efficiency gain
                   </div>
                   <h3 className="mt-4 text-[1.65rem] font-semibold text-amber-950 md:text-[1.9rem]">
-                    平均入驻耗时下降
+                    Reduction in avg. onboarding time
                   </h3>
                   <p className="mt-3 text-[3.6rem] font-semibold tracking-tight text-orange-600 md:text-[4rem]">
                     69.53%
@@ -842,10 +842,10 @@ export function MerchantOnboardingCaseStudy({
                 <div className="border-t border-orange-100/80 p-6 lg:border-l lg:border-t-0 md:p-7">
                   <div className="inline-flex items-center gap-2 rounded-full bg-orange-100 px-3 py-1.5 text-sm font-medium text-orange-700">
                     <Waypoints className="h-4 w-4" />
-                    转化提升
+                    Conversion gain
                   </div>
                   <h3 className="mt-4 text-[1.65rem] font-semibold text-amber-950 md:text-[1.9rem]">
-                    从商机创建到审核通过率
+                    Opportunity-to-approval rate
                   </h3>
                   <div className="mt-4 flex items-center gap-3 text-[2.8rem] font-semibold tracking-tight md:text-[3.4rem]">
                     <span className="text-amber-950">55.48%</span>
@@ -864,7 +864,7 @@ export function MerchantOnboardingCaseStudy({
                   <div>
                     <div className="inline-flex items-center gap-2 rounded-full bg-orange-100 px-3 py-1.5 text-sm font-medium text-orange-700">
                       <RefreshCcw className="h-4 w-4" />
-                      低意愿流失召回
+                      Low-intent drop-off re-engagement
                     </div>
                     <p className="mt-4 text-[3.4rem] font-semibold tracking-tight text-orange-600 md:text-[4rem]">
                       51.47%
@@ -876,13 +876,13 @@ export function MerchantOnboardingCaseStudy({
                       <div className="flex flex-col items-center gap-2">
                         <span className="text-sm text-stone-500">20.63%</span>
                         <div className="h-12 w-14 rounded-t-2xl bg-orange-200/70" />
-                        <span className="text-sm text-stone-600">传统召回</span>
+                        <span className="text-sm text-stone-600">Standard re-engagement</span>
                       </div>
                       <div className="relative flex flex-col items-center gap-2">
                         <span className="absolute -left-10 top-0 text-4xl text-orange-300">↗</span>
                         <span className="text-sm text-stone-500">51.47%</span>
                         <div className="h-24 w-14 rounded-t-2xl bg-orange-500/85" />
-                        <span className="text-sm text-stone-600">AI 召回</span>
+                        <span className="text-sm text-stone-600">AI re-engagement</span>
                       </div>
                     </div>
                   </div>
@@ -894,13 +894,13 @@ export function MerchantOnboardingCaseStudy({
                   <div>
                     <div className="inline-flex items-center gap-2 rounded-full bg-orange-100 px-3 py-1.5 text-sm font-medium text-orange-700">
                       <CheckCircle2 className="h-4 w-4" />
-                      AI 预审有效
+                      AI pre-check effective
                     </div>
                     <p className="mt-4 text-[3.4rem] font-semibold tracking-tight text-orange-600 md:text-[4rem]">
                       97.6%
                     </p>
                     <p className="mt-3 text-base font-medium text-amber-950 md:text-lg">
-                      AI 预审后人工通过率
+                      Manual pass rate after AI pre-check
                     </p>
                   </div>
                   <div className="hidden min-w-[220px] flex-1 lg:flex lg:items-center lg:justify-center lg:translate-y-10">
@@ -939,7 +939,7 @@ export function MerchantOnboardingCaseStudy({
                     <span className="mr-2 text-[2.6rem] font-semibold tracking-tight text-orange-600 md:text-[3rem]">
                       3318
                     </span>
-                    家商户覆盖
+                    merchants covered
                   </p>
                 </div>
                 <div className="flex items-center gap-4 px-5 py-4">
@@ -947,11 +947,10 @@ export function MerchantOnboardingCaseStudy({
                     <Building2 className="h-5 w-5" />
                   </div>
                   <p className="text-base font-medium text-amber-950 md:text-lg">
-                    核心城市
-                    <span className="mx-2 text-[2.6rem] font-semibold tracking-tight text-orange-600 md:text-[3rem]">
+                    <span className="mr-2 text-[2.6rem] font-semibold tracking-tight text-orange-600 md:text-[3rem]">
                       50%
                     </span>
-                    灰度放量
+                    gray rollout in core cities
                   </p>
                 </div>
                 <div className="flex items-center gap-4 px-5 py-4">
@@ -959,7 +958,7 @@ export function MerchantOnboardingCaseStudy({
                     <CheckCircle2 className="h-5 w-5" />
                   </div>
                   <p className="text-base font-medium text-amber-950 md:text-lg">
-                    已进入真实业务流量验证
+                    In validation on real business traffic
                   </p>
                 </div>
               </div>
