@@ -260,7 +260,7 @@ function MasterAgentCore() {
 function CapabilityBand() {
   return (
     <SectionShell>
-      <div className="grid gap-2 xl:grid-cols-2">
+      <div className="grid gap-2">
         {capabilityGroups.map((group, index) => (
           <div
             key={group.title}
