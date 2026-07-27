@@ -62,7 +62,7 @@ const copy = {
     eyebrow: "Education",
     title: "Strong Foundations in AI and Computer Science",
     description:
-      "Trained in both AI and core computer science, with a continued focus on AI systems, intelligent products, and data-driven applications through graduate study at UCSD.",
+      "A strong AI and CS foundation, now focused on AI systems, intelligent products, and data-driven applications — continuing at UCSD.",
     cucSchool: "Communication University of China",
     ucsdDegree: "M.S. in Computer Science and Engineering (CS75)",
     ucsdDescription: "Incoming M.S. student, Fall 2026.",
@@ -75,12 +75,12 @@ const copy = {
       </>
     ),
     achievements: [
-      "National Digital Human Project",
+      "National Innovation Program — Digital Human Project",
       "First Prize for an AI Health Assistant Product",
       "Research Assistant, Intelligent Media Lab",
       "Teaching Assistant, Computational Thinking",
       "AI Education Volunteer, UN She × Digital Future",
-      "IELTS 7.5 / CET-4 / CET-6",
+      "IELTS 7.5",
     ],
   },
   projects: {
@@ -98,7 +98,7 @@ const copy = {
   },
   skills: {
     eyebrow: "Capabilities",
-    title: "Cross-functional Strength in AI Product, Engineering, and Analytics",
+    title: "Cross-functional: Product, Engineering & Analytics",
     description:
       "Spanning agent design, RAG workflows, analytics, and product engineering, with the ability to turn business problems into AI solutions that can be launched, evaluated, and iterated.",
     cards: [
@@ -147,9 +147,9 @@ const copy = {
   },
   contact: {
     eyebrow: "Contact",
-    title: "Exploring More Possibilities for AI Products Together",
+    title: "Let's build great AI products together",
     description:
-      "Focused on AI agents, intelligent workflows, and RAG applications. Open to conversations about product case studies, new opportunities, and how applied AI systems move from design to real-world deployment.",
+      "I work on AI agents, intelligent workflows, and RAG. Happy to talk through case studies, new roles, or how applied AI gets from design to production.",
     secondaryButton: "Get in Touch",
   },
 } as const;

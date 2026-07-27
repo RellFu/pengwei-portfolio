@@ -469,7 +469,7 @@ export function BeforeAfterSection({
         <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#1d1d1f] md:text-4xl">
           {title}
         </h2>
-        <p className="mt-4 whitespace-nowrap text-base leading-8 text-[#6e6e73] md:text-lg">
+        <p className="mt-4 text-base leading-8 text-[#6e6e73] md:text-lg">
           {description}
         </p>
       </div>

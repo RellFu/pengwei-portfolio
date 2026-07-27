@@ -753,8 +753,8 @@ export function MerchantOnboardingCaseStudy({
           <section>
             <div className="max-w-3xl">
               <SectionLabel>1. Business Problem</SectionLabel>
-              <h2 className="mt-4 text-[2rem] font-semibold tracking-tight text-[#1d1d1f] md:whitespace-nowrap md:text-[2.5rem] md:leading-[1.02]">
-                Pain points: long onboarding, high comprehension cost, clear post-signup drop-off
+              <h2 className="mt-4 text-[2rem] font-semibold tracking-tight text-[#1d1d1f] md:text-[2.5rem] md:leading-[1.02]">
+                Onboarding was long, hard to understand, and merchants dropped off after signup
               </h2>
             </div>
 

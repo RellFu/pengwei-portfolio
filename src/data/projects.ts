@@ -72,11 +72,11 @@ export const featuredProjects: CaseStudyProject[] = [
     title: "AI Merchant Onboarding Assistant",
     type: "Multi-Agent / AI Product Workflow",
     summary:
-      "Built on WhatsApp and a multi-agent workflow, this rebuilt overseas merchant onboarding from a traditional form flow into a conversational experience for data collection, Q&A, review follow-up, and re-engagement.",
+      "Rebuilt overseas merchant onboarding — from a form-heavy flow into a WhatsApp, multi-agent conversation that handles data collection, Q&A, review follow-up, and re-engagement.",
     subtitle:
       "Using multi-agent orchestration to turn merchant onboarding in Mexico from form-filling into a conversational AI workflow",
     heroDescription:
-      "I helped design and iterate an onboarding AI assistant for overseas merchants. Facing post-signup drop-off, complex document submission, and high review-comprehension costs, we upgraded an onboarding path that once relied on forms and manual explanation into a WhatsApp-based flow for conversational onboarding, document recognition, guided Q&A, review follow-up, and re-engagement.",
+      "I helped design and iterate an onboarding AI assistant for overseas merchants. To fight post-signup drop-off and a confusing, form-heavy submission process, we turned an onboarding path that relied on forms and manual explanation into a WhatsApp flow with conversational onboarding, document recognition, guided Q&A, review follow-up, and re-engagement.",
     overview:
       "This is a real-world AI agent product case. The project tackled a complex overseas merchant onboarding flow with high post-signup drop-off and costly review communication. Rather than simply bolting on a chatbot, we rebuilt the form-based onboarding path—where merchants had to interpret platform rules themselves—into a conversational AI workflow driven by coordinated multi-agent orchestration.",
     problem:
@@ -150,7 +150,7 @@ export const featuredProjects: CaseStudyProject[] = [
       "Data-driven iteration: use read rate, reply rate, send-failure rate, document-completion rate, and review pass rate to tell whether the issue is reach, comprehension, documents, or the flow itself.",
     ],
     reflection:
-      "This project made me realize that the value of an AI product is not in adding a chat entry point to an existing flow, but in redesigning the entire flow around user intent, business state, system capabilities, and measurable metrics. For an agent in a business scenario, what matters is not only answering correctly, but continuously guiding the user to task completion while keeping the business system's state in sync.",
+      "This project taught me that an AI product's value isn't a chat box bolted onto an existing flow — it's redesigning the whole flow around user intent, business state, system capabilities, and measurable outcomes. In a real business setting, an agent has to do more than answer correctly: it has to keep guiding the user to done, and keep the backend state in sync.",
     reflectionTitle: "From a single feature to a reusable AI onboarding framework",
     tags: [
       "Multi-Agent",
@@ -305,7 +305,7 @@ export const featuredProjects: CaseStudyProject[] = [
     title: "ByteDance AI Tools",
     type: "RAG / LLM Workflow / Procurement AI",
     summary:
-      "Around product normalization, supplier price comparison, and talent pricing consultation, I shipped three 0-to-1 AI tools that productized procurement cleanup, comparison, and consultation workflows.",
+      "Shipped three 0-to-1 AI tools for procurement — product normalization, supplier price comparison, and talent pricing — turning manual cleanup, comparison, and consultation into reusable workflows.",
     overview:
       "Around procurement and business-decision scenarios, I broke high-labor cleanup, comparison, and consultation work into three independent AI tools, distilled into reusable RAG + LLM workflows.",
     problem:
