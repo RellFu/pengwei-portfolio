@@ -66,11 +66,11 @@ const entryModules: readonly IconModule[] = [
 const capabilityGroups = [
   {
     title: "Agent Orchestration & KB",
-    modules: ["Prompt", "State-driven", "Orchestration", "Query Routing", "Issue Mgmt", "Glossary"],
+    modules: ["Prompt", "State-driven", "Flow Orchestration", "Query Classification", "Issue Management", "Glossary"],
   },
   {
     title: "AI Tools & Capabilities",
-    modules: ["OCR", "Multilingual", "Memory Mgmt", "Resume", "RAG", "CoT", "API Calls"],
+    modules: ["OCR", "Multilingual", "Memory Management", "Resume", "RAG", "CoT", "API Calls"],
   },
 ];
 
