@@ -52,9 +52,8 @@ const copy = {
     <>
       Hi, I&apos;m Pengwei Fu.
       <br />
-      I turn <span className="text-[#0071e3]">AI</span> capabilities
-      <br />
-      into reliable <span className="text-[#0071e3]">products</span>.
+      I build reliable <span className="text-[#0071e3]">AI</span>{" "}
+      <span className="text-[#0071e3]">products</span>.
     </>
   ),
   heroNav: ["Education", "Experience", "Capabilities", "Contact"],
