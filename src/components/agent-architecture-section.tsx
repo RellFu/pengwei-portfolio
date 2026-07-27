@@ -276,13 +276,7 @@ function CapabilityBand() {
               </div>
               <p className="text-[11px] font-semibold leading-none text-[#1d1d1f]">{group.title}</p>
             </div>
-            <div
-              className={
-                index === 0
-                  ? "grid gap-1.5 xl:grid-cols-6"
-                  : "grid gap-1.5 xl:grid-cols-7"
-              }
-            >
+            <div className="flex flex-wrap gap-1.5">
               {group.modules.map((module) => (
                 <FlatChip key={module} label={module} />
               ))}
