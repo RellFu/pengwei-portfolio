@@ -33,34 +33,34 @@ export function MerchantCaseStudyCard({
       <GlassSurface className="overflow-hidden rounded-[2rem] p-6 sm:p-7 lg:p-8">
         <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
           <div>
-            <SectionLabel className="inline-flex rounded-full border border-orange-300/70 bg-orange-100 px-4 py-2 text-xs font-medium tracking-[0.18em] text-orange-800">
+            <SectionLabel className="inline-flex rounded-full border border-black/10 bg-[#f5f5f7] px-4 py-2 text-xs font-medium tracking-[0.18em] text-[#6e6e73]">
               {project.type}
             </SectionLabel>
-            <h3 className="mt-5 text-3xl font-semibold tracking-tight text-amber-950 md:text-4xl">
+            <h3 className="mt-5 text-3xl font-semibold tracking-tight text-[#1d1d1f] md:text-4xl">
               {project.title}
             </h3>
-            <p className="mt-5 max-w-3xl text-base leading-8 text-stone-600 md:text-lg">
+            <p className="mt-5 max-w-3xl text-base leading-8 text-[#6e6e73] md:text-lg">
               {project.summary}
             </p>
 
             <div className="mt-6 grid gap-4 md:grid-cols-2">
-              <div className="rounded-[1.5rem] border border-orange-100 bg-white/76 p-5">
+              <div className="rounded-[1.5rem] border border-black/5 bg-white/76 p-5">
                 <SectionLabel>Problem</SectionLabel>
-                <p className="mt-3 text-sm leading-7 text-stone-600">
+                <p className="mt-3 text-sm leading-7 text-[#6e6e73]">
                   {project.problem}
                 </p>
               </div>
               <WarmSurface className="rounded-[1.5rem] p-5 shadow-none">
                 <SectionLabel>Solution</SectionLabel>
-                <p className="mt-3 text-sm leading-7 text-stone-600">
+                <p className="mt-3 text-sm leading-7 text-[#6e6e73]">
                   {project.solution}
                 </p>
               </WarmSurface>
             </div>
 
-            <div className="mt-4 rounded-[1.5rem] border border-orange-100 bg-orange-50/70 p-5">
+            <div className="mt-4 rounded-[1.5rem] border border-black/5 bg-[#f5f5f7]/70 p-5">
               <SectionLabel>Result</SectionLabel>
-              <p className="mt-3 text-sm leading-7 text-stone-600">
+              <p className="mt-3 text-sm leading-7 text-[#6e6e73]">
                 Average onboarding time down 69.53%; manual pass rate after AI pre-check reached 97.6%; AI re-engagement submission rate reached 78.39%, above the 64.65% of the standard flow; with 50% gray rollout in core cities.
               </p>
             </div>
@@ -76,7 +76,7 @@ export function MerchantCaseStudyCard({
             <div className="mt-7">
               <Link
                 href={`/projects/${project.slug}`}
-                className="inline-flex items-center gap-2 rounded-full bg-orange-500 px-6 py-3.5 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(249,115,22,0.24)] transition hover:bg-orange-400"
+                className="inline-flex items-center gap-2 rounded-full bg-[#0071e3] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(0, 113, 227,0.24)] transition hover:bg-[#0077ed] active:scale-[0.97]"
               >
                 View Case Study
                 <ArrowRight className="h-4 w-4" />

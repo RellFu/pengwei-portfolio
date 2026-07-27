@@ -120,7 +120,7 @@ function FormFieldMock({
   if (field.type === "map") {
     return (
       <div className="space-y-2">
-        <p className="text-xs font-medium text-stone-500">{field.label}</p>
+        <p className="text-xs font-medium text-[#86868b]">{field.label}</p>
         <div className="relative h-24 overflow-hidden rounded-2xl border border-slate-200 bg-[linear-gradient(135deg,#eef4f8,#f7fafc)]">
           <div className="absolute inset-0 opacity-70 [background-image:linear-gradient(to_right,rgba(148,163,184,0.14)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.14)_1px,transparent_1px)] [background-size:20px_20px]" />
           <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-slate-300/70" />
@@ -129,12 +129,12 @@ function FormFieldMock({
           <div className="absolute right-[16%] top-[18%] h-10 w-20 rounded-[1.4rem] border border-slate-300/60 bg-white/45" />
           <div className="absolute bottom-[18%] left-[28%] h-9 w-24 rounded-[1.2rem] border border-slate-300/60 bg-white/45" />
           <div className="absolute bottom-[24%] right-[22%] h-6 w-10 rounded-full border border-slate-300/60 bg-white/55" />
-          <div className="pointer-events-none absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/92 px-2 py-1 text-[11px] text-orange-700 shadow-sm">
+          <div className="pointer-events-none absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/92 px-2 py-1 text-[11px] text-[#86868b] shadow-sm">
             <MapPin className="h-3.5 w-3.5" />
             Located
           </div>
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-orange-500 drop-shadow-[0_8px_18px_rgba(249,115,22,0.24)]">
-            <MapPin className="h-7 w-7 fill-orange-500 stroke-white stroke-[1.5]" />
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[#0071e3] drop-shadow-[0_8px_18px_rgba(0, 113, 227,0.24)]">
+            <MapPin className="h-7 w-7 fill-[#0071e3] stroke-white stroke-[1.5]" />
           </div>
         </div>
       </div>
@@ -144,16 +144,16 @@ function FormFieldMock({
   if (field.type === "upload") {
     return (
       <div className="space-y-2">
-        <p className="text-xs font-medium text-stone-500">{field.label}</p>
-        <div className="rounded-2xl border border-dashed border-orange-200 bg-orange-50/40 p-3">
-          <div className="flex items-center gap-3 rounded-xl border border-orange-100 bg-white px-3 py-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-100 text-orange-700">
+        <p className="text-xs font-medium text-[#86868b]">{field.label}</p>
+        <div className="rounded-2xl border border-dashed border-black/10 bg-[#f5f5f7]/40 p-3">
+          <div className="flex items-center gap-3 rounded-xl border border-black/5 bg-white px-3 py-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#f5f5f7] text-[#86868b]">
               <Upload className="h-4 w-4" />
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-medium text-stone-700">Upload file</p>
+              <p className="text-sm font-medium text-[#515154]">Upload file</p>
               {field.helper ? (
-                <p className="text-xs text-stone-400">{field.helper}</p>
+                <p className="text-xs text-[#a1a1a6]">{field.helper}</p>
               ) : null}
             </div>
           </div>
@@ -166,7 +166,7 @@ function FormFieldMock({
     return (
       <button
         type="button"
-        className="w-full rounded-2xl bg-orange-500 px-4 py-3 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(249,115,22,0.18)]"
+        className="w-full rounded-2xl bg-[#0071e3] px-4 py-3 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(0,113,227,0.18)] transition active:scale-[0.97]"
       >
         {field.label}
       </button>
@@ -175,13 +175,13 @@ function FormFieldMock({
 
   return (
     <div className="space-y-2">
-      <p className="text-xs font-medium text-stone-500">{field.label}</p>
-      <div className="flex items-center justify-between rounded-2xl border border-stone-200 bg-white px-3 py-3 text-sm text-stone-700">
-        <span className={field.value === "Please select" ? "text-stone-400" : ""}>
+      <p className="text-xs font-medium text-[#86868b]">{field.label}</p>
+      <div className="flex items-center justify-between rounded-2xl border border-stone-200 bg-white px-3 py-3 text-sm text-[#515154]">
+        <span className={field.value === "Please select" ? "text-[#a1a1a6]" : ""}>
           {field.value}
         </span>
         {field.type === "select" ? (
-          <ChevronDown className="h-4 w-4 text-stone-400" />
+          <ChevronDown className="h-4 w-4 text-[#a1a1a6]" />
         ) : null}
       </div>
     </div>
@@ -208,8 +208,8 @@ function UploadBubble({ content }: { content: string }) {
         : "ID document";
 
   return (
-    <div className="inline-flex w-[15.5rem] overflow-hidden rounded-2xl border border-orange-100 bg-white text-stone-700 shadow-[0_8px_20px_rgba(180,83,9,0.08)]">
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-[linear-gradient(135deg,#fde7cf,#fff2df)]">
+    <div className="inline-flex w-[15.5rem] overflow-hidden rounded-2xl border border-black/5 bg-white text-[#515154] shadow-[0_8px_20px_rgba(0, 0, 0,0.08)]">
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-[linear-gradient(135deg,#f5f5f7,#f5f5f7)]">
         <Image
           src={imageSrc}
           alt={imageAlt}
@@ -218,7 +218,7 @@ function UploadBubble({ content }: { content: string }) {
           sizes="248px"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/12 via-transparent to-white/8" />
-        <div className="absolute left-3 top-3 flex h-8 w-8 items-center justify-center rounded-xl bg-white/90 text-orange-700 shadow-sm">
+        <div className="absolute left-3 top-3 flex h-8 w-8 items-center justify-center rounded-xl bg-white/90 text-[#86868b] shadow-sm">
           {mediaType === "storefront" ? (
             <ImageIcon className="h-4 w-4" />
           ) : mediaType === "menu" ? (
@@ -227,7 +227,7 @@ function UploadBubble({ content }: { content: string }) {
             <IdCard className="h-4 w-4" />
           )}
         </div>
-        <div className="absolute bottom-3 right-3 rounded-full bg-white/90 px-2 py-1 text-[10px] font-medium text-stone-500 shadow-sm">
+        <div className="absolute bottom-3 right-3 rounded-full bg-white/90 px-2 py-1 text-[10px] font-medium text-[#86868b] shadow-sm">
           {mediaType === "storefront"
             ? "Storefront photo"
             : mediaType === "menu"
@@ -241,7 +241,7 @@ function UploadBubble({ content }: { content: string }) {
 
 function LocationBubble({ content }: { content: string }) {
   return (
-    <div className="inline-flex w-[15.5rem] flex-col overflow-hidden rounded-2xl border border-orange-100 bg-white text-stone-700 shadow-[0_8px_20px_rgba(180,83,9,0.08)]">
+    <div className="inline-flex w-[15.5rem] flex-col overflow-hidden rounded-2xl border border-black/5 bg-white text-[#515154] shadow-[0_8px_20px_rgba(0, 0, 0,0.08)]">
       <div className="relative h-28 bg-[linear-gradient(135deg,#eef4f8,#f7fafc)]">
         <div className="absolute inset-0 opacity-70 [background-image:linear-gradient(to_right,rgba(148,163,184,0.14)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.14)_1px,transparent_1px)] [background-size:18px_18px]" />
         <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-slate-300/70" />
@@ -250,20 +250,20 @@ function LocationBubble({ content }: { content: string }) {
         <div className="absolute right-[16%] top-[18%] h-10 w-20 rounded-[1.4rem] border border-slate-300/60 bg-white/45" />
         <div className="absolute bottom-[18%] left-[28%] h-9 w-24 rounded-[1.2rem] border border-slate-300/60 bg-white/45" />
         <div className="absolute bottom-[24%] right-[22%] h-6 w-10 rounded-full border border-slate-300/60 bg-white/55" />
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-orange-500 drop-shadow-[0_8px_18px_rgba(249,115,22,0.24)]">
-          <MapPinned className="h-8 w-8 fill-orange-500 stroke-white stroke-[1.4]" />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[#0071e3] drop-shadow-[0_8px_18px_rgba(0, 113, 227,0.24)]">
+          <MapPinned className="h-8 w-8 fill-[#0071e3] stroke-white stroke-[1.4]" />
         </div>
-        <div className="absolute left-3 top-3 rounded-full bg-white/90 px-2 py-1 text-[10px] font-medium text-orange-700 shadow-sm">
+        <div className="absolute left-3 top-3 rounded-full bg-white/90 px-2 py-1 text-[10px] font-medium text-[#86868b] shadow-sm">
           Location shared
         </div>
       </div>
       <div className="flex items-center gap-3 px-3 py-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-orange-100 text-orange-700">
+        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#f5f5f7] text-[#86868b]">
           <MapPin className="h-4 w-4" />
         </div>
         <div className="min-w-0">
-          <p className="truncate text-sm font-medium text-stone-700">{content}</p>
-          <p className="mt-0.5 text-xs text-stone-400">Location message</p>
+          <p className="truncate text-sm font-medium text-[#515154]">{content}</p>
+          <p className="mt-0.5 text-xs text-[#a1a1a6]">Location message</p>
         </div>
       </div>
     </div>
@@ -290,10 +290,10 @@ function ChatBubble({ message }: { message: ChatMessage }) {
         <LocationBubble content={message.content} />
       ) : (
         <div
-          className={`max-w-[18rem] rounded-2xl px-4 py-3 text-sm leading-7 shadow-[0_8px_20px_rgba(180,83,9,0.05)] ${
+          className={`max-w-[18rem] rounded-2xl px-4 py-3 text-sm leading-7 shadow-[0_8px_20px_rgba(0, 0, 0,0.05)] ${
             isAi
-              ? "rounded-bl-md border border-orange-100 bg-white text-stone-700"
-              : "rounded-br-md bg-orange-500 text-white"
+              ? "rounded-bl-md border border-black/5 bg-white text-[#515154]"
+              : "rounded-br-md bg-[#0071e3] text-white"
           }`}
         >
           {message.content.split("\n").map((line) => (
@@ -310,9 +310,9 @@ function LegacyFormSimulator() {
 
   return (
     <GlassSurface className="overflow-hidden rounded-[1.9rem] p-0">
-      <div className="border-b border-orange-100 px-5 py-4">
+      <div className="border-b border-black/5 px-5 py-4">
         <SectionLabel>
-          Before: <span className="font-semibold text-amber-950">Traditional Form Onboarding</span>
+          Before: <span className="font-semibold text-[#1d1d1f]">Traditional Form Onboarding</span>
         </SectionLabel>
       </div>
 
@@ -341,12 +341,12 @@ function LegacyFormSimulator() {
         </motion.div>
 
         <div className="pointer-events-none absolute inset-x-4 bottom-4 z-20 lg:inset-x-auto lg:right-4 lg:top-5 lg:bottom-auto lg:w-[12rem]">
-          <div className="rounded-[1.4rem] border border-orange-100/90 bg-white/92 p-3 shadow-[0_12px_30px_rgba(180,83,9,0.08)] backdrop-blur-sm">
+          <div className="rounded-[1.4rem] border border-black/5 bg-white/92 p-3 shadow-[0_12px_30px_rgba(0, 0, 0,0.08)] backdrop-blur-sm">
             <div className="mb-2 flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-orange-100 text-orange-700">
+              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#f5f5f7] text-[#86868b]">
                 <Frown className="h-4 w-4" />
               </div>
-              <p className="text-xs font-medium tracking-[0.16em] text-orange-700">
+              <p className="text-xs font-medium tracking-[0.16em] text-[#86868b]">
                 Poor user experience
               </p>
             </div>
@@ -354,7 +354,7 @@ function LegacyFormSimulator() {
               {legacyHints.map((hint, index) => (
                 <motion.div
                   key={hint}
-                  className="rounded-xl border border-orange-100 bg-orange-50/70 px-3 py-2 text-xs leading-5 text-stone-600"
+                  className="rounded-xl border border-black/5 bg-[#f5f5f7]/70 px-3 py-2 text-xs leading-5 text-[#6e6e73]"
                   initial={{ opacity: 0, x: 8 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 + index * 0.25, duration: 0.3 }}
@@ -410,9 +410,9 @@ function AgentChatSimulator() {
 
   return (
     <WarmSurface className="rounded-[1.9rem] p-0">
-      <div className="border-b border-orange-100 px-5 py-4">
+      <div className="border-b border-black/5 px-5 py-4">
         <SectionLabel>
-          After: <span className="font-semibold text-amber-950">AI Conversational Onboarding</span>
+          After: <span className="font-semibold text-[#1d1d1f]">AI Conversational Onboarding</span>
         </SectionLabel>
       </div>
 
@@ -445,7 +445,7 @@ function AgentChatSimulator() {
                 exit={{ opacity: 0, y: -6 }}
                 transition={{ duration: 0.25 }}
               >
-                <div className="inline-flex items-center gap-2 rounded-full border border-orange-100 bg-white px-3 py-2 text-xs text-stone-400">
+                <div className="inline-flex items-center gap-2 rounded-full border border-black/5 bg-white px-3 py-2 text-xs text-[#a1a1a6]">
                   <MessageCircle className="h-3.5 w-3.5" />
                   Typing...
                 </div>
@@ -466,10 +466,10 @@ export function BeforeAfterSection({
     <section>
       <div className="max-w-3xl">
         <SectionLabel>2. Before / After Flow Redesign</SectionLabel>
-        <h2 className="mt-4 text-3xl font-semibold tracking-tight text-amber-950 md:text-4xl">
+        <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#1d1d1f] md:text-4xl">
           {title}
         </h2>
-        <p className="mt-4 whitespace-nowrap text-base leading-8 text-stone-600 md:text-lg">
+        <p className="mt-4 whitespace-nowrap text-base leading-8 text-[#6e6e73] md:text-lg">
           {description}
         </p>
       </div>

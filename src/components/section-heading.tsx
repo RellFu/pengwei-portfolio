@@ -14,10 +14,10 @@ export function SectionHeading({
   return (
     <div className="max-w-3xl">
       <SectionLabel className="mb-4">{eyebrow}</SectionLabel>
-      <h2 className="text-3xl font-semibold tracking-tight text-amber-950 md:text-4xl">
+      <h2 className="text-3xl font-semibold tracking-tight text-[#1d1d1f] md:text-4xl">
         {title}
       </h2>
-      <p className="mt-4 text-base leading-8 text-stone-600 md:text-lg">
+      <p className="mt-4 text-base leading-8 text-[#6e6e73] md:text-lg">
         {description}
       </p>
     </div>

@@ -109,14 +109,14 @@ function SideLabel({
     <div
       className={`flex h-full flex-col justify-center rounded-[1rem] border px-3 py-3 ${
         emphasis
-          ? "border-orange-300/80 bg-[linear-gradient(160deg,#ff8a1f_0%,#ff7a18_48%,#f97316_100%)] text-white shadow-[0_14px_28px_rgba(249,115,22,0.16)]"
-          : "border-orange-200/70 bg-white/88 text-stone-800"
+          ? "border-black/10 bg-[linear-gradient(160deg,#0a84ff_0%,#0071e3_100%)] text-white shadow-[0_14px_28px_rgba(0,113,227,0.24)]"
+          : "border-black/10 bg-white/88 text-[#1d1d1f]"
       }`}
     >
-      <h3 className={`text-sm font-semibold leading-tight ${emphasis ? "text-white" : "text-stone-800"}`}>
+      <h3 className={`text-sm font-semibold leading-tight ${emphasis ? "text-white" : "text-[#1d1d1f]"}`}>
         {title}
       </h3>
-      <p className={`mt-1 text-[11px] leading-5 ${emphasis ? "text-white/84" : "text-stone-500"}`}>
+      <p className={`mt-1 text-[11px] leading-5 ${emphasis ? "text-white/84" : "text-[#86868b]"}`}>
         {subtitle}
       </p>
     </div>
@@ -153,10 +153,10 @@ function FlatChip({ label, strong = false }: { label: string; strong?: boolean }
     <motion.div
       whileHover={{ y: -2 }}
       transition={{ duration: 0.16 }}
-      className={`flex min-h-[34px] items-center justify-center whitespace-nowrap rounded-full border px-2.5 py-1.5 text-center text-[11px] font-medium leading-none shadow-[0_8px_16px_rgba(180,83,9,0.04)] transition-all duration-200 hover:border-orange-300 ${
+      className={`flex min-h-[34px] items-center justify-center whitespace-nowrap rounded-full border px-2.5 py-1.5 text-center text-[11px] font-medium leading-none shadow-[0_8px_16px_rgba(0, 0, 0,0.04)] transition-all duration-200 hover:border-black/10 ${
         strong
-          ? "border-orange-200/80 bg-[#fff1da] text-stone-800"
-          : "border-orange-100/80 bg-white/92 text-stone-700"
+          ? "border-black/10 bg-[#f5f5f7] text-[#1d1d1f]"
+          : "border-black/5 bg-white/92 text-[#515154]"
       }`}
     >
       {label}
@@ -170,8 +170,8 @@ function IconChip({
   imageSrc,
   customIcon,
   strong = false,
-  iconClassName = "text-orange-700",
-  iconBgClassName = "bg-orange-50",
+  iconClassName = "text-[#86868b]",
+  iconBgClassName = "bg-[#f5f5f7]",
   imageClassName = "h-3.5 w-3.5",
 }: {
   label: string;
@@ -187,10 +187,10 @@ function IconChip({
     <motion.div
       whileHover={{ y: -2 }}
       transition={{ duration: 0.16 }}
-      className={`flex min-h-[42px] items-center gap-2 rounded-[0.875rem] border px-3 py-2 text-xs font-medium shadow-[0_8px_16px_rgba(180,83,9,0.04)] transition-all duration-200 hover:border-orange-300 ${
+      className={`flex min-h-[42px] items-center gap-2 rounded-[0.875rem] border px-3 py-2 text-xs font-medium shadow-[0_8px_16px_rgba(0, 0, 0,0.04)] transition-all duration-200 hover:border-black/10 ${
         strong
-          ? "border-orange-200/80 bg-[#fff1da] text-stone-800"
-          : "border-orange-100/80 bg-white/92 text-stone-700"
+          ? "border-black/10 bg-[#f5f5f7] text-[#1d1d1f]"
+          : "border-black/5 bg-white/92 text-[#515154]"
       }`}
     >
       <div
@@ -213,7 +213,7 @@ function IconChip({
 
 function SectionShell({ children }: { children: ReactNode }) {
   return (
-    <div className="rounded-[1rem] border border-orange-200/70 bg-white/92 p-2 shadow-[0_12px_22px_rgba(180,83,9,0.05)] backdrop-blur-xl">
+    <div className="rounded-[1rem] border border-black/10 bg-white/92 p-2 shadow-[0_12px_22px_rgba(0, 0, 0,0.05)] backdrop-blur-xl">
       {children}
     </div>
   );
@@ -221,16 +221,16 @@ function SectionShell({ children }: { children: ReactNode }) {
 
 function MasterAgentCore() {
   return (
-    <div className="rounded-[1rem] border-2 border-orange-300 bg-[linear-gradient(180deg,#fff8ee_0%,#fff1da_100%)] p-2.5 shadow-[0_16px_32px_rgba(180,83,9,0.09)]">
+    <div className="rounded-[1rem] border-2 border-black/10 bg-[linear-gradient(180deg,#ffffff_0%,#f5f5f7_100%)] p-2.5 shadow-[0_16px_32px_rgba(0, 0, 0,0.09)]">
       <div className="flex justify-center">
-        <div className="rounded-[0.875rem] border border-orange-200 bg-white/92 px-4 py-2.5 text-center shadow-[0_10px_18px_rgba(180,83,9,0.06)]">
+        <div className="rounded-[0.875rem] border border-black/10 bg-white/92 px-4 py-2.5 text-center shadow-[0_10px_18px_rgba(0, 0, 0,0.06)]">
           <div className="flex items-center justify-center gap-2">
-            <div className="flex h-6.5 w-6.5 items-center justify-center rounded-full bg-orange-100 text-orange-700">
+            <div className="flex h-6.5 w-6.5 items-center justify-center rounded-full bg-[#f5f5f7] text-[#86868b]">
               <Layers3 className="h-4 w-4" />
             </div>
-            <p className="text-sm font-semibold leading-none text-amber-950">Master Agent</p>
+            <p className="text-sm font-semibold leading-none text-[#1d1d1f]">Master Agent</p>
           </div>
-          <p className="mt-1 text-[11px] leading-none text-stone-500">
+          <p className="mt-1 text-[11px] leading-none text-[#86868b]">
             Intent recognition · State judgment · Task routing
           </p>
         </div>
@@ -246,9 +246,9 @@ function MasterAgentCore() {
               viewport={{ once: true, amount: 0.14 }}
               transition={{ duration: 0.24, delay: index * 0.02 }}
               whileHover={{ y: -2 }}
-            className="relative flex min-h-[52px] items-center justify-center rounded-[0.875rem] border border-orange-200/80 bg-white/94 px-2.5 py-2 text-center shadow-[0_10px_18px_rgba(180,83,9,0.05)] transition-all duration-200 hover:border-orange-300"
+            className="relative flex min-h-[52px] items-center justify-center rounded-[0.875rem] border border-black/10 bg-white/94 px-2.5 py-2 text-center shadow-[0_10px_18px_rgba(0, 0, 0,0.05)] transition-all duration-200 hover:border-black/10"
             >
-              <p className="text-[11px] font-semibold leading-snug text-stone-800">{agent}</p>
+              <p className="text-[11px] font-semibold leading-snug text-[#1d1d1f]">{agent}</p>
             </motion.div>
           ))}
         </div>
@@ -264,17 +264,17 @@ function CapabilityBand() {
         {capabilityGroups.map((group, index) => (
           <div
             key={group.title}
-            className="rounded-[0.875rem] border border-orange-100/80 bg-white/92 p-2"
+            className="rounded-[0.875rem] border border-black/5 bg-white/92 p-2"
           >
             <div className="mb-1.5 flex items-center gap-2">
-              <div className="flex h-5.5 w-5.5 items-center justify-center rounded-lg bg-orange-50 text-orange-700">
+              <div className="flex h-5.5 w-5.5 items-center justify-center rounded-lg bg-[#f5f5f7] text-[#86868b]">
                 {index === 0 ? (
                   <Database className="h-3.5 w-3.5" />
                 ) : (
                   <Sparkles className="h-3.5 w-3.5" />
                 )}
               </div>
-              <p className="text-[11px] font-semibold leading-none text-stone-800">{group.title}</p>
+              <p className="text-[11px] font-semibold leading-none text-[#1d1d1f]">{group.title}</p>
             </div>
             <div
               className={
@@ -317,10 +317,10 @@ export function AgentArchitectureSection() {
         <SectionLabel>
           3. Multi-Agent Product Architecture
         </SectionLabel>
-        <h2 className="mt-2 text-[2rem] font-semibold tracking-tight text-amber-950 md:text-[2.5rem] md:leading-[1.02]">
-          A <span className="text-orange-600">Multi-Agent</span> architecture from conversation entry to business loop
+        <h2 className="mt-2 text-[2rem] font-semibold tracking-tight text-[#1d1d1f] md:text-[2.5rem] md:leading-[1.02]">
+          A <span className="text-[#0071e3]">Multi-Agent</span> architecture from conversation entry to business loop
         </h2>
-        <p className="mt-3 max-w-5xl text-[15px] leading-7 text-stone-600 md:text-base">
+        <p className="mt-3 max-w-5xl text-[15px] leading-7 text-[#6e6e73] md:text-base">
           A master agent orchestrates multiple specialized agents; the entry, capability, and loop layers together support the full product architecture.
         </p>
       </div>
