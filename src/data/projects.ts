@@ -165,17 +165,17 @@ export const featuredProjects: CaseStudyProject[] = [
       {
         title: "Heavy form-filling burden",
         description:
-          "Merchants had to fill structured information across multiple pages, upload documents, and interpret different field requirements—an onboarding process that isn't friendly to new merchants.",
+          "Multi-page forms, document uploads, and unclear field requirements created a friction-heavy onboarding experience.",
       },
       {
         title: "High review communication cost",
         description:
-          "Merchants often needed to understand missing documents, review status, resubmission requirements, and how to re-submit—driving up the cost of manual explanation.",
+          "Merchants repeatedly reached out about missing documents, status, and resubmission steps, creating a support bottleneck at scale.",
       },
       {
         title: "Post-signup conversion drop-off",
         description:
-          "Some merchants completed initial signup but never finished document submission and review, causing clear funnel loss between signup and review submission.",
+          "Many merchants signed up but abandoned before completing document review, causing significant drop-off between registration and approval.",
       },
     ],
     funnelSteps: [
@@ -216,12 +216,12 @@ export const featuredProjects: CaseStudyProject[] = [
       {
         title: "Market Insight & Solution Definition",
         description:
-          "For the Mexico merchant onboarding scenario, combined local merchant profiles, existing BD onboarding pain points, and competitor agent capabilities to judge how AI could lower the onboarding barrier, then turned that into a basis for product design.",
+          "Mapped Mexico merchant profiles, BD pain points, and competitor agents to pinpoint where AI could cut onboarding friction, then set the product requirements.",
       },
       {
         title: "Multi-Agent Product Flow Design",
         description:
-          "Helped design the multi-agent collaboration flow for merchant onboarding, letting the master agent orchestrate different business agents based on merchant intent and progress.",
+          "Designed the multi-agent collaboration flow for merchant onboarding, letting the master agent orchestrate different business agents based on merchant intent and progress.",
       },
       {
         title: "Agent Evaluation & Bad Case Analysis",
@@ -231,7 +231,7 @@ export const featuredProjects: CaseStudyProject[] = [
       {
         title: "Data Analysis & Event Tracking",
         description:
-          "Independently built session data analysis scripts that automatically generate reports. Also helped design event tracking for the website entry point and defined metric standards, so feature iteration could be driven by data.",
+          "Independently built session data analysis scripts that auto-generate reports. Also designed event tracking for the website entry point and defined the metric standards that guide feature iteration.",
       },
     ],
     resultCards: [

@@ -315,7 +315,7 @@ export function AgentArchitectureSection() {
           A <span className="text-[#0071e3]">Multi-Agent</span> architecture from conversation entry to business loop
         </h2>
         <p className="mt-3 max-w-5xl text-[15px] leading-7 text-[#6e6e73] md:text-base">
-          A master agent orchestrates multiple specialized agents; the entry, capability, and loop layers together support the full product architecture.
+          A master agent orchestrates multiple specialized agents across entry, capability, and loop layers, turning a merchant's conversation into completed business actions.
         </p>
       </div>
 

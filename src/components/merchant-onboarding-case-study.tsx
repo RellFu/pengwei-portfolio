@@ -67,12 +67,12 @@ const competitorLogos = [
 ];
 
 const workflowSteps = [
-  { title: "WhatsApp Reach", icon: MessageCircleMore },
-  { title: "Conversational AI Guidance", icon: Bot },
-  { title: "AI Document Recognition", icon: ScanText },
-  { title: "Smart Pre-check & Correction", icon: CheckCircle2 },
-  { title: "Real-time Q&A", icon: CircleHelp },
-  { title: "Write Back to CRM", icon: Database },
+  { title: "WhatsApp Outreach", icon: MessageCircleMore },
+  { title: "Registration", icon: Bot },
+  { title: "Doc & Image Capture", icon: ScanText },
+  { title: "AI Validation", icon: CheckCircle2 },
+  { title: "Submit & Review", icon: CircleHelp },
+  { title: "CRM Status Sync", icon: Database },
 ];
 
 const agentCards = [
@@ -123,12 +123,12 @@ const evaluationDimensions = [
     items: ["Forward flow", "Backward flow", "Flow pull-back", "Field collection"],
   },
   {
-    title: "Multimodal Understanding",
-    items: ["Text + image", "Multi-image", "OCR", "Forgery detection"],
+    title: "Multimodal",
+    items: ["Text & image", "Multi-image", "OCR", "Forgery detection"],
   },
   {
-    title: "System Consistency",
-    items: ["CRM", "Tool calling", "Front/back office", "BD response"],
+    title: "Consistency",
+    items: ["CRM", "Tool calling", "Office sync", "BD response"],
   },
 ];
 
@@ -269,32 +269,45 @@ function ResponsibilityCard({
             <div className="pr-1">
               {variant === "agent-workflow" ? (
                 <div className="mx-auto flex w-full max-w-4xl flex-col items-start space-y-5 text-left">
-                  <div className="w-full">
+                    <div className="w-full">
                     <h4 className="text-lg font-semibold text-[#1d1d1f] sm:text-xl">
                       AI Onboarding Flow Redesign
                     </h4>
-                    <div className="mt-4 grid grid-cols-3 items-start gap-x-2 gap-y-3 md:grid-cols-6 md:gap-x-3">
-                      {workflowSteps.map((step, index) => {
-                        const Icon = step.icon;
+                    <p className="mt-1 text-[13px] leading-6 text-[#6e6e73]">
+                      Two capabilities run through every step:{" "}
+                      <span className="font-semibold text-[#1d1d1f]">
+                        Real-Time Q&amp;A &amp; RAG Support
+                      </span>{" "}
+                      and{" "}
+                      <span className="font-semibold text-[#1d1d1f]">
+                        Risk Controls, Human Handoff &amp; Traceability
+                      </span>
+                      .
+                    </p>
+                    <div className="mt-3 w-full md:px-7">
+                      <div className="grid grid-cols-3 items-start gap-x-2 gap-y-3 md:grid-cols-6 md:gap-x-3">
+                        {workflowSteps.map((step, index) => {
+                          const Icon = step.icon;
 
-                        return (
-                          <div key={step.title} className="relative">
-                            <div className="flex flex-col items-center text-center">
-                              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-black/10 bg-white/86 text-[#0071e3] shadow-[0_10px_20px_rgba(0, 0, 0,0.05)]">
-                                <Icon className="h-6 w-6" />
+                          return (
+                            <div key={step.title} className="relative">
+                              <div className="flex flex-col items-center text-center">
+                                <div className="flex h-12 w-12 items-center justify-center rounded-full border border-black/10 bg-white/86 text-[#0071e3] shadow-[0_10px_20px_rgba(0, 0, 0,0.05)]">
+                                  <Icon className="h-6 w-6" />
+                                </div>
+                                <p className="mt-2 text-[12px] font-medium leading-5 text-[#1d1d1f]">
+                                  {step.title}
+                                </p>
                               </div>
-                              <p className="mt-2 text-[12px] font-medium leading-5 text-[#1d1d1f]">
-                                {step.title}
-                              </p>
+                              {index < workflowSteps.length - 1 ? (
+                                <span className="absolute -right-2 top-4 hidden text-xl text-[#0071e3] md:block">
+                                  →
+                                </span>
+                              ) : null}
                             </div>
-                            {index < workflowSteps.length - 1 ? (
-                              <span className="absolute -right-2 top-4 hidden text-xl text-[#0071e3] md:block">
-                                →
-                              </span>
-                            ) : null}
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
 
@@ -359,7 +372,7 @@ function ResponsibilityCard({
                     <h4 className="text-lg font-semibold text-[#1d1d1f] sm:text-xl">
                       Design Value
                     </h4>
-                    <p className="mt-3 text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
+                    <p className="mt-1 text-[13px] leading-6 text-[#6e6e73]">
                       Upgrades the agent from single-turn Q&A into a
                       <span className="mx-1 font-semibold text-[#86868b]">
                         flow-execution layer
@@ -410,7 +423,7 @@ function ResponsibilityCard({
                               <Icon className="h-4 w-4 text-[#0071e3]" />
                               <h5 className="text-[14px] font-semibold">{group.title}</h5>
                             </div>
-                            <div className="mt-3 grid w-full grid-cols-2 gap-2">
+                            <div className="mt-3 flex flex-col gap-2">
                               {group.items.map((item) => (
                                 <span
                                   key={item}
@@ -431,7 +444,7 @@ function ResponsibilityCard({
                       AI Automated Monitoring
                     </h4>
                     <p className="mt-3 max-w-3xl text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
-                      Led the design of an automated monitoring agent, defined evaluation standards, and automatically flagged abnormal conversations—using AI to inspect AI.
+                      Led the design of an AI-powered monitoring agent that automatically flags abnormal conversations. It uses AI to inspect AI, catching issues a rule-based system would miss.
                     </p>
                     <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)] lg:items-stretch">
                       <div className="rounded-[1.15rem] border border-black/5 bg-white/82 p-4 shadow-[0_10px_20px_rgba(0, 0, 0,0.05)]">
@@ -573,8 +586,8 @@ function ResponsibilityCard({
                     <h4 className="text-lg font-semibold text-[#1d1d1f] sm:text-xl">
                       Local Scenario Insight
                     </h4>
-                    <p className="mt-4 max-w-3xl text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
-                      Merchants in Mexico are mostly small family restaurants with limited digital capability, where complex forms and manual follow-up easily cause onboarding drop-off.
+                    <p className="mt-4 w-full text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
+                      Most Mexico merchants are <span className="font-semibold text-[#1d1d1f]">small family restaurants</span> with <span className="font-semibold text-[#1d1d1f]">low digital literacy</span>, so <span className="font-semibold text-[#1d1d1f]">complex forms</span> drive <span className="font-semibold text-[#1d1d1f]">onboarding drop-off</span>.
                     </p>
                   </div>
 
@@ -582,7 +595,7 @@ function ResponsibilityCard({
                     <h4 className="text-lg font-semibold text-[#1d1d1f] sm:text-xl">
                       Competitor Capability Reference
                     </h4>
-                    <p className="mt-4 max-w-3xl text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
+                    <p className="mt-4 w-full text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
                       Benchmarked
                     </p>
                     <div className="mt-3 grid max-w-4xl grid-cols-3 gap-3 sm:grid-cols-6">
@@ -599,8 +612,8 @@ function ResponsibilityCard({
                         </div>
                       ))}
                     </div>
-                    <p className="mt-4 max-w-3xl text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
-                      merchant onboarding flows, focusing on:
+                    <p className="mt-4 w-full text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
+                      Merchant onboarding flows, focusing on:
                     </p>
                     <div className="mt-4 grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-4">
                       {competitorResearchDetails.map((item) => (
@@ -618,42 +631,39 @@ function ResponsibilityCard({
                     <h4 className="text-lg font-semibold text-[#1d1d1f] sm:text-xl">
                       Core Judgment
                     </h4>
-                    <div className="mt-4 max-w-3xl space-y-3 text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
+                    <div className="mt-4 w-full space-y-3 text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
                       <p>
                         <span className="mr-2 font-semibold text-[#1d1d1f]">1.</span>
-                        Merchant onboarding in Mexico needs an
-                        <span className="mx-1 font-semibold text-[#86868b]">
-                          AI Agent
-                        </span>
-                        to lower the barrier of
-                        <span className="mx-1 font-semibold text-[#86868b]">
-                          document submission
-                        </span>
-                        and
-                        <span className="mx-1 font-semibold text-[#86868b]">
-                          flow comprehension
-                        </span>
-                        .
+                        Mexico onboarding needs an
+                        <span className="mx-1 font-semibold text-[#86868b]">AI Agent</span>
+                        to lower
+                        <span className="mx-1 font-semibold text-[#86868b]">document barriers</span>
+                        and simplify the flow.
                       </p>
                       <p>
                         <span className="mr-2 font-semibold text-[#1d1d1f]">2.</span>
-                        The agent fits better embedded in
-                        <span className="mx-1 font-semibold text-[#86868b]">WhatsApp</span>
-                        , reusing its advantages in
+                        <span className="font-semibold text-[#86868b]">WhatsApp</span>
+                        is the right channel, leveraging
                         <span className="mx-1 font-semibold text-[#86868b]">image upload</span>
                         ,
-                        <span className="mx-1 font-semibold text-[#86868b]">instant messaging</span>
+                        <span className="mx-1 font-semibold text-[#86868b]">messaging</span>
                         ,
-                        <span className="mx-1 font-semibold text-[#86868b]">conversational reach</span>
+                        <span className="mx-1 font-semibold text-[#86868b]">reach</span>
                         , and
-                        <span className="mx-1 font-semibold text-[#86868b]">user familiarity</span>
+                        <span className="mx-1 font-semibold text-[#86868b]">familiarity</span>
                         .
                       </p>
                       <p>
                         <span className="mr-2 font-semibold text-[#1d1d1f]">3.</span>
-                        Free-form conversation easily causes
+                        Free-form chat causes
                         <span className="mx-1 font-semibold text-[#86868b]">flow divergence</span>
-                        , so it relies more on intent recognition, context memory, and error fallback.
+                        , requiring
+                        <span className="mx-1 font-semibold text-[#86868b]">intent recognition</span>
+                        ,
+                        <span className="mx-1 font-semibold text-[#86868b]">context memory</span>
+                        , and
+                        <span className="mx-1 font-semibold text-[#86868b]">error fallback</span>
+                        .
                       </p>
                     </div>
                   </div>
@@ -697,11 +707,11 @@ export function MerchantOnboardingCaseStudy({
         <section className="grid items-center gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
           <div className="max-w-2xl">
             <h1 className="mt-4 text-4xl font-semibold tracking-tight text-[#1d1d1f] sm:text-5xl md:text-6xl md:leading-[1.04]">
-              <span className="block">DiDi Food Agent</span>
-              <span className="block">Rebuilding Merchant Onboarding</span>
+              <span className="block">DiDi Food</span>
+              <span className="block">Merchant Onboarding Agent</span>
             </h1>
             <p className="mt-5 max-w-xl text-base leading-8 text-[#6e6e73] md:text-lg">
-              Built on WhatsApp and multi-agent collaboration, DiDi Food Agent rebuilds a flow that once relied on form-filling and manual follow-up into an integrated experience of conversational onboarding, document recognition, real-time Q&A, and review progression.
+              A WhatsApp multi-agent system that replaced manual forms with conversational onboarding, document recognition, and real-time Q&A.
             </p>
           </div>
 
@@ -754,7 +764,7 @@ export function MerchantOnboardingCaseStudy({
             <div className="max-w-3xl">
               <SectionLabel>1. Business Problem</SectionLabel>
               <h2 className="mt-4 text-[2rem] font-semibold tracking-tight text-[#1d1d1f] md:text-[2.5rem] md:leading-[1.02]">
-                Onboarding was long, hard to understand, and merchants dropped off after signup
+                Merchants signed up, then dropped off
               </h2>
             </div>
 
@@ -771,8 +781,8 @@ export function MerchantOnboardingCaseStudy({
           </section>
 
           <BeforeAfterSection
-            title={"From “merchants understand the platform” to “AI understands merchants”"}
-            description="Let AI act as a thoughtful assistant that reads the merchant's current progress, helps review document status, and follows up on the next task—turning onboarding from passive form-filling into active progression."
+            title={"From passive forms to proactive AI guidance"}
+            description="Built as a multi-agent system on WhatsApp, the AI reads merchant documents, tracks progress, and guides each step to approval. Onboarding finishes through conversation, not forms."
           />
 
           <AgentArchitectureSection />
