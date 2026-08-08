@@ -736,10 +736,11 @@ export function MerchantOnboardingCaseStudy({
           <div className="max-w-2xl">
             <h1 className="mt-4 text-4xl font-semibold tracking-tight text-[#1d1d1f] sm:text-5xl md:text-6xl md:leading-[1.12]">
               <span className="block">DiDi Food</span>
-              <span
-                className="block bg-gradient-to-r from-[#0071e3] via-[#af52de] via-[#ff2d55] to-[#ff9500] bg-clip-text text-transparent"
-              >
-                Merchant Onboarding Agent
+              <span className="block">
+                <span>Merchant </span>
+                <span className="bg-gradient-to-r from-[#0071e3] via-[#af52de] via-[#ff2d55] to-[#ff9500] bg-clip-text text-transparent">
+                  Onboarding Agent
+                </span>
               </span>
             </h1>
             <p className="mt-5 max-w-xl text-base leading-8 text-[#6e6e73] md:text-lg">
@@ -751,7 +752,7 @@ export function MerchantOnboardingCaseStudy({
             <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(0, 0, 0,0.12),transparent_50%)]" />
             <div className="relative mx-auto w-full max-w-[560px] overflow-hidden rounded-[1.6rem]">
               <img
-                src="/images/A_3D_rendered_illustration_in__2026-08-08T12-08-36.png"
+                src="/images/Keep_the_exact_same_scene__com_2026-08-08T15-32-48.png"
                 alt="Merchant chatting with DiDi AI onboarding assistant"
                 className="h-full w-full object-contain drop-shadow-[0_20px_60px_rgba(0,0,0,0.10)]"
               />
@@ -783,11 +784,23 @@ export function MerchantOnboardingCaseStudy({
                     y: { duration: 3 + Math.random() * 2, repeat: Infinity, ease: "easeInOut" },
                     delay: 0.3 + Math.random() * 0.5,
                   }}
-                  className={`absolute max-w-[170px] rounded-[1.05rem] px-3.5 py-2 shadow-[0_10px_26px_rgba(0,0,0,0.10)] backdrop-blur-xl ${
+                  className={`absolute max-w-[170px] rounded-[1.05rem] px-3.5 py-2 shadow-[0_10px_26px_rgba(0,0,0,0.08)] backdrop-blur-xl ${
                     bubble.from === "agent"
-                      ? "border border-black/[0.06] bg-white/85 text-[#1d1d1f]"
-                      : "bg-[#0071e3]/80 backdrop-blur-xl text-[#1d1d1f] border border-white/10"
+                      ? "text-[#1d1d1f]"
+                      : "bg-[#0071e3]/55 backdrop-blur-xl text-[#1d1d1f] border border-white/15"
                   } ${bubble.position}`}
+                  style={
+                    bubble.from === "agent"
+                      ? {
+                          border: "1px solid transparent",
+                          backgroundImage:
+                            "linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), linear-gradient(135deg, rgba(0,113,227,0.3), rgba(175,82,222,0.3), rgba(255,45,85,0.3), rgba(255,149,0,0.3))",
+                          backgroundOrigin: "border-box",
+                          WebkitBackgroundClip: "padding-box, border-box",
+                          backgroundClip: "padding-box, border-box",
+                        }
+                      : undefined
+                  }
                 >
                   <p className="text-[12px] font-medium leading-relaxed">
                     {bubble.text}
