@@ -83,33 +83,33 @@ const legacyHints = [
 const chatMessages: ChatMessage[] = [
   {
     side: "ai",
-    content: "Hello and welcome. I'll help you submit your store information step by step.",
+    content: "Hey there! Welcome aboard. Let me walk you through getting your store set up, nice and easy.",
   },
-  { side: "ai", content: "First, please tell me your store name." },
+  { side: "ai", content: "To start off, what's the name of your store?" },
   { side: "merchant", content: "Awei's Taqueria" },
-  { side: "ai", content: "Please send your store address." },
+  { side: "ai", content: "Got it! And where is it located? Share me the address whenever you're ready." },
   { side: "merchant", content: "13 Génova St, Mexico City", kind: "location" },
-  { side: "ai", content: "Please upload a storefront photo with the store name clearly visible." },
+  { side: "ai", content: "Nice! Could you snap a photo of your storefront so I can see the sign clearly?" },
   { side: "merchant", content: "Sent storefront photo", kind: "upload" },
   {
     side: "ai",
-    content: "Now please upload a menu photo with dishes and prices clearly shown.",
+    content: "Great, thanks! One more photo needed: your menu, with dishes and prices visible if possible.",
   },
   { side: "merchant", content: "Sent menu photo", kind: "upload" },
   {
     side: "ai",
     content:
-      "I've recognized: store name Awei's Taqueria, main category Mexican. Please confirm this is correct.",
+      "I can see everything now. Store name is Awei's Taqueria, looks like Mexican cuisine. Does that look right to you?",
   },
   { side: "merchant", content: "Correct" },
   {
     side: "ai",
-    content: "Please upload an ID document to complete identity verification.",
+    content: "Almost there! Just need a quick ID document for verification and we're good to go.",
   },
   { side: "merchant", content: "Sent ID document", kind: "upload" },
-  { side: "ai", content: "All documents collected. Submit for review?" },
+  { side: "ai", content: "You're all set! Ready for me to submit everything for review?" },
   { side: "merchant", content: "Submit for review" },
-  { side: "ai", content: "Submitted successfully. You'll be notified of the result within 1–3 business days." },
+  { side: "ai", content: "Done! Your application is in. Expect an update within 1 to 3 business days." },
 ];
 
 function FormFieldMock({

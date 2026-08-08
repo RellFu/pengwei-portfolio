@@ -1,9 +1,10 @@
  "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   ArrowLeft,
+  ArrowRightLeft,
   BadgeAlert,
   Bot,
   BrainCircuit,
@@ -18,8 +19,10 @@ import {
   MessageCircleMore,
   MessageSquareQuote,
   MessagesSquare,
+  PhoneOff,
   PictureInPicture2,
   Plus,
+  ShieldAlert,
   ShieldCheck,
   RefreshCcw,
   ScanText,
@@ -41,6 +44,8 @@ import {
 import { AgentArchitectureSection } from "@/components/agent-architecture-section";
 import { BeforeAfterSection } from "@/components/before-after-section";
 import type { CaseStudyProject } from "@/data/projects";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 type MerchantOnboardingCaseStudyProps = {
   project: CaseStudyProject;
@@ -75,38 +80,37 @@ const workflowSteps = [
   { title: "CRM Status Sync", icon: Database },
 ];
 
-const agentCards = [
-  {
-    title: "Onboarding Agent",
-    description: "Data collection and flow guidance",
-    icon: UserRound,
-  },
-  {
-    title: "Pre-check Agent",
-    description: "Pre-check correction and resubmission reminders",
-    icon: ScanSearch,
-  },
-  {
-    title: "Q&A Agent",
-    description: "Real-time answers, pulling back to the main flow",
-    icon: MessageCircleMore,
-  },
-  {
-    title: "Opportunity Agent",
-    description: "Interruption detection and re-engagement",
-    icon: Waypoints,
-  },
+const routingExamples = [
+  { trigger: "Filling the form", agent: "Onboarding Agent" },
+  { trigger: "Uploads storefront or menu", agent: "OCR Check" },
+  { trigger: "Asks about platform rules", agent: "Q&A Agent" },
+  { trigger: "Submits for review", agent: "Review Agent" },
+  { trigger: "Goes silent or drops off", agent: "Re-engage Agent" },
 ];
 
-const agentCapabilityChips = [
-  { label: "Context Memory", icon: BrainCircuit },
-  { label: "Tool Calling", icon: Wrench },
-  { label: "Result Write-back", icon: Database },
+// Each case is a concrete merchant input routed to a different specialist.
+// The animation cycles through them on a loop while the panel is open.
+const routingCases = [
+  { input: "hey, how do i get my restaurant on DiDi?", thumb: null, target: 0, thought: "New merchant asking how to start. Routing to Onboarding." },
+  { input: "pic of my storefront 👇", thumb: "storefront.jpg", target: 1, thought: "Merchant is uploading a storefront photo. Sending to OCR Check." },
+  { input: "do i get to set my own delivery fee?", thumb: null, target: 2, thought: "Pricing question detected. Handing off to Q&A Agent." },
+  { input: "sent everything, can u review pls?", thumb: null, target: 3, thought: "Submission ready for review. Escalating to Review Agent." },
+  { input: "Merchant silent for 3 days", thumb: null, target: 4, muted: true, system: true, thought: "No response for 3 days. Triggering Re-engagement." },
 ];
-const stabilityChips = [
-  { label: "Resume from Breakpoint", icon: Link2 },
-  { label: "Flow Pull-back", icon: RefreshCcw },
-  { label: "Error Fallback", icon: BadgeAlert },
+
+const controlRules = [
+  {
+    trigger: "Risk control blocks",
+    rule: "Stop all agents, freeze submission, and keep one fixed appeal path.",
+  },
+  {
+    trigger: "CRM stage mismatch",
+    rule: "Override the model's guess with the ground-truth flow state.",
+  },
+  {
+    trigger: "Human takeover or audit",
+    rule: "Agent yields control, context retained, every action logged with a trace ID.",
+  },
 ];
 
 const evaluationDimensions = [
@@ -158,11 +162,11 @@ const heroBubbles = [
 ];
 
 const sessionPipeline = [
-  { label: "Fetch Session ID", icon: FileStack },
-  { label: "ETL Cleaning", icon: Wrench },
-  { label: "State Completion", icon: RefreshCcw },
-  { label: "LLM Classification", icon: Bot },
-  { label: "Auto Report", icon: ScrollText },
+  { label: "Data Ingestion", icon: FileStack },
+  { label: "Clean & Merge", icon: Wrench },
+  { label: "Enrich States", icon: RefreshCcw },
+  { label: "LLM Classify", icon: Bot },
+  { label: "Diagnose Funnel", icon: ScrollText },
 ];
 
 const attributionSources = [
@@ -178,7 +182,7 @@ const attributionSources = [
     value: "1,477",
     percent: "26.9%",
     width: "26.9%",
-    color: "bg-[#0071e3]",
+    color: "bg-[#6cb2f5]",
   },
   {
     label: "Form-page retention",
@@ -206,6 +210,41 @@ function ResponsibilityCard({
     | "data-analytics";
 }) {
   const [expanded, setExpanded] = useState(false);
+  const [activeCase, setActiveCase] = useState(0);
+  const activeCaseData = routingCases[activeCase];
+  const orchestrationRef = useRef(null);
+
+  useGSAP(
+    () => {
+      if (!expanded) return;
+      const cards = gsap.utils.toArray<HTMLElement>(".routing-card");
+      gsap.set(cards, { opacity: 1, scale: 1, clearProps: "boxShadow" });
+
+      const tl = gsap.timeline({
+        defaults: { ease: "power2.out" },
+        // When this case finishes, advance to the next one. The dependency on
+        // activeCase re-runs the whole sequence, so it loops through every case.
+        onComplete: () => {
+          setActiveCase((c) => (c + 1) % routingCases.length);
+        },
+      });
+      tl.from(".routing-bubble", { opacity: 0, y: 14, duration: 0.5 })
+        .from(".routing-master", { opacity: 0, scale: 0.95, duration: 0.4 }, "-=0.2")
+        .to(".routing-master", { scale: 1.04, duration: 0.18, yoyo: true, repeat: 1 }, "-=0.05")
+        .to(cards, { opacity: 0.3, duration: 0.3 }, "<")
+        .to(".routing-card--target", { opacity: 1, scale: 1.05, duration: 0.3 }, "<")
+        .to(
+          ".routing-card--target",
+          {
+            boxShadow: "0 0 0 2px #0071e3, 0 12px 24px rgba(0,113,227,0.22)",
+            duration: 0.3,
+          },
+          "<"
+        )
+        .to({}, { duration: 1.6 });
+    },
+    { dependencies: [expanded, activeCase], scope: orchestrationRef }
+  );
 
   if (!expandable) {
     return (
@@ -224,9 +263,9 @@ function ResponsibilityCard({
         className="block w-full text-left"
         aria-expanded={expanded}
       >
-        <GlassSurface className="rounded-[1.8rem] p-6 transition duration-300 hover:border-black/10 hover:shadow-[0_26px_60px_rgba(0, 0, 0,0.14)]">
+        <GlassSurface className="rounded-[1.8rem] p-6 transition duration-300 hover:border-black/10 hover:shadow-[0_26px_60px_rgba(0, 0, 0,0.14)] active:scale-[0.99]">
           <div className="flex items-start justify-between gap-4">
-            <h3 className="text-xl font-semibold text-[#1d1d1f]">{title}</h3>
+            <h3 className="text-xl font-semibold tracking-[-0.01em] text-[#1d1d1f]">{title}</h3>
             <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#0071e3] text-white">
               <Plus className="h-4 w-4 stroke-[2.4]" />
             </span>
@@ -251,7 +290,7 @@ function ResponsibilityCard({
 
         <div className="absolute inset-0 flex items-center justify-center px-4 py-8 sm:px-6">
           <GlassSurface
-            className={`relative max-h-[calc(100vh-80px)] w-full max-w-5xl overflow-y-auto rounded-[2rem] border-black/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(245,245,247,0.96))] p-6 shadow-[0_40px_120px_rgba(0, 0, 0,0.24)] transition duration-300 sm:p-7 md:p-8 ${
+            className={`relative max-h-[calc(100vh-80px)] w-full max-w-5xl overflow-y-auto rounded-[2rem] border-black/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(245,245,247,0.96))] p-6 shadow-[0_40px_120px_rgba(0, 0, 0,0.24)] transition duration-300 sm:p-7 md:p-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar-display:none] ${
               expanded
                 ? "translate-y-0 scale-100 opacity-100"
                 : "translate-y-4 scale-[0.98] opacity-0"
@@ -261,7 +300,7 @@ function ResponsibilityCard({
               type="button"
               aria-label="Close details"
               onClick={() => setExpanded(false)}
-              className="absolute right-6 top-6 flex h-8 w-8 items-center justify-center rounded-full bg-[#0071e3] text-white transition hover:scale-[1.03]"
+              className="absolute right-6 top-6 flex h-8 w-8 items-center justify-center rounded-full bg-[#0071e3] text-white transition duration-150 active:scale-90 hover:scale-[1.03]"
             >
               <X className="h-4 w-4" />
             </button>
@@ -270,7 +309,7 @@ function ResponsibilityCard({
               {variant === "agent-workflow" ? (
                 <div className="mx-auto flex w-full max-w-4xl flex-col items-start space-y-5 text-left">
                     <div className="w-full">
-                    <h4 className="text-lg font-semibold text-[#1d1d1f] sm:text-xl">
+                    <h4 className="text-lg font-semibold tracking-[-0.01em] text-[#1d1d1f] sm:text-xl">
                       AI Onboarding Flow Redesign
                     </h4>
                     <p className="mt-1 text-[13px] leading-6 text-[#6e6e73]">
@@ -312,95 +351,102 @@ function ResponsibilityCard({
                   </div>
 
                   <div className="w-full">
-                    <h4 className="text-lg font-semibold text-[#1d1d1f] sm:text-xl">
+                    <h4 className="text-lg font-semibold tracking-[-0.01em] text-[#1d1d1f] sm:text-xl">
                       Multi-Agent Orchestration
                     </h4>
-                    <div className="mt-4 space-y-4">
-                      <div className="mx-auto max-w-3xl rounded-[1.15rem] border border-black/5 bg-white/88 px-4 py-2.5 text-center shadow-[0_10px_20px_rgba(0, 0, 0,0.05)]">
-                        <div>
-                          <h5 className="text-base font-semibold text-[#1d1d1f] sm:text-lg">
-                            Master Agent
-                          </h5>
-                          <p className="mt-1 text-[13px] leading-5 text-[#6e6e73]">
-                            Recognizes merchant intent, breaks down tasks based on current progress, and routes to the right business agent.
-                          </p>
+                    <div className="mt-4 space-y-5">
+                      {/* Block 1: Routing logic */}
+                      <div ref={orchestrationRef}>
+                        <p className="mt-0.5 text-[12px] font-medium uppercase tracking-wide text-[#86868b]">
+                          Routing logic
+                        </p>
+                        <p className="mt-1 text-[13px] leading-6 text-[#6e6e73]">
+                          Master Agent reads intent and stage, then routes the merchant to the right specialist. It does not run every task itself.
+                        </p>
+                        <div className="mt-3 flex flex-col items-center">
+                          {activeCaseData.system ? (
+                            <div className="routing-bubble flex w-full max-w-md items-start gap-2">
+                              <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#86868b]/[0.1]">
+                                <Clock3 className="h-3.5 w-3.5 text-[#86868b]" />
+                              </div>
+                              <div className="rounded-2xl rounded-tl-sm border border-black/6 bg-[#f5f5f7] px-3.5 py-2 shadow-[0_8px_18px_rgba(0,0,0,0.03)]">
+                                <p className="text-[13px] leading-snug text-[#86868b]">
+                                  {activeCaseData.input}
+                                </p>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="routing-bubble flex w-full max-w-md items-start gap-2">
+                              <img
+                                src="/whatsapp-logo.webp"
+                                alt="WhatsApp"
+                                className="mt-0.5 h-7 w-7 shrink-0 object-contain"
+                              />
+                              <div className={`rounded-2xl rounded-tl-sm border border-black/[0.08] bg-white px-3.5 py-2 shadow-[0_8px_18px_rgba(0,0,0,0.05)] ${activeCaseData.muted ? "opacity-50" : ""}`}>
+                                <div className={`flex items-baseline gap-1 text-[13px] leading-snug ${activeCaseData.muted ? "text-[#86868b]" : "text-[#1d1d1f]"}`}>
+                                  {activeCaseData.input}
+                                  {activeCaseData.thumb && (
+                                    <span className="inline-flex shrink-0 items-center gap-0.5 rounded border border-black/8 bg-white/70 px-1 py-[1px] text-[10px] text-[#6e6e73] leading-none">
+                                      <PictureInPicture2 className="h-2.5 w-2.5 text-[#86868b]" />
+                                      {activeCaseData.thumb}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                          <div className="routing-master mt-2 w-full max-w-md rounded-[1.1rem] border border-black/5 bg-[#0071e3]/[0.06] px-4 py-2.5 text-center shadow-[0_10px_20px_rgba(0,0,0,0.05)]">
+                            <h6 className="text-[14px] font-semibold text-[#0071e3]">
+                              Master Agent
+                            </h6>
+                            <p className="mt-0.5 text-[13px] leading-6 text-[#6e6e73]">
+                              {activeCaseData.thought}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-5">
+                          {routingExamples.map((r, i) => (
+                            <div
+                              key={r.agent}
+                              className={`routing-card rounded-[1rem] border border-black/5 bg-white/88 px-3 py-2.5 text-center shadow-[0_8px_18px_rgba(0,0,0,0.04)] ${
+                                i === activeCaseData.target ? "routing-card--target" : ""
+                              }`}
+                            >
+                              <p className="text-[13px] font-semibold text-[#1d1d1f]">
+                                {r.agent}
+                              </p>
+                            </div>
+                          ))}
                         </div>
                       </div>
 
-                      <div className="grid gap-2 md:grid-cols-2 xl:grid-cols-4">
-                        {agentCards.map((item) => {
-                          const Icon = item.icon;
-
-                          return (
-                            <div
-                              key={item.title}
-                              className="rounded-[1.05rem] border border-black/5 bg-white/88 px-3 py-3 text-center shadow-[0_10px_20px_rgba(0, 0, 0,0.05)]"
-                            >
-                              <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-full bg-[#f5f5f7] text-[#0071e3]">
-                                <Icon className="h-4.5 w-4.5" />
-                              </div>
-                              <h6 className="mt-2 text-[15px] font-semibold text-[#1d1d1f]">
-                                {item.title}
-                              </h6>
-                              <p className="mt-1 text-[12px] leading-5 text-[#6e6e73]">
-                                {item.description}
-                              </p>
+                      {/* Block 2: Deterministic control layer */}
+                      <div>
+                        <p className="text-[12px] font-medium uppercase tracking-wide text-[#86868b]">
+                          Deterministic control layer
+                        </p>
+                        <div className="mt-2 space-y-1.5 rounded-[1rem] border border-black/5 bg-white/88 px-4 py-3 shadow-[0_8px_18px_rgba(0,0,0,0.04)]">
+                          {controlRules.map((c) => (
+                            <div key={c.trigger} className="flex items-start gap-2 text-[12px] leading-5">
+                              <span className="shrink-0 font-medium uppercase tracking-wide text-[#0071e3]">
+                                {c.trigger}
+                              </span>
+                              <span className="text-[#6e6e73]">{c.rule}</span>
                             </div>
-                          );
-                        })}
-                      </div>
-
-                      <div className="flex flex-wrap justify-center gap-2">
-                        {[...agentCapabilityChips, ...stabilityChips].map((item) => {
-                          const Icon = item.icon;
-
-                          return (
-                            <div
-                              key={item.label}
-                              className="flex items-center gap-2 rounded-full border border-black/10 bg-white/84 px-4 py-2 text-sm font-medium text-[#1d1d1f]"
-                            >
-                              <Icon className="h-4 w-4 text-[#0071e3]" />
-                              {item.label}
-                            </div>
-                          );
-                        })}
+                          ))}
+                          <p className="border-t border-black/5 pt-1.5 text-[13px] leading-6 text-[#6e6e73]">
+                            LLMs decide what to say. Rules decide what is allowed.
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  <div>
-                    <h4 className="text-lg font-semibold text-[#1d1d1f] sm:text-xl">
-                      Design Value
-                    </h4>
-                    <p className="mt-1 text-[13px] leading-6 text-[#6e6e73]">
-                      Upgrades the agent from single-turn Q&A into a
-                      <span className="mx-1 font-semibold text-[#86868b]">
-                        flow-execution layer
-                      </span>
-                      , enabling it to
-                      <span className="mx-1 font-semibold text-[#86868b]">
-                        understand merchant state
-                      </span>
-                      ,
-                      <span className="mx-1 font-semibold text-[#86868b]">
-                        route tasks
-                      </span>
-                      ,
-                      <span className="mx-1 font-semibold text-[#86868b]">
-                        call capabilities
-                      </span>
-                      , and
-                      <span className="mx-1 font-semibold text-[#86868b]">
-                        keep driving onboarding to completion
-                      </span>
-                      .
-                    </p>
-                  </div>
                 </div>
               ) : variant === "agent-evaluation" ? (
                 <div className="mx-auto flex w-full max-w-4xl flex-col items-start space-y-5 text-left">
                   <div className="w-full">
-                    <h4 className="text-lg font-semibold text-[#1d1d1f] sm:text-xl">
+                    <h4 className="text-lg font-semibold tracking-[-0.01em] text-[#1d1d1f] sm:text-xl">
                       Evaluation Framework Design
                     </h4>
                     <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
@@ -440,43 +486,48 @@ function ResponsibilityCard({
                   </div>
 
                   <div className="w-full">
-                    <h4 className="text-lg font-semibold text-[#1d1d1f] sm:text-xl">
+                    <h4 className="text-lg font-semibold tracking-[-0.01em] text-[#1d1d1f] sm:text-xl">
                       AI Automated Monitoring
                     </h4>
-                    <p className="mt-3 max-w-3xl text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
-                      Led the design of an AI-powered monitoring agent that automatically flags abnormal conversations. It uses AI to inspect AI, catching issues a rule-based system would miss.
+                    <p className="mt-3 text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
+                      Designed an LLM-as-judge monitoring agent that flags abnormal conversations and catches issues rule-based systems would miss.
                     </p>
-                    <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)] lg:items-stretch">
+                    <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:items-stretch">
                       <div className="rounded-[1.15rem] border border-black/5 bg-white/82 p-4 shadow-[0_10px_20px_rgba(0, 0, 0,0.05)]">
-                        <div className="rounded-[0.95rem] bg-[#f5f5f7]/60 px-3 py-2.5">
-                          <p className="flex items-center gap-1.5 text-[12px] font-medium text-[#86868b]">
-                            <UserRound className="h-3.5 w-3.5 text-[#0071e3]" />
-                            User
-                          </p>
-                          <p className="mt-1 text-[13px] leading-6 text-[#515154]">
-                            I&apos;d like to reach one of your consultants.
-                          </p>
-                        </div>
-                        <div className="mt-3 rounded-[0.95rem] border border-black/5 bg-white px-3 py-2.5">
-                          <p className="flex items-center gap-1.5 text-[12px] font-medium text-[#86868b]">
-                            <Bot className="h-3.5 w-3.5 text-[#0071e3]" />
-                            Agent
-                          </p>
-                          <p className="mt-1 text-[13px] leading-6 text-[#515154]">
-                            I understand how you feel, but please upload your menu photo first.
-                          </p>
+                        <div className="space-y-3">
+                          <div className="rounded-[0.95rem] bg-[#f5f5f7]/60 px-3 py-2">
+                            <p className="flex items-center gap-1.5 text-[12px] font-medium text-[#86868b]">
+                              <UserRound className="h-3.5 w-3.5 text-[#0071e3]" />
+                              User
+                            </p>
+                            <p className="mt-1 text-[13px] leading-6 text-[#515154]">
+                              I need to talk to your consultant.
+                            </p>
+                          </div>
+                          <div className="rounded-[0.95rem] border border-black/5 bg-white px-3 py-2">
+                            <p className="flex items-center gap-1.5 text-[12px] font-medium text-[#86868b]">
+                              <Bot className="h-3.5 w-3.5 text-[#0071e3]" />
+                              Agent
+                            </p>
+                            <p className="mt-1 text-[13px] leading-6 text-[#515154]">
+                              Could you send your storefront photo first?
+                            </p>
+                          </div>
                         </div>
                       </div>
 
-                      <div className="rounded-[1.15rem] border border-black/5 bg-white/82 p-4 shadow-[0_10px_20px_rgba(0, 0, 0,0.05)]">
-                        <h5 className="text-[15px] font-semibold text-[#1d1d1f]">
-                          AI Monitoring Result
-                        </h5>
-                        <div className="mt-3 space-y-2 text-[13px] leading-6 text-[#515154]">
-                          <p>Failed to correctly understand the user&apos;s request</p>
-                          <p>Did not trigger the fallback mechanism</p>
-                          <p>Should have provided a support phone number but didn&apos;t</p>
-                          <p className="font-semibold text-[#86868b]">
+                      <div className="rounded-[1.15rem] border border-black/5 bg-white/82 p-4 shadow-[0_10px_20px_rgba(0,0,0,0.05)]">
+                        <div className="flex items-center gap-2">
+                          <ShieldAlert className="h-4 w-4 text-[#ff9f0a]" />
+                          <h5 className="text-[14px] font-semibold text-[#1d1d1f]">
+                            AI Monitoring Result
+                          </h5>
+                        </div>
+                        <div className="mt-3 text-[13px] leading-6 text-[#515154]">
+                          <p>
+                            The agent <strong>failed to match user intent</strong>, routing a support request as onboarding instead of escalating. It also <strong>missed the fallback trigger</strong> and <strong>omitted required info</strong> (support phone number).
+                          </p>
+                          <p className="mt-1.5 font-medium text-[#c45c00]">
                             Risk level: Medium
                           </p>
                         </div>
@@ -486,31 +537,34 @@ function ResponsibilityCard({
                   </div>
 
                   <div className="w-full">
-                    <h4 className="text-lg font-semibold text-[#1d1d1f] sm:text-xl">
-                      Bad Case Attribution
+                    <h4 className="text-lg font-semibold tracking-[-0.01em] text-[#1d1d1f] sm:text-xl">
+                      Bad Case Attribution and Review Loop
                     </h4>
-                    <p className="mt-3 max-w-3xl text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
-                      Traced issues from surface symptoms down to root causes in the prompt, knowledge base, agent routing, OCR, multimodal processing, or back-end system chain.
+                    <p className="mt-3 text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
+                      Traced bad cases to root causes, then worked with engineering to file CE IDs, fix, and retest.
                     </p>
-                  </div>
-
-                  <div className="w-full">
-                    <h4 className="text-lg font-semibold text-[#1d1d1f] sm:text-xl">
-                      Engineering Review Loop
-                    </h4>
-                    <p className="mt-3 max-w-3xl text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
-                      Independently ran weekly bad-case reviews, combining session, traceId, and anomaly attribution to guide engineering through locating, fixing, and retesting.
-                    </p>
+                    <div className="mt-4 flex flex-wrap items-center gap-x-2.5 gap-y-2 text-[13px] font-medium text-[#1d1d1f]">
+                      {reviewLoop.map((step, index) => (
+                        <div key={step} className="flex items-center gap-2.5">
+                          <div className="flex items-center gap-2 rounded-full border border-black/10 bg-white/84 px-3 py-1.5 shadow-[0_8px_16px_rgba(0,0,0,0.04)]">
+                            <span>{step}</span>
+                          </div>
+                          {index < reviewLoop.length - 1 ? (
+                            <span className="text-[#0071e3]">→</span>
+                          ) : null}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               ) : variant === "data-analytics" ? (
                 <div className="mx-auto flex w-full max-w-4xl flex-col items-start space-y-5 text-left">
                   <div className="w-full">
-                    <h4 className="text-lg font-semibold text-[#1d1d1f] sm:text-xl">
-                      Conversation Data Analysis
+                    <h4 className="text-lg font-semibold tracking-[-0.01em] text-[#1d1d1f] sm:text-xl">
+                      Automated Session-Level Onboarding Analysis
                     </h4>
-                    <p className="mt-3 max-w-3xl text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
-                      Independently built session-level analysis scripts to analyze user and agent conversation data, locate where users got stuck, and drive feature optimization.
+                    <p className="mt-3 text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
+                      Built a pipeline that linked merchant-agent conversations with CRM funnel states, then used LLM-assisted classification to diagnose where merchants dropped off and why.
                     </p>
                     <div className="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-3 text-[13px] font-medium text-[#1d1d1f]">
                       {sessionPipeline.map((item, index) => {
@@ -532,24 +586,20 @@ function ResponsibilityCard({
 
                     <div className="mt-5 rounded-[1.15rem] border border-black/5 bg-white/82 p-4 shadow-[0_10px_20px_rgba(0, 0, 0,0.05)]">
                       <h5 className="text-[15px] font-semibold text-[#1d1d1f]">
-                        Data Insight
+                        From Drop-off Signal to Product Decision
                       </h5>
                       <p className="mt-3 text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
-                        Storefront-photo AI rejection rate as high as 50%
-                        <span className="mx-1 text-[#0071e3]">→</span>
-                        loosened OCR tolerance
-                        <span className="mx-1 text-[#0071e3]">→</span>
-                        merchant onboarding completion rate rose from 21.9% to 76.6%
+                        CRM data pinpointed the biggest drop-off at storefront-photo collection. Conversation analysis tied it to 50% OCR rejection and repeated uploads, leading to a more tolerant validation workflow. Post-release completion rose to 76.6% from 21.9%.
                       </p>
                     </div>
                   </div>
 
                   <div className="w-full">
-                    <h4 className="text-lg font-semibold text-[#1d1d1f] sm:text-xl">
+                    <h4 className="text-lg font-semibold tracking-[-0.01em] text-[#1d1d1f] sm:text-xl">
                       Website Entry Event-Tracking Attribution
                     </h4>
-                    <p className="mt-3 max-w-3xl text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
-                      Collaborated with the data PM to define event tracking for the website entry point, analyzing user behavior to optimize features.
+                    <p className="mt-3 text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
+                      Defined event tracking for user clicks, behavioral prompts, and form-exit rescue to analyze how merchants reached AI onboarding support.
                     </p>
 
                     <div className="mt-5 rounded-[1.15rem] border border-black/5 bg-white/82 p-4 shadow-[0_10px_20px_rgba(0, 0, 0,0.05)]">
@@ -583,7 +633,7 @@ function ResponsibilityCard({
               ) : (
                 <div className="mx-auto flex w-full max-w-4xl flex-col items-start space-y-5 text-left">
                   <div className="w-full">
-                    <h4 className="text-lg font-semibold text-[#1d1d1f] sm:text-xl">
+                    <h4 className="text-lg font-semibold tracking-[-0.01em] text-[#1d1d1f] sm:text-xl">
                       Local Scenario Insight
                     </h4>
                     <p className="mt-4 w-full text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
@@ -592,7 +642,7 @@ function ResponsibilityCard({
                   </div>
 
                   <div className="w-full">
-                    <h4 className="text-lg font-semibold text-[#1d1d1f] sm:text-xl">
+                    <h4 className="text-lg font-semibold tracking-[-0.01em] text-[#1d1d1f] sm:text-xl">
                       Competitor Capability Reference
                     </h4>
                     <p className="mt-4 w-full text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
@@ -628,7 +678,7 @@ function ResponsibilityCard({
                   </div>
 
                   <div className="w-full">
-                    <h4 className="text-lg font-semibold text-[#1d1d1f] sm:text-xl">
+                    <h4 className="text-lg font-semibold tracking-[-0.01em] text-[#1d1d1f] sm:text-xl">
                       Core Judgment
                     </h4>
                     <div className="mt-4 w-full space-y-3 text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
