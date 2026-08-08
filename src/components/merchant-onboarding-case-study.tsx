@@ -10,6 +10,7 @@ import {
   BrainCircuit,
   Building2,
   CheckCircle2,
+  ChevronRight,
   CircleHelp,
   Clock3,
   Database,
@@ -249,7 +250,7 @@ function ResponsibilityCard({
   if (!expandable) {
     return (
       <GlassSurface className="rounded-[1.8rem] p-6">
-        <h3 className="text-xl font-semibold text-[#1d1d1f]">{title}</h3>
+        <h3 className="text-xl font-semibold tracking-[-0.01em] text-[#1d1d1f]">{title}</h3>
         <p className="mt-4 text-sm leading-7 text-[#6e6e73]">{description}</p>
       </GlassSurface>
     );
@@ -339,8 +340,8 @@ function ResponsibilityCard({
                                 </p>
                               </div>
                               {index < workflowSteps.length - 1 ? (
-                                <span className="absolute -right-2 top-4 hidden text-xl text-[#0071e3] md:block">
-                                  →
+                                <span className="absolute -right-2 top-4 hidden md:block">
+                                  <ChevronRight className="h-4 w-4 text-[#c7c7cc]" />
                                 </span>
                               ) : null}
                             </div>
@@ -360,7 +361,7 @@ function ResponsibilityCard({
                         <p className="mt-0.5 text-[12px] font-medium uppercase tracking-wide text-[#86868b]">
                           Routing logic
                         </p>
-                        <p className="mt-1 text-[13px] leading-6 text-[#6e6e73]">
+                        <p className="mt-3 text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
                           Master Agent reads intent and stage, then routes the merchant to the right specialist. It does not run every task itself.
                         </p>
                         <div className="mt-3 flex flex-col items-center">
@@ -425,7 +426,7 @@ function ResponsibilityCard({
                         <p className="text-[12px] font-medium uppercase tracking-wide text-[#86868b]">
                           Deterministic control layer
                         </p>
-                        <div className="mt-2 space-y-1.5 rounded-[1rem] border border-black/5 bg-white/88 px-4 py-3 shadow-[0_8px_18px_rgba(0,0,0,0.04)]">
+                        <div className="mt-2 space-y-1.5 rounded-[1.15rem] border border-black/5 bg-white/82 px-4 py-3 shadow-[0_10px_20px_rgba(0,0,0,0.05)]">
                           {controlRules.map((c) => (
                             <div key={c.trigger} className="flex items-start gap-2 text-[12px] leading-5">
                               <span className="shrink-0 font-medium uppercase tracking-wide text-[#0071e3]">
@@ -463,7 +464,7 @@ function ResponsibilityCard({
                         return (
                           <div
                             key={group.title}
-                            className="rounded-[1rem] border border-black/5 bg-white/82 px-3 py-3 shadow-[0_10px_20px_rgba(0, 0, 0,0.05)]"
+                            className="rounded-[1.15rem] border border-black/5 bg-white/82 px-3 py-3 shadow-[0_10px_20px_rgba(0, 0, 0,0.05)]"
                           >
                             <div className="flex items-center gap-2 text-[#1d1d1f]">
                               <Icon className="h-4 w-4 text-[#0071e3]" />
@@ -527,7 +528,7 @@ function ResponsibilityCard({
                           <p>
                             The agent <strong>failed to match user intent</strong>, routing a support request as onboarding instead of escalating. It also <strong>missed the fallback trigger</strong> and <strong>omitted required info</strong> (support phone number).
                           </p>
-                          <p className="mt-1.5 font-medium text-[#c45c00]">
+                          <p className="mt-1.5 text-[13px] leading-6 font-medium text-[#c45c00]">
                             Risk level: Medium
                           </p>
                         </div>
@@ -550,7 +551,7 @@ function ResponsibilityCard({
                             <span>{step}</span>
                           </div>
                           {index < reviewLoop.length - 1 ? (
-                            <span className="text-[#0071e3]">→</span>
+                            <ChevronRight className="h-4 w-4 text-[#c7c7cc]" />
                           ) : null}
                         </div>
                       ))}
@@ -577,7 +578,7 @@ function ResponsibilityCard({
                               <span>{item.label}</span>
                             </div>
                             {index < sessionPipeline.length - 1 ? (
-                              <span className="text-[#0071e3]">→</span>
+                              <ChevronRight className="h-4 w-4 text-[#c7c7cc]" />
                             ) : null}
                           </div>
                         );
@@ -585,7 +586,7 @@ function ResponsibilityCard({
                     </div>
 
                     <div className="mt-5 rounded-[1.15rem] border border-black/5 bg-white/82 p-4 shadow-[0_10px_20px_rgba(0, 0, 0,0.05)]">
-                      <h5 className="text-[15px] font-semibold text-[#1d1d1f]">
+                        <h5 className="text-[14px] font-semibold text-[#1d1d1f]">
                         From Drop-off Signal to Product Decision
                       </h5>
                       <p className="mt-3 text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
@@ -603,7 +604,7 @@ function ResponsibilityCard({
                     </p>
 
                     <div className="mt-5 rounded-[1.15rem] border border-black/5 bg-white/82 p-4 shadow-[0_10px_20px_rgba(0, 0, 0,0.05)]">
-                      <h5 className="text-[15px] font-semibold text-[#1d1d1f]">
+                        <h5 className="text-[14px] font-semibold text-[#1d1d1f]">
                         Source Breakdown (UV)
                       </h5>
                       <div className="mt-3 overflow-hidden rounded-full bg-[#f5f5f7]/70">
@@ -636,7 +637,7 @@ function ResponsibilityCard({
                     <h4 className="text-lg font-semibold tracking-[-0.01em] text-[#1d1d1f] sm:text-xl">
                       Local Scenario Insight
                     </h4>
-                    <p className="mt-4 w-full text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
+                      <p className="mt-3 w-full text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
                       Most Mexico merchants are <span className="font-semibold text-[#1d1d1f]">small family restaurants</span> with <span className="font-semibold text-[#1d1d1f]">low digital literacy</span>, so <span className="font-semibold text-[#1d1d1f]">complex forms</span> drive <span className="font-semibold text-[#1d1d1f]">onboarding drop-off</span>.
                     </p>
                   </div>
@@ -645,14 +646,14 @@ function ResponsibilityCard({
                     <h4 className="text-lg font-semibold tracking-[-0.01em] text-[#1d1d1f] sm:text-xl">
                       Competitor Capability Reference
                     </h4>
-                    <p className="mt-4 w-full text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
-                      Benchmarked
-                    </p>
+                      <p className="mt-3 w-full text-[13px] leading-6 text-[#6e6e73] sm:text-[14px] sm:leading-7">
+                      Benchmarked leading competitors&apos; merchant-onboarding flows.
+                      </p>
                     <div className="mt-3 grid max-w-4xl grid-cols-3 gap-3 sm:grid-cols-6">
                       {competitorLogos.map((item) => (
                         <div
                           key={item.name}
-                          className="flex h-14 items-center justify-center rounded-[1rem] bg-white/82 px-3 shadow-[0_10px_20px_rgba(0, 0, 0,0.05)]"
+                          className="flex h-14 items-center justify-center rounded-[1rem] border border-black/[0.08] bg-white/82 px-3 shadow-[0_10px_20px_rgba(0, 0, 0,0.05)]"
                         >
                           <img
                             src={item.src}
@@ -669,7 +670,7 @@ function ResponsibilityCard({
                       {competitorResearchDetails.map((item) => (
                         <div
                           key={item}
-                          className="flex h-14 items-center justify-center rounded-[1rem] bg-white/82 px-3 text-center text-[13px] font-medium text-[#1d1d1f] shadow-[0_10px_20px_rgba(0, 0, 0,0.05)]"
+                          className="flex h-14 items-center justify-center rounded-[1rem] border border-black/[0.08] bg-white/82 px-3 text-center text-[13px] font-medium text-[#1d1d1f] shadow-[0_10px_20px_rgba(0, 0, 0,0.05)]"
                         >
                           {item}
                         </div>
@@ -909,9 +910,7 @@ export function MerchantOnboardingCaseStudy({
                   </h3>
                   <div className="mt-4 flex items-center gap-3 text-[2.8rem] font-semibold tracking-tight md:text-[3.4rem]">
                     <span className="text-[#1d1d1f]">55.48%</span>
-                    <span className="flex items-center text-2xl font-normal text-[#0071e3] md:text-3xl">
-                      →
-                    </span>
+                    <ChevronRight className="h-7 w-7 text-[#0071e3] md:h-9 md:w-9" />
                     <span className="text-[#0071e3]">78.46%</span>
                   </div>
                 </div>
