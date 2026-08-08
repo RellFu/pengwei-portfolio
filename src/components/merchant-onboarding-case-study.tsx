@@ -39,7 +39,6 @@ import {
 } from "lucide-react";
 import {
   GlassSurface,
-  SectionLabel,
   WarmSurface,
 } from "@/components/design-system";
 import { AgentArchitectureSection } from "@/components/agent-architecture-section";
@@ -47,6 +46,7 @@ import { BeforeAfterSection } from "@/components/before-after-section";
 import type { CaseStudyProject } from "@/data/projects";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { motion } from "framer-motion";
 
 type MerchantOnboardingCaseStudyProps = {
   project: CaseStudyProject;
@@ -138,29 +138,6 @@ const evaluationDimensions = [
 ];
 
 const reviewLoop = ["Locate issue", "Analyze root cause", "Fix bug", "Retest", "Back to locating"];
-
-const heroBubbles = [
-  {
-    text: "Hi, please tell me your store name",
-    className: "right-8 top-4 md:right-10 md:top-2",
-    delayClassName: "animate-[heroBubble_8s_ease-in-out_infinite]",
-  },
-  {
-    text: "Please upload your storefront photo",
-    className: "right-0 top-52 md:right-2 md:top-56",
-    delayClassName: "animate-[heroBubble_8s_ease-in-out_infinite_3.2s]",
-  },
-  {
-    text: "Please upload your menu photo",
-    className: "right-2 bottom-10 md:right-4 md:bottom-12",
-    delayClassName: "animate-[heroBubble_8s_ease-in-out_infinite_1.6s]",
-  },
-  {
-    text: "Let me help check your documents",
-    className: "left-0 bottom-6 md:left-6 md:bottom-14",
-    delayClassName: "animate-[heroBubble_8s_ease-in-out_infinite_0.8s]",
-  },
-];
 
 const sessionPipeline = [
   { label: "Data Ingestion", icon: FileStack },
@@ -757,54 +734,65 @@ export function MerchantOnboardingCaseStudy({
 
         <section className="grid items-center gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
           <div className="max-w-2xl">
-            <h1 className="mt-4 text-4xl font-semibold tracking-tight text-[#1d1d1f] sm:text-5xl md:text-6xl md:leading-[1.04]">
+            <h1 className="mt-4 text-4xl font-semibold tracking-tight text-[#1d1d1f] sm:text-5xl md:text-6xl md:leading-[1.12]">
               <span className="block">DiDi Food</span>
-              <span className="block">Merchant Onboarding Agent</span>
+              <span
+                className="block bg-gradient-to-r from-[#0071e3] via-[#af52de] via-[#ff2d55] to-[#ff9500] bg-clip-text text-transparent"
+              >
+                Merchant Onboarding Agent
+              </span>
             </h1>
             <p className="mt-5 max-w-xl text-base leading-8 text-[#6e6e73] md:text-lg">
-              A WhatsApp multi-agent system that replaced manual forms with conversational onboarding, document recognition, and real-time Q&A.
+              Built a WhatsApp AI onboarding agent that replaced manual forms, cutting sign-up time by 70% and lifting approval rates from 55% to 78%.
             </p>
           </div>
 
-          <div className="relative flex min-h-[430px] items-center justify-center lg:min-h-[500px]">
-            <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(0, 0, 0,0.16),transparent_44%),radial-gradient(circle_at_72%_28%,rgba(0, 0, 0,0.08),transparent_18%)]" />
-            <div className="relative h-[420px] w-full max-w-[720px]">
-              <div className="absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.98)_0%,rgba(255,255,255,0.94)_48%,rgba(255,255,255,0)_72%)] shadow-[0_0_90px_rgba(0, 0, 0,0.22)]" />
-              <div className="absolute left-1/2 top-1/2 h-[338px] w-[338px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-black/10 animate-[heroPulse_6s_ease-in-out_infinite]" />
-              <div className="absolute left-1/2 top-1/2 h-[278px] w-[278px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-black/10 bg-[radial-gradient(circle,rgba(255,255,255,0.96),rgba(255,255,255,0.92))] shadow-[0_26px_80px_rgba(0, 0, 0,0.14)]" />
-              <div className="absolute left-1/2 top-1/2 h-[242px] w-[242px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-black/10 bg-[radial-gradient(circle,rgba(255,255,255,0.98),rgba(255,255,255,0.96))] shadow-[inset_0_0_28px_rgba(0, 0, 0,0.08)]" />
+          <div className="relative flex items-center justify-center py-4">
+            <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(0, 0, 0,0.12),transparent_50%)]" />
+            <div className="relative mx-auto w-full max-w-[560px] overflow-hidden rounded-[1.6rem]">
+              <img
+                src="/images/A_3D_rendered_illustration_in__2026-08-08T12-08-36.png"
+                alt="Merchant chatting with DiDi AI onboarding assistant"
+                className="h-full w-full object-contain drop-shadow-[0_20px_60px_rgba(0,0,0,0.10)]"
+              />
 
-              <div className="absolute left-1/2 top-1/2 flex w-[240px] -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center">
-                <img
-                  src="/icon/DiDi_Logo.svg"
-                  alt="DiDi"
-                  className="h-12 w-auto"
-                />
-                <h3 className="mt-4 text-[2rem] font-semibold tracking-tight text-[#1d1d1f]">
-                  Merchant Side
-                </h3>
-                <p className="mt-2 text-lg font-medium text-[#6e6e73]">Smart Onboarding Assistant</p>
-              </div>
-
-              <div className="absolute left-[18%] top-[18%] h-3 w-3 rounded-full bg-[#d2d2d7]/80 animate-[heroGlow_7s_ease-in-out_infinite]" />
-              <div className="absolute right-[14%] top-[24%] h-5 w-5 rounded-full bg-[#d2d2d7]/70 animate-[heroGlow_8s_ease-in-out_infinite_1s]" />
-              <div className="absolute left-[22%] bottom-[20%] h-4 w-4 rounded-full bg-[#f5f5f7]/90 animate-[heroGlow_7.5s_ease-in-out_infinite_2s]" />
-              <div className="absolute right-[18%] bottom-[14%] h-6 w-6 rounded-full bg-[#f5f5f7]/80 animate-[heroGlow_8.2s_ease-in-out_infinite_1.7s]" />
-
-              {heroBubbles.map((bubble) => (
-                <div
+              {[
+                {
+                  text: "¡Hola! Let's get your store set up.",
+                  position: "right-[6%] top-2 md:right-[10%] md:top-4",
+                  from: "agent",
+                },
+                {
+                  text: "I just sent my storefront photo.",
+                  position: "left-[4%] bottom-[16%] md:left-[8%] md:bottom-[18%]",
+                  from: "merchant",
+                },
+                {
+                  text: "You're approved. Welcome!",
+                  position: "right-[4%] bottom-[14%] md:right-[8%] md:bottom-[16%]",
+                  from: "agent",
+                },
+              ].map((bubble) => (
+                <motion.div
                   key={bubble.text}
-                  className={`absolute max-w-[280px] rounded-[1.35rem] border border-black/5 bg-white/92 px-5 py-4 text-[15px] font-medium leading-6 text-[#1d1d1f] shadow-[0_18px_40px_rgba(0, 0, 0,0.08)] ${bubble.className} ${bubble.delayClassName}`}
+                  initial={{ opacity: 0, scale: 0.92 }}
+                  animate={{ opacity: 1, scale: 1, y: [0, -5, 0] }}
+                  transition={{
+                    opacity: { duration: 0.5 },
+                    scale: { duration: 0.5 },
+                    y: { duration: 3 + Math.random() * 2, repeat: Infinity, ease: "easeInOut" },
+                    delay: 0.3 + Math.random() * 0.5,
+                  }}
+                  className={`absolute max-w-[170px] rounded-[1.05rem] px-3.5 py-2 shadow-[0_10px_26px_rgba(0,0,0,0.10)] backdrop-blur-xl ${
+                    bubble.from === "agent"
+                      ? "border border-black/[0.06] bg-white/85 text-[#1d1d1f]"
+                      : "bg-[#0071e3]/80 backdrop-blur-xl text-[#1d1d1f] border border-white/10"
+                  } ${bubble.position}`}
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <span>{bubble.text}</span>
-                    <span className="mt-1 flex shrink-0 gap-1.5">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#0071e3] animate-[heroDot_1.1s_ease-in-out_infinite]" />
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#0071e3] animate-[heroDot_1.1s_ease-in-out_infinite_0.18s]" />
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#0071e3] animate-[heroDot_1.1s_ease-in-out_infinite_0.36s]" />
-                    </span>
-                  </div>
-                </div>
+                  <p className="text-[12px] font-medium leading-relaxed">
+                    {bubble.text}
+                  </p>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -812,9 +800,12 @@ export function MerchantOnboardingCaseStudy({
 
         <div className="mt-12 grid gap-7">
           <section>
-            <div className="max-w-3xl">
-              <SectionLabel>1. Business Problem</SectionLabel>
-              <h2 className="mt-4 text-[2rem] font-semibold tracking-tight text-[#1d1d1f] md:text-[2.5rem] md:leading-[1.02]">
+            <div className="w-full">
+              <div className="flex items-baseline gap-2">
+                <span className="text-[13px] font-semibold tracking-[0.02em] text-[#0071e3]">01</span>
+                <span className="text-[13px] font-medium tracking-[0.01em] text-[#86868b]">Business Problem</span>
+              </div>
+              <h2 className="mt-2 text-[2rem] font-semibold tracking-tight text-[#1d1d1f] md:text-[2.5rem] md:leading-[1.02]">
                 Merchants signed up, then dropped off
               </h2>
             </div>
@@ -839,9 +830,12 @@ export function MerchantOnboardingCaseStudy({
           <AgentArchitectureSection />
 
           <section>
-            <div className="max-w-3xl">
-              <SectionLabel>4. My Product Responsibilities</SectionLabel>
-              <h2 className="mt-4 text-[2rem] font-semibold tracking-tight text-[#1d1d1f] md:text-[2.5rem] md:leading-[1.02]">
+            <div className="w-full">
+              <div className="flex items-baseline gap-2">
+                <span className="text-[13px] font-semibold tracking-[0.02em] text-[#0071e3]">04</span>
+                <span className="text-[13px] font-medium tracking-[0.01em] text-[#86868b]">My Product Responsibilities</span>
+              </div>
+              <h2 className="mt-2 text-[2rem] font-semibold tracking-tight text-[#1d1d1f] md:text-[2.5rem] md:leading-[1.02]">
                 From competitor insight to agent iteration
               </h2>
             </div>
@@ -875,14 +869,14 @@ export function MerchantOnboardingCaseStudy({
           </section>
 
           <section>
-            <div className="max-w-3xl">
-              <SectionLabel>5. Core Data Results</SectionLabel>
-              <h2 className="mt-4 text-[2rem] font-semibold tracking-tight text-[#1d1d1f] md:text-[2.5rem]">
-                Efficiency, conversion, and review quality improved together
+            <div className="w-full">
+              <div className="flex items-baseline gap-2">
+                <span className="text-[13px] font-semibold tracking-[0.02em] text-[#0071e3]">05</span>
+                <span className="text-[13px] font-medium tracking-[0.01em] text-[#86868b]">Core Data Results</span>
+              </div>
+              <h2 className="mt-2 whitespace-nowrap text-[2rem] font-semibold tracking-tight text-[#1d1d1f] md:text-[2.5rem]">
+                Faster sign-ups, higher approvals, and AI that recovers drop-offs
               </h2>
-              <p className="mt-3 text-[15px] leading-7 text-[#6e6e73] md:text-[15px] md:leading-7">
-                From organic onboarding to drop-off re-engagement to AI pre-check, the key paths were all validated as effective.
-              </p>
             </div>
 
             <WarmSurface className="mt-6 overflow-hidden rounded-[2rem] border border-black/10 p-0">
@@ -893,11 +887,16 @@ export function MerchantOnboardingCaseStudy({
                     Efficiency gain
                   </div>
                   <h3 className="mt-4 text-[1.65rem] font-semibold text-[#1d1d1f] md:text-[1.9rem]">
-                    Reduction in avg. onboarding time
+                    Onboarding time reduction
                   </h3>
-                  <p className="mt-3 text-[3.6rem] font-semibold tracking-tight text-[#0071e3] md:text-[4rem]">
-                    69.53%
-                  </p>
+                  <div className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                    <p className="text-[3.6rem] font-semibold tracking-tight text-[#0071e3] md:text-[4rem]">
+                      69.53%
+                    </p>
+                    <p className="text-base font-medium text-[#6e6e73] md:text-lg">
+                      as fast as <span className="text-[#0071e3]">5 min</span> to complete
+                    </p>
+                  </div>
                 </div>
 
                 <div className="border-t border-black/5 p-6 lg:border-l lg:border-t-0 md:p-7">
@@ -906,7 +905,7 @@ export function MerchantOnboardingCaseStudy({
                     Conversion gain
                   </div>
                   <h3 className="mt-4 text-[1.65rem] font-semibold text-[#1d1d1f] md:text-[1.9rem]">
-                    Opportunity-to-approval rate
+                    Sign-up approval rate
                   </h3>
                   <div className="mt-4 flex items-center gap-3 text-[2.8rem] font-semibold tracking-tight md:text-[3.4rem]">
                     <span className="text-[#1d1d1f]">55.48%</span>
@@ -923,25 +922,24 @@ export function MerchantOnboardingCaseStudy({
                   <div>
                     <div className="inline-flex items-center gap-2 rounded-full bg-[#f5f5f7] px-3 py-1.5 text-sm font-medium text-[#86868b]">
                       <RefreshCcw className="h-4 w-4" />
-                      Low-intent drop-off re-engagement
+                      Drop-off re-engagement
                     </div>
                     <p className="mt-4 text-[3.4rem] font-semibold tracking-tight text-[#0071e3] md:text-[4rem]">
                       51.47%
                     </p>
-                    <p className="mt-2 text-[2rem] font-semibold text-[#0071e3]">+30.84pp</p>
+                    <p className="mt-2 text-[2rem] font-semibold text-[#0071e3]">+30.84 pts</p>
                   </div>
                   <div className="hidden min-w-[220px] flex-1 lg:flex lg:items-center lg:justify-center lg:translate-y-10">
-                    <div className="flex h-32 items-end justify-center gap-5">
+                    <div className="flex h-36 items-end justify-center gap-7">
                       <div className="flex flex-col items-center gap-2">
-                        <span className="text-sm text-[#86868b]">20.63%</span>
-                        <div className="h-12 w-14 rounded-t-2xl bg-[#d2d2d7]/70" />
-                        <span className="text-sm text-[#6e6e73]">Standard re-engagement</span>
+                        <span className="text-sm font-medium text-[#86868b]">20.63%</span>
+                        <div className="h-14 w-12 rounded-t-xl bg-[#d2d2d7]/60" />
+                        <span className="text-sm text-[#6e6e73]">Standard</span>
                       </div>
-                      <div className="relative flex flex-col items-center gap-2">
-                        <span className="absolute -left-10 top-0 text-4xl text-[#c7c7cc]">↗</span>
-                        <span className="text-sm text-[#86868b]">51.47%</span>
-                        <div className="h-24 w-14 rounded-t-2xl bg-[#0071e3]/85" />
-                        <span className="text-sm text-[#6e6e73]">AI re-engagement</span>
+                      <div className="flex flex-col items-center gap-2">
+                        <span className="text-sm font-medium text-[#86868b]">51.47%</span>
+                        <div className="h-28 w-12 rounded-t-xl bg-[#0071e3]/80" />
+                        <span className="text-sm text-[#6e6e73]">AI re-engage</span>
                       </div>
                     </div>
                   </div>
@@ -953,13 +951,13 @@ export function MerchantOnboardingCaseStudy({
                   <div>
                     <div className="inline-flex items-center gap-2 rounded-full bg-[#f5f5f7] px-3 py-1.5 text-sm font-medium text-[#86868b]">
                       <CheckCircle2 className="h-4 w-4" />
-                      AI pre-check effective
+                      AI pre-check pass rate
                     </div>
                     <p className="mt-4 text-[3.4rem] font-semibold tracking-tight text-[#0071e3] md:text-[4rem]">
                       97.6%
                     </p>
                     <p className="mt-3 text-base font-medium text-[#1d1d1f] md:text-lg">
-                      Manual pass rate after AI pre-check
+                      Manual approval rate
                     </p>
                   </div>
                   <div className="hidden min-w-[220px] flex-1 lg:flex lg:items-center lg:justify-center lg:translate-y-10">
@@ -992,7 +990,7 @@ export function MerchantOnboardingCaseStudy({
               <div className="grid divide-y divide-black/5 lg:grid-cols-3 lg:divide-x lg:divide-y-0">
                 <div className="flex items-center gap-4 px-5 py-4">
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#f5f5f7] text-[#0071e3]">
-                    <UserRound className="h-5 w-5" />
+                    <UserRound className="h-[26px] w-[26px]" />
                   </div>
                   <p className="text-base font-medium text-[#1d1d1f] md:text-lg">
                     <span className="mr-2 text-[2.6rem] font-semibold tracking-tight text-[#0071e3] md:text-[3rem]">
@@ -1003,21 +1001,21 @@ export function MerchantOnboardingCaseStudy({
                 </div>
                 <div className="flex items-center gap-4 px-5 py-4">
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#f5f5f7] text-[#0071e3]">
-                    <Building2 className="h-5 w-5" />
+                    <Building2 className="h-[26px] w-[26px]" />
                   </div>
                   <p className="text-base font-medium text-[#1d1d1f] md:text-lg">
                     <span className="mr-2 text-[2.6rem] font-semibold tracking-tight text-[#0071e3] md:text-[3rem]">
                       50%
                     </span>
-                    gray rollout in core cities
+                    Across core regions
                   </p>
                 </div>
                 <div className="flex items-center gap-4 px-5 py-4">
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#f5f5f7] text-[#0071e3]">
-                    <CheckCircle2 className="h-5 w-5" />
+                    <CheckCircle2 className="h-[26px] w-[26px]" />
                   </div>
                   <p className="text-base font-medium text-[#1d1d1f] md:text-lg">
-                    In validation on real business traffic
+                    Validated on live business traffic
                   </p>
                 </div>
               </div>

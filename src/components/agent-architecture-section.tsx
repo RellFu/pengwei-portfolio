@@ -26,7 +26,7 @@ import {
   Waypoints,
 } from "lucide-react";
 
-import { GlassSurface, SectionLabel, WarmSurface } from "@/components/design-system";
+import { GlassSurface, WarmSurface } from "@/components/design-system";
 
 type IconModule = {
   label: string;
@@ -307,14 +307,15 @@ function CloseLoopBand() {
 export function AgentArchitectureSection() {
   return (
     <section>
-      <div className="max-w-5xl">
-        <SectionLabel>
-          3. Multi-Agent Product Architecture
-        </SectionLabel>
+      <div className="w-full">
+        <div className="flex items-baseline gap-2">
+          <span className="text-[13px] font-semibold tracking-[0.02em] text-[#0071e3]">03</span>
+          <span className="text-[13px] font-medium tracking-[0.01em] text-[#86868b]">Multi-Agent Product Architecture</span>
+        </div>
         <h2 className="mt-2 text-[2rem] font-semibold tracking-tight text-[#1d1d1f] md:text-[2.5rem] md:leading-[1.02]">
           A <span className="text-[#0071e3]">Multi-Agent</span> architecture from conversation entry to business loop
         </h2>
-        <p className="mt-3 max-w-5xl text-[15px] leading-7 text-[#6e6e73] md:text-base">
+        <p className="mt-3 text-[15px] leading-7 text-[#6e6e73] md:text-base">
           A master agent orchestrates multiple specialized agents across entry, capability, and loop layers, turning a merchant's conversation into completed business actions.
         </p>
       </div>

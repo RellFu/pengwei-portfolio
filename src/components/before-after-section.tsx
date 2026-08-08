@@ -76,8 +76,8 @@ const legacyFields: LegacyField[] = [
 const legacyHints = [
   "Tedious process",
   "No real-time pre-check",
-  "Can't answer onboarding questions",
-  "Scares off inexperienced merchants",
+  "Can't answer questions",
+  "Scares new merchants",
 ];
 
 const chatMessages: ChatMessage[] = [
@@ -464,12 +464,15 @@ export function BeforeAfterSection({
 }: BeforeAfterSectionProps) {
   return (
     <section>
-      <div className="max-w-3xl">
-        <SectionLabel>2. Before / After Flow Redesign</SectionLabel>
-        <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#1d1d1f] md:text-4xl">
+      <div className="w-full">
+        <div className="flex items-baseline gap-2">
+          <span className="text-[13px] font-semibold tracking-[0.02em] text-[#0071e3]">02</span>
+          <span className="text-[13px] font-medium tracking-[0.01em] text-[#86868b]">Before / After Flow Redesign</span>
+        </div>
+        <h2 className="mt-2 text-[2rem] font-semibold tracking-tight text-[#1d1d1f] md:text-[2.5rem] md:leading-[1.02]">
           {title}
         </h2>
-        <p className="mt-4 text-base leading-8 text-[#6e6e73] md:text-lg">
+        <p className="mt-3 text-[15px] leading-7 text-[#6e6e73] md:text-base">
           {description}
         </p>
       </div>
