@@ -112,6 +112,17 @@ a {
   }
 }
 
+/* ByteDance logo bars: scale vertically while the agent is generating */
+@keyframes byteBarPulse {
+  0%,
+  100% {
+    transform: scaleY(0.42);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
 /* Reduced motion: keep opacity, drop movement/looping (apple-design §14) */
 @media (prefers-reduced-motion: reduce) {
   html {
