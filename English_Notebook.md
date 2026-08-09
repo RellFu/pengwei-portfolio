@@ -1,0 +1,13 @@
+# English Notebook (tech workplace)
+
+## 2026-08-09
+
+- combines current audience signals → folds in audience signals（"结合信号" 在英文里 folds in / incorporates 比 combines 更地道，combines 偏"把两样东西搅一起"）
+- AI-assisted pricing reference tool → AI pricing reference tool（口语里 assisted 常可省，AI pricing tool 更利落；保留也无错）
+- "Bot" vs "Agent"：2026 北美招聘语境下 Agent 比 Bot 更有分量，指 retrieval + LLM 的 agentic 流程时用 Agent
+- "Talent" vs "Celebrity"：KOL/达人营销行业词是 talent（talent manager/marketing），更准；celebrity 更易懂但偏明星
+- "Reputation risk" vs "Reputation note"：risk 听起来像"别碰这个人"，note 是中性信息提示；portfolio 里用 note 更安全，把判断权留给读者
+- "self-media creator" → "content creator"（"自媒体" 是中文直译，美国人只说 content creator / social media creator，绝不说 self-media）
+- "Previously reported by a coworker: ..." 标签+冒号结构是 AI 生成文本典型套路，改成人话句子 "A coworker reported that Pengwei dozed off..." 去掉冒号更自然
+- "dozed off" 比 "fell asleep" 更口语地道（美国职场幽默常用）
+- "AI product manager requirements review" 语法别扭，改成 "an AI-product requirements review"（复合形容词 + 名词）
