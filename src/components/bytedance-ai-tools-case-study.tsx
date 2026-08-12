@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   ArrowLeft,
   CircleAlert,
-  ChevronRight,
   UserRound,
 } from "lucide-react";
 import { GlassSurface } from "@/components/design-system";
@@ -37,7 +36,7 @@ const toolProjects = [
     built:
       "I built an entity-matching RAG workflow. Each product name becomes a query key for hybrid retrieval and reranking against a standard-SKU knowledge base. The workflow augments the raw record with five candidate items, scores them against predefined business rules, and selects the best match.",
     shipped:
-      "I designed the knowledge base with one canonical product mapping per retrieval unit, each bound to its SKU, specification, flavor, and awarded price. I implemented the retrieval, scoring, threshold control, structured output, and multidimensional-table write-back workflow end to end.",
+      "I designed the knowledge base with one canonical product mapping per retrieval unit, each bound to its SKU, pack size, flavor, and awarded price. Retrieval only finds similar products, so scoring is what identifies the same SKU. Candidates that read almost the same still fail on a single attribute, and the score has to carry that reason. I built the retrieval, scoring, threshold control, and JSON write-back end to end.",
     metrics: [
       { value: "92.42%", label: "Accuracy on 132 labeled records" },
       { value: "<1 min", label: "Processing and write-back for the batch" },
@@ -62,194 +61,441 @@ const toolProjects = [
   },
 ];
 
-const ragStages = [
-  { stage: "R", title: "RETRIEVE", body: "Hybrid Search" },
-  { stage: "A", title: "AUGMENT", body: "Candidates + Rules" },
-  { stage: "G", title: "SCORE", body: "100 · 80 · 60 · 40 · 0" },
+const ragStages: { stage: string; title: string; body: string; body2?: string }[] = [
+  { stage: "R", title: "Candidate Recall", body: "Hybrid Search · Top 5" },
+  { stage: "A", title: "Attribute Scoring", body: "Name · Brand · Pack", body2: "Flavor · Price" },
+  { stage: "G", title: "Structured Match", body: "Top 1 · Score · Reason" },
 ];
 
-const kbSlice = [
-  ["Canonical name", "Black Rice Crackers"],
-  ["Standard SKU", "100303701"],
-  ["Specification", "425g"],
-  ["Flavor", "Original"],
-  ["Awarded price", "¥12.80"],
+const RAG_SURFACE = "#f5f5f7";
+const RAG_HAIRLINE = "rgba(0,0,0,0.07)";
+const RAG_CONNECTOR = "#c7c7cc";
+const RAG_INK = "#1d1d1f";
+const RAG_MUTED = "#86868b";
+const RAG_FAINT = "#a1a1a6";
+const RAG_ACCENT = "#0071e3";
+
+function RagStageNode({
+  x,
+  y,
+  width,
+  height,
+  stage,
+  title,
+  body,
+  body2,
+}: {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  stage: string;
+  title: string;
+  body: string;
+  body2?: string;
+}) {
+  const cx = x + width / 2;
+
+  return (
+    <g>
+      <rect
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        rx={13}
+        fill={RAG_SURFACE}
+        stroke={RAG_HAIRLINE}
+      />
+      {/* Stage letter and title on one centered line: "R · Candidate Recall" */}
+      <text x={cx} y={y + 25} textAnchor="middle" dominantBaseline="middle">
+        <tspan fontSize="23" fontWeight="700" fill={RAG_ACCENT}>
+          {stage}
+        </tspan>
+        <tspan fontSize="18" fill={RAG_FAINT}>
+          {" · "}
+        </tspan>
+        <tspan fontSize="18" fontWeight="600" fill={RAG_INK}>
+          {title}
+        </tspan>
+      </text>
+      <text
+        x={cx}
+        y={y + 47}
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fontSize="18"
+        fill={RAG_MUTED}
+      >
+        {body}
+      </text>
+      {body2 ? (
+        <text
+          x={cx}
+          y={y + 65}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fontSize="18"
+          fill={RAG_MUTED}
+        >
+          {body2}
+        </text>
+      ) : null}
+    </g>
+  );
+}
+
+function RagDecisionNode({
+  cx,
+  cy,
+  halfWidth,
+  halfHeight,
+  label,
+}: {
+  cx: number;
+  cy: number;
+  halfWidth: number;
+  halfHeight: number;
+  label: string;
+}) {
+  const points = [
+    `${cx},${cy - halfHeight}`,
+    `${cx + halfWidth},${cy}`,
+    `${cx},${cy + halfHeight}`,
+    `${cx - halfWidth},${cy}`,
+  ].join(" ");
+
+  return (
+    <g>
+      <polygon points={points} fill={RAG_SURFACE} stroke={RAG_HAIRLINE} />
+      <text
+        x={cx}
+        y={cy}
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fontSize="18"
+        fontWeight="600"
+        fill={RAG_INK}
+      >
+        {label}
+      </text>
+    </g>
+  );
+}
+
+function RagIoNode({
+  x,
+  y,
+  width,
+  height,
+  title,
+  body,
+  tone = "neutral",
+  shape = "card",
+}: {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  title: string;
+  body: string;
+  tone?: "neutral" | "accent" | "quiet";
+  shape?: "card" | "cylinder";
+}) {
+  const fill = tone === "accent" ? "rgba(0,113,227,0.06)" : RAG_SURFACE;
+  const stroke = tone === "accent" ? "rgba(0,113,227,0.22)" : RAG_HAIRLINE;
+  const titleFill =
+    tone === "accent" ? RAG_ACCENT : tone === "quiet" ? RAG_MUTED : RAG_INK;
+  const bodyFill = tone === "quiet" ? RAG_FAINT : RAG_MUTED;
+
+  if (shape === "cylinder") {
+    const capRy = Math.min(height / 2, 12);
+    const bodyTop = y + capRy;
+    const bodyBottom = y + height - capRy;
+    const cx = x + width / 2;
+    const rx = width / 2;
+
+    return (
+      <g>
+        {/* body fill only, no stroke: avoids a straight seam under the top ellipse */}
+        <path
+          d={`M ${x} ${bodyTop} L ${x} ${bodyBottom} A ${rx} ${capRy} 0 0 0 ${x + width} ${bodyBottom} L ${x + width} ${bodyTop} Z`}
+          fill={fill}
+        />
+        {/* left and right side edges */}
+        <line x1={x} y1={bodyTop} x2={x} y2={bodyBottom} stroke={stroke} />
+        <line x1={x + width} y1={bodyTop} x2={x + width} y2={bodyBottom} stroke={stroke} />
+        {/* visible front curve of the base */}
+        <path
+          d={`M ${x} ${bodyBottom} A ${rx} ${capRy} 0 0 0 ${x + width} ${bodyBottom}`}
+          fill="none"
+          stroke={stroke}
+        />
+        {/* top face: a real ellipse, fully stroked as its own rim */}
+        <ellipse cx={cx} cy={bodyTop} rx={rx} ry={capRy} fill={fill} stroke={stroke} />
+        <text x={x + 16} y={y + height / 2 - 2} fontSize="19" fontWeight="600" fill={titleFill}>
+          {title}
+        </text>
+        <text x={x + 16} y={y + height / 2 + 18} fontSize="18" fill={bodyFill}>
+          {body}
+        </text>
+      </g>
+    );
+  }
+
+  return (
+    <g>
+      <rect x={x} y={y} width={width} height={height} rx={13} fill={fill} stroke={stroke} />
+      <text x={x + 16} y={y + 27} fontSize="19" fontWeight="600" fill={titleFill}>
+        {title}
+      </text>
+      <text x={x + 16} y={y + 48} fontSize="18" fill={bodyFill}>
+        {body}
+      </text>
+    </g>
+  );
+}
+
+function RagFlowDiagram() {
+  return (
+    <div className="rounded-[1.5rem] border border-black/5 bg-white/70 p-5 shadow-[0_18px_50px_rgba(0,0,0,0.06)] backdrop-blur-xl sm:p-6">
+      <div className="overflow-x-auto">
+        <svg
+          viewBox="0 0 1624 232"
+          role="img"
+          aria-label="A raw row becomes a query key and the standard SKU knowledge base is searched. Candidate recall returns the top five, attribute scoring compares name, brand, spec, flavor and price, and structured match returns the top result with a score and reason. If the best score is at least 40 the record is written back, otherwise it is flagged for review."
+          className="h-auto w-full min-w-[980px]"
+        >
+          <defs>
+            <marker
+              id="ragArrow"
+              viewBox="0 0 10 10"
+              refX="8"
+              refY="5"
+              markerWidth="6"
+              markerHeight="6"
+              orient="auto-start-reverse"
+            >
+              <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill={RAG_CONNECTOR} />
+            </marker>
+          </defs>
+
+          <g fill="none" stroke={RAG_CONNECTOR} strokeWidth="1.4" markerEnd="url(#ragArrow)">
+            {/* Raw Row and KB both feed Candidate Recall */}
+            <path d="M312 40 C 330 40, 328 104, 346 104" />
+            <path d="M312 192 C 330 192, 328 128, 346 128" />
+            {/* R to A to G */}
+            <path d="M566 116 H 600" />
+            <path d="M820 116 H 854" />
+            {/* G to decision diamond */}
+            <path d="M1074 116 H 1106" />
+            {/* diamond to the two outcomes */}
+            <path d="M1278 88 C 1296 72, 1300 48, 1318 48" />
+            <path d="M1278 144 C 1296 160, 1300 184, 1318 184" />
+          </g>
+
+          <RagIoNode
+            x={12}
+            y={8}
+            width={300}
+            height={64}
+            title="Raw Row"
+            body="Product Name · Price"
+          />
+          <RagIoNode
+            x={12}
+            y={160}
+            width={300}
+            height={64}
+            title="Standard SKU KB"
+            body="Canonical Name · SKU · Price"
+            shape="cylinder"
+          />
+
+          {ragStages.map((step, index) => (
+            <RagStageNode
+              key={step.stage}
+              x={346 + index * 254}
+              y={78}
+              width={220}
+              height={76}
+              stage={step.stage}
+              title={step.title}
+              body={step.body}
+              body2={step.body2}
+            />
+          ))}
+
+          {/* Edge labels sit right beside their own source box, far apart vertically */}
+          <g>
+            <rect x={328} y={29} width={82} height={22} rx={11} fill="#ffffff" />
+            <text x={369} y={40} textAnchor="middle" dominantBaseline="middle" fontSize="15" fontWeight="500" fill={RAG_FAINT}>
+              Query Key
+            </text>
+          </g>
+          <g>
+            <rect x={328} y={181} width={58} height={22} rx={11} fill="#ffffff" />
+            <text x={357} y={192} textAnchor="middle" dominantBaseline="middle" fontSize="15" fontWeight="500" fill={RAG_FAINT}>
+              Search
+            </text>
+          </g>
+
+          {/* Threshold decision */}
+          <RagDecisionNode
+            cx={1198}
+            cy={116}
+            halfWidth={84}
+            halfHeight={46}
+            label="Score ≥ 40?"
+          />
+
+          {/* Yes / No labels */}
+          <g>
+            <text x={1286} y={60} textAnchor="middle" fontSize="15" fontWeight="600" fill={RAG_ACCENT}>
+              Yes
+            </text>
+            <text x={1286} y={180} textAnchor="middle" fontSize="15" fontWeight="600" fill={RAG_FAINT}>
+              No
+            </text>
+          </g>
+
+          <RagIoNode
+            x={1322}
+            y={16}
+            width={290}
+            height={64}
+            title="Write Back"
+            body="SKU · Awarded Price · Score"
+            tone="accent"
+          />
+          <RagIoNode
+            x={1322}
+            y={152}
+            width={290}
+            height={64}
+            title="No Match"
+            body="Flag for Review"
+            tone="quiet"
+          />
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+const retrievedCandidates: {
+  name: string;
+  score: string;
+  note: string;
+  highlight?: string;
+  selected: boolean;
+}[] = [
+  {
+    name: "Doritos Nacho Cheese · 1 oz × 40",
+    score: "100",
+    note: "Exact match",
+    selected: true,
+  },
+  {
+    name: "Doritos Cool Ranch · 1 oz × 40",
+    score: "60",
+    note: "Flavor mismatch",
+    highlight: "Cool Ranch",
+    selected: false,
+  },
+  {
+    name: "Doritos Nacho Cheese · 9.25 oz × 8",
+    score: "40",
+    note: "Pack mismatch",
+    highlight: "9.25 oz × 8",
+    selected: false,
+  },
 ];
 
-const retrievedCandidates = [
-  { name: "Black Rice Crackers · 425g · Original", score: "100", decision: "Selected" },
-  { name: "Black Rice Crackers · 400g · Original", score: "40", decision: "Rejected" },
-  { name: "Rice Crackers · 425g · Seaweed", score: "0", decision: "Rejected" },
+const matchedRecord: [string, string][] = [
+  ["SKU", "SNK-1042"],
+  ["Awarded price", "$24.80/case"],
+  ["Match score", "100"],
 ];
 
 function MatchingPreview() {
   return (
-    <GlassSurface className="h-full rounded-[1.6rem] border-black/5 p-5 shadow-[0_18px_50px_rgba(0,0,0,0.08)]">
-      <div className="space-y-4">
-        {/* Horizontal RAG pipeline */}
-        <div className="rounded-[1.1rem] border border-black/5 bg-white/88 px-3 py-3.5">
-          {/* Inputs feeding into Retrieve */}
-          <div className="flex items-stretch gap-2">
-            <div className="flex flex-1 flex-col gap-1.5">
-              <div className="rounded-[0.7rem] border border-black/[0.07] bg-[#f5f5f7]/60 px-2.5 py-2">
-                <p className="text-[10.5px] font-semibold leading-4 text-[#1d1d1f]">Raw Row</p>
-                <p className="text-[9.5px] leading-4 text-[#86868b]">Name · Price</p>
-              </div>
-              <div className="rounded-[0.7rem] border border-dashed border-[#0071e3]/30 bg-[#0071e3]/[0.05] px-2.5 py-2">
-                <p className="text-[10.5px] font-semibold leading-4 text-[#1d1d1f]">Standard SKU KB</p>
-                <p className="text-[9.5px] leading-4 text-[#86868b]">Name · SKU · Price</p>
-              </div>
-            </div>
-
-            <div className="flex shrink-0 flex-col items-center justify-center px-0.5">
-              <ChevronRight className="h-3.5 w-3.5 text-[#c7c7cc]" />
-              <span className="mt-0.5 text-[9px] font-medium text-[#a1a1a6]">Top 5</span>
-            </div>
-
-            {/* R A G stages */}
-            <div className="flex flex-[2.2] items-center gap-1">
-              {ragStages.map((step, index) => (
-                <div key={step.stage} className="flex min-w-0 flex-1 items-center gap-1">
-                  <div className="min-w-0 flex-1 rounded-[0.7rem] border border-black/[0.07] bg-[#f5f5f7]/60 px-2 py-2 text-center">
-                    <div className="flex items-center justify-center gap-1">
-                      <span className="flex h-[15px] w-[15px] items-center justify-center rounded-[4px] bg-[#0071e3] text-[9px] font-bold text-white">
-                        {step.stage}
-                      </span>
-                      <p className="text-[10px] font-semibold leading-3 tracking-[0.04em] text-[#1d1d1f]">
-                        {step.title}
-                      </p>
-                    </div>
-                    <p className="mt-1 text-[9px] leading-3 text-[#86868b]">{step.body}</p>
-                  </div>
-                  {index < ragStages.length - 1 ? (
-                    <ChevronRight className="h-3 w-3 shrink-0 text-[#c7c7cc]" />
-                  ) : null}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Decision branch */}
-          <div className="mt-2 flex items-stretch gap-2">
-            <div className="flex flex-1 items-center justify-center rounded-[0.7rem] border border-black/[0.07] bg-[#f5f5f7]/60 px-2.5 py-2">
-              <p className="text-[10.5px] font-semibold leading-4 text-[#1d1d1f]">Select Top 1</p>
-            </div>
-            <div className="flex shrink-0 items-center px-0.5">
-              <ChevronRight className="h-3.5 w-3.5 text-[#c7c7cc]" />
-            </div>
-            <div className="flex flex-[2.2] gap-1.5">
-              <div className="min-w-0 flex-1 rounded-[0.7rem] border border-[#0071e3]/20 bg-[#0071e3]/[0.06] px-2.5 py-2">
-                <p className="text-[10.5px] font-semibold leading-4 text-[#0071e3]">Write Back</p>
-                <p className="text-[9.5px] leading-4 text-[#86868b]">SKU · Price · Score</p>
-              </div>
-              <div className="min-w-0 flex-1 rounded-[0.7rem] border border-black/[0.07] bg-[#f5f5f7]/50 px-2.5 py-2">
-                <p className="text-[10.5px] font-semibold leading-4 text-[#86868b]">No Match</p>
-                <p className="text-[9.5px] leading-4 text-[#a1a1a6]">Held for review</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-2.5 flex flex-wrap items-center gap-1.5 border-t border-black/5 pt-2.5">
-            <span className="rounded-full border border-[#0071e3]/25 bg-[#0071e3]/[0.06] px-2 py-0.5 text-[9.5px] font-medium text-[#0071e3]">
-              Structured JSON, not a chat response
-            </span>
-            <span className="text-[9.5px] text-[#a1a1a6]">
-              One canonical product mapping per retrieval unit
-            </span>
-          </div>
+    <GlassSurface className="rounded-[1.4rem] border-black/5 p-6 shadow-[0_16px_44px_rgba(0,0,0,0.06)] sm:p-7">
+      <div>
+        {/* Raw query reads like an input object */}
+        <div className="rounded-[0.85rem] bg-[#f5f5f7] px-4 py-2.5">
+          <p className="text-[11px] font-medium tracking-[0.06em] text-[#a1a1a6]">
+            RAW QUERY
+          </p>
+          <p className="mt-0.5 text-[14px] leading-5 text-[#1d1d1f]">
+            DORITOS Nacho Chz 1oz Bags, 40ct
+          </p>
         </div>
 
-        {/* Knowledge base slice */}
-        <div className="rounded-[1.05rem] border border-black/5 bg-white/88 px-3 py-2.5">
-          <p className="text-[11px] font-semibold text-[#1d1d1f]">
-            Knowledge Base Record
-          </p>
-          <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1">
-            {kbSlice.map(([key, value]) => (
-              <div key={key} className="flex justify-between gap-2 text-[10px] leading-4">
-                <span className="text-[#86868b]">{key}</span>
-                <span className="font-medium text-[#1d1d1f]">{value}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Entity matching example */}
-        <div>
-          <p className="text-[12px] font-semibold text-[#1d1d1f]">
-            Entity Matching Example
-          </p>
-          <p className="mt-1.5 rounded-[0.7rem] bg-[#f5f5f7]/70 px-2.5 py-1.5 text-[10.5px] leading-4 text-[#6e6e73]">
-            Query key: Want Want Black Rice Crackers 425g Family Pack
-          </p>
-
-          <div className="mt-2.5 overflow-hidden rounded-[1.05rem] border border-black/5 bg-white/88">
-            <div className="grid grid-cols-[minmax(0,1fr)_2.2rem_3.6rem] gap-2 border-b border-black/5 bg-[#f5f5f7]/60 px-3 py-2 text-[10px] font-medium tracking-[0.08em] text-[#86868b]">
-              <span>RETRIEVED CANDIDATES</span>
-              <span className="text-right">SCORE</span>
-              <span className="text-right">DECISION</span>
+        {/* Candidates: no outer frame, no per-field borders */}
+        <div className="mt-6">
+            <div className="flex items-baseline justify-between gap-4 px-4 text-[11px] font-medium tracking-[0.06em] text-[#a1a1a6]">
+              <span>CANDIDATE</span>
+              <span>SCORE</span>
             </div>
-            {retrievedCandidates.map((row, index) => {
-              const selected = row.decision === "Selected";
 
-              return (
+            <div className="mt-1 space-y-0">
+              {retrievedCandidates.map((row) => (
                 <div
                   key={row.name}
-                  className={`grid grid-cols-[minmax(0,1fr)_2.2rem_3.6rem] items-center gap-2 px-3 py-2.5 text-[11px] leading-4 ${
-                    index < retrievedCandidates.length - 1 ? "border-b border-black/5" : ""
+                  className={`rounded-[0.85rem] px-4 py-2 ${
+                    row.selected ? "bg-[#0071e3]/[0.06]" : ""
                   }`}
                 >
-                  <span className={`min-w-0 ${selected ? "font-medium text-[#1d1d1f]" : "text-[#86868b]"}`}>
-                    {row.name}
-                  </span>
-                  <span
-                    className={`text-right font-semibold ${
-                      selected ? "text-[#0071e3]" : "text-[#86868b]"
-                    }`}
-                  >
-                    {row.score}
-                  </span>
-                  <span
-                    className={`text-right text-[10px] font-medium ${
-                      selected ? "text-[#0071e3]" : "text-[#a1a1a6]"
-                    }`}
-                  >
-                    {row.decision}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Final structured write-back */}
-          <div className="mt-2.5 rounded-[1.05rem] border border-[#0071e3]/20 bg-[#0071e3]/[0.05] px-3 py-3">
-            <p className="text-[10px] font-medium tracking-[0.08em] text-[#0071e3]">
-              STRUCTURED WRITE-BACK
-            </p>
-            <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1.5">
-              {[
-                ["Standard item", "Black Rice Crackers, 425g"],
-                ["Standard SKU", "100303701"],
-                ["Awarded price", "¥12.80"],
-                ["Match score", "100"],
-              ].map(([key, value]) => (
-                <div key={key}>
-                  <p className="text-[10px] leading-4 text-[#86868b]">{key}</p>
-                  <p className="text-[11px] font-medium leading-4 text-[#1d1d1f]">{value}</p>
+                  <div className="flex items-baseline justify-between gap-4">
+                    <p className="min-w-0 text-[14px] leading-5 text-[#1d1d1f]">
+                      {row.highlight ? (
+                        <>
+                          {row.name.split(row.highlight)[0]}
+                          <span className="font-medium text-[#c2571b]">
+                            {row.highlight}
+                          </span>
+                          {row.name.split(row.highlight)[1]}
+                        </>
+                      ) : (
+                        row.name
+                      )}
+                    </p>
+                    <span
+                      className={`shrink-0 text-[15px] tabular-nums ${
+                        row.selected
+                          ? "font-semibold text-[#0071e3]"
+                          : "font-medium text-[#6e6e73]"
+                      }`}
+                    >
+                      {row.score}
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <p className="mt-2 text-[11px] leading-5 text-[#86868b]">
-            The workflow retrieves five candidates, scores each against predefined business
-            rules, selects the highest-confidence match, and writes back the metadata bound
-            to that standard SKU.
-          </p>
-          <p className="mt-1.5 text-[10.5px] leading-4 text-[#a1a1a6]">
-            Illustrative example using anonymized data.
-          </p>
-        </div>
+          {/* Completion feedback, light material and no heavy shadow */}
+          <div className="mt-6 rounded-[0.85rem] bg-[#0071e3]/[0.05] px-4 py-3">
+            <p className="text-[11px] font-medium tracking-[0.06em] text-[#0071e3]">
+              &#10003; MATCHED
+            </p>
+            <p className="mt-2 text-[16px] font-semibold leading-5 text-[#1d1d1f]">
+              Doritos Nacho Cheese
+            </p>
+
+            <div className="mt-2 flex flex-wrap items-baseline gap-x-2.5 gap-y-1 text-[12px] leading-5">
+              <span className="text-[#6e6e73]">1 oz &times; 40</span>
+              {matchedRecord.map(([key, value]) => (
+                <span key={key} className="flex items-baseline gap-1">
+                  <span className="text-[#c7c7cc]">&middot;</span>
+                  <span className="text-[#86868b]">{key}</span>
+                  <span className="tabular-nums text-[#1d1d1f]">{value}</span>
+                </span>
+              ))}
+            </div>
+          </div>
       </div>
     </GlassSurface>
   );
@@ -624,6 +870,42 @@ function ToolPreview({ type }: { type: (typeof toolProjects)[number]["previewTyp
   return <AgentPreview />;
 }
 
+function MetricRow({
+  metrics,
+}: {
+  metrics: { value: string; label: string }[];
+}) {
+  return (
+    <div className="flex items-end gap-10 border-t border-black/[0.07] pt-4">
+      {metrics.map((metric) => (
+        <div key={metric.label} className="min-w-[5rem]">
+          <p className="text-[2rem] font-semibold tracking-tight text-[#1d1d1f] leading-none">
+            {metric.value}
+          </p>
+          <p className="mt-1.5 text-[13px] text-[#86868b]">{metric.label}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function NarrativeBlock({
+  title,
+  body,
+}: {
+  title: string;
+  body: string;
+}) {
+  return (
+    <div>
+      <p className="text-[15px] font-semibold tracking-[0.06em] text-[#1d1d1f]">
+        {title}
+      </p>
+      <p className="mt-2 text-base leading-8 text-[#6e6e73]">{body}</p>
+    </div>
+  );
+}
+
 type ByteDanceCaseStudyProps = {
   project: CaseStudyProject;
 };
@@ -713,49 +995,48 @@ export function ByteDanceAiToolsCaseStudy({
                 </h2>
               </div>
 
-              <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:items-start">
-                <div className="flex flex-col gap-6">
+              {item.previewType === "matching" ? (
+                <div className="mt-8 flex flex-col gap-8">
                   <p className="text-base leading-8 text-[#6e6e73]">
                     {item.problem}
                   </p>
 
-                  <div className="grid gap-4">
-                    <div>
-                      <p className="text-[15px] font-semibold tracking-[0.06em] text-[#1d1d1f]">
-                        What I built
-                      </p>
-                      <p className="mt-2 text-[15px] leading-7 text-[#6e6e73]">
-                        {item.built}
-                      </p>
+                  <NarrativeBlock title="What I built" body={item.built} />
+
+                  <RagFlowDiagram />
+
+                  <div className="grid gap-8 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1fr)] lg:items-start lg:gap-12">
+                    <div className="lg:sticky lg:top-8">
+                      <NarrativeBlock title="How I shipped it" body={item.shipped} />
                     </div>
-                    <div>
-                      <p className="text-[15px] font-semibold tracking-[0.06em] text-[#1d1d1f]">
-                        How I shipped it
-                      </p>
-                      <p className="mt-2 text-[15px] leading-7 text-[#6e6e73]">
-                        {item.shipped}
-                      </p>
+                    <div className="overflow-visible">
+                      <ToolPreview type={item.previewType} />
                     </div>
                   </div>
+                </div>
+              ) : (
+                <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:items-start">
+                  <div className="flex flex-col gap-6">
+                    <p className="text-base leading-8 text-[#6e6e73]">
+                      {item.problem}
+                    </p>
 
-                  <div className="flex items-end gap-10 border-t border-black/[0.07] pt-4">
-                    {item.metrics.map((metric) => (
-                      <div key={metric.label} className="min-w-[5rem]">
-                        <p className="text-[2rem] font-semibold tracking-tight text-[#1d1d1f] leading-none">
-                          {metric.value}
-                        </p>
-                        <p className="mt-1.5 text-[13px] text-[#86868b]">
-                          {metric.label}
-                        </p>
-                      </div>
-                    ))}
+                    <div className="grid gap-4">
+                      <NarrativeBlock title="What I built" body={item.built} />
+                      <NarrativeBlock
+                        title="How I shipped it"
+                        body={item.shipped}
+                      />
+                    </div>
+
+                    <MetricRow metrics={item.metrics} />
+                  </div>
+
+                  <div className="lg:sticky lg:top-8 overflow-visible">
+                    <ToolPreview type={item.previewType} />
                   </div>
                 </div>
-
-                <div className="lg:sticky lg:top-8 overflow-visible">
-                  <ToolPreview type={item.previewType} />
-                </div>
-              </div>
+              )}
             </section>
           ))}
         </div>
