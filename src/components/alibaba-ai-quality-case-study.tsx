@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useGSAP } from "@gsap/react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import gsap from "gsap";
 import {
   ArrowLeft,
   ArrowRight,
@@ -37,6 +39,64 @@ import type { CaseStudyProject } from "@/data/projects";
 
 type Props = { project: CaseStudyProject };
 type DetailType = "knowledge" | "architecture" | null;
+type ProductScenarioId = "diagnose" | "bible" | "brief";
+type InspectorTab = "artifact" | "trace" | "knowledge" | "files";
+type CapabilityId = "context" | "skills" | "knowledge" | "action" | "orchestration";
+
+gsap.registerPlugin(useGSAP);
+
+const productScenarios = {
+  diagnose: {
+    eyebrow: "Pinned",
+    title: "Diagnose Episode 1",
+    project: "Glass Harbor · Episode 01",
+    prompt: "Review the first episode. Find the real Act I turning point and explain why the middle loses momentum.",
+    response: "The first irreversible choice happens later than the apparent inciting event. Moving the commitment beat forward would give the investigation a clearer dramatic engine.",
+    steps: [
+      ["Read", "episode-01.md and project context"],
+      ["Loaded", "@Three-Act Diagnosis"],
+      ["Compared", "3 turning-point candidates"],
+      ["Checked", "8 linked narrative dimensions"],
+      ["Delivered", "evidence-backed diagnosis"],
+    ],
+  },
+  bible: {
+    eyebrow: "Recent",
+    title: "Build Project Bible",
+    project: "Glass Harbor · Development",
+    prompt: "Turn the approved concept and character notes into a project Bible. Infer what is supported; flag what still needs a creative decision.",
+    response: "I organized the material into a seven-part creative blueprint, preserved source-backed decisions, and separated inferred placeholders from decisions the team still needs to make.",
+    steps: [
+      ["Read", "concept.md and character-notes.docx"],
+      ["Loaded", "@Project Bible"],
+      ["Mapped", "7 development decisions"],
+      ["Checked", "Bible ↔ script consistency"],
+      ["Created", "project-bible.md"],
+    ],
+  },
+  brief: {
+    eyebrow: "Scheduled",
+    title: "Daily Industry Brief",
+    project: "Entertainment intelligence",
+    prompt: "Every weekday at 09:00, collect the most relevant industry updates, remove duplicates, and deliver a source-linked brief.",
+    response: "The scheduled Agent collected current sources, delegated topic scans, removed repeated coverage, and prepared a concise brief with traceable links.",
+    steps: [
+      ["Triggered", "weekday schedule · 09:00"],
+      ["Browsed", "12 public sources"],
+      ["Delegated", "3 topic scans"],
+      ["Deduplicated", "21 candidate updates"],
+      ["Prepared", "source-linked daily brief"],
+    ],
+  },
+} as const;
+
+const productCapabilities = {
+  context: ["Work in context", "Conversation, attachments, project workspaces, file trees, quotes, clipboard history, and global search."],
+  skills: ["Apply expertise", "Built-in and custom Skills turn professional methods into reusable, shareable workflows."],
+  knowledge: ["Ground with knowledge", "Official and personal knowledge bases can be cited directly inside a task through @ mentions."],
+  action: ["Take action", "Phai can work with files, commands, images, web research, and browser automation—not only return text."],
+  orchestration: ["Orchestrate work", "Sub-agents, group collaboration, schedules, and messaging channels keep longer workflows moving."],
+} as const;
 
 const challengeCards = [
   ["Subjective quality", "A fluent response could still be structurally weak or creatively unusable.", Sparkles],
@@ -253,6 +313,303 @@ function ArchitectureDetail() {
   );
 }
 
+function ProductInspector({ scenarioId, tab }: { scenarioId: ProductScenarioId; tab: InspectorTab }) {
+  if (tab === "trace") {
+    return (
+      <div className="space-y-2">
+        {productScenarios[scenarioId].steps.map(([verb, detail], index) => (
+          <div key={`${verb}-${detail}`} className="flex items-start gap-3 rounded-xl bg-[#f5f5f7] p-3">
+            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#dff2e5] text-[#248a3d]">
+              <Check className="h-3 w-3" strokeWidth={2.5} />
+            </span>
+            <div>
+              <p className="text-[11px] font-semibold text-[#1d1d1f]">{verb}</p>
+              <p className="mt-0.5 text-[10px] leading-4 text-[#86868b]">{detail}</p>
+            </div>
+            <span className="ml-auto text-[9px] tabular-nums text-[#b0b0b5]">0{index + 1}</span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (tab === "knowledge") {
+    return (
+      <div className="space-y-3">
+        {[
+          ["Story structure handbook", "Official knowledge · 8 sections"],
+          ["Glass Harbor story world", "My knowledge · 14 files"],
+          ["Character relationship map", "Structured knowledge · 9 entities"],
+        ].map(([title, detail], index) => (
+          <div key={title} className="rounded-xl border border-black/8 bg-white p-3 shadow-[0_6px_20px_rgba(0,0,0,0.035)]">
+            <div className="flex items-center gap-3">
+              <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${index === 0 ? "bg-[#eaf4ff] text-[#0071e3]" : "bg-[#f5f5f7] text-[#6e6e73]"}`}>
+                <Database className="h-4 w-4" />
+              </span>
+              <div>
+                <p className="text-[11px] font-semibold text-[#1d1d1f]">{title}</p>
+                <p className="mt-0.5 text-[9px] text-[#86868b]">{detail}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+        <div className="rounded-xl bg-[#eaf4ff] p-3 text-[10px] leading-5 text-[#3f5f78]">
+          Knowledge is attached with source context so the Agent can distinguish retrieved evidence from its own inference.
+        </div>
+      </div>
+    );
+  }
+
+  if (tab === "files") {
+    return (
+      <div className="space-y-1 text-[11px] text-[#515154]">
+        {[
+          ["Glass Harbor", "folder"],
+          ["episode-01.md", "final"],
+          ["concept.md", "file"],
+          ["character-notes.docx", "file"],
+          ["project-bible.md", "new"],
+          ["research", "folder"],
+        ].map(([name, state], index) => (
+          <div key={name} className={`flex items-center gap-2 rounded-lg px-2.5 py-2 ${index === 1 ? "bg-[#eaf4ff] text-[#0066cc]" : "hover:bg-[#f5f5f7]"}`}>
+            {state === "folder" ? <BookOpenCheck className="h-3.5 w-3.5" /> : <MessageSquareText className="h-3.5 w-3.5" />}
+            <span className="truncate">{name}</span>
+            {state === "final" && <span className="ml-auto rounded bg-[#dff2e5] px-1.5 py-0.5 text-[8px] font-semibold text-[#248a3d]">FINAL</span>}
+            {state === "new" && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-[#0071e3]" />}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (scenarioId === "diagnose") {
+    return (
+      <div>
+        <div className="rounded-xl bg-[#f5f5f7] p-4">
+          <div className="flex items-center justify-between text-[9px] font-medium text-[#86868b]"><span>ACT I</span><span>ACT II</span><span>ACT III</span></div>
+          <div className="relative mt-3 flex h-2 overflow-visible rounded-full bg-[#e2e2e5]">
+            <span className="w-[31%] rounded-l-full bg-[#65b5ff]" />
+            <span className="w-[45%] bg-[#0071e3]" />
+            <span className="flex-1 rounded-r-full bg-[#111318]" />
+            <span className="absolute left-[31%] top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-white bg-[#0071e3] shadow" />
+            <span className="absolute left-[76%] top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-white bg-[#111318] shadow" />
+          </div>
+          <p className="mt-4 text-[10px] font-semibold leading-4 text-[#1d1d1f]">The apparent incident is not yet an irreversible commitment.</p>
+        </div>
+        <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+          <div className="rounded-xl border border-[#ffcc00]/30 bg-[#fff9df] p-3"><p className="text-[9px] font-semibold text-[#8a6500]">STRUCTURE</p><p className="mt-1 text-[10px] leading-4 text-[#6e5b23]">Act I commitment arrives late.</p></div>
+          <div className="rounded-xl border border-black/8 p-3"><p className="text-[9px] font-semibold text-[#86868b]">EVIDENCE</p><p className="mt-1 text-[10px] leading-4 text-[#515154]">Scene 18 changes the goal and closes the old path.</p></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (scenarioId === "bible") {
+    return (
+      <div>
+        <div className="grid grid-cols-4 gap-1.5">
+          {["Question", "Overview", "World", "Tone", "Characters", "Arcs", "Episodes"].map((item, index) => (
+            <div key={item} className={`rounded-lg p-2 ${index < 5 ? "bg-[#eaf4ff] text-[#0066cc]" : "bg-[#f5f5f7] text-[#86868b]"}`}>
+              <span className="text-[8px] font-semibold">0{index + 1}</span>
+              <p className="mt-1 truncate text-[9px] font-medium">{item}</p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-3 rounded-xl border border-black/8 bg-white p-4">
+          <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-[#86868b]">Project Bible</p>
+          <h4 className="mt-2 text-sm font-semibold text-[#1d1d1f]">Glass Harbor</h4>
+          <div className="mt-3 space-y-2">
+            {["Core dramatic question", "World rules", "Character engine", "Season trajectory"].map((item, index) => (
+              <div key={item} className="flex items-center gap-2 text-[10px] text-[#515154]"><span className={`h-1.5 w-1.5 rounded-full ${index < 3 ? "bg-[#34c759]" : "bg-[#ffcc00]"}`} />{item}</div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="grid grid-cols-3 gap-2">
+        {[["12", "Sources"], ["3", "Agents"], ["7", "Updates"]].map(([value, label]) => (
+          <div key={label} className="rounded-xl bg-[#f5f5f7] p-3 text-center"><p className="text-lg font-semibold tracking-[-0.04em] text-[#1d1d1f]">{value}</p><p className="text-[8px] uppercase tracking-[0.12em] text-[#86868b]">{label}</p></div>
+        ))}
+      </div>
+      <div className="mt-3 space-y-2">
+        {["Streaming platforms expand short-form slates", "New creator tooling enters private beta", "Weekly audience trend snapshot"].map((item, index) => (
+          <div key={item} className="rounded-xl border border-black/8 p-3"><div className="flex items-start gap-2"><span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-[#0071e3]" /><p className="text-[10px] font-medium leading-4 text-[#1d1d1f]">{item}</p></div><p className="mt-1 pl-3.5 text-[8px] text-[#86868b]">Public source {index + 1} · verified</p></div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PhaiProductDemo() {
+  const [scenarioId, setScenarioId] = useState<ProductScenarioId>("diagnose");
+  const [inspectorTab, setInspectorTab] = useState<InspectorTab>("artifact");
+  const [activeCapability, setActiveCapability] = useState<CapabilityId>("skills");
+  const [isReplaying, setIsReplaying] = useState(false);
+  const reduceMotion = useReducedMotion();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const replayTimeline = useRef<gsap.core.Timeline | null>(null);
+  const scenario = productScenarios[scenarioId];
+
+  useGSAP(
+    () => {
+      const targets = gsap.utils.toArray<HTMLElement>("[data-demo-change]", rootRef.current);
+      gsap.killTweensOf(targets);
+      if (reduceMotion) {
+        gsap.set(targets, { clearProps: "all" });
+        return;
+      }
+      gsap.fromTo(targets, { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.38, stagger: 0.035, ease: "power3.out", overwrite: "auto" });
+    },
+    { scope: rootRef, dependencies: [scenarioId, inspectorTab, activeCapability, reduceMotion], revertOnUpdate: true },
+  );
+
+  const replay = () => {
+    const steps = gsap.utils.toArray<HTMLElement>("[data-demo-step]", rootRef.current);
+    replayTimeline.current?.kill();
+    setIsReplaying(true);
+
+    if (reduceMotion) {
+      gsap.set(steps, { autoAlpha: 1, y: 0 });
+      setIsReplaying(false);
+      return;
+    }
+
+    replayTimeline.current = gsap.timeline({
+      onComplete: () => setIsReplaying(false),
+      onInterrupt: () => setIsReplaying(false),
+    });
+    replayTimeline.current
+      .set(steps, { autoAlpha: 0, y: 8 })
+      .to(steps, { autoAlpha: 1, y: 0, duration: 0.32, stagger: 0.28, ease: "power3.out", overwrite: "auto" });
+  };
+
+  const selectScenario = (nextId: ProductScenarioId) => {
+    replayTimeline.current?.kill();
+    setIsReplaying(false);
+    setInspectorTab("artifact");
+    setScenarioId(nextId);
+  };
+
+  const selectCapability = (id: CapabilityId) => {
+    setActiveCapability(id);
+    if (id === "context") setInspectorTab("files");
+    if (id === "skills" || id === "action" || id === "orchestration") setInspectorTab("trace");
+    if (id === "knowledge") setInspectorTab("knowledge");
+  };
+
+  return (
+    <div ref={rootRef} className="mt-9">
+      <div className="overflow-hidden rounded-[2rem] border border-black/10 bg-[#f5f5f7] shadow-[0_34px_100px_rgba(0,0,0,0.13)]">
+        <div className="flex h-12 items-center border-b border-black/8 bg-white/80 px-4 backdrop-blur-2xl sm:px-5">
+          <div className="flex gap-1.5" aria-hidden="true"><span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" /><span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" /><span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" /></div>
+          <div className="absolute left-1/2 flex -translate-x-1/2 items-center gap-2 text-[11px] font-semibold text-[#515154]"><span className="flex h-5 w-5 items-center justify-center rounded-md bg-[#111318] font-serif text-sm italic text-white">φ</span>Phai</div>
+          <div className="ml-auto flex items-center gap-2 text-[9px] text-[#86868b]"><LockKeyhole className="h-3 w-3" /><span className="hidden sm:inline">Local workspace</span></div>
+        </div>
+
+        <div className="flex gap-2 overflow-x-auto border-b border-black/8 bg-white px-3 py-2 lg:hidden">
+          {(Object.entries(productScenarios) as [ProductScenarioId, (typeof productScenarios)[ProductScenarioId]][]).map(([id, item]) => (
+            <button key={id} type="button" onClick={() => selectScenario(id)} className={`shrink-0 rounded-full px-3 py-2 text-[10px] font-semibold transition active:scale-[0.97] motion-reduce:transition-none ${scenarioId === id ? "bg-[#1d1d1f] text-white" : "bg-[#f5f5f7] text-[#6e6e73]"}`}>{item.title}</button>
+          ))}
+        </div>
+
+        <div className="grid bg-white lg:min-h-[38rem] lg:grid-cols-[13rem_minmax(0,1fr)_19rem]">
+          <aside className="hidden border-r border-black/8 bg-[#f7f7f8] p-3 lg:flex lg:flex-col">
+            <button type="button" className="flex items-center gap-2 rounded-xl bg-white px-3 py-2.5 text-left text-[11px] font-semibold text-[#1d1d1f] shadow-sm transition active:scale-[0.97] motion-reduce:transition-none"><span className="text-base font-normal">＋</span>New task</button>
+            <div className="mt-5 space-y-5">
+              {(["Pinned", "Recent", "Scheduled"] as const).map((group) => (
+                <div key={group}>
+                  <p className="px-2 text-[8px] font-semibold uppercase tracking-[0.14em] text-[#b0b0b5]">{group}</p>
+                  <div className="mt-1.5 space-y-1">
+                    {(Object.entries(productScenarios) as [ProductScenarioId, (typeof productScenarios)[ProductScenarioId]][]).filter(([, item]) => item.eyebrow === group).map(([id, item]) => (
+                      <button key={id} type="button" aria-pressed={scenarioId === id} onClick={() => selectScenario(id)} className={`flex w-full items-center gap-2 rounded-xl px-2.5 py-2.5 text-left text-[10px] font-medium transition active:scale-[0.98] motion-reduce:transition-none ${scenarioId === id ? "bg-[#dedee1] text-[#1d1d1f]" : "text-[#6e6e73] hover:bg-black/[0.035]"}`}>
+                        {id === "brief" ? <CalendarClock className="h-3.5 w-3.5" /> : id === "bible" ? <BookOpenCheck className="h-3.5 w-3.5" /> : <GitBranch className="h-3.5 w-3.5 text-[#0071e3]" />}
+                        <span>{item.title}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-auto space-y-1 border-t border-black/8 pt-3 text-[10px] text-[#6e6e73]">
+              {["Skills", "Knowledge", "My Agents"].map((item) => <div key={item} className="rounded-lg px-2.5 py-2">{item}</div>)}
+            </div>
+          </aside>
+
+          <section className="flex min-w-0 flex-col border-b border-black/8 lg:border-b-0 lg:border-r">
+            <div className="flex min-h-12 items-center gap-2 border-b border-black/8 px-4 sm:px-5">
+              <span data-demo-change className="truncate text-[11px] font-semibold text-[#1d1d1f]">{scenario.project}</span>
+              <span className="text-[#d2d2d7]">/</span>
+              <span data-demo-change className="truncate text-[10px] text-[#86868b]">{scenario.title}</span>
+              <button type="button" onClick={replay} disabled={isReplaying} className="ml-auto flex shrink-0 items-center gap-1.5 rounded-full border border-black/8 bg-white px-2.5 py-1.5 text-[9px] font-semibold text-[#515154] shadow-sm transition active:scale-[0.96] disabled:opacity-50 motion-reduce:transition-none">
+                <Zap className="h-3 w-3 text-[#0071e3]" />{isReplaying ? "Replaying" : "Replay"}
+              </button>
+            </div>
+
+            <div className="flex-1 p-4 sm:p-6">
+              <div data-demo-change className="ml-auto max-w-[30rem] rounded-[1.1rem] bg-[#eaf4ff] px-4 py-3 text-[11px] leading-5 text-[#0066cc]">{scenario.prompt}</div>
+              <div className="mt-5 space-y-2">
+                {scenario.steps.map(([verb, detail], index) => (
+                  <div key={`${verb}-${detail}`} data-demo-change data-demo-step className="flex items-center gap-2 text-[10px] text-[#86868b]">
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#dff2e5] text-[#248a3d]"><Check className="h-2.5 w-2.5" strokeWidth={3} /></span>
+                    <span><strong className="font-semibold text-[#515154]">{verb}</strong> {detail}</span>
+                    <span className="ml-auto hidden text-[8px] tabular-nums text-[#c7c7cc] sm:block">0{index + 1}</span>
+                  </div>
+                ))}
+              </div>
+              <div data-demo-change className="mt-5 max-w-[36rem] text-[11px] leading-6 text-[#515154]">
+                <p>{scenario.response}</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {(scenarioId === "diagnose" ? ["3 acts", "2 turning points", "8 dimensions"] : scenarioId === "bible" ? ["7 decisions", "source-backed", "review required"] : ["12 sources", "3 sub-agents", "scheduled"]).map((item) => <span key={item} className="rounded-full bg-[#f5f5f7] px-2.5 py-1 text-[9px] font-medium text-[#6e6e73]">{item}</span>)}
+                </div>
+              </div>
+            </div>
+
+            <div className="m-4 mt-0 rounded-[1.15rem] border border-black/10 bg-white p-3 shadow-[0_10px_30px_rgba(0,0,0,0.05)] sm:m-5 sm:mt-0">
+              <p className="text-[10px] text-[#b0b0b5]">Describe a task or @ mention context</p>
+              <div className="mt-3 flex items-center gap-2">
+                {["@ Files", "Skills", "Knowledge"].map((item) => <span key={item} className="rounded-lg bg-[#f5f5f7] px-2 py-1 text-[8px] text-[#6e6e73]">{item}</span>)}
+                <span className="ml-auto flex h-7 w-7 items-center justify-center rounded-full bg-[#111318] text-white"><ArrowRight className="h-3.5 w-3.5" /></span>
+              </div>
+            </div>
+          </section>
+
+          <aside className="min-w-0 bg-[#fbfbfc] p-3 sm:p-4">
+            <div className="flex gap-1 overflow-x-auto rounded-xl bg-[#efeff1] p-1">
+              {(["artifact", "trace", "knowledge", "files"] as InspectorTab[]).map((tab) => (
+                <button key={tab} type="button" aria-pressed={inspectorTab === tab} onClick={() => setInspectorTab(tab)} className={`shrink-0 rounded-lg px-2.5 py-1.5 text-[8px] font-semibold capitalize transition active:scale-[0.96] motion-reduce:transition-none ${inspectorTab === tab ? "bg-white text-[#1d1d1f] shadow-sm" : "text-[#86868b]"}`}>{tab}</button>
+              ))}
+            </div>
+            <div data-demo-change className="mt-4"><ProductInspector scenarioId={scenarioId} tab={inspectorTab} /></div>
+          </aside>
+        </div>
+      </div>
+
+      <div className="mt-4 flex items-center justify-between gap-4 px-1">
+        <p className="text-[10px] leading-5 text-[#86868b]">Interactive product simulation · fictional project data</p>
+        <span className="hidden items-center gap-1.5 text-[9px] text-[#b0b0b5] sm:flex"><LockKeyhole className="h-3 w-3" />Public-safe representation</span>
+      </div>
+
+      <div className="mt-7 grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+        {(Object.entries(productCapabilities) as [CapabilityId, (typeof productCapabilities)[CapabilityId]][]).map(([id, [title]]) => (
+          <button key={id} type="button" aria-pressed={activeCapability === id} onClick={() => selectCapability(id)} className={`rounded-2xl border p-4 text-left transition active:scale-[0.97] motion-reduce:transition-none ${activeCapability === id ? "border-[#0071e3]/25 bg-[#eaf4ff] text-[#0066cc] shadow-[0_10px_28px_rgba(0,113,227,0.08)]" : "border-black/8 bg-white text-[#6e6e73] hover:border-black/15"}`}>
+            <p className="text-[10px] font-semibold">{title}</p>
+          </button>
+        ))}
+      </div>
+      <div data-demo-change className="mt-3 rounded-2xl bg-[#f5f5f7] px-5 py-4 text-xs leading-6 text-[#6e6e73]"><strong className="font-semibold text-[#1d1d1f]">{productCapabilities[activeCapability][0]}.</strong> {productCapabilities[activeCapability][1]}</div>
+
+      <div className="mt-6 rounded-[1.5rem] bg-[#111318] px-5 py-5 text-white sm:flex sm:items-center sm:justify-between sm:gap-8 sm:px-6">
+        <p className="max-w-3xl text-sm leading-7 text-white/65">One request can cross files, knowledge, Skills, tools, and multiple Agents. That is why evaluating only the final answer was never enough.</p>
+        <span className="mt-3 inline-flex shrink-0 items-center gap-2 text-[10px] font-semibold text-[#65b5ff] sm:mt-0">Next · the quality problem <ArrowRight className="h-3.5 w-3.5" /></span>
+      </div>
+    </div>
+  );
+}
+
 export function AlibabaAiQualityCaseStudy({ project }: Props) {
   const [detail, setDetail] = useState<DetailType>(null);
 
@@ -332,61 +689,7 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
               description="It helps creators work through long-form story tasks across scripts, files, professional methods, and reusable knowledge. Unlike a chat-only assistant, Phai can take action inside the creative workflow."
             />
 
-            <div className="mt-8 grid gap-5 lg:grid-cols-[0.82fr_1.18fr]">
-              <div className="rounded-[2rem] border border-black/8 bg-white p-6 shadow-[0_18px_50px_rgba(0,0,0,0.05)] sm:p-8">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Who and what it serves</p>
-                <div className="mt-6 space-y-5">
-                  {[
-                    ["Professional creators", "Screenwriters and content teams working with complex story materials.", BookOpenCheck],
-                    ["Long-form creative tasks", "Script analysis, story-structure diagnosis, Bible building, and creative knowledge management.", Sparkles],
-                    ["Action, not only answers", "Read and modify files, call tools, run Skills, retrieve knowledge, and coordinate sub-agents.", Bot],
-                  ].map(([title, text, Icon]) => (
-                    <div key={title as string} className="flex gap-4">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#eaf4ff] text-[#0071e3]"><Icon className="h-5 w-5" /></div>
-                      <div>
-                        <h3 className="text-sm font-semibold text-[#1d1d1f]">{title as string}</h3>
-                        <p className="mt-1 text-xs leading-5 text-[#86868b]">{text as string}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="rounded-[2rem] bg-[#111318] p-6 text-white shadow-[0_28px_80px_rgba(0,0,0,0.18)] sm:p-8">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">Representative workflow</p>
-                    <h3 className="mt-2 text-xl font-semibold">From a script to an actionable diagnosis</h3>
-                  </div>
-                  <Workflow className="h-5 w-5 text-[#65b5ff]" />
-                </div>
-                <div className="mt-7 grid gap-3 sm:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] sm:items-center">
-                  {[
-                    ["01", "Upload script", "Files + context", MessageSquareText],
-                    ["02", "Ask Phai", "Creative intent", Bot],
-                    ["03", "Run Skill", "Method + references", Braces],
-                    ["04", "Deliver", "Diagnosis or artifact", CheckCircle2],
-                  ].map(([number, title, text, Icon], index) => (
-                    <div key={number as string} className="contents">
-                      <div className="h-full rounded-2xl border border-white/8 bg-white/[0.055] p-4">
-                        <div className="flex items-center justify-between">
-                          <Icon className="h-4 w-4 text-[#65b5ff]" />
-                          <span className="text-[9px] text-white/25">{number as string}</span>
-                        </div>
-                        <p className="mt-5 text-sm font-semibold">{title as string}</p>
-                        <p className="mt-2 text-[10px] leading-4 text-white/40">{text as string}</p>
-                      </div>
-                      {index < 3 && <ArrowRight className="m-auto hidden h-4 w-4 text-white/25 sm:block" />}
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-5 rounded-2xl border border-[#65b5ff]/20 bg-[#65b5ff]/10 p-4">
-                  <p className="text-sm leading-6 text-white/60">
-                    One request can cross files, context, Skills, tools, and expert judgment. That is why a weak result cannot be diagnosed from the final answer alone.
-                  </p>
-                </div>
-              </div>
-            </div>
+            <PhaiProductDemo />
           </AnimatedSection>
 
           <AnimatedSection>
