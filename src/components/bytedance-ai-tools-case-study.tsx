@@ -1361,23 +1361,26 @@ export function ByteDanceAiToolsCaseStudy({
           <div className="max-w-2xl">
             <h1 className="text-4xl font-semibold tracking-tight text-[#1d1d1f] sm:text-5xl md:text-6xl md:leading-[1.12]">
               <span className="block">ByteDance</span>
-              <span className="block">
-                <span>Procurement </span>
-                <span className="bg-gradient-to-r from-[#0071e3] via-[#af52de] via-[#ff2d55] to-[#ff9500] bg-clip-text text-transparent">
-                  AI Tools
-                </span>
+              <span className="block">Procurement</span>
+              <span className="block bg-gradient-to-r from-[#0071e3] via-[#af52de] via-[#ff2d55] to-[#ff9500] bg-clip-text text-transparent">
+                AI Tools
               </span>
             </h1>
             <p className="mt-5 max-w-xl text-base leading-8 text-[#6e6e73] md:text-lg">
-              Shipped three 0-to-1 AI tools for a procurement team, taking pricing, product cleanup and supplier comparison off manual work. Owned the product judgment and wrote the code.
+              Designed and implemented three AI workflows for benchmarking talent fees, matching product listings to standard SKUs, and turning supplier quotes into grounded summaries and price analysis, owning the product design end to end and building the core data pipelines and AI logic.
             </p>
           </div>
 
           <div className="relative mx-auto w-full max-w-[560px] overflow-hidden rounded-[1.6rem]">
-            <img
-              src="/images/bytedance-hero-glass-icons.png"
-              alt="A large frosted-glass tile with a four-bar brand mark at the center, surrounded by three smaller glass tiles: a talent price tag, a matched SKU barcode pair, and a bar chart with a magnifying glass, echoing the three procurement AI tools"
+            <video
+              src="/videos/bytedance-hero-glass-tiles.mp4"
+              poster="/images/bytedance-hero-glass-icons.png"
+              aria-label="A large frosted-glass tile with a four-bar brand mark at the center, surrounded by three smaller glass tiles: a talent price tag, a matched SKU barcode pair, and a bar chart with a magnifying glass, gently floating in place to echo the three procurement AI tools"
               className="h-full w-full scale-[1.12] object-contain drop-shadow-[0_20px_60px_rgba(0,0,0,0.10)]"
+              autoPlay
+              loop
+              muted
+              playsInline
             />
           </div>
         </section>
