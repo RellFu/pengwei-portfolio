@@ -35,6 +35,7 @@ import {
   Zap,
 } from "lucide-react";
 import { AnimatedSection, FadeInCard } from "@/components/animated-section";
+import { PhaiProductSimulator } from "@/components/phai-product-simulator";
 import type { CaseStudyProject } from "@/data/projects";
 
 type Props = { project: CaseStudyProject };
@@ -444,7 +445,7 @@ function ProductInspector({ scenarioId, tab }: { scenarioId: ProductScenarioId; 
   );
 }
 
-function PhaiProductDemo() {
+export function PhaiProductDemoLegacy() {
   const [scenarioId, setScenarioId] = useState<ProductScenarioId>("diagnose");
   const [inspectorTab, setInspectorTab] = useState<InspectorTab>("artifact");
   const [activeCapability, setActiveCapability] = useState<CapabilityId>("skills");
@@ -689,7 +690,7 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
               description="It helps creators work through long-form story tasks across scripts, files, professional methods, and reusable knowledge. Unlike a chat-only assistant, Phai can take action inside the creative workflow."
             />
 
-            <PhaiProductDemo />
+            <PhaiProductSimulator />
           </AnimatedSection>
 
           <AnimatedSection>
