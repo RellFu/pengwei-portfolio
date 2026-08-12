@@ -327,6 +327,71 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
           <AnimatedSection>
             <SectionHeading
               number="01"
+              label="Product Context"
+              title="Phai is a desktop creative Agent for professional content production."
+              description="It helps creators work through long-form story tasks across scripts, files, professional methods, and reusable knowledge. Unlike a chat-only assistant, Phai can take action inside the creative workflow."
+            />
+
+            <div className="mt-8 grid gap-5 lg:grid-cols-[0.82fr_1.18fr]">
+              <div className="rounded-[2rem] border border-black/8 bg-white p-6 shadow-[0_18px_50px_rgba(0,0,0,0.05)] sm:p-8">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Who and what it serves</p>
+                <div className="mt-6 space-y-5">
+                  {[
+                    ["Professional creators", "Screenwriters and content teams working with complex story materials.", BookOpenCheck],
+                    ["Long-form creative tasks", "Script analysis, story-structure diagnosis, Bible building, and creative knowledge management.", Sparkles],
+                    ["Action, not only answers", "Read and modify files, call tools, run Skills, retrieve knowledge, and coordinate sub-agents.", Bot],
+                  ].map(([title, text, Icon]) => (
+                    <div key={title as string} className="flex gap-4">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#eaf4ff] text-[#0071e3]"><Icon className="h-5 w-5" /></div>
+                      <div>
+                        <h3 className="text-sm font-semibold text-[#1d1d1f]">{title as string}</h3>
+                        <p className="mt-1 text-xs leading-5 text-[#86868b]">{text as string}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-[2rem] bg-[#111318] p-6 text-white shadow-[0_28px_80px_rgba(0,0,0,0.18)] sm:p-8">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">Representative workflow</p>
+                    <h3 className="mt-2 text-xl font-semibold">From a script to an actionable diagnosis</h3>
+                  </div>
+                  <Workflow className="h-5 w-5 text-[#65b5ff]" />
+                </div>
+                <div className="mt-7 grid gap-3 sm:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] sm:items-center">
+                  {[
+                    ["01", "Upload script", "Files + context", MessageSquareText],
+                    ["02", "Ask Phai", "Creative intent", Bot],
+                    ["03", "Run Skill", "Method + references", Braces],
+                    ["04", "Deliver", "Diagnosis or artifact", CheckCircle2],
+                  ].map(([number, title, text, Icon], index) => (
+                    <div key={number as string} className="contents">
+                      <div className="h-full rounded-2xl border border-white/8 bg-white/[0.055] p-4">
+                        <div className="flex items-center justify-between">
+                          <Icon className="h-4 w-4 text-[#65b5ff]" />
+                          <span className="text-[9px] text-white/25">{number as string}</span>
+                        </div>
+                        <p className="mt-5 text-sm font-semibold">{title as string}</p>
+                        <p className="mt-2 text-[10px] leading-4 text-white/40">{text as string}</p>
+                      </div>
+                      {index < 3 && <ArrowRight className="m-auto hidden h-4 w-4 text-white/25 sm:block" />}
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-5 rounded-2xl border border-[#65b5ff]/20 bg-[#65b5ff]/10 p-4">
+                  <p className="text-sm leading-6 text-white/60">
+                    One request can cross files, context, Skills, tools, and expert judgment. That is why a weak result cannot be diagnosed from the final answer alone.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </AnimatedSection>
+
+          <AnimatedSection>
+            <SectionHeading
+              number="02"
               label="Why Quality Was Hard"
               title="The team did not need another score. It needed a diagnosis."
               description="Creative quality was subjective, and Phai operated across a layered runtime. A weak final artifact did not explain what failed or what the team should change next."
@@ -344,7 +409,7 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
 
           <AnimatedSection>
             <SectionHeading
-              number="02"
+              number="03"
               label="The Evidence That Changed the Model"
               title="One session looked successful—until I decomposed it into 34 tasks."
               description="Session-level scoring hid what the Agent actually completed. I rebuilt the unit of evaluation around independently judgeable user tasks."
@@ -410,7 +475,7 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
 
           <AnimatedSection>
             <SectionHeading
-              number="03"
+              number="04"
               label="Quality System Architecture"
               title="Evaluation only mattered when it changed the product."
               description="I connected signal collection, failure attribution, expert-method design, validation, and recurring operations into one quality loop."
@@ -445,7 +510,7 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
 
           <AnimatedSection>
             <SectionHeading
-              number="04"
+              number="05"
               label="Deep Dive · Three-Act Skill"
               title="I turned narrative theory into a Skill the Agent could execute."
               description="For the Three-Act Structure and Bible Skills, I owned product design, Prompt/Skill authoring, and test iteration."
@@ -506,7 +571,7 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
 
           <AnimatedSection>
             <SectionHeading
-              number="05"
+              number="06"
               label="From One Skill to System Governance"
               title="I audited all 55 Skills—then built the evaluator I wished I had."
               description="The full audit and skill-evaluator were independently completed. The goal was to make ecosystem quality repeatable before release."
@@ -563,7 +628,7 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
 
           <AnimatedSection>
             <SectionHeading
-              number="06"
+              number="07"
               label="From Manual Governance to Daily Operations"
               title="The quality check now runs every day—and reports to the work group."
               description="I designed the instrumentation list, authored the patrol Skill, and configured the recurring task. This is deployed workflow infrastructure, not a future concept."
@@ -603,7 +668,7 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
 
           <AnimatedSection>
             <SectionHeading
-              number="07"
+              number="08"
               label="Supporting Systems"
               title="The main story is quality. These systems show how far it reached."
               description="Open either layer when an interviewer wants to go deeper into knowledge design or Agent engineering."
