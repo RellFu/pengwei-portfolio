@@ -35,6 +35,7 @@ import {
   Zap,
 } from "lucide-react";
 import { AnimatedSection, FadeInCard } from "@/components/animated-section";
+import { PhaiCapabilityCarousel } from "@/components/phai-capability-carousel";
 import { PhaiProductSimulator } from "@/components/phai-product-simulator";
 import type { CaseStudyProject } from "@/data/projects";
 
@@ -681,7 +682,7 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
           </AnimatedSection>
         </section>
 
-        <div className="mt-16 grid gap-20 lg:mt-20 lg:gap-28">
+        <div className="mt-16 grid min-w-0 gap-20 lg:mt-20 lg:gap-28">
           <AnimatedSection>
             <SectionHeading
               number="01"
@@ -691,6 +692,12 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
             />
 
             <PhaiProductSimulator />
+          </AnimatedSection>
+
+          <AnimatedSection className="min-w-0">
+            <div className="w-full min-w-0 overflow-hidden">
+              <PhaiCapabilityCarousel />
+            </div>
           </AnimatedSection>
 
           <AnimatedSection>
