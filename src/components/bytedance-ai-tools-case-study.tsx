@@ -5,17 +5,33 @@ import Link from "next/link";
 import {
   ArrowLeft,
   CircleAlert,
-  ChevronRight,
   UserRound,
+  RotateCcw,
 } from "lucide-react";
+import gsap from "gsap";
 import { GlassSurface } from "@/components/design-system";
 import type { CaseStudyProject } from "@/data/projects";
 
-const toolProjects = [
+type ToolProject = {
+  index: string;
+  kicker: string;
+  heading: string;
+  problem: string;
+  built: string;
+  shipped: string;
+  // Some projects are design-led rather than fully shipped, so the label varies
+  shippedTitle?: string;
+  metrics: { value: string; label: string }[];
+  // Optional footnote for targets that should not read as shipped results
+  metricsNote?: string;
+  previewType: "agent" | "matching" | "summary";
+};
+
+const toolProjects: ToolProject[] = [
   {
     index: "01",
     kicker: "Talent Pricing Agent",
-    heading: "Turning scattered celebrity deal records into comparable pricing references",
+    heading: "Benchmark talent fees against comparable past deals",
     problem:
       "Historical celebrity collaboration quotes were scattered across sourcing-request records, making it hard for buyers to find comparable deals by talent tier, collaboration type, and budget.",
     built:
@@ -30,14 +46,14 @@ const toolProjects = [
   },
   {
     index: "02",
-    kicker: "Entity-matching RAG",
-    heading: "Turning inconsistent product listings into standard SKUs",
+    kicker: "RAG SKU Matching Workflow",
+    heading: "Match changing product listings to standard SKUs",
     problem:
       "External product listings changed frequently because of inconsistent naming, relisting, and packaging updates. Analysts had to map each row manually to a stable internal SKU before the data could support price comparison and cost analysis.",
     built:
-      "I built an entity-matching RAG workflow. Each product name becomes a query key for hybrid retrieval and reranking against a standard-SKU knowledge base. The workflow augments the raw record with five candidate items, scores them against predefined business rules, and selects the best match.",
+      "I built an entity-matching RAG workflow that maps changing e-commerce listings to a stable internal SKU library. For each product name, the workflow retrieves up to five plausible candidates and applies a predefined business rubric across brand, product name, specification, flavor, and price. It returns explainable, structured matches that buyers can use for price comparison and cost analysis.",
     shipped:
-      "I designed the knowledge base with one canonical product mapping per retrieval unit, each bound to its SKU, specification, flavor, and awarded price. I implemented the retrieval, scoring, threshold control, structured output, and multidimensional-table write-back workflow end to end.",
+      "I designed the knowledge base around canonical product records, each linked to its standard SKU, product attributes, and awarded price. I then implemented the triggered workflow end to end, including query parsing, candidate retrieval, structured model output, JavaScript result expansion, threshold control, and table write-back. Candidates scoring below the business threshold are withheld.",
     metrics: [
       { value: "92.42%", label: "Accuracy on 132 labeled records" },
       { value: "<1 min", label: "Processing and write-back for the batch" },
@@ -46,214 +62,742 @@ const toolProjects = [
   },
   {
     index: "03",
-    kicker: "Supplier Comparison AI Summary",
-    heading: "Buyers wrote every comparison summary themselves",
+    kicker: "AI Quote Summary & Analysis",
+    heading: "Summarize quote changes and flag negotiation room",
     problem:
-      "The sourcing system managed quotes but stopped short of analysis. Buyers read quote tables and historical rounds themselves, compiled the comparison by hand, and often missed price changes.",
+      "Buyers had to manually track shifting quotes, exceptions, and price gaps across multiple bidding rounds and category-specific templates, with price tables large enough to exceed the model's context window.",
     built:
-      "Split the input into four context types so the model returns an objective summary and negotiation advice as separate outputs, each one bound to the quote data behind it.",
+      "I designed a two-path AI workflow that turns complex quote data into a factual summary and a separate, tightly scoped price analysis. Four structured inputs keep each output grounded in the data it is allowed to use: comparison rules, current metrics, quote history, and line-item prices.",
+    shippedTitle: "How I designed it",
     shipped:
-      "A strict data protocol and output constraints in code, with the summary and the advice evaluated as separate tasks against an MOS target.",
-    metrics: [
-      { value: "90%+", label: "MOS target accuracy" },
-      { value: "2", label: "Separately scored outputs" },
-    ],
+      "I encoded category-specific comparison logic through fields, SQL, formulas, and code annotations, then added token-aware prioritization for oversized price tables. I also defined separate prompts, data boundaries, and evaluation criteria to keep factual reporting distinct from action-oriented analysis.",
+    metrics: [],
     previewType: "summary" as const,
   },
 ];
 
-const ragStages = [
-  { stage: "R", title: "RETRIEVE", body: "Hybrid Search" },
-  { stage: "A", title: "AUGMENT", body: "Candidates + Rules" },
-  { stage: "G", title: "SCORE", body: "100 · 80 · 60 · 40 · 0" },
+const ragStages: { stage: string; title: string; body: string; body2?: string }[] = [
+  { stage: "R", title: "Retrieve Candidates", body: "Hybrid Search · Top 5" },
+  { stage: "A", title: "Add Context", body: "Item · Candidates · Rules" },
+  { stage: "G", title: "Generate Match", body: "Score · Reason · SKU" },
 ];
 
-const kbSlice = [
-  ["Canonical name", "Black Rice Crackers"],
-  ["Standard SKU", "100303701"],
-  ["Specification", "425g"],
-  ["Flavor", "Original"],
-  ["Awarded price", "¥12.80"],
-];
+const RAG_SURFACE = "#f5f5f7";
+const RAG_HAIRLINE = "rgba(0,0,0,0.07)";
+const RAG_CONNECTOR = "#c7c7cc";
+const RAG_INK = "#1d1d1f";
+const RAG_MUTED = "#86868b";
+const RAG_FAINT = "#a1a1a6";
+const RAG_ACCENT = "#0071e3";
 
-const retrievedCandidates = [
-  { name: "Black Rice Crackers · 425g · Original", score: "100", decision: "Selected" },
-  { name: "Black Rice Crackers · 400g · Original", score: "40", decision: "Rejected" },
-  { name: "Rice Crackers · 425g · Seaweed", score: "0", decision: "Rejected" },
-];
+function RagStageNode({
+  x,
+  y,
+  width,
+  height,
+  stage,
+  title,
+  body,
+  body2,
+  nodeId,
+}: {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  stage: string;
+  title: string;
+  body: string;
+  body2?: string;
+  nodeId?: string;
+}) {
+  const cx = x + width / 2;
 
-function MatchingPreview() {
   return (
-    <GlassSurface className="h-full rounded-[1.6rem] border-black/5 p-5 shadow-[0_18px_50px_rgba(0,0,0,0.08)]">
-      <div className="space-y-4">
-        {/* Horizontal RAG pipeline */}
-        <div className="rounded-[1.1rem] border border-black/5 bg-white/88 px-3 py-3.5">
-          {/* Inputs feeding into Retrieve */}
-          <div className="flex items-stretch gap-2">
-            <div className="flex flex-1 flex-col gap-1.5">
-              <div className="rounded-[0.7rem] border border-black/[0.07] bg-[#f5f5f7]/60 px-2.5 py-2">
-                <p className="text-[10.5px] font-semibold leading-4 text-[#1d1d1f]">Raw Row</p>
-                <p className="text-[9.5px] leading-4 text-[#86868b]">Name · Price</p>
-              </div>
-              <div className="rounded-[0.7rem] border border-dashed border-[#0071e3]/30 bg-[#0071e3]/[0.05] px-2.5 py-2">
-                <p className="text-[10.5px] font-semibold leading-4 text-[#1d1d1f]">Standard SKU KB</p>
-                <p className="text-[9.5px] leading-4 text-[#86868b]">Name · SKU · Price</p>
-              </div>
-            </div>
+    <g data-node={nodeId}>
+      <rect
+        className="rag-node-surface"
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        rx={13}
+        fill={RAG_SURFACE}
+        stroke={RAG_HAIRLINE}
+      />
+      {/* Stage letter and title on one centered line: "R · Retrieve Candidates" */}
+      <text x={cx} y={y + 25} textAnchor="middle" dominantBaseline="middle">
+        <tspan fontSize="23" fontWeight="700" fill={RAG_ACCENT}>
+          {stage}
+        </tspan>
+        <tspan fontSize="18" fill={RAG_FAINT}>
+          {" · "}
+        </tspan>
+        <tspan fontSize="18" fontWeight="600" fill={RAG_INK}>
+          {title}
+        </tspan>
+      </text>
+      <text
+        x={cx}
+        y={y + 47}
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fontSize="18"
+        fill={RAG_MUTED}
+      >
+        {body}
+      </text>
+      {body2 ? (
+        <text
+          x={cx}
+          y={y + 65}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fontSize="18"
+          fill={RAG_MUTED}
+        >
+          {body2}
+        </text>
+      ) : null}
+    </g>
+  );
+}
 
-            <div className="flex shrink-0 flex-col items-center justify-center px-0.5">
-              <ChevronRight className="h-3.5 w-3.5 text-[#c7c7cc]" />
-              <span className="mt-0.5 text-[9px] font-medium text-[#a1a1a6]">Top 5</span>
-            </div>
+function RagDecisionNode({
+  cx,
+  cy,
+  halfWidth,
+  halfHeight,
+  label,
+  nodeId,
+}: {
+  cx: number;
+  cy: number;
+  halfWidth: number;
+  halfHeight: number;
+  label: string;
+  nodeId?: string;
+}) {
+  const points = [
+    `${cx},${cy - halfHeight}`,
+    `${cx + halfWidth},${cy}`,
+    `${cx},${cy + halfHeight}`,
+    `${cx - halfWidth},${cy}`,
+  ].join(" ");
 
-            {/* R A G stages */}
-            <div className="flex flex-[2.2] items-center gap-1">
-              {ragStages.map((step, index) => (
-                <div key={step.stage} className="flex min-w-0 flex-1 items-center gap-1">
-                  <div className="min-w-0 flex-1 rounded-[0.7rem] border border-black/[0.07] bg-[#f5f5f7]/60 px-2 py-2 text-center">
-                    <div className="flex items-center justify-center gap-1">
-                      <span className="flex h-[15px] w-[15px] items-center justify-center rounded-[4px] bg-[#0071e3] text-[9px] font-bold text-white">
-                        {step.stage}
-                      </span>
-                      <p className="text-[10px] font-semibold leading-3 tracking-[0.04em] text-[#1d1d1f]">
-                        {step.title}
-                      </p>
-                    </div>
-                    <p className="mt-1 text-[9px] leading-3 text-[#86868b]">{step.body}</p>
-                  </div>
-                  {index < ragStages.length - 1 ? (
-                    <ChevronRight className="h-3 w-3 shrink-0 text-[#c7c7cc]" />
-                  ) : null}
-                </div>
-              ))}
-            </div>
-          </div>
+  return (
+    <g data-node={nodeId}>
+      <polygon
+        className="rag-node-surface"
+        points={points}
+        fill={RAG_SURFACE}
+        stroke={RAG_HAIRLINE}
+      />
+      <text
+        x={cx}
+        y={cy}
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fontSize="18"
+        fontWeight="600"
+        fill={RAG_INK}
+      >
+        {label}
+      </text>
+    </g>
+  );
+}
 
-          {/* Decision branch */}
-          <div className="mt-2 flex items-stretch gap-2">
-            <div className="flex flex-1 items-center justify-center rounded-[0.7rem] border border-black/[0.07] bg-[#f5f5f7]/60 px-2.5 py-2">
-              <p className="text-[10.5px] font-semibold leading-4 text-[#1d1d1f]">Select Top 1</p>
-            </div>
-            <div className="flex shrink-0 items-center px-0.5">
-              <ChevronRight className="h-3.5 w-3.5 text-[#c7c7cc]" />
-            </div>
-            <div className="flex flex-[2.2] gap-1.5">
-              <div className="min-w-0 flex-1 rounded-[0.7rem] border border-[#0071e3]/20 bg-[#0071e3]/[0.06] px-2.5 py-2">
-                <p className="text-[10.5px] font-semibold leading-4 text-[#0071e3]">Write Back</p>
-                <p className="text-[9.5px] leading-4 text-[#86868b]">SKU · Price · Score</p>
-              </div>
-              <div className="min-w-0 flex-1 rounded-[0.7rem] border border-black/[0.07] bg-[#f5f5f7]/50 px-2.5 py-2">
-                <p className="text-[10.5px] font-semibold leading-4 text-[#86868b]">No Match</p>
-                <p className="text-[9.5px] leading-4 text-[#a1a1a6]">Held for review</p>
-              </div>
-            </div>
-          </div>
+function RagIoNode({
+  x,
+  y,
+  width,
+  height,
+  title,
+  body,
+  tone = "neutral",
+  shape = "card",
+  nodeId,
+}: {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  title: string;
+  body: string;
+  tone?: "neutral" | "accent" | "quiet";
+  shape?: "card" | "cylinder";
+  nodeId?: string;
+}) {
+  const fill = tone === "accent" ? "rgba(0,113,227,0.06)" : RAG_SURFACE;
+  const stroke = tone === "accent" ? "rgba(0,113,227,0.22)" : RAG_HAIRLINE;
+  const titleFill =
+    tone === "accent" ? RAG_ACCENT : tone === "quiet" ? RAG_MUTED : RAG_INK;
+  const bodyFill = tone === "quiet" ? RAG_FAINT : RAG_MUTED;
 
-          <div className="mt-2.5 flex flex-wrap items-center gap-1.5 border-t border-black/5 pt-2.5">
-            <span className="rounded-full border border-[#0071e3]/25 bg-[#0071e3]/[0.06] px-2 py-0.5 text-[9.5px] font-medium text-[#0071e3]">
-              Structured JSON, not a chat response
-            </span>
-            <span className="text-[9.5px] text-[#a1a1a6]">
-              One canonical product mapping per retrieval unit
-            </span>
-          </div>
-        </div>
+  if (shape === "cylinder") {
+    const capRy = Math.min(height / 2, 12);
+    const bodyTop = y + capRy;
+    const bodyBottom = y + height - capRy;
+    const cx = x + width / 2;
+    const rx = width / 2;
 
-        {/* Knowledge base slice */}
-        <div className="rounded-[1.05rem] border border-black/5 bg-white/88 px-3 py-2.5">
-          <p className="text-[11px] font-semibold text-[#1d1d1f]">
-            Knowledge Base Record
-          </p>
-          <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1">
-            {kbSlice.map(([key, value]) => (
-              <div key={key} className="flex justify-between gap-2 text-[10px] leading-4">
-                <span className="text-[#86868b]">{key}</span>
-                <span className="font-medium text-[#1d1d1f]">{value}</span>
-              </div>
+    return (
+      <g data-node={nodeId}>
+        {/* body fill only, no stroke: avoids a straight seam under the top ellipse */}
+        <path
+          className="rag-node-surface"
+          d={`M ${x} ${bodyTop} L ${x} ${bodyBottom} A ${rx} ${capRy} 0 0 0 ${x + width} ${bodyBottom} L ${x + width} ${bodyTop} Z`}
+          fill={fill}
+        />
+        {/* left and right side edges: also tagged so the active-step highlight
+            reaches them, not just the body fill path */}
+        <line
+          className="rag-node-outline"
+          x1={x}
+          y1={bodyTop}
+          x2={x}
+          y2={bodyBottom}
+          stroke={stroke}
+        />
+        <line
+          className="rag-node-outline"
+          x1={x + width}
+          y1={bodyTop}
+          x2={x + width}
+          y2={bodyBottom}
+          stroke={stroke}
+        />
+        {/* visible front curve of the base */}
+        <path
+          className="rag-node-outline"
+          d={`M ${x} ${bodyBottom} A ${rx} ${capRy} 0 0 0 ${x + width} ${bodyBottom}`}
+          fill="none"
+          stroke={stroke}
+        />
+        {/* top face fill: full ellipse, no stroke here since its lower half
+            sits right where the title text is and a stroke there would cut
+            through the letters */}
+        <ellipse cx={cx} cy={bodyTop} rx={rx} ry={capRy} fill={fill} />
+        {/* top rim outline: only the upper half of that ellipse, bulging
+            above the text line, so the outline stays on the outer edge */}
+        <path
+          className="rag-node-outline"
+          d={`M ${x} ${bodyTop} A ${rx} ${capRy} 0 0 1 ${x + width} ${bodyTop}`}
+          fill="none"
+          stroke={stroke}
+        />
+        <text x={x + 16} y={y + height / 2 - 2} fontSize="19" fontWeight="600" fill={titleFill}>
+          {title}
+        </text>
+        <text x={x + 16} y={y + height / 2 + 18} fontSize="18" fill={bodyFill}>
+          {body}
+        </text>
+      </g>
+    );
+  }
+
+  return (
+    <g data-node={nodeId}>
+      <rect
+        className="rag-node-surface"
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        rx={13}
+        fill={fill}
+        stroke={stroke}
+      />
+      <text x={x + 16} y={y + 27} fontSize="19" fontWeight="600" fill={titleFill}>
+        {title}
+      </text>
+      <text x={x + 16} y={y + 48} fontSize="18" fill={bodyFill}>
+        {body}
+      </text>
+    </g>
+  );
+}
+
+const RAG_STEP_CAPTIONS = [
+  "One raw listing, traced end to end through the pipeline.",
+  "A vendor listing arrives as free text. Nothing about it is canonical yet.",
+  "The product name becomes the query key against the standard SKU knowledge base.",
+  "Hybrid retrieval returns the five closest candidates. Retrieval rank is not a verdict.",
+  "Each candidate is expanded into its attributes: brand, short name, pack, flavor, price.",
+  "Generation applies the buyer's scoring rubric and emits a score with its reason.",
+  "The top score of 100 clears the threshold of 40, so this row is safe to commit.",
+  "The canonical SKU, awarded price, and score are written back as JSON.",
+];
+
+const RAG_EDGES = [
+  { id: "raw-to-r", d: "M312 40 C 330 40, 328 104, 346 104" },
+  { id: "kb-to-r", d: "M312 192 C 330 192, 328 128, 346 128" },
+  { id: "r-to-a", d: "M566 116 H 600" },
+  { id: "a-to-g", d: "M820 116 H 854" },
+  { id: "g-to-decision", d: "M1074 116 H 1106" },
+  { id: "decision-yes", d: "M1278 88 C 1296 72, 1300 48, 1318 48" },
+  { id: "decision-no", d: "M1278 144 C 1296 160, 1300 184, 1318 184" },
+];
+
+function RagFlowDiagram({
+  activeStep,
+  onReplay,
+  isPlaying,
+}: {
+  activeStep: number;
+  onReplay: () => void;
+  isPlaying: boolean;
+}) {
+  const svgRef = useRef<SVGSVGElement | null>(null);
+
+  // Each step lights up its own nodes and edges. Index maps to the narrative:
+  // 0 idle, 1 raw row, 2 KB search, 3 recall, 4 scoring, 5 match, 6 threshold, 7 write back.
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+
+    const ctx = gsap.context(() => {
+      const activeNodesByStep: Record<number, string[]> = {
+        1: ["raw"],
+        2: ["raw", "kb"],
+        3: ["kb", "stage-R"],
+        4: ["stage-R", "stage-A"],
+        5: ["stage-A", "stage-G"],
+        6: ["stage-G", "decision"],
+        7: ["decision", "write-back"],
+      };
+      const activeEdgesByStep: Record<number, string[]> = {
+        2: ["raw-to-r"],
+        3: ["kb-to-r"],
+        4: ["r-to-a"],
+        5: ["a-to-g"],
+        6: ["g-to-decision"],
+        7: ["decision-yes"],
+      };
+
+      const active = new Set(activeNodesByStep[activeStep] ?? []);
+      const activeEdges = new Set(activeEdgesByStep[activeStep] ?? []);
+
+      svg.querySelectorAll<SVGGElement>("[data-node]").forEach((node) => {
+        const isOn = active.has(node.dataset.node ?? "");
+        const surface = node.querySelector<SVGElement>(".rag-node-surface");
+        gsap.to(node, {
+          opacity: activeStep === 0 ? 1 : isOn ? 1 : 0.42,
+          duration: 0.4,
+          ease: "power2.out",
+        });
+        if (surface) {
+          gsap.to(surface, {
+            stroke: isOn && activeStep !== 0 ? RAG_ACCENT : RAG_HAIRLINE,
+            strokeWidth: isOn && activeStep !== 0 ? 1.8 : 1,
+            duration: 0.4,
+            ease: "power2.out",
+          });
+        }
+        // Cylinder shapes (the KB node) split their rim across side lines,
+        // the base curve, and the top ellipse, since a single path can't
+        // describe all three without a visible seam. Keep them in sync with
+        // the body fill so the highlight reads as one continuous outline.
+        const outlineParts = node.querySelectorAll<SVGElement>(".rag-node-outline");
+        if (outlineParts.length) {
+          gsap.to(outlineParts, {
+            stroke: isOn && activeStep !== 0 ? RAG_ACCENT : RAG_HAIRLINE,
+            strokeWidth: isOn && activeStep !== 0 ? 1.8 : 1,
+            duration: 0.4,
+            ease: "power2.out",
+          });
+        }
+      });
+
+      svg.querySelectorAll<SVGPathElement>("[data-edge]").forEach((edge) => {
+        const isOn = activeEdges.has(edge.dataset.edge ?? "");
+        gsap.to(edge, {
+          stroke: isOn ? RAG_ACCENT : RAG_CONNECTOR,
+          strokeWidth: isOn ? 2.2 : 1.4,
+          opacity: activeStep === 0 ? 1 : isOn ? 1 : 0.45,
+          duration: 0.4,
+          ease: "power2.out",
+        });
+      });
+    }, svgRef);
+
+    return () => ctx.revert();
+  }, [activeStep]);
+
+  return (
+    <div className="rounded-[1.5rem] border border-black/5 bg-white/70 p-5 shadow-[0_18px_50px_rgba(0,0,0,0.06)] backdrop-blur-xl sm:p-6">
+      <div className="mb-3 flex items-center justify-between gap-4">
+        <p className="text-[13px] text-[#86868b]">
+          {RAG_STEP_CAPTIONS[activeStep]}
+        </p>
+        <button
+          type="button"
+          onClick={onReplay}
+          className="flex shrink-0 items-center gap-1.5 rounded-full border border-black/[0.08] bg-white/80 px-3 py-1.5 text-[12px] font-medium text-[#1d1d1f] transition-colors duration-200 hover:bg-white active:scale-[0.97]"
+        >
+          <RotateCcw
+            className={`h-3 w-3 ${isPlaying ? "text-[#0071e3]" : "text-[#86868b]"}`}
+          />
+          Replay
+        </button>
+      </div>
+
+      <div className="overflow-x-auto">
+        <svg
+          ref={svgRef}
+          viewBox="0 0 1624 232"
+          role="img"
+          aria-label="A raw row becomes a query key and the standard SKU knowledge base is searched. Retrieve candidates returns the top five, add context expands the item, the candidates, and the buyer's rules, and generate match applies the rubric to emit a score, a reason, and the matched SKU. If the best score is at least 40 the record is written back, otherwise it is flagged for review."
+          className="h-auto w-full min-w-[980px]"
+        >
+          <defs>
+            <marker
+              id="ragArrow"
+              viewBox="0 0 10 10"
+              refX="8"
+              refY="5"
+              markerWidth="6"
+              markerHeight="6"
+              orient="auto-start-reverse"
+            >
+              <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill={RAG_CONNECTOR} />
+            </marker>
+          </defs>
+
+          <g fill="none" strokeWidth="1.4" markerEnd="url(#ragArrow)">
+            {RAG_EDGES.map((edge) => (
+              <path
+                key={edge.id}
+                data-edge={edge.id}
+                d={edge.d}
+                stroke={RAG_CONNECTOR}
+              />
             ))}
-          </div>
+          </g>
+
+          <RagIoNode
+            nodeId="raw"
+            x={12}
+            y={8}
+            width={300}
+            height={64}
+            title="Raw Row"
+            body="Product Name · Price"
+          />
+          <RagIoNode
+            nodeId="kb"
+            x={12}
+            y={160}
+            width={300}
+            height={64}
+            title="Standard SKU KB"
+            body="Canonical Name · SKU · Price"
+            shape="cylinder"
+          />
+
+          {ragStages.map((step, index) => (
+            <RagStageNode
+              key={step.stage}
+              nodeId={`stage-${step.stage}`}
+              x={346 + index * 254}
+              y={78}
+              width={220}
+              height={76}
+              stage={step.stage}
+              title={step.title}
+              body={step.body}
+              body2={step.body2}
+            />
+          ))}
+
+          {/* Edge labels sit right beside their own source box, far apart vertically */}
+          <g>
+            <rect x={328} y={29} width={82} height={22} rx={11} fill="#ffffff" />
+            <text x={369} y={40} textAnchor="middle" dominantBaseline="middle" fontSize="15" fontWeight="500" fill={RAG_FAINT}>
+              Query Key
+            </text>
+          </g>
+          <g>
+            <rect x={328} y={181} width={58} height={22} rx={11} fill="#ffffff" />
+            <text x={357} y={192} textAnchor="middle" dominantBaseline="middle" fontSize="15" fontWeight="500" fill={RAG_FAINT}>
+              Search
+            </text>
+          </g>
+
+          {/* Threshold decision */}
+          <RagDecisionNode
+            nodeId="decision"
+            cx={1198}
+            cy={116}
+            halfWidth={84}
+            halfHeight={46}
+            label="Score ≥ 40?"
+          />
+
+          {/* Yes / No labels */}
+          <g>
+            <text x={1286} y={60} textAnchor="middle" fontSize="15" fontWeight="600" fill={RAG_ACCENT}>
+              Yes
+            </text>
+            <text x={1286} y={180} textAnchor="middle" fontSize="15" fontWeight="600" fill={RAG_FAINT}>
+              No
+            </text>
+          </g>
+
+          <RagIoNode
+            nodeId="write-back"
+            x={1322}
+            y={16}
+            width={290}
+            height={64}
+            title="Write Back"
+            body="SKU · Awarded Price · Score"
+            tone="accent"
+          />
+          <RagIoNode
+            nodeId="no-match"
+            x={1322}
+            y={152}
+            width={290}
+            height={64}
+            title="No Match"
+            body="Flag for Review"
+            tone="quiet"
+          />
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+const retrievedCandidates: {
+  name: string;
+  score: string;
+  note: string;
+  highlight?: string;
+  selected: boolean;
+}[] = [
+  {
+    name: "Doritos Nacho Cheese · 1 oz × 40",
+    score: "100",
+    note: "Same product on every attribute",
+    selected: true,
+  },
+  {
+    name: "Doritos Cool Ranch · 1 oz × 40",
+    score: "60",
+    note: "Same series, different flavor",
+    highlight: "Cool Ranch",
+    selected: false,
+  },
+  {
+    name: "Doritos Nacho Cheese · 9.25 oz × 8",
+    score: "40",
+    note: "Related candidate, pack differs",
+    highlight: "9.25 oz × 8",
+    selected: false,
+  },
+  {
+    name: "Doritos Spicy Sweet Chili · 1 oz × 40",
+    score: "60",
+    note: "Same series, different flavor",
+    highlight: "Spicy Sweet Chili",
+    selected: false,
+  },
+  {
+    name: "Tostitos Nacho Cheese Dip · 15 oz × 12",
+    score: "0",
+    note: "Different brand",
+    highlight: "Tostitos",
+    selected: false,
+  },
+];
+
+const matchedRecord: [string, string][] = [
+  ["SKU", "SNK-1042"],
+  ["Awarded price", "$24.80/case"],
+  ["Match score", "100"],
+];
+
+function MatchingPreview({ activeStep = 7 }: { activeStep?: number }) {
+  const rootRef = useRef<HTMLDivElement | null>(null);
+
+  // Reveal stages mirror the pipeline: query at 1, candidates at 3, attribute
+  // highlights at 4, and scores only at 5, because scoring happens in
+  // generation against the buyer's rubric rather than during retrieval.
+  const showQuery = activeStep >= 1;
+  const showCandidates = activeStep >= 3;
+  const showAttributes = activeStep >= 4;
+  const showScores = activeStep >= 5;
+  const showWinner = activeStep >= 5;
+  const showMatched = activeStep >= 7;
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || !showCandidates) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        root.querySelectorAll("[data-candidate-row]"),
+        { opacity: 0, y: 8 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          ease: "power2.out",
+          stagger: 0.06,
+          overwrite: "auto",
+        },
+      );
+    }, rootRef);
+
+    return () => ctx.revert();
+  }, [showCandidates]);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || !showMatched) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        root.querySelectorAll("[data-matched-card]"),
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0, duration: 0.45, ease: "power2.out", overwrite: "auto" },
+      );
+    }, rootRef);
+
+    return () => ctx.revert();
+  }, [showMatched]);
+
+  return (
+    <GlassSurface className="rounded-[1.4rem] border-black/5 p-6 shadow-[0_16px_44px_rgba(0,0,0,0.06)] sm:p-7">
+      <div ref={rootRef}>
+        {/* Raw query reads like an input object */}
+        <div
+          className="rounded-[0.85rem] bg-[#f5f5f7] px-4 py-2.5 transition-opacity duration-500"
+          style={{ opacity: showQuery ? 1 : 0.25 }}
+        >
+          <p className="text-[11px] font-medium tracking-[0.06em] text-[#a1a1a6]">
+            RAW QUERY
+          </p>
+          <p className="mt-0.5 text-[12px] font-medium leading-5 text-[#1d1d1f]">
+            DORITOS Nacho Chz 1oz Bags, 40ct
+          </p>
         </div>
 
-        {/* Entity matching example */}
-        <div>
-          <p className="text-[12px] font-semibold text-[#1d1d1f]">
-            Entity Matching Example
-          </p>
-          <p className="mt-1.5 rounded-[0.7rem] bg-[#f5f5f7]/70 px-2.5 py-1.5 text-[10.5px] leading-4 text-[#6e6e73]">
-            Query key: Want Want Black Rice Crackers 425g Family Pack
-          </p>
-
-          <div className="mt-2.5 overflow-hidden rounded-[1.05rem] border border-black/5 bg-white/88">
-            <div className="grid grid-cols-[minmax(0,1fr)_2.2rem_3.6rem] gap-2 border-b border-black/5 bg-[#f5f5f7]/60 px-3 py-2 text-[10px] font-medium tracking-[0.08em] text-[#86868b]">
-              <span>RETRIEVED CANDIDATES</span>
-              <span className="text-right">SCORE</span>
-              <span className="text-right">DECISION</span>
+        {/* Candidates: no outer frame, no per-field borders */}
+        <div className="mt-6">
+            <div className="flex items-baseline justify-between gap-4 px-4 text-[11px] font-medium tracking-[0.06em] text-[#a1a1a6]">
+              <span>CANDIDATE</span>
+              <span
+                className="transition-opacity duration-400"
+                style={{ opacity: showScores ? 1 : 0 }}
+              >
+                SCORE
+              </span>
             </div>
-            {retrievedCandidates.map((row, index) => {
-              const selected = row.decision === "Selected";
 
-              return (
-                <div
-                  key={row.name}
-                  className={`grid grid-cols-[minmax(0,1fr)_2.2rem_3.6rem] items-center gap-2 px-3 py-2.5 text-[11px] leading-4 ${
-                    index < retrievedCandidates.length - 1 ? "border-b border-black/5" : ""
-                  }`}
-                >
-                  <span className={`min-w-0 ${selected ? "font-medium text-[#1d1d1f]" : "text-[#86868b]"}`}>
-                    {row.name}
-                  </span>
-                  <span
-                    className={`text-right font-semibold ${
-                      selected ? "text-[#0071e3]" : "text-[#86868b]"
-                    }`}
-                  >
-                    {row.score}
-                  </span>
-                  <span
-                    className={`text-right text-[10px] font-medium ${
-                      selected ? "text-[#0071e3]" : "text-[#a1a1a6]"
-                    }`}
-                  >
-                    {row.decision}
-                  </span>
-                </div>
-              );
-            })}
+            <div className="mt-1 h-[240px] overflow-hidden space-y-0">
+              {showCandidates
+                ? retrievedCandidates.map((row) => {
+                    const isWinner = showWinner && row.selected;
+                    const isDimmed = showWinner && !row.selected;
+                    return (
+                      <div
+                        key={row.name}
+                        data-candidate-row
+                        className={`rounded-[0.85rem] px-4 py-1 transition-all duration-500 ${
+                          isWinner ? "bg-[#0071e3]/[0.06]" : ""
+                        }`}
+                        style={{ opacity: isDimmed ? 0.4 : 1 }}
+                      >
+                        <div className="flex items-baseline justify-between gap-4">
+                          <p className="min-w-0 text-[12px] font-medium leading-5 text-[#1d1d1f]">
+                            {row.highlight ? (
+                              <>
+                                {row.name.split(row.highlight)[0]}
+                                <span
+                                  className="font-medium transition-colors duration-500"
+                                  style={{
+                                    color: showAttributes ? "#c2571b" : "#1d1d1f",
+                                  }}
+                                >
+                                  {row.highlight}
+                                </span>
+                                {row.name.split(row.highlight)[1]}
+                              </>
+                            ) : (
+                              row.name
+                            )}
+                          </p>
+                          <span
+                            className={`shrink-0 text-[12px] tabular-nums transition-all duration-400 ${
+                              isWinner
+                                ? "font-semibold text-[#0071e3]"
+                                : "font-medium text-[#6e6e73]"
+                            }`}
+                            style={{ opacity: showScores ? 1 : 0 }}
+                          >
+                            {row.score}
+                          </span>
+                        </div>
+
+                        {/* The rubric's reason travels with the score */}
+                        <p
+                          className="mt-0.5 text-[11px] leading-4 text-[#a1a1a6] transition-opacity duration-500"
+                          style={{ opacity: showScores ? 1 : 0 }}
+                        >
+                          {row.note}
+                        </p>
+                      </div>
+                    );
+                  })
+                : null}
+            </div>
           </div>
 
-          {/* Final structured write-back */}
-          <div className="mt-2.5 rounded-[1.05rem] border border-[#0071e3]/20 bg-[#0071e3]/[0.05] px-3 py-3">
-            <p className="text-[10px] font-medium tracking-[0.08em] text-[#0071e3]">
-              STRUCTURED WRITE-BACK
-            </p>
-            <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1.5">
-              {[
-                ["Standard item", "Black Rice Crackers, 425g"],
-                ["Standard SKU", "100303701"],
-                ["Awarded price", "¥12.80"],
-                ["Match score", "100"],
-              ].map(([key, value]) => (
-                <div key={key}>
-                  <p className="text-[10px] leading-4 text-[#86868b]">{key}</p>
-                  <p className="text-[11px] font-medium leading-4 text-[#1d1d1f]">{value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* Completion feedback, light material and no heavy shadow */}
+          <div className="mt-6 min-h-[92px]">
+            {showMatched ? (
+              <div
+                data-matched-card
+                className="rounded-[0.85rem] bg-[#0071e3]/[0.05] px-4 py-3"
+              >
+                <p className="text-[11px] font-medium tracking-[0.06em] text-[#0071e3]">
+                  &#10003; MATCHED
+                </p>
+                <p className="mt-2 text-[12px] font-semibold leading-5 text-[#1d1d1f]">
+                  Doritos Nacho Cheese
+                </p>
 
-          <p className="mt-2 text-[11px] leading-5 text-[#86868b]">
-            The workflow retrieves five candidates, scores each against predefined business
-            rules, selects the highest-confidence match, and writes back the metadata bound
-            to that standard SKU.
-          </p>
-          <p className="mt-1.5 text-[10.5px] leading-4 text-[#a1a1a6]">
-            Illustrative example using anonymized data.
-          </p>
-        </div>
+                <div className="mt-2 flex flex-wrap items-baseline gap-x-2.5 gap-y-1 text-[12px] leading-5">
+                  <span className="text-[#6e6e73]">1 oz &times; 40</span>
+                  {matchedRecord.map(([key, value]) => (
+                    <span key={key} className="flex items-baseline gap-1">
+                      <span className="text-[#c7c7cc]">&middot;</span>
+                      <span className="text-[#86868b]">{key}</span>
+                      <span className="tabular-nums text-[#1d1d1f]">{value}</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </div>
       </div>
     </GlassSurface>
   );
 }
+
+// The four structured inputs, each showing the concrete value the outputs
+// below actually cite. Deliberately uncolored so the reading path stays on
+// PE1 and PE2, and so input and output read as one mapping.
+const quoteInputs: { title: string; example: string }[] = [
+  { title: "Comparison Rules", example: "Same model · Unit price" },
+  { title: "Current Snapshot", example: "3 suppliers · $121.5K to $136K" },
+  { title: "Quote History", example: "Supplier A · $134K to $128K" },
+  { title: "Line-item Prices", example: "Dell 27\" · $220 / $205 / $260" },
+];
 
 function SummaryPreview() {
   return (
@@ -261,20 +805,20 @@ function SummaryPreview() {
       <div className="space-y-5">
         <div>
           <p className="text-[11px] font-medium tracking-[0.16em] text-[#86868b]">
-            Quotes In
+            Structured Inputs
           </p>
-          <div className="mt-3 grid grid-cols-3 gap-2">
-            {[
-              ["Supplier A", "¥128,000"],
-              ["Supplier B", "¥121,500"],
-              ["Supplier C", "¥136,000"],
-            ].map((row) => (
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            {quoteInputs.map((input) => (
               <div
-                key={row[0]}
+                key={input.title}
                 className="rounded-[0.95rem] border border-black/5 bg-white/88 px-3 py-3"
               >
-                <p className="text-[11px] text-[#86868b]">{row[0]}</p>
-                <p className="mt-1 text-[13px] font-semibold text-[#1d1d1f]">{row[1]}</p>
+                <p className="text-[12px] font-semibold leading-4 text-[#1d1d1f]">
+                  {input.title}
+                </p>
+                <p className="mt-1 text-[11px] leading-4 tabular-nums text-[#86868b]">
+                  {input.example}
+                </p>
               </div>
             ))}
           </div>
@@ -286,31 +830,35 @@ function SummaryPreview() {
           </p>
           <div className="mt-3 space-y-2">
             <div className="rounded-[1rem] border border-black/5 bg-white/90 p-4">
-              <div className="flex items-center justify-between">
-                <p className="text-[12px] font-semibold text-[#1d1d1f]">Objective summary</p>
-                <span className="text-[10px] font-medium tracking-[0.14em] text-[#86868b]">
-                  NO ADVICE
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-[12px] font-semibold text-[#1d1d1f]">
+                  <span className="text-[#0071e3]">PE1</span> Quote Summary
+                </p>
+                <span className="shrink-0 text-[10px] font-medium tracking-[0.14em] text-[#86868b]">
+                  FACTS ONLY
                 </span>
               </div>
               <p className="mt-2 text-[11px] leading-6 text-[#6e6e73]">
-                Supplier B holds the lowest quote at ¥121,500. Supplier A runs ¥6,500 higher with a shorter delivery cycle.
+                Three suppliers submitted total quotes ranging from $121,500 to $136,000. In its second round, Supplier A reduced its total from $134,000 to $128,000 and its flagged line items from three to one.
               </p>
             </div>
 
             <div className="rounded-[1rem] border border-black/5 bg-white/90 p-4">
-              <div className="flex items-center justify-between">
-                <p className="text-[12px] font-semibold text-[#1d1d1f]">Negotiation advice</p>
-                <span className="text-[10px] font-medium tracking-[0.14em] text-[#86868b]">
-                  PRICE DATA ONLY
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-[12px] font-semibold text-[#1d1d1f]">
+                  <span className="text-[#0071e3]">PE2</span> Price Analysis
+                </p>
+                <span className="shrink-0 text-[10px] font-medium tracking-[0.14em] text-[#86868b]">
+                  FOR REFERENCE ONLY
                 </span>
               </div>
               <p className="mt-2 text-[11px] leading-6 text-[#6e6e73]">
-                Lead with Supplier B and keep A as backup. Push B on delivery terms, and check C for an anomalous line item.
+                Dell 27-inch monitor: Supplier A quoted $220 per unit, Supplier B $205, and Supplier C $260. Supplier C may have negotiation room on this line item.
               </p>
             </div>
           </div>
           <p className="mt-2 text-[11px] leading-5 text-[#86868b]">
-            Each output is scored on its own so a confident summary never carries an unsupported recommendation.
+            PE1 and PE2 use different data boundaries and are evaluated separately.
           </p>
         </div>
       </div>
@@ -612,6 +1160,99 @@ function AgentPreview() {
   );
 }
 
+const RAG_TOTAL_STEPS = 7;
+
+function prefersReducedMotion() {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function RagWalkthrough({
+  built,
+  shipped,
+}: {
+  built: string;
+  shipped: string;
+}) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  // Reduced motion skips the walkthrough and renders the finished state.
+  const [activeStep, setActiveStep] = useState(() =>
+    prefersReducedMotion() ? RAG_TOTAL_STEPS : 0,
+  );
+  const [isPlaying, setIsPlaying] = useState(false);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container || prefersReducedMotion()) return;
+
+    // A paused timeline whose only job is to advance the step index on a
+    // comfortable reading cadence, then hold on the final state.
+    const tl = gsap.timeline({
+      paused: true,
+      onStart: () => setIsPlaying(true),
+      onComplete: () => setIsPlaying(false),
+    });
+
+    for (let step = 1; step <= RAG_TOTAL_STEPS; step += 1) {
+      tl.call(() => setActiveStep(step), undefined, step === 1 ? 0 : "+=1.15");
+    }
+    // Let the last frame breathe before the timeline reports completion.
+    tl.to({}, { duration: 0.9 });
+
+    timelineRef.current = tl;
+
+    // Start the walkthrough as soon as the block is meaningfully in view.
+    // An IntersectionObserver fires on load as well as on scroll, so it works
+    // whether the visitor lands mid-page or scrolls down to this section.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          observer.disconnect();
+          tl.play(0);
+        }
+      },
+      { threshold: 0.25 },
+    );
+    observer.observe(container);
+
+    return () => {
+      observer.disconnect();
+      tl.kill();
+      timelineRef.current = null;
+    };
+  }, []);
+
+  const handleReplay = useCallback(() => {
+    const tl = timelineRef.current;
+    if (!tl) {
+      setActiveStep(RAG_TOTAL_STEPS);
+      return;
+    }
+    setActiveStep(0);
+    tl.restart(true);
+  }, []);
+
+  return (
+    <div ref={containerRef} data-rag-walkthrough className="flex flex-col gap-8">
+      <RagFlowDiagram
+        activeStep={activeStep}
+        onReplay={handleReplay}
+        isPlaying={isPlaying}
+      />
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1fr)] lg:items-start lg:gap-12">
+        <div className="lg:sticky lg:top-8 flex flex-col gap-6">
+          <NarrativeBlock title="What I built" body={built} />
+          <NarrativeBlock title="How I shipped it" body={shipped} />
+        </div>
+        <div className="overflow-visible">
+          <MatchingPreview activeStep={activeStep} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ToolPreview({ type }: { type: (typeof toolProjects)[number]["previewType"] }) {
   if (type === "matching") {
     return <MatchingPreview />;
@@ -622,6 +1263,51 @@ function ToolPreview({ type }: { type: (typeof toolProjects)[number]["previewTyp
   }
 
   return <AgentPreview />;
+}
+
+function MetricRow({
+  metrics,
+  note,
+}: {
+  metrics: { value: string; label: string }[];
+  note?: string;
+}) {
+  if (metrics.length === 0) return null;
+
+  return (
+    <div className="border-t border-black/[0.07] pt-4">
+      <div className="flex items-end gap-10">
+        {metrics.map((metric) => (
+          <div key={metric.label} className="min-w-[5rem]">
+            <p className="text-[2rem] font-semibold tracking-tight text-[#1d1d1f] leading-none">
+              {metric.value}
+            </p>
+            <p className="mt-1.5 text-[13px] text-[#86868b]">{metric.label}</p>
+          </div>
+        ))}
+      </div>
+      {note ? (
+        <p className="mt-3 text-[12px] leading-5 text-[#a1a1a6]">{note}</p>
+      ) : null}
+    </div>
+  );
+}
+
+function NarrativeBlock({
+  title,
+  body,
+}: {
+  title: string;
+  body: string;
+}) {
+  return (
+    <div>
+      <p className="text-[15px] font-semibold tracking-[0.06em] text-[#1d1d1f]">
+        {title}
+      </p>
+      <p className="mt-2 text-base leading-8 text-[#6e6e73]">{body}</p>
+    </div>
+  );
 }
 
 type ByteDanceCaseStudyProps = {
@@ -675,23 +1361,26 @@ export function ByteDanceAiToolsCaseStudy({
           <div className="max-w-2xl">
             <h1 className="text-4xl font-semibold tracking-tight text-[#1d1d1f] sm:text-5xl md:text-6xl md:leading-[1.12]">
               <span className="block">ByteDance</span>
-              <span className="block">
-                <span>Procurement </span>
-                <span className="bg-gradient-to-r from-[#0071e3] via-[#af52de] via-[#ff2d55] to-[#ff9500] bg-clip-text text-transparent">
-                  AI Tools
-                </span>
+              <span className="block">Procurement</span>
+              <span className="block bg-gradient-to-r from-[#0071e3] via-[#af52de] via-[#ff2d55] to-[#ff9500] bg-clip-text text-transparent">
+                AI Tools
               </span>
             </h1>
             <p className="mt-5 max-w-xl text-base leading-8 text-[#6e6e73] md:text-lg">
-              Shipped three 0-to-1 AI tools for a procurement team, taking pricing, product cleanup and supplier comparison off manual work. Owned the product judgment and wrote the code.
+              Designed and implemented three AI workflows for benchmarking talent fees, matching product listings to standard SKUs, and turning supplier quotes into grounded summaries and price analysis, owning the product design end to end and building the core data pipelines and AI logic.
             </p>
           </div>
 
           <div className="relative mx-auto w-full max-w-[560px] overflow-hidden rounded-[1.6rem]">
-            <img
-              src="/images/A_clean_3D_rendered_illustrati_2026-08-09T02-36-04.png"
-              alt="Three procurement AI tools feeding into one decision surface"
+            <video
+              src="/videos/bytedance-hero-glass-tiles.mp4"
+              poster="/images/bytedance-hero-glass-icons.png"
+              aria-label="A large frosted-glass tile with a four-bar brand mark at the center, surrounded by three smaller glass tiles: a talent price tag, a matched SKU barcode pair, and a bar chart with a magnifying glass, gently floating in place to echo the three procurement AI tools"
               className="h-full w-full scale-[1.12] object-contain drop-shadow-[0_20px_60px_rgba(0,0,0,0.10)]"
+              autoPlay
+              loop
+              muted
+              playsInline
             />
           </div>
         </section>
@@ -699,7 +1388,7 @@ export function ByteDanceAiToolsCaseStudy({
         <div className="mt-20 grid gap-16">
           {toolProjects.map((item) => (
             <section key={item.index}>
-              <div className="max-w-3xl">
+              <div className="max-w-none">
                 <div className="flex items-baseline gap-2">
                   <span className="text-[13px] font-semibold tracking-[0.02em] text-[#0071e3]">
                     {item.index}
@@ -713,49 +1402,37 @@ export function ByteDanceAiToolsCaseStudy({
                 </h2>
               </div>
 
-              <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:items-start">
-                <div className="flex flex-col gap-6">
+              {item.previewType === "matching" ? (
+                <div className="mt-8 flex flex-col gap-8">
                   <p className="text-base leading-8 text-[#6e6e73]">
                     {item.problem}
                   </p>
 
-                  <div className="grid gap-4">
-                    <div>
-                      <p className="text-[15px] font-semibold tracking-[0.06em] text-[#1d1d1f]">
-                        What I built
-                      </p>
-                      <p className="mt-2 text-[15px] leading-7 text-[#6e6e73]">
-                        {item.built}
-                      </p>
+                  <RagWalkthrough built={item.built} shipped={item.shipped} />
+                </div>
+              ) : (
+                <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:items-start">
+                  <div className="flex flex-col gap-6">
+                    <p className="text-base leading-8 text-[#6e6e73]">
+                      {item.problem}
+                    </p>
+
+                    <div className="grid gap-4">
+                      <NarrativeBlock title="What I built" body={item.built} />
+                      <NarrativeBlock
+                        title={item.shippedTitle ?? "How I shipped it"}
+                        body={item.shipped}
+                      />
                     </div>
-                    <div>
-                      <p className="text-[15px] font-semibold tracking-[0.06em] text-[#1d1d1f]">
-                        How I shipped it
-                      </p>
-                      <p className="mt-2 text-[15px] leading-7 text-[#6e6e73]">
-                        {item.shipped}
-                      </p>
-                    </div>
+
+                    <MetricRow metrics={item.metrics} note={item.metricsNote} />
                   </div>
 
-                  <div className="flex items-end gap-10 border-t border-black/[0.07] pt-4">
-                    {item.metrics.map((metric) => (
-                      <div key={metric.label} className="min-w-[5rem]">
-                        <p className="text-[2rem] font-semibold tracking-tight text-[#1d1d1f] leading-none">
-                          {metric.value}
-                        </p>
-                        <p className="mt-1.5 text-[13px] text-[#86868b]">
-                          {metric.label}
-                        </p>
-                      </div>
-                    ))}
+                  <div className="lg:sticky lg:top-8 overflow-visible">
+                    <ToolPreview type={item.previewType} />
                   </div>
                 </div>
-
-                <div className="lg:sticky lg:top-8 overflow-visible">
-                  <ToolPreview type={item.previewType} />
-                </div>
-              </div>
+              )}
             </section>
           ))}
         </div>
