@@ -35,7 +35,6 @@ import {
   Zap,
 } from "lucide-react";
 import { AnimatedSection, FadeInCard } from "@/components/animated-section";
-import { PhaiCapabilityCarousel } from "@/components/phai-capability-carousel";
 import { PhaiProductSimulator } from "@/components/phai-product-simulator";
 import type { CaseStudyProject } from "@/data/projects";
 
@@ -96,7 +95,7 @@ const productCapabilities = {
   context: ["Work in context", "Conversation, attachments, project workspaces, file trees, quotes, clipboard history, and global search."],
   skills: ["Apply expertise", "Built-in and custom Skills turn professional methods into reusable, shareable workflows."],
   knowledge: ["Ground with knowledge", "Official and personal knowledge bases can be cited directly inside a task through @ mentions."],
-  action: ["Take action", "Phai can work with files, commands, images, web research, and browser automation—not only return text."],
+  action: ["Take action", "Alpha can work with files, commands, images, web research, and browser automation. It does more than return text."],
   orchestration: ["Orchestrate work", "Sub-agents, group collaboration, schedules, and messaging channels keep longer workflows moving."],
 } as const;
 
@@ -104,7 +103,7 @@ const challengeCards = [
   ["Subjective quality", "A fluent response could still be structurally weak or creatively unusable.", Sparkles],
   ["Layered failures", "Retrieval, routing, context, Skills, tools, and models could all be responsible.", Layers3],
   ["Long-horizon work", "One conversation could contain dozens of separate creative tasks and revisions.", Route],
-  ["Tacit expertise", "Professional story judgment lived in examples and intuition—not executable rules.", BookOpenCheck],
+  ["Tacit expertise", "Professional story judgment lived in examples and intuition, not executable rules.", BookOpenCheck],
 ] as const;
 
 const failureModes = [
@@ -508,7 +507,7 @@ export function PhaiProductDemoLegacy() {
       <div className="overflow-hidden rounded-[2rem] border border-black/10 bg-[#f5f5f7] shadow-[0_34px_100px_rgba(0,0,0,0.13)]">
         <div className="flex h-12 items-center border-b border-black/8 bg-white/80 px-4 backdrop-blur-2xl sm:px-5">
           <div className="flex gap-1.5" aria-hidden="true"><span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" /><span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" /><span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" /></div>
-          <div className="absolute left-1/2 flex -translate-x-1/2 items-center gap-2 text-[11px] font-semibold text-[#515154]"><span className="flex h-5 w-5 items-center justify-center rounded-md bg-[#111318] font-serif text-sm italic text-white">φ</span>Phai</div>
+          <div className="absolute left-1/2 flex -translate-x-1/2 items-center gap-1.5 font-serif text-[13px] font-semibold italic text-[#1d1d1f]"><span className="text-sm">α</span>Alpha</div>
           <div className="ml-auto flex items-center gap-2 text-[9px] text-[#86868b]"><LockKeyhole className="h-3 w-3" /><span className="hidden sm:inline">Local workspace</span></div>
         </div>
 
@@ -652,7 +651,7 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
             <div className="rounded-[2rem] border border-black/8 bg-white/80 p-6 shadow-[0_28px_80px_rgba(0,0,0,0.09)] backdrop-blur-xl sm:p-8">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Phai product anatomy</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Alpha product anatomy</p>
                   <p className="mt-2 text-lg font-semibold text-[#1d1d1f]">One request, many systems</p>
                 </div>
                 <Bot className="h-6 w-6 text-[#0071e3]" />
@@ -660,7 +659,7 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
               <div className="mt-7 grid items-stretch gap-3 sm:grid-cols-[1fr_auto_1.2fr_auto_1fr]">
                 {[
                   ["INPUT", "Creative task", MessageSquareText],
-                  ["AGENT", "Phai runtime", Network],
+                  ["AGENT", "Alpha runtime", Network],
                   ["OUTPUT", "Creative artifact", Sparkles],
                 ].map(([label, value, Icon], index) => (
                   <div key={label as string} className="contents">
@@ -687,17 +686,11 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
             <SectionHeading
               number="01"
               label="Product Context"
-              title="Phai is a desktop creative Agent for professional content production."
-              description="It helps creators work through long-form story tasks across scripts, files, professional methods, and reusable knowledge. Unlike a chat-only assistant, Phai can take action inside the creative workflow."
+              title="An AI workspace for film and TV story development."
+              description="Built for writers and production teams, Alpha brings task-running Agents, reusable storytelling Skills, structured IP knowledge, and project files into one desktop workspace. It supports the full workflow from script analysis to production-ready artifacts."
             />
 
             <PhaiProductSimulator />
-          </AnimatedSection>
-
-          <AnimatedSection className="min-w-0">
-            <div className="w-full min-w-0 overflow-hidden">
-              <PhaiCapabilityCarousel />
-            </div>
           </AnimatedSection>
 
           <AnimatedSection>
@@ -705,7 +698,7 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
               number="02"
               label="Why Quality Was Hard"
               title="The team did not need another score. It needed a diagnosis."
-              description="Creative quality was subjective, and Phai operated across a layered runtime. A weak final artifact did not explain what failed or what the team should change next."
+              description="Creative quality was subjective, and Alpha operated across a layered runtime. A weak final artifact did not explain what failed or what the team should change next."
             />
             <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               {challengeCards.map(([title, text, Icon], index) => (
@@ -722,7 +715,7 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
             <SectionHeading
               number="03"
               label="The Evidence That Changed the Model"
-              title="One session looked successful—until I decomposed it into 34 tasks."
+              title="One session looked successful. Then I decomposed it into 34 tasks."
               description="Session-level scoring hid what the Agent actually completed. I rebuilt the unit of evaluation around independently judgeable user tasks."
             />
             <div className="mt-8 grid gap-5 lg:grid-cols-[1.12fr_0.88fr]">
@@ -751,7 +744,7 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
                   ))}
                 </div>
                 <div className="mt-5 rounded-2xl border border-[#65b5ff]/20 bg-[#65b5ff]/10 p-4 text-sm leading-6 text-white/65">
-                  Across five sessions, I labeled <strong className="text-white">91 query–response pairs</strong>. Initial rubric agreement was <strong className="text-white">65 / 91 (71.4%)</strong>—evidence that the definitions needed calibration, not a success metric.
+                  Across five sessions, I labeled <strong className="text-white">91 query–response pairs</strong>. Initial rubric agreement was <strong className="text-white">65 / 91 (71.4%)</strong>. This showed that the definitions needed calibration, not that the system had succeeded.
                 </div>
               </div>
 
@@ -884,7 +877,7 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
             <SectionHeading
               number="06"
               label="From One Skill to System Governance"
-              title="I audited all 55 Skills—then built the evaluator I wished I had."
+              title="I audited all 55 Skills, then built the evaluator I wished I had."
               description="The full audit and skill-evaluator were independently completed. The goal was to make ecosystem quality repeatable before release."
             />
             <div className="mt-8 grid gap-5 lg:grid-cols-2">
@@ -941,7 +934,7 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
             <SectionHeading
               number="07"
               label="From Manual Governance to Daily Operations"
-              title="The quality check now runs every day—and reports to the work group."
+              title="The quality check now runs every day and reports to the work group."
               description="I designed the instrumentation list, authored the patrol Skill, and configured the recurring task. This is deployed workflow infrastructure, not a future concept."
             />
             <div className="mt-8 rounded-[2rem] border border-black/8 bg-white p-6 shadow-[0_22px_70px_rgba(0,0,0,0.07)] sm:p-8">
@@ -1022,7 +1015,7 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
               <div className="rounded-[2rem] bg-[#111318] p-8 text-white shadow-[0_28px_80px_rgba(0,0,0,0.18)] sm:p-10">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#65b5ff]">The throughline</p>
                 <h2 className="mt-5 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">Product judgment became an executable system.</h2>
-                <p className="mt-5 text-base leading-8 text-white/55">I moved from real user traces to evaluation design, Prompt/Skill implementation, ecosystem tooling, and deployed quality operations—because reliable AI products fail at the seams between those layers.</p>
+                <p className="mt-5 text-base leading-8 text-white/55">I moved from real user traces to evaluation design, Prompt/Skill implementation, ecosystem tooling, and deployed quality operations. Reliable AI products fail at the seams between those layers.</p>
               </div>
               <div className="rounded-[2rem] border border-black/8 bg-white p-8 shadow-sm sm:p-10">
                 <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#f5f5f7] text-[#0071e3]"><LockKeyhole className="h-5 w-5" /></div>
