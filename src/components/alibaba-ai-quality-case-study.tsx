@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useGSAP } from "@gsap/react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
@@ -12,16 +13,21 @@ import {
   Bot,
   Braces,
   CalendarClock,
+  Camera,
   Check,
   CheckCircle2,
   ChevronRight,
   CircleDot,
+  Cloud,
   Code2,
+  Cog,
   Database,
   Eye,
   FileSearch,
+  Folder,
   GitBranch,
   Layers3,
+  LayoutTemplate,
   LockKeyhole,
   MessageSquareText,
   Network,
@@ -30,16 +36,19 @@ import {
   ScanSearch,
   Sparkles,
   Split,
-  Workflow,
+  User,
+  Users,
+  Wrench,
   X,
   Zap,
 } from "lucide-react";
 import { AnimatedSection, FadeInCard } from "@/components/animated-section";
+import { AnalyticsDashboardSimulator } from "@/components/analytics-dashboard-simulator";
 import { PhaiProductSimulator } from "@/components/phai-product-simulator";
 import type { CaseStudyProject } from "@/data/projects";
 
 type Props = { project: CaseStudyProject };
-type DetailType = "knowledge" | "architecture" | null;
+type DetailType = "knowledge" | null;
 type ProductScenarioId = "diagnose" | "bible" | "brief";
 type InspectorTab = "artifact" | "trace" | "knowledge" | "files";
 type CapabilityId = "context" | "skills" | "knowledge" | "action" | "orchestration";
@@ -115,18 +124,9 @@ const failureModes = [
 const qualityLoop = [
   ["Observe", "Behavior · feedback · traces", Eye],
   ["Diagnose", "Task · query · Agent layer", ScanSearch],
-  ["Formalize", "Expert judgment → Skill", Braces],
+  ["Formalize", "Expert judgment into a Skill", Braces],
   ["Validate", "Real cases · rubric calibration", CheckCircle2],
   ["Operationalize", "Recurring quality infrastructure", CalendarClock],
-] as const;
-
-const threeActSteps = [
-  ["01", "Identify the form", "Single episode or full-season arc"],
-  ["02", "Generate candidates", "List at least three possible turning points"],
-  ["03", "Test irreversibility", "Does the character situation truly change?"],
-  ["04", "Diagnose in context", "Evaluate eight linked narrative dimensions"],
-  ["05", "Check false signals", "Activity and event count are not structure"],
-  ["06", "Return a contract", "Structured output, self-check, and safe exit"],
 ] as const;
 
 const evaluatorChecks = [
@@ -216,12 +216,10 @@ function DetailModal({ detail, onClose }: { detail: Exclude<DetailType, null>; o
           {isKnowledge ? "Knowledge system" : "Engineering lens"}
         </p>
         <h2 id="alibaba-detail-title" className="mt-4 pr-12 text-3xl font-semibold tracking-[-0.04em] text-[#1d1d1f] sm:text-4xl">
-          {isKnowledge
-            ? "Structuring 4,700+ knowledge items for contextual retrieval"
-            : "Mapping product behavior to a 23-package Agent runtime"}
+          Structuring 4,700+ knowledge items for contextual retrieval
         </h2>
 
-        {isKnowledge ? <KnowledgeDetail /> : <ArchitectureDetail />}
+        <KnowledgeDetail />
       </motion.div>
     </motion.div>
   );
@@ -270,49 +268,212 @@ function KnowledgeDetail() {
 }
 
 function ArchitectureDetail() {
+  const capabilityLayer = [
+    "Unified model abstraction",
+    "Tool system",
+    "Skill system",
+    "Task scheduling",
+    "Task management",
+    "Screen automation",
+    "Agent definitions",
+    "Config & hot reload",
+  ] as const;
+
+  const infraLayer = [
+    "Data storage",
+    "Logging & tracing",
+    "Unified error handling",
+    "Event broadcasting",
+    "Plugin framework",
+    "Data migration",
+    "Response validation",
+    "Request signing",
+    "Role identity core",
+  ] as const;
+
+  const externalLayer = [
+    { title: "Local storage", text: "SQLite / JSON / JSONL / local files", icon: "folder" as const },
+    { title: "Managed data", text: "PostgreSQL + Redis", icon: "database-cluster" as const },
+    { title: "Skill market", text: "Repo pull + object storage", icon: "wrench" as const },
+    { title: "Model providers", text: "Anthropic / OpenAI / regional models", icon: "models" as const },
+    { title: "External channels", text: "Chat platform bridges", icon: "channels" as const },
+    { title: "System automation", text: "OS / MCP / browser / Git", icon: "cog" as const },
+  ];
+
   return (
     <div className="mt-8">
-      <p className="max-w-3xl text-base leading-8 text-[#6e6e73]">
-        I translated the runtime into a seven-layer product architecture so requirements and quality failures could be traced to orchestration, context, tools, Skills, scheduling, and observability.
-      </p>
-      <div className="mt-7 rounded-[1.6rem] bg-[#111318] p-5 text-white sm:p-7">
-        <div className="grid gap-2 md:grid-cols-7">
-          {[
-            ["01", "Entry"],
-            ["02", "Actor"],
-            ["03", "Context"],
-            ["04", "Tool"],
-            ["05", "Skill"],
-            ["06", "Schedule"],
-            ["07", "Observe"],
-          ].map(([number, title]) => (
-            <div key={number} className="rounded-xl border border-white/8 bg-white/[0.055] p-4">
-              <span className="text-[9px] text-[#65b5ff]">{number}</span>
-              <p className="mt-3 text-sm font-semibold">{title}</p>
+      <div className="flex flex-col gap-2">
+        <div className="grid grid-cols-[108px_1fr_108px] items-stretch gap-2">
+          <div className="flex flex-col items-center justify-center gap-1.5 rounded-xl bg-[#0071e3] p-3 text-center">
+            <span className="text-[9px] font-medium text-white/70">01</span>
+            <p className="text-[11px] font-medium leading-[1.3] text-white">Top layer</p>
+            <p className="text-[9px] text-white/70">User &amp; delivery</p>
+          </div>
+          <div className="grid grid-cols-3 gap-2 rounded-xl border border-black/8 bg-[#fafafa] p-2.5 px-3">
+            <div className="rounded-lg border border-black/6 bg-white p-2 px-2.5">
+              <div className="flex items-center gap-2">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[#111318] font-serif text-[10px] font-semibold italic text-white">α</span>
+                <p className="text-[11px] font-medium text-[#1d1d1f]">Desktop app</p>
+              </div>
+              <div className="mt-1.5 flex flex-wrap gap-1">
+                {["Electron", "Vue", "tRPC", "Product surfaces"].map((tag) => (
+                  <span key={tag} className="rounded border border-black/8 px-1 py-0.5 text-[7.5px] font-medium text-[#6e6e73]">{tag}</span>
+                ))}
+              </div>
             </div>
-          ))}
+            <div className="rounded-lg border border-black/6 bg-white p-2 px-2.5">
+              <div className="flex items-center gap-2">
+                <Cloud className="h-4 w-4 shrink-0 text-[#0071e3]" strokeWidth={2} />
+                <p className="text-[11px] font-medium text-[#1d1d1f]">Cloud service</p>
+              </div>
+              <div className="mt-1.5 flex flex-wrap gap-1">
+                {["Fastify 5", "Prisma", "PostgreSQL", "Redis"].map((tag) => (
+                  <span key={tag} className="rounded border border-black/8 px-1 py-0.5 text-[7.5px] font-medium text-[#6e6e73]">{tag}</span>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-lg border border-black/6 bg-white p-2 px-2.5">
+              <div className="flex items-center gap-2">
+                <Code2 className="h-4 w-4 shrink-0 text-[#0071e3]" strokeWidth={2} />
+                <p className="text-[11px] font-medium text-[#1d1d1f]">Dev role CLI</p>
+              </div>
+              <div className="mt-1.5 flex flex-wrap gap-1">
+                {["TypeScript CLI", "Role management", "Hook injection", "Skill sync"].map((tag) => (
+                  <span key={tag} className="rounded border border-black/8 px-1 py-0.5 text-[7.5px] font-medium text-[#6e6e73]">{tag}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-1 rounded-xl border border-black/8 bg-[#fafafa] p-3 text-center">
+            <User className="h-4 w-4 text-[#86868b]" strokeWidth={2} />
+            <p className="mt-0.5 text-[10px] font-medium text-[#1d1d1f]">User</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-[108px_1fr_auto] items-center gap-2">
+          <div className="flex flex-col items-center justify-center gap-1.5 self-stretch rounded-xl bg-[#0071e3] p-3 text-center">
+            <span className="text-[9px] font-medium text-white/70">02</span>
+            <p className="text-[11px] font-medium leading-[1.3] text-white">Ingress layer</p>
+            <p className="text-[9px] text-white/70">Channel / CLI</p>
+          </div>
+          <div className="grid grid-cols-2 gap-2 self-stretch rounded-xl border border-black/8 bg-[#fafafa] p-2.5 px-3">
+            <div className="rounded-lg border border-black/6 bg-white p-2 px-2.5">
+              <p className="text-[11px] font-medium text-[#1d1d1f]">Channel adapters</p>
+              <p className="mt-0.5 text-[9px] text-[#86868b]">IPC, SSE, cloud Stream bridge, chat long-poll</p>
+            </div>
+            <div className="rounded-lg border border-black/6 bg-white p-2 px-2.5">
+              <p className="text-[11px] font-medium text-[#1d1d1f]">CLI entry</p>
+              <p className="mt-0.5 text-[9px] text-[#86868b]">Sub-commands, prompt injection</p>
+            </div>
+          </div>
+          <p className="whitespace-nowrap text-[9px] font-medium text-[#0071e3]">Unified ingress and routing</p>
+        </div>
+
+        <div className="grid grid-cols-[108px_1fr] gap-2">
+          <div className="flex flex-col items-center justify-center gap-1.5 rounded-xl bg-[#534AB7] p-3 text-center">
+            <span className="text-[9px] font-medium text-white/70">03</span>
+            <p className="text-[11px] font-medium leading-[1.3] text-white">Agent core</p>
+          </div>
+          <div className="grid grid-cols-2 gap-2 rounded-xl border border-[#534AB7]/15 bg-[#534AB7]/[0.06] p-2.5 px-3">
+            <div className="rounded-lg border border-[#534AB7]/12 bg-white p-2.5 px-3">
+              <div className="flex items-center gap-1.5">
+                <Bot className="h-3.5 w-3.5 shrink-0 text-[#534AB7]" strokeWidth={2} />
+                <p className="text-[11px] font-medium text-[#3c3489]">Agent runtime</p>
+              </div>
+              <div className="mt-2 grid grid-cols-3 gap-1">
+                {["Session", "ContextEngine", "LLM routing", "Tool orchestration", "Hooks", "Token budget"].map((tag) => (
+                  <span key={tag} className="rounded border border-[#534AB7]/15 bg-[#534AB7]/[0.04] px-1 py-1 text-center text-[7.5px] font-medium leading-[1.3] text-[#3c3489]">{tag}</span>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-lg border border-[#534AB7]/12 bg-white p-2.5 px-3">
+              <div className="flex items-center gap-1.5">
+                <Users className="h-3.5 w-3.5 shrink-0 text-[#534AB7]" strokeWidth={2} />
+                <p className="text-[11px] font-medium text-[#3c3489]">Actor dispatcher</p>
+              </div>
+              <div className="mt-2 grid grid-cols-3 gap-1">
+                {["Dispatcher", "Inbox", "Lifecycle", "Parent / child", "Abort cascade"].map((tag) => (
+                  <span key={tag} className="rounded border border-[#534AB7]/15 bg-[#534AB7]/[0.04] px-1 py-1 text-center text-[7.5px] font-medium leading-[1.3] text-[#3c3489]">{tag}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-[108px_1fr] gap-2">
+          <div className="flex flex-col items-center justify-center gap-1.5 rounded-xl bg-[#0071e3] p-3 text-center">
+            <span className="text-[9px] font-medium text-white/70">04</span>
+            <p className="text-[11px] font-medium leading-[1.3] text-white">Capability</p>
+          </div>
+          <div className="grid grid-cols-4 gap-1.5 rounded-xl border border-black/8 bg-[#fafafa] p-2.5 px-3">
+            {capabilityLayer.map((title) => (
+              <div key={title} className="rounded-lg border border-black/6 bg-white px-1.5 py-1.5 text-center">
+                <p className="text-[9.5px] font-medium text-[#1d1d1f]">{title}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-[108px_1fr] gap-2">
+          <div className="flex flex-col items-center justify-center gap-1.5 rounded-xl bg-[#0071e3] p-3 text-center">
+            <span className="text-[9px] font-medium text-white/70">05</span>
+            <p className="text-[11px] font-medium leading-[1.3] text-white">Infrastructure</p>
+          </div>
+          <div className="grid grid-cols-3 gap-1.5 rounded-xl border border-black/8 bg-[#fafafa] p-2.5 px-3">
+            {infraLayer.map((title) => (
+              <div key={title} className="rounded-lg border border-black/6 bg-white px-1.5 py-1.5 text-center">
+                <p className="text-[9.5px] font-medium text-[#1d1d1f]">{title}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-[108px_1fr] gap-2">
+          <div className="flex flex-col items-center justify-center gap-1.5 rounded-xl bg-[#0071e3] p-3 text-center">
+            <span className="text-[9px] font-medium text-white/70">06</span>
+            <p className="text-[11px] font-medium leading-[1.3] text-white">External systems</p>
+          </div>
+          <div className="grid grid-cols-2 gap-2 rounded-xl border border-black/8 bg-[#fafafa] p-2.5 px-3 sm:grid-cols-3">
+            {externalLayer.map(({ title, text, icon }) => (
+              <div key={title} className="rounded-lg border border-black/6 bg-white p-2 px-2.5">
+                <div className="flex items-center gap-1.5">
+                  {icon === "folder" && <Folder className="h-4 w-4 shrink-0 text-[#0071e3]" strokeWidth={2} />}
+                  {icon === "database-cluster" && (
+                    <span className="flex shrink-0 items-center gap-1">
+                      <Image src="/logos/postgresql.svg" alt="" width={16} height={16} className="h-4 w-4" />
+                      <Image src="/logos/redis.svg" alt="" width={14} height={14} className="h-3.5 w-3.5" />
+                    </span>
+                  )}
+                  {icon === "wrench" && <Wrench className="h-4 w-4 shrink-0 text-[#0071e3]" strokeWidth={2} />}
+                  {icon === "models" && (
+                    <span className="flex shrink-0 items-center gap-1">
+                      <Image src="/logos/claude.svg" alt="" width={14} height={14} className="h-3.5 w-3.5" />
+                      <Image src="/logos/openai.svg" alt="" width={14} height={14} className="h-3.5 w-3.5" />
+                      <Image src="/logos/deepseek.svg" alt="" width={16} height={16} className="h-3.5 w-4" />
+                    </span>
+                  )}
+                  {icon === "channels" && (
+                    <span className="flex shrink-0 items-center gap-0.5">
+                      <Image src="/logos/slack.svg" alt="" width={14} height={14} className="h-3.5 w-3.5" />
+                      <Image src="/logos/telegram.svg" alt="" width={14} height={14} className="h-3.5 w-3.5" />
+                    </span>
+                  )}
+                  {icon === "cog" && <Cog className="h-4 w-4 shrink-0 text-[#0071e3]" strokeWidth={2} />}
+                  <p className="text-[10.5px] font-medium text-[#1d1d1f]">{title}</p>
+                </div>
+                <p className="mt-1 text-[9px] leading-[1.4] text-[#86868b]">{text}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-      <div className="mt-5 grid gap-3 sm:grid-cols-2">
-        {[
-          ["Actor / Inbox / Dispatcher", "How requests enter, queue, and route", Network],
-          ["ContextEngine", "Ingest → assemble → afterTurn", Layers3],
-          ["Tool + Skill runtime", "Capability selection and execution", Bot],
-          ["Scheduler + observability", "Recurring work and quality traces", CalendarClock],
-        ].map(([title, text, Icon]) => (
-          <div key={title as string} className="rounded-[1.35rem] border border-black/8 bg-white p-5">
-            <Icon className="h-5 w-5 text-[#0071e3]" />
-            <h3 className="mt-4 text-sm font-semibold text-[#1d1d1f]">{title as string}</h3>
-            <p className="mt-2 text-xs leading-5 text-[#86868b]">{text as string}</p>
-          </div>
-        ))}
-      </div>
-      <p className="mt-6 text-xs leading-5 text-[#86868b]">
-        Boundary: this is a product-to-engineering architecture map, not a claim that I authored the underlying runtime framework.
-      </p>
+
+      <p className="mt-3.5 text-[9.5px] leading-[1.5] text-[#b0b0b5]">Six layers reconstructed from source. Anonymized for public use; real product name and package names are kept in a private evidence layer.</p>
     </div>
   );
 }
+
+
 
 function ProductInspector({ scenarioId, tab }: { scenarioId: ProductScenarioId; tab: InspectorTab }) {
   if (tab === "trace") {
@@ -635,13 +796,13 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
               <span className="rounded-full border border-black/10 bg-white/70 px-3 py-1.5 text-xs text-[#6e6e73]">AI Product Manager Intern</span>
             </div>
             <h1 className="mt-7 text-4xl font-semibold leading-[1.02] tracking-[-0.05em] text-[#1d1d1f] sm:text-5xl md:text-6xl">
-              Building the quality system behind a creative AI Agent.
+              I designed the quality layer that made a 55-Skill Agent shippable.
             </h1>
             <p className="mt-6 max-w-xl text-base leading-8 text-[#6e6e73] md:text-lg">
-              I turned ambiguous creative feedback into task-level evaluation, executable expert Skills, and recurring quality infrastructure.
+              I read the runtime from source, designed what to measure, built three Agents to keep that measurement honest, and proved the impact with data.
             </p>
             <div className="mt-7 flex flex-wrap gap-2">
-              {["AI Product", "Prompt / Skill", "Agent Evaluation", "Workflow Engineering"].map((item) => (
+              {["AI Product", "Skill Engineering", "Agent Evaluation", "Product Analytics"].map((item) => (
                 <span key={item} className="rounded-full bg-[#f5f5f7] px-3 py-2 text-xs font-medium text-[#515154]">{item}</span>
               ))}
             </div>
@@ -685,9 +846,9 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
           <AnimatedSection>
             <SectionHeading
               number="01"
-              label="Product Context"
-              title="An AI workspace for film and TV story development."
-              description="Built for writers and production teams, Alpha brings task-running Agents, reusable storytelling Skills, structured IP knowledge, and project files into one desktop workspace. It supports the full workflow from script analysis to production-ready artifacts."
+              label="Entry Point"
+              title="I had to learn this system before I could evaluate it."
+              description="When I joined, Alpha was already a working desktop AI Agent for screenwriters and production teams, built on Skills, tools, and a knowledge base. Nobody handed me a spec. I had to trace how a request actually moved through the system before I could touch anything."
             />
 
             <PhaiProductSimulator />
@@ -696,11 +857,50 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
           <AnimatedSection>
             <SectionHeading
               number="02"
-              label="Why Quality Was Hard"
-              title="The team did not need another score. It needed a diagnosis."
-              description="Creative quality was subjective, and Alpha operated across a layered runtime. A weak final artifact did not explain what failed or what the team should change next."
+              label="Reading the Source"
+              title="I went into the repo to see how the Agent actually reasons."
+              description="I traced the runtime myself. An actor model with a dispatcher and inbox drives multi-agent coordination. A Skill router matches each request to the right capability. Context injection pulls in project files and prior turns before the model runs. This was not documentation I read. It was behavior I reconstructed from the codebase, because the instrumentation work ahead of me depended on knowing exactly where in that flow things could go wrong."
             />
-            <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-8 flex items-baseline justify-between gap-2">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Runtime map I reconstructed · six layers</p>
+              <span className="text-[10px] text-[#b0b0b5]">Anonymized for public use</span>
+            </div>
+            <ArchitectureDetail />
+          </AnimatedSection>
+
+          <AnimatedSection>
+            <SectionHeading
+              number="03"
+              label="Designing the Evaluation Framework"
+              title="I designed the evaluation framework, then built what it needed to run."
+              description="A single quality score could not tell anyone where an Agent actually failed, so I designed a five-layer evaluation architecture: Task (did the end-to-end delivery satisfy the user), Query (was this one turn a good response), Agent (were orchestration and memory decisions correct), Skill (was the right capability triggered with the right parameters), and Sub-agent (did delegated work meet its own bar). Each layer traces to the next, so a failure at the top can be pushed down to the exact mechanism that caused it. I set four constraints going in: metrics inside a layer cannot overlap, every metric is attributable to AI, user, or system, every metric has a formula that real trace data can compute, and every metric holds up across versions and time."
+            />
+            <div className="mt-8 rounded-[2rem] border border-black/8 bg-white p-6 shadow-[0_20px_60px_rgba(0,0,0,0.06)] sm:p-8">
+              <div className="flex items-center justify-between">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Five-layer attribution stack</p>
+                <GitBranch className="h-5 w-5 text-[#0071e3]" />
+              </div>
+              <div className="mt-6 grid gap-2 sm:grid-cols-5">
+                {[
+                  ["Task", "End-to-end delivery"],
+                  ["Query", "Single-turn response"],
+                  ["Agent", "Orchestration + memory"],
+                  ["Skill", "Trigger + parameters"],
+                  ["Sub-agent", "Delegated execution"],
+                ].map(([layer, note], index) => (
+                  <div key={layer} className="flex items-center gap-2 sm:contents">
+                    <div className="flex-1 rounded-xl bg-[#f5f5f7] p-4 sm:flex-none">
+                      <p className="text-sm font-semibold text-[#1d1d1f]">{layer}</p>
+                      <p className="mt-1 text-[11px] leading-4 text-[#86868b]">{note}</p>
+                    </div>
+                    {index < 4 && <ChevronRight className="h-4 w-4 shrink-0 text-[#b0b0b5] sm:hidden" />}
+                  </div>
+                ))}
+              </div>
+              <p className="mt-5 text-xs leading-5 text-[#86868b]">A failure found at the Task layer gets pushed down through Query, Agent, and Skill until it reaches the mechanism responsible. That is the difference between a score and a diagnosis.</p>
+            </div>
+
+            <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               {challengeCards.map(([title, text, Icon], index) => (
                 <FadeInCard key={title} delay={index * 0.04} className="h-full rounded-[1.6rem] border border-black/8 bg-white p-6 shadow-[0_16px_44px_rgba(0,0,0,0.05)]">
                   <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#eaf4ff] text-[#0071e3]"><Icon className="h-5 w-5" /></div>
@@ -709,178 +909,60 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
                 </FadeInCard>
               ))}
             </div>
-          </AnimatedSection>
 
-          <AnimatedSection>
-            <SectionHeading
-              number="03"
-              label="The Evidence That Changed the Model"
-              title="One session looked successful. Then I decomposed it into 34 tasks."
-              description="Session-level scoring hid what the Agent actually completed. I rebuilt the unit of evaluation around independently judgeable user tasks."
-            />
-            <div className="mt-8 grid gap-5 lg:grid-cols-[1.12fr_0.88fr]">
-              <div className="rounded-[2rem] bg-[#111318] p-6 text-white shadow-[0_28px_80px_rgba(0,0,0,0.18)] sm:p-8">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">Real creative session</p>
-                    <h3 className="mt-2 text-xl font-semibold">Conversation → evidence</h3>
-                  </div>
-                  <Split className="h-5 w-5 text-[#65b5ff]" />
-                </div>
-                <div className="mt-7 grid gap-3 sm:grid-cols-[1fr_auto_1fr_auto_1fr] sm:items-center">
-                  {[
-                    ["119", "turns", "One long session"],
-                    ["34", "tasks", "Independently judged"],
-                    ["32 / 2", "complete / incomplete", "Failures isolated"],
-                  ].map(([value, label, note], index) => (
-                    <div key={label} className="contents">
-                      <div className="rounded-2xl border border-white/8 bg-white/[0.055] p-5">
-                        <p className="text-3xl font-semibold tracking-[-0.04em]">{value}</p>
-                        <p className="mt-1 text-sm font-semibold text-[#a9d5ff]">{label}</p>
-                        <p className="mt-3 text-xs text-white/40">{note}</p>
-                      </div>
-                      {index < 2 && <ArrowRight className="m-auto hidden h-4 w-4 text-white/25 sm:block" />}
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-5 rounded-2xl border border-[#65b5ff]/20 bg-[#65b5ff]/10 p-4 text-sm leading-6 text-white/65">
-                  Across five sessions, I labeled <strong className="text-white">91 query–response pairs</strong>. Initial rubric agreement was <strong className="text-white">65 / 91 (71.4%)</strong>. This showed that the definitions needed calibration, not that the system had succeeded.
-                </div>
-              </div>
-
-              <div className="rounded-[2rem] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Attribution stack</p>
-                    <h3 className="mt-2 text-xl font-semibold text-[#1d1d1f]">Where did quality break?</h3>
-                  </div>
-                  <GitBranch className="h-5 w-5 text-[#0071e3]" />
-                </div>
-                <div className="mt-6 space-y-2">
-                  {["Task", "Query", "Agent", "Skill", "Sub-agent"].map((layer, index) => (
-                    <div key={layer} className="flex items-center gap-3">
-                      <span className="flex h-7 w-7 items-center justify-center rounded-full border border-black/10 text-[10px] text-[#86868b]">{index + 1}</span>
-                      <div className="flex-1 rounded-xl bg-[#f5f5f7] px-4 py-3 text-sm font-semibold text-[#1d1d1f]">{layer}</div>
-                      {index < 4 ? <ArrowRight className="h-4 w-4 text-[#b0b0b5]" /> : <CircleDot className="h-4 w-4 text-[#30a46c]" />}
-                    </div>
-                  ))}
-                </div>
+            <div className="mt-5 rounded-[2rem] border border-black/8 bg-white p-6 shadow-[0_22px_70px_rgba(0,0,0,0.07)] sm:p-8">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">The data layer underneath the framework</p>
+              <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">I designed the feedback instrumentation the framework needed to run on real usage.</h3>
+              <p className="mt-4 max-w-3xl text-sm leading-7 text-[#6e6e73]">Each event ties back to a session, a run, and an Agent through a shared identifier scheme, so a like, a copy, a dislike, or a stop can be traced to the exact Skill and turn that produced it.</p>
+              <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
+                {[["18", "product surfaces instrumented"], ["12", "positive touchpoints"], ["2", "negative signals"], ["6 + 4", "event types + trace contexts"]].map(([value, label]) => (
+                  <div key={label} className="rounded-xl border border-black/8 bg-white px-4 py-3"><p className="text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">{value}</p><p className="mt-1 text-[11px] text-[#86868b]">{label}</p></div>
+                ))}
               </div>
             </div>
-            <div className="mt-4 grid gap-4 md:grid-cols-3">
-              {failureModes.map(([title, text]) => (
-                <div key={title} className="rounded-[1.4rem] bg-[#f5f5f7] p-5">
-                  <p className="text-sm font-semibold text-[#1d1d1f]">{title}</p>
-                  <p className="mt-2 text-xs leading-5 text-[#86868b]">{text}</p>
+
+            <div className="mt-5 rounded-[2rem] border border-black/8 bg-white p-6 shadow-[0_22px_70px_rgba(0,0,0,0.07)] sm:p-8">
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Agent I built · 01</p>
+                  <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">A scheme only holds if it stays correct, so I built a bot to patrol it.</h3>
                 </div>
-              ))}
+                <div className="flex items-center gap-3">
+                  <span className="relative flex h-3 w-3"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#30a46c] opacity-50 motion-reduce:animate-none" /><span className="relative inline-flex h-3 w-3 rounded-full bg-[#30a46c]" /></span>
+                  <span className="rounded-full bg-[#eaf8ef] px-3 py-1.5 text-xs font-semibold text-[#207a4b]">Deployed · runs daily</span>
+                </div>
+              </div>
+              <p className="mt-4 max-w-3xl text-sm leading-7 text-[#6e6e73]">
+                It cross-checks the event types, the documentation, and the analytics code for consistency, then reports coverage gaps to the work group before they become blind spots in the data.
+              </p>
+              <div className="mt-7 grid gap-3 lg:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] lg:items-center">
+                {[
+                  ["01", "Event spec", "18 surfaces · privacy boundary", Radar],
+                  ["02", "Code callsite", "Verify implementation", Code2],
+                  ["03", "Data pipeline", "Trace event to warehouse", Database],
+                  ["04", "Group report", "Changes · gaps · severity", MessageSquareText],
+                ].map(([number, title, text, Icon], index) => (
+                  <div key={number as string} className="contents">
+                    <div className="h-full rounded-[1.4rem] bg-[#f5f5f7] p-5">
+                      <div className="flex justify-between"><Icon className="h-5 w-5 text-[#0071e3]" /><span className="text-[10px] text-[#b0b0b5]">{number as string}</span></div>
+                      <p className="mt-5 text-sm font-semibold text-[#1d1d1f]">{title as string}</p>
+                      <p className="mt-2 text-xs leading-5 text-[#86868b]">{text as string}</p>
+                    </div>
+                    {index < 3 && <ArrowRight className="m-auto hidden h-4 w-4 text-[#b0b0b5] lg:block" />}
+                  </div>
+                ))}
+              </div>
             </div>
           </AnimatedSection>
 
           <AnimatedSection>
             <SectionHeading
               number="04"
-              label="Quality System Architecture"
-              title="Evaluation only mattered when it changed the product."
-              description="I connected signal collection, failure attribution, expert-method design, validation, and recurring operations into one quality loop."
+              label="Where the Cracks Showed Up"
+              title="Instrumenting 55 Skills is where I found the real problem."
+              description="Running checks across the full catalog, I found trigger words colliding between Skills, fast and expert variants that were indistinguishable to the router, and check versus generate entry points stepping on each other. I did not read this in a bug report. I found it by testing the catalog myself."
             />
-            <div className="mt-8 rounded-[2rem] border border-black/8 bg-white p-5 shadow-[0_20px_60px_rgba(0,0,0,0.06)] sm:p-7">
-              <div className="grid gap-3 lg:grid-cols-5">
-                {qualityLoop.map(([title, text, Icon], index) => (
-                  <div key={title} className="relative rounded-[1.45rem] bg-[#f5f5f7] p-5">
-                    <div className="flex items-center justify-between">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#1d1d1f] text-white"><Icon className="h-4 w-4" /></div>
-                      <span className="text-[10px] text-[#b0b0b5]">0{index + 1}</span>
-                    </div>
-                    <p className="mt-5 font-semibold text-[#1d1d1f]">{title}</p>
-                    <p className="mt-2 text-xs leading-5 text-[#86868b]">{text}</p>
-                    {index < 4 && <ChevronRight className="absolute -right-3 top-1/2 z-10 hidden h-5 w-5 -translate-y-1/2 text-[#b0b0b5] lg:block" />}
-                  </div>
-                ))}
-              </div>
-              <div className="mt-4 grid gap-2 sm:grid-cols-3 lg:grid-cols-5">
-                {[
-                  "Task-level evaluation",
-                  "Failure attribution",
-                  "Three-Act / Bible",
-                  "55-Skill governance",
-                  "Daily patrol",
-                ].map((item) => (
-                  <p key={item} className="rounded-xl border border-black/8 px-3 py-3 text-center text-[11px] font-medium text-[#6e6e73]">{item}</p>
-                ))}
-              </div>
-            </div>
-          </AnimatedSection>
-
-          <AnimatedSection>
-            <SectionHeading
-              number="05"
-              label="Deep Dive · Three-Act Skill"
-              title="I turned narrative theory into a Skill the Agent could execute."
-              description="For the Three-Act Structure and Bible Skills, I owned product design, Prompt/Skill authoring, and test iteration."
-            />
-            <div className="mt-8 grid gap-7 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:items-start">
-              <div>
-                <div className="space-y-3">
-                  {threeActSteps.map(([number, title, detail]) => (
-                    <div key={number} className="flex gap-4 rounded-[1.35rem] border border-black/8 bg-white p-4 shadow-sm">
-                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#eaf4ff] text-[10px] font-semibold text-[#0071e3]">{number}</span>
-                      <div>
-                        <p className="text-sm font-semibold text-[#1d1d1f]">{title}</p>
-                        <p className="mt-1 text-xs leading-5 text-[#86868b]">{detail}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {["Episode + season", "Lazy references", "Anti-hallucination", "Graceful exit"].map((item) => (
-                    <span key={item} className="rounded-full bg-[#f5f5f7] px-3 py-2 text-[11px] font-medium text-[#6e6e73]">{item}</span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="lg:sticky lg:top-8">
-                <div className="rounded-[2rem] bg-[#111318] p-6 text-white shadow-[0_28px_80px_rgba(0,0,0,0.18)] sm:p-8">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">Skill execution preview</p>
-                      <h3 className="mt-2 text-xl font-semibold">Find the real turning point</h3>
-                    </div>
-                    <Braces className="h-5 w-5 text-[#65b5ff]" />
-                  </div>
-                  <div className="mt-6 rounded-2xl border border-white/8 bg-white/[0.055] p-4">
-                    <p className="text-[10px] uppercase tracking-[0.16em] text-white/35">User input</p>
-                    <p className="mt-2 text-sm leading-6 text-white/70">Which event is the true end of Act One?</p>
-                  </div>
-                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-2xl border border-[#ff6b6b]/20 bg-[#ff6b6b]/8 p-5">
-                      <div className="flex items-center gap-2 text-[#ff9b9b]"><X className="h-4 w-4" /><span className="text-[10px] font-semibold uppercase tracking-[0.13em]">Event only</span></div>
-                      <p className="mt-5 font-semibold">“The proposal is rejected.”</p>
-                      <p className="mt-3 text-xs leading-5 text-white/45">Dramatic, but the previous plan can still resume.</p>
-                    </div>
-                    <div className="rounded-2xl border border-[#30d158]/25 bg-[#30d158]/10 p-5">
-                      <div className="flex items-center gap-2 text-[#8ee9a9]"><Check className="h-4 w-4" /><span className="text-[10px] font-semibold uppercase tracking-[0.13em]">State change</span></div>
-                      <p className="mt-5 font-semibold">“She decides to leave the company.”</p>
-                      <p className="mt-3 text-xs leading-5 text-white/50">Goal, relationships, and available choices all shift.</p>
-                    </div>
-                  </div>
-                  <div className="mt-3 rounded-2xl border border-[#65b5ff]/20 bg-[#65b5ff]/10 p-4">
-                    <p className="text-xs font-semibold text-[#a9d5ff]">Anti-pattern check</p>
-                    <p className="mt-2 text-xs leading-5 text-white/50">Many events can still produce a flat second act. Event count is not structural progression.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </AnimatedSection>
-
-          <AnimatedSection>
-            <SectionHeading
-              number="06"
-              label="From One Skill to System Governance"
-              title="I audited all 55 Skills, then built the evaluator I wished I had."
-              description="The full audit and skill-evaluator were independently completed. The goal was to make ecosystem quality repeatable before release."
-            />
-            <div className="mt-8 grid gap-5 lg:grid-cols-2">
+            <div className="mt-8 grid gap-5 lg:grid-cols-[0.92fr_1.08fr]">
               <div className="rounded-[2rem] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
                 <div className="flex items-start justify-between">
                   <div>
@@ -890,10 +972,10 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
                   </div>
                   <FileSearch className="h-6 w-6 text-[#0071e3]" />
                 </div>
-                <div className="mt-7 grid gap-2 sm:grid-cols-2">
+                <div className="mt-7 grid gap-2">
                   {[
                     "Check and generation trigger conflicts",
-                    "Fast / expert variants indistinguishable",
+                    "Fast and expert variants indistinguishable",
                     "Missing domain and task granularity",
                     "Capability promises exceeded execution",
                     "Validation and exit rules missing",
@@ -907,8 +989,42 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
               <div className="rounded-[2rem] bg-[#111318] p-6 text-white shadow-[0_28px_80px_rgba(0,0,0,0.18)] sm:p-8">
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">skill-evaluator</p>
-                    <h3 className="mt-2 text-xl font-semibold">Audit logic, packaged as a tool</h3>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">Two findings that mattered</p>
+                    <h3 className="mt-2 text-xl font-semibold">The router was guessing</h3>
+                  </div>
+                  <Split className="h-5 w-5 text-[#65b5ff]" />
+                </div>
+                <div className="mt-6 space-y-3">
+                  <div className="rounded-2xl border border-[#ff6b6b]/20 bg-[#ff6b6b]/8 p-5">
+                    <div className="flex items-center gap-2 text-[#ff9b9b]"><X className="h-4 w-4" /><span className="text-[10px] font-semibold uppercase tracking-[0.13em]">Identical descriptions</span></div>
+                    <p className="mt-4 text-sm leading-6 text-white/75">Two expert whitepaper Skills shipped with the same description text. The Agent had no basis to prefer one, so selection was effectively random.</p>
+                  </div>
+                  <div className="rounded-2xl border border-[#ff9500]/25 bg-[#ff9500]/10 p-5">
+                    <div className="flex items-center gap-2 text-[#ffc078]"><Split className="h-4 w-4" /><span className="text-[10px] font-semibold uppercase tracking-[0.13em]">Trigger collision</span></div>
+                    <p className="mt-4 text-sm leading-6 text-white/75">On the story structure Skill, the words that should route to a diagnostic check overlapped the words that should route to generation. Users got the wrong mode.</p>
+                  </div>
+                  <div className="rounded-2xl border border-[#65b5ff]/20 bg-[#65b5ff]/10 p-4">
+                    <p className="text-xs font-semibold text-[#a9d5ff]">Why it only appears at scale</p>
+                    <p className="mt-2 text-xs leading-5 text-white/50">One Skill in isolation always looks correct. These failures are properties of the catalog, not of any single Skill.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </AnimatedSection>
+
+          <AnimatedSection>
+            <SectionHeading
+              number="05"
+              label="What I Built"
+              title="Finding the cracks meant I needed a repeatable way to catch them."
+              description="So I built skill-evaluator. It runs a five dimension diagnostic, produces a graded gap analysis, and returns a rewritten description. It writes a report and stops there. It never edits a Skill on its own, because I kept the human in the loop on purpose."
+            />
+            <div className="mt-8 grid gap-5 lg:grid-cols-2">
+              <div className="rounded-[2rem] bg-[#111318] p-6 text-white shadow-[0_28px_80px_rgba(0,0,0,0.18)] sm:p-8">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">Agent I built · 02</p>
+                    <h3 className="mt-2 text-xl font-semibold">skill-evaluator</h3>
                   </div>
                   <Zap className="h-5 w-5 text-[#65b5ff]" />
                 </div>
@@ -925,32 +1041,175 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
                   <ArrowRight className="m-auto hidden h-4 w-4 text-white/25 sm:block" />
                   <div className="rounded-xl bg-white/[0.055] p-4"><p className="text-[9px] text-[#65b5ff]">OUTPUT</p><p className="mt-2 text-xs text-white/55">Conflicts · severity · rewrite</p></div>
                 </div>
-                <p className="mt-4 text-[11px] leading-5 text-white/35">Does not auto-write files or use static review to claim runtime quality.</p>
+                <p className="mt-4 text-[11px] leading-5 text-white/35">Static review is used to catch catalog conflicts. It is not used to claim runtime quality.</p>
+              </div>
+
+              <div>
+                <div className="rounded-[2rem] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">The Skill I authored</p>
+                      <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">I turned narrative theory into something the Agent could execute</h3>
+                    </div>
+                    <Braces className="h-5 w-5 shrink-0 text-[#0071e3]" />
+                  </div>
+                  <p className="mt-4 text-sm leading-7 text-[#6e6e73]">
+                    For the Three-Act and Bible Skills I owned product design, Skill authoring, and test iteration. The hard part was not writing the theory down. It was defining a check the model could not fake.
+                  </p>
+                  <div className="mt-6 grid gap-2 sm:grid-cols-2">
+                    <div className="rounded-2xl border border-[#ff6b6b]/25 bg-[#fff5f5] p-4">
+                      <div className="flex items-center gap-2 text-[#b3251f]"><X className="h-3.5 w-3.5" /><span className="text-[9px] font-semibold uppercase tracking-[0.13em]">Event only</span></div>
+                      <p className="mt-3 text-sm font-semibold text-[#1d1d1f]">The proposal is rejected.</p>
+                      <p className="mt-2 text-xs leading-5 text-[#86868b]">Dramatic, but the previous plan can still resume.</p>
+                    </div>
+                    <div className="rounded-2xl border border-[#30d158]/30 bg-[#f2fbf5] p-4">
+                      <div className="flex items-center gap-2 text-[#207a4b]"><Check className="h-3.5 w-3.5" /><span className="text-[9px] font-semibold uppercase tracking-[0.13em]">State change</span></div>
+                      <p className="mt-3 text-sm font-semibold text-[#1d1d1f]">She decides to leave the company.</p>
+                      <p className="mt-2 text-xs leading-5 text-[#86868b]">Goal, relationships, and available choices all shift.</p>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {["Episode + season", "Lazy references", "Anti-hallucination", "Graceful exit"].map((item) => (
+                      <span key={item} className="rounded-full bg-[#f5f5f7] px-3 py-2 text-[11px] font-medium text-[#6e6e73]">{item}</span>
+                    ))}
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setDetail("knowledge")}
+                  className="group mt-4 flex w-full items-center gap-4 rounded-[1.4rem] border border-black/8 bg-white p-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(0,0,0,0.08)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3] motion-reduce:transform-none motion-reduce:transition-none"
+                >
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#eaf4ff] text-[#0071e3]"><Database className="h-5 w-5" /></span>
+                  <span className="min-w-0">
+                    <span className="block text-sm font-semibold text-[#1d1d1f]">Open the knowledge Schema I proposed</span>
+                    <span className="mt-1 block text-xs leading-5 text-[#86868b]">4,700+ unstructured items turned into retrievable entities with source context.</span>
+                  </span>
+                  <ArrowRight className="ml-auto h-5 w-5 shrink-0 text-[#b0b0b5] transition group-hover:translate-x-1 group-hover:text-[#0071e3] motion-reduce:transform-none" />
+                </button>
               </div>
             </div>
           </AnimatedSection>
 
           <AnimatedSection>
             <SectionHeading
-              number="07"
-              label="From Manual Governance to Daily Operations"
-              title="The quality check now runs every day and reports to the work group."
-              description="I designed the instrumentation list, authored the patrol Skill, and configured the recurring task. This is deployed workflow infrastructure, not a future concept."
+              number="06"
+              label="Owning the Ground Truth"
+              title="I owned the ground truth, then found out it was lying to me."
+              description="The framework needed automated judgment on four things: which task a query belonged to, what the user's intent was, whether a task was complete, and whether feedback was positive or negative. Automating those judgments required a human-labeled baseline to check them against, so I owned the labeling effort end to end: what to label, how many annotators, how to resolve disagreement. I also weighed in on which model configurations to test against that baseline, three models across three context-window lengths, since a longer window means better recall at a real latency and cost tradeoff."
             />
-            <div className="mt-8 rounded-[2rem] border border-black/8 bg-white p-6 shadow-[0_22px_70px_rgba(0,0,0,0.07)] sm:p-8">
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <span className="relative flex h-3 w-3"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#30a46c] opacity-50 motion-reduce:animate-none" /><span className="relative inline-flex h-3 w-3 rounded-full bg-[#30a46c]" /></span>
-                  <p className="text-sm font-semibold text-[#1d1d1f]">Deployed · recurring · in group use</p>
+
+            <div className="mt-8 rounded-[2rem] bg-[#111318] p-6 text-white shadow-[0_28px_80px_rgba(0,0,0,0.18)] sm:p-8">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">The number that should have been a red flag</p>
+                  <h3 className="mt-2 text-xl font-semibold">Eight model configurations. All of them at 100 percent.</h3>
                 </div>
-                <span className="rounded-full bg-[#eaf8ef] px-3 py-1.5 text-xs font-semibold text-[#207a4b]">Daily patrol</span>
+                <Split className="h-5 w-5 text-[#65b5ff]" />
               </div>
-              <div className="mt-7 grid gap-3 lg:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] lg:items-center">
+              <p className="mt-4 max-w-3xl text-sm leading-6 text-white/65">
+                Three models across three context-window lengths were compared against the human-labeled baseline. Every single configuration came back perfect. That is the moment I went back into the labeling data instead of trusting the number.
+              </p>
+              <div className="mt-6 grid gap-3 sm:grid-cols-[1fr_auto_1fr_auto_1fr] sm:items-center">
                 {[
-                  ["01", "Event spec", "18 surfaces · privacy boundary", Radar],
-                  ["02", "Code callsite", "Verify implementation", Code2],
-                  ["03", "Data pipeline", "Trace event to DWD", Database],
-                  ["04", "Group report", "Changes · gaps · severity", MessageSquareText],
+                  ["343", "labeled turns", "Across 19 sessions"],
+                  ["19", "cross-checked", "5.5% of the dataset"],
+                  ["1", "category covered", "All 19 were the same label"],
+                ].map(([value, label, note], index) => (
+                  <div key={label} className="contents">
+                    <div className="rounded-2xl border border-white/8 bg-white/[0.055] p-5">
+                      <p className="text-3xl font-semibold tracking-[-0.04em]">{value}</p>
+                      <p className="mt-1 text-sm font-semibold text-[#a9d5ff]">{label}</p>
+                      <p className="mt-3 text-xs text-white/40">{note}</p>
+                    </div>
+                    {index < 2 && <ArrowRight className="m-auto hidden h-4 w-4 text-white/25 sm:block" />}
+                  </div>
+                ))}
+              </div>
+              <div className="mt-5 rounded-2xl border border-[#65b5ff]/20 bg-[#65b5ff]/10 p-4 text-sm leading-6 text-white/65">
+                The 100 percent was not measuring whether a model could tell a positive signal from a negative one. It could only ever say the model agreed on the easy case, because every cross-checked record happened to fall into the same feedback category. I flagged it and re-scoped the labeling work to a task-level design instead: roughly 70 sessions, six annotators, built to test task recognition and completion judgment rather than a single feedback label.
+              </div>
+              <p className="mt-4 text-[11px] leading-5 text-white/35">Ground truth is supposed to be the thing you trust without checking. I checked it anyway, and that is the habit that kept a false positive from becoming a shipped conclusion.</p>
+            </div>
+
+            <div className="mt-5 rounded-[2rem] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Attribution stack</p>
+                  <h3 className="mt-2 text-xl font-semibold text-[#1d1d1f]">Where the framework sends a failure</h3>
+                </div>
+                <GitBranch className="h-5 w-5 text-[#0071e3]" />
+              </div>
+              <div className="mt-6 grid gap-2 sm:grid-cols-5">
+                {["Task", "Query", "Agent", "Skill", "Sub-agent"].map((layer, index) => (
+                  <div key={layer} className="flex items-center gap-2 sm:contents">
+                    <div className="flex-1 rounded-xl bg-[#f5f5f7] px-4 py-3 text-center text-sm font-semibold text-[#1d1d1f] sm:flex-none">{layer}</div>
+                    {index < 4 && <ChevronRight className="h-4 w-4 shrink-0 text-[#b0b0b5] sm:hidden" />}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <SectionHeading
+              number="07"
+              label="Closing the Loop with Data"
+              title="I did not just fix Skills. I proved it with data."
+              description="I built and ran the analytics layer behind the product: a library of 29 user behavior metrics, funnel analysis that showed exactly where users dropped off, retention cohorts, and live feedback signals. Every finding became a product requirement, and every requirement shipped as a fix."
+            />
+
+            <AnalyticsDashboardSimulator />
+
+            <div className="mt-5 rounded-[2rem] border border-black/8 bg-white p-6 shadow-[0_22px_70px_rgba(0,0,0,0.07)] sm:p-8">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">From signal to shipped fix</p>
+                  <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">I traced negative feedback to root cause.</h3>
+                </div>
+                <ScanSearch className="h-5 w-5 shrink-0 text-[#0071e3]" />
+              </div>
+              <p className="mt-4 max-w-3xl text-sm leading-7 text-[#6e6e73]">
+                On one track, quality collapsed as a session went deep, character identities drifted between turns, and stale retrieval kept surfacing outdated versions. Each pattern became a requirement with an owner, not a dashboard observation.
+              </p>
+              <div className="mt-6 grid gap-3 md:grid-cols-3">
+                {[
+                  ["Depth collapse", "Output quality degraded as a single session ran long.", "Explicit constraint re-injection"],
+                  ["Identity drift", "Character behavior became inconsistent across turns.", "Core profile pinned before generation"],
+                  ["Stale retrieval", "Retrieval returned superseded versions of the same document.", "Version-aware recall"],
+                ].map(([title, symptom, fix]) => (
+                  <div key={title} className="rounded-[1.4rem] bg-[#f5f5f7] p-5">
+                    <p className="text-sm font-semibold text-[#1d1d1f]">{title}</p>
+                    <p className="mt-2 text-xs leading-5 text-[#86868b]">{symptom}</p>
+                    <p className="mt-4 flex items-start gap-1.5 text-[11px] font-semibold leading-5 text-[#0071e3]"><CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0" />{fix}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 grid gap-3 md:grid-cols-3">
+                {failureModes.map(([title, text]) => (
+                  <div key={title} className="rounded-xl border border-black/8 px-4 py-3">
+                    <p className="text-xs font-semibold text-[#1d1d1f]">{title}</p>
+                    <p className="mt-1 text-[11px] leading-5 text-[#86868b]">{text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-5 rounded-[2rem] border border-black/8 bg-white p-6 shadow-[0_22px_70px_rgba(0,0,0,0.07)] sm:p-8">
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Agent I built · 03</p>
+                  <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">Dashboards make data available. A bot makes it arrive.</h3>
+                </div>
+                <span className="rounded-full bg-[#eaf8ef] px-3 py-1.5 text-xs font-semibold text-[#207a4b]">Scheduled · in group use</span>
+              </div>
+              <p className="mt-4 max-w-3xl text-sm leading-7 text-[#6e6e73]">
+                I built a scheduled Agent that pulls usage statistics, renders them into a ranking card, and posts it straight into the team group chat. Usage signals reach the people who act on them without anyone pulling a report by hand.
+              </p>
+              <div className="mt-6 grid gap-3 lg:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] lg:items-center">
+                {[
+                  ["01", "Query stats", "Scheduled trigger", CalendarClock],
+                  ["02", "Render card", "Ranking layout", LayoutTemplate],
+                  ["03", "Capture image", "Browser automation", Camera],
+                  ["04", "Post to group", "Delivered in chat", MessageSquareText],
                 ].map(([number, title, text, Icon], index) => (
                   <div key={number as string} className="contents">
                     <div className="h-full rounded-[1.4rem] bg-[#f5f5f7] p-5">
@@ -962,51 +1221,43 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
                   </div>
                 ))}
               </div>
-              <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
-                {[["18", "product surfaces"], ["12", "positive touchpoints"], ["2", "negative signals"], ["6 + 4", "event types + trace contexts"]].map(([value, label]) => (
-                  <div key={label} className="rounded-xl border border-black/8 px-4 py-3"><p className="text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">{value}</p><p className="mt-1 text-[11px] text-[#86868b]">{label}</p></div>
-                ))}
-              </div>
             </div>
           </AnimatedSection>
 
           <AnimatedSection>
             <SectionHeading
               number="08"
-              label="Supporting Systems"
-              title="The main story is quality. These systems show how far it reached."
-              description="Open either layer when an interviewer wants to go deeper into knowledge design or Agent engineering."
+              label="What This Proves"
+              title="I did not start with a spec. I read the system, then improved it."
+              description="I traced the runtime myself, designed what to measure, built the tools that keep the measurement honest, and proved the impact with data that three Agents I built helped collect. That is the work of someone who learns a system fast enough to change it, not just operate it."
             />
-            <div className="mt-8 grid gap-5 md:grid-cols-2">
-              <button
-                type="button"
-                onClick={() => setDetail("knowledge")}
-                className="group rounded-[2rem] border border-black/8 bg-white p-7 text-left shadow-[0_18px_50px_rgba(0,0,0,0.05)] transition hover:-translate-y-1 hover:shadow-[0_24px_65px_rgba(0,0,0,0.09)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3] motion-reduce:transform-none motion-reduce:transition-none"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eaf4ff] text-[#0071e3]"><Database className="h-5 w-5" /></div>
-                  <ArrowRight className="h-5 w-5 text-[#b0b0b5] transition group-hover:translate-x-1 group-hover:text-[#0071e3] motion-reduce:transform-none" />
-                </div>
-                <p className="mt-7 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#86868b]">Knowledge Schema</p>
-                <h3 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">4,700+ unstructured items → contextual entities</h3>
-                <p className="mt-4 text-sm leading-7 text-[#6e6e73]">Character, relationship, world, and plotline entities with scene anchors and reviewed retrieval logic.</p>
-                <p className="mt-6 text-xs font-semibold text-[#0071e3]">Proposed and advanced through review</p>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setDetail("architecture")}
-                className="group rounded-[2rem] border border-black/8 bg-white p-7 text-left shadow-[0_18px_50px_rgba(0,0,0,0.05)] transition hover:-translate-y-1 hover:shadow-[0_24px_65px_rgba(0,0,0,0.09)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3] motion-reduce:transform-none motion-reduce:transition-none"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eaf4ff] text-[#0071e3]"><Workflow className="h-5 w-5" /></div>
-                  <ArrowRight className="h-5 w-5 text-[#b0b0b5] transition group-hover:translate-x-1 group-hover:text-[#0071e3] motion-reduce:transform-none" />
-                </div>
-                <p className="mt-7 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#86868b]">Product-to-Engineering Map</p>
-                <h3 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">23 packages → seven runtime layers</h3>
-                <p className="mt-4 text-sm leading-7 text-[#6e6e73]">Actor routing, ContextEngine, tool and Skill runtime, scheduling, and observability.</p>
-                <p className="mt-6 text-xs font-semibold text-[#0071e3]">Architecture analysis, not framework authorship</p>
-              </button>
+            <div className="mt-8 grid gap-4 md:grid-cols-3">
+              {[
+                ["Learned the system", "Reconstructed a 23-package runtime from source before touching it.", Code2],
+                ["Designed the signals", "Instrumented 18 surfaces with traceable session, run, and Agent context.", Radar],
+                ["Built the tooling", "Three Agents: an instrumentation patrol, skill-evaluator, and a reporting bot.", Bot],
+              ].map(([title, text, Icon], index) => (
+                <FadeInCard key={title as string} delay={index * 0.05} className="h-full rounded-[1.6rem] border border-black/8 bg-white p-6 shadow-[0_16px_44px_rgba(0,0,0,0.05)]">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#eaf4ff] text-[#0071e3]"><Icon className="h-5 w-5" /></div>
+                  <h3 className="mt-5 text-base font-semibold text-[#1d1d1f]">{title as string}</h3>
+                  <p className="mt-3 text-sm leading-7 text-[#6e6e73]">{text as string}</p>
+                </FadeInCard>
+              ))}
+            </div>
+            <div className="mt-5 rounded-[2rem] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
+              <div className="grid gap-3 lg:grid-cols-5">
+                {qualityLoop.map(([title, text, Icon], index) => (
+                  <div key={title} className="relative rounded-[1.45rem] bg-[#f5f5f7] p-5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#1d1d1f] text-white"><Icon className="h-4 w-4" /></div>
+                      <span className="text-[10px] text-[#b0b0b5]">0{index + 1}</span>
+                    </div>
+                    <p className="mt-5 font-semibold text-[#1d1d1f]">{title}</p>
+                    <p className="mt-2 text-xs leading-5 text-[#86868b]">{text}</p>
+                    {index < 4 && <ChevronRight className="absolute -right-3 top-1/2 z-10 hidden h-5 w-5 -translate-y-1/2 text-[#b0b0b5] lg:block" />}
+                  </div>
+                ))}
+              </div>
             </div>
           </AnimatedSection>
 
