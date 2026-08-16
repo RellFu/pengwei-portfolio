@@ -8,8 +8,10 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import {
+  ArrowDown,
   ArrowLeft,
   ArrowRight,
+  AtSign,
   BarChart3,
   BookOpenCheck,
   Bot,
@@ -19,14 +21,18 @@ import {
   Check,
   CheckCircle2,
   ChevronRight,
+  CircleUserRound,
   Cloud,
   Code2,
   Cog,
+  Cpu,
   Database,
   Eye,
   FileText,
+  Film,
   Folder,
   GitBranch,
+  GitMerge,
   Globe,
   Info,
   Layers3,
@@ -52,7 +58,7 @@ import { PhaiProductSimulator } from "@/components/phai-product-simulator";
 import type { CaseStudyProject } from "@/data/projects";
 
 type Props = { project: CaseStudyProject };
-type DetailType = "script" | "report" | null;
+type DetailType = "script" | "report" | "characterBio" | null;
 type ProductScenarioId = "diagnose" | "bible" | "brief";
 type InspectorTab = "artifact" | "trace" | "knowledge" | "files";
 type CapabilityId = "context" | "skills" | "knowledge" | "action" | "orchestration";
@@ -184,8 +190,8 @@ function DetailModal({ detail, onClose }: { detail: Exclude<DetailType, null>; o
     };
   }, [onClose]);
 
-  const eyebrow = detail === "script" ? "Input, attached to the request" : "Skill output, generated";
-  const title = detail === "script" ? "bad_parasite_v2.txt" : "three-act-diagnostic-report.md";
+  const eyebrow = detail === "script" ? "Input, attached to the request" : detail === "characterBio" ? "Knowledge base record, ip channel" : "Skill output, generated";
+  const title = detail === "script" ? "bad_parasite_v2.txt" : detail === "characterBio" ? "character-biography.md" : "three-act-diagnostic-report.md";
 
   return (
     <motion.div
@@ -226,6 +232,7 @@ function DetailModal({ detail, onClose }: { detail: Exclude<DetailType, null>; o
 
         {detail === "script" && <ScriptDetail />}
         {detail === "report" && <ReportDetail />}
+        {detail === "characterBio" && <CharacterBioDetail />}
       </motion.div>
     </motion.div>
   );
@@ -332,6 +339,63 @@ function ReportDetail() {
             <p className="text-xs leading-5 text-[#515154]">{text}</p>
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+function CharacterBioDetail() {
+  const sections = [
+    ["Basic profile", "A recent college graduate who dresses plainly at the start, her signature garment a loose blue sweater. After her makeover she carries Chanel and other elite labels with polished confidence. Intelligent, quick to learn, hardworking, and strongly principled, but initially carries an intellectual's pride, prejudging a field she does not understand."],
+    ["Education, work, and family", "A Northwestern University graduate and former editor in chief of the student newspaper, admitted to Stanford Law School. Wants to become a serious journalist but currently works as second assistant to a formidable fashion editor. Her family is close, her father deeply concerned about the hardship of the job."],
+    ["Psychological profile", "Begins protected by a sense of intellectual superiority, treating the assistant job as a stepping-stone toward real journalism. Her employer's criticism and her coworkers' scorn expose a deeper need, to prove she is capable and worthy of recognition even in an arena she once despised."],
+    ["Core desire and deeper need", "Core desire: survive the job for one year and earn the r\u00e9sum\u00e9 line that could open the door to a top news organization. Deeper need: prove her value in a field she once looked down on, and learn what professionalism actually requires."],
+  ] as const;
+
+  const arc = [
+    ["Scenes 1\u20132", "An outsider who does not belong", "Parallel editing contrasts her plain clothes with the fashion world's refined luxury, establishing her as an outsider."],
+    ["Scene 16", "The cerulean humiliation", "During a wardrobe review she laughs at two belts that look identical. Her editor crushes her with a precise explanation of the cerulean fashion supply chain. She recognizes, for the first time, the professional depth of the field she dismissed."],
+    ["Scenes 20\u201324", "Collapse and the wake-up call", "An impossible assignment during a hurricane ends in failure. After being battered at work, a mentor's blunt rebuke wakes her up: her failure comes from not trying, not from the environment."],
+    ["Scene 25", "Transformation", "A complete fashion makeover under a mentor's guidance. Her efficiency and initiative rise sharply, she starts anticipating her employer's needs instead of merely reacting to them."],
+  ] as const;
+
+  return (
+    <div className="mt-8">
+      <div className="flex items-start gap-4">
+        <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#dbeafe] to-[#93c5fd] text-sm font-bold text-[#0756a4] shadow-sm"><CircleUserRound className="absolute h-11 w-11 opacity-25" />AS</span>
+        <div>
+          <h3 className="text-lg font-semibold text-[#1d1d1f]">Andrea &ldquo;Andy&rdquo; Sachs</h3>
+          <p className="mt-1 text-xs text-[#86868b]">Protagonist &middot; second assistant &middot; aspiring journalist</p>
+        </div>
+      </div>
+
+      <p className="mt-6 max-w-3xl text-sm leading-7 text-[#6e6e73]">
+        An ambitious would-be journalist who dismisses fashion must become the assistant to its most formidable editor in order to establish herself in New York media. Under extreme pressure, she is forced to remake both her outward image and her inner assumptions.
+      </p>
+
+      <p className="mt-8 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#86868b]">Character biography</p>
+      <div className="mt-3 grid gap-3 sm:grid-cols-2">
+        {sections.map(([title, text]) => (
+          <div key={title} className="rounded-2xl bg-[#f5f5f7] p-4">
+            <p className="text-xs font-semibold text-[#1d1d1f]">{title}</p>
+            <p className="mt-2 text-[11px] leading-5 text-[#86868b]">{text}</p>
+          </div>
+        ))}
+      </div>
+
+      <p className="mt-8 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#86868b]">Arc, beginning to resolution</p>
+      <div className="mt-3 space-y-2">
+        {arc.map(([scene, phase, text]) => (
+          <div key={phase} className="grid gap-2 rounded-xl border border-black/8 bg-white p-3.5 sm:grid-cols-[6.5rem_10rem_1fr]">
+            <span className="text-[10px] font-semibold text-[#0071e3]">{scene}</span>
+            <span className="text-xs font-semibold text-[#1d1d1f]">{phase}</span>
+            <span className="text-[11px] leading-5 text-[#6e6e73]">{text}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-6 rounded-2xl bg-[#eaf4ff] p-5 text-sm leading-7 text-[#3f5f78]">
+        This is the same record the Agent pulled for the demo above, addressed by field from the character dimension of the knowledgeFile, not summarized on the fly.
       </div>
     </div>
   );
@@ -550,116 +614,7 @@ function ArchitectureDetail() {
   );
 }
 
-function KnowledgeSystemDiagram() {
-  const reduceMotion = useReducedMotion();
-  const rootRef = useRef<HTMLDivElement>(null);
-
-  const stages = [
-    {
-      icon: Database,
-      title: "Knowledge base",
-      note: "Official library, 4,700+ works · My library, user imports",
-      items: ["Structured by dimension", "World · character · plot · relationship", "Stored as dimension files"],
-    },
-    {
-      icon: MessageSquareText,
-      title: "Writer query",
-      note: "Natural language, in the conversation",
-      items: ["\u201cCheck this against the Prada IP\u201d", "\u201cFind me a reversal like this\u201d"],
-    },
-    {
-      icon: Bot,
-      title: "Agent",
-      note: "Intent understanding · channel routing",
-      items: ["Full document, or a fragment, or the web", "Decided per request, not per work"],
-    },
-    {
-      icon: ScanSearch,
-      title: "Retrieval layer",
-      note: "Three channels, one shared source",
-      items: ["Structural · coarse grain", "Fragment · RAG + rerank", "Web · fallback only"],
-    },
-    {
-      icon: Route,
-      title: "Context assembly",
-      note: "Query rewrite · rerank · merge",
-      items: ["Splits one query into angles", "Dedupes across parallel calls"],
-    },
-    {
-      icon: Sparkles,
-      title: "Used in the draft",
-      note: "Back in the writer's hands",
-      items: ["@ reference an IP", "Character, world, and plot lookup", "Beat and character comps"],
-    },
-  ] as const;
-
-  useGSAP(
-    () => {
-      const nodeTargets = gsap.utils.toArray<HTMLElement>("[data-diagram-node]", rootRef.current);
-      const connectorTargets = gsap.utils.toArray<HTMLElement>("[data-diagram-connector]", rootRef.current);
-
-      if (reduceMotion) {
-        gsap.set([...nodeTargets, ...connectorTargets], { clearProps: "all" });
-        return;
-      }
-
-      gsap.set(nodeTargets, { autoAlpha: 0, y: 16 });
-      gsap.set(connectorTargets, { autoAlpha: 0, scaleX: 0, transformOrigin: "left center" });
-
-      ScrollTrigger.create({
-        trigger: rootRef.current,
-        start: "top 78%",
-        once: true,
-        onEnter: () => {
-          const tl = gsap.timeline();
-          nodeTargets.forEach((node, index) => {
-            tl.to(node, { autoAlpha: 1, y: 0, duration: 0.45, ease: "power3.out" }, index * 0.16);
-            if (connectorTargets[index]) {
-              tl.to(connectorTargets[index], { autoAlpha: 1, scaleX: 1, duration: 0.3, ease: "power3.out" }, index * 0.16 + 0.2);
-            }
-          });
-        },
-      });
-    },
-    { scope: rootRef, dependencies: [reduceMotion], revertOnUpdate: true },
-  );
-
-  return (
-    <div ref={rootRef} className="mt-8 overflow-hidden rounded-[2rem] border border-black/8 bg-gradient-to-br from-white via-white to-[#f5f9ff] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.06)] sm:p-9">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">System map</p>
-      <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">From an unstructured library to a citation the Agent can use mid-draft.</h3>
-
-      <div className="mt-8 flex flex-col gap-2 lg:flex-row lg:items-stretch lg:gap-0">
-        {stages.map((stage, index) => (
-          <Fragment key={stage.title}>
-            <div data-diagram-node className="flex-1 rounded-[1.4rem] border border-black/8 bg-white p-4">
-              <div className="flex items-center gap-2">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#eaf4ff] text-[#0071e3]"><stage.icon className="h-4 w-4" /></span>
-                <p className="text-sm font-semibold text-[#1d1d1f]">{stage.title}</p>
-              </div>
-              <p className="mt-2.5 text-[10px] leading-4 text-[#86868b]">{stage.note}</p>
-              <div className="mt-3 space-y-1">
-                {stage.items.map((item) => (
-                  <p key={item} className="text-[10px] leading-4 text-[#515154]">{item}</p>
-                ))}
-              </div>
-            </div>
-            {index < stages.length - 1 && (
-              <div className="flex items-center justify-center px-1 lg:w-6">
-                <div data-diagram-connector className="hidden h-px w-full bg-gradient-to-r from-[#0071e3]/40 to-[#0071e3]/10 lg:block" />
-                <ArrowRight className="my-1 h-4 w-4 rotate-90 text-[#b0b0b5] lg:hidden" />
-              </div>
-            )}
-          </Fragment>
-        ))}
-      </div>
-
-      <p className="mt-5 text-[10.5px] leading-4 text-[#86868b]">The same six-stage path runs whether the request needs a full document, a fragment, or a web fallback, only the retrieval layer&apos;s channel choice changes underneath it. Field-level Schema and channel detail are below.</p>
-    </div>
-  );
-}
-
-function KnowledgeSchemaDetail() {
+function KnowledgeFoundationDetail() {
   const entities = [
     {
       code: "CH",
@@ -687,112 +642,285 @@ function KnowledgeSchemaDetail() {
     },
   ] as const;
 
-  const channels = [
+  return (
+    <div className="mt-8">
+      <div className="overflow-hidden rounded-[2rem] border border-black/8 bg-gradient-to-br from-white via-white to-[#f5f9ff] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.06)] sm:p-9">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Knowledge modeling</p>
+        <div className="mt-4 flex flex-col items-center gap-2">
+          <div className="rounded-2xl border border-black/8 bg-white px-6 py-3 text-center shadow-sm">
+            <p className="text-lg font-semibold tracking-[-0.03em] text-[#1d1d1f]">4,700+ Film &amp; TV IPs</p>
+            <p className="mt-0.5 text-[10px] text-[#86868b]">All unstructured text on day one</p>
+          </div>
+          <ArrowDown className="h-4 w-4 text-[#b0b0b5]" />
+          <div className="rounded-2xl bg-[#111318] px-6 py-3 text-center shadow-[0_12px_30px_rgba(0,0,0,0.12)]">
+            <p className="text-sm font-semibold text-white">Knowledge modeling</p>
+            <p className="mt-0.5 text-[10px] text-white/50">Every work broken into queryable fields</p>
+          </div>
+          <ArrowDown className="h-4 w-4 text-[#b0b0b5]" />
+        </div>
+
+        <div className="mt-2 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {entities.map((entity) => (
+            <div key={entity.code} className="rounded-[1.4rem] bg-[#f5f5f7] p-5">
+              <div className="flex items-center justify-between">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-[10px] font-semibold text-[#0071e3] shadow-sm">{entity.code}</span>
+                <span className="text-[9px] font-medium text-[#86868b]">{entity.count}</span>
+              </div>
+              <h3 className="mt-4 font-semibold text-[#1d1d1f]">{entity.title}</h3>
+              <div className="mt-3 space-y-1">
+                {entity.fields.map((field) => (
+                  <p key={field} className="text-[10.5px] leading-4 text-[#86868b]">{field}</p>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <p className="mt-8 text-center text-lg font-semibold leading-7 tracking-[-0.02em] text-[#1d1d1f] sm:text-xl">From 4,700+ unstructured stories to an AI-consumable knowledge layer.</p>
+      </div>
+
+      <p className="mt-9 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">How a work is actually stored</p>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <div className="rounded-[1.6rem] border border-black/8 bg-white p-5 shadow-sm">
+          <div className="flex items-center gap-2">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#eaf4ff] text-[#0071e3]"><Film className="h-[18px] w-[18px]" /></span>
+            <p className="text-sm font-semibold text-[#1d1d1f]">IP metadata</p>
+          </div>
+          <p className="mt-4 text-[11px] leading-5 text-[#515154]">Name, type, genre tags, cover, and a short synopsis, the record that lets a title get matched by name in the first place.</p>
+        </div>
+        <div className="rounded-[1.6rem] border border-black/8 bg-white p-5 shadow-sm">
+          <div className="flex items-center gap-2">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#eaf4ff] text-[#0071e3]"><Database className="h-[18px] w-[18px]" /></span>
+            <p className="text-sm font-semibold text-[#1d1d1f]">Knowledge files, on object storage</p>
+          </div>
+          <div className="mt-4 space-y-1.5">
+            {["Character biography", "World building", "Story overview"].map((file) => (
+              <p key={file} className="rounded-lg bg-[#f5f5f7] px-3 py-2 text-[10.5px] leading-4 text-[#515154]">{file}</p>
+            ))}
+          </div>
+        </div>
+      </div>
+      <p className="mt-3 text-[10.5px] leading-4 text-[#86868b]">Each dimension is its own file rather than one long document. A single work can carry tens of thousands of words of knowledge, splitting by dimension lets a request pull only the piece it actually needs.</p>
+    </div>
+  );
+}
+
+function AgenticRetrievalDiagram() {
+  const reduceMotion = useReducedMotion();
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  const spine = [
+    { icon: MessageSquareText, title: "User query", note: "Natural language, in the conversation" },
+    { icon: Bot, title: "Phai Agent", note: "Intent understanding" },
+    { icon: Route, title: "Routing", note: "Picks the channel for this request" },
+  ] as const;
+
+  const routes = [
     {
-      icon: Layers3,
-      name: "Structural channel",
-      grain: "Coarse grain",
-      returns: "The complete document for a knowledge dimension, world, character archive, story spine, addressed by field.",
-      fit: "\u201cGive me the full picture of this work.\u201d",
-      note: "No embedding step. The work is already a structured, complete document, so matching the title is enough to return the whole thing.",
+      icon: Film,
+      name: "IP Retrieval",
+      example: "\u201cTell me about Andy's character arc in The Devil Wears Prada.\u201d",
+      when: "A named work, a full picture requested.",
+      flow: "Find the IP \u2192 find its knowledgeFile \u2192 pull the complete character archive.",
     },
     {
       icon: ScanSearch,
-      name: "Fragment channel",
-      grain: "Fine grain",
-      returns: "Ranked passages pulled from across the corpus, query rewritten into several angles, retrieved in parallel, then reranked.",
-      fit: "\u201cFind me a beat like this\u201d or \u201ca character arc like that.\u201d",
-      note: "This is where retrieval-augmented generation earns its cost, open-ended search across thousands of works needs fragment-level recall plus a reranker, not a single document match.",
+      name: "RAG Search",
+      example: "\u201cFind scenes where a junior employee is humiliated and decides to change.\u201d",
+      when: "No named work, a beat or feeling instead.",
+      flow: "Query rewrite \u2192 parallel retrieval \u2192 reranker \u2192 matched passages.",
     },
     {
       icon: Globe,
-      name: "Fallback channel",
-      grain: "Outside the corpus",
-      returns: "A streamed general web search, used only when the first two channels return nothing.",
-      fit: "The work or the detail simply is not in the library yet.",
-      note: "A fully independent data source, kept as a last resort so the Agent never dead-ends on a query.",
+      name: "Web Fallback",
+      example: "The internal library has no record of this at all.",
+      when: "Both channels above return nothing.",
+      flow: "Stream a general web search instead of dead-ending the request.",
     },
   ] as const;
 
-  const decisions = [
-    ["Structural channel skips embedding entirely", "The knowledge is pre-structured into complete documents. There is nothing to chunk, you either need the whole thing or you do not."],
-    ["Fragment channel pairs retrieval with a reranker", "Open queries like \u201cfind a similar reversal\u201d need broad recall first, then precision ranking on top, a single-pass match is not enough."],
-    ["Two-step reveal, summary before detail", "Pulling every matching work's full text at once could mean hundreds of thousands of words. Show the list first, let the request decide what to expand."],
-    ["Each work's fields are split by dimension", "A single work can carry tens of thousands of words of knowledge. Splitting by world, character, and plot lets a request pull only the dimension it actually needs."],
+  const merge = [
+    { icon: Cpu, title: "Query rewrite", note: "One query, split into angles" },
+    { icon: GitMerge, title: "Retrieval / rerank", note: "Parallel calls, deduped and ranked" },
+    { icon: Layers3, title: "Context", note: "Assembled for the model" },
+    { icon: Sparkles, title: "LLM", note: "Writes with grounded material" },
   ] as const;
 
+  useGSAP(
+    () => {
+      const spineTargets = gsap.utils.toArray<HTMLElement>("[data-retrieval-spine]", rootRef.current);
+      const routeTargets = gsap.utils.toArray<HTMLElement>("[data-retrieval-route]", rootRef.current);
+      const mergeTargets = gsap.utils.toArray<HTMLElement>("[data-retrieval-merge]", rootRef.current);
+
+      if (reduceMotion) {
+        gsap.set([...spineTargets, ...routeTargets, ...mergeTargets], { clearProps: "all" });
+        return;
+      }
+
+      gsap.set(spineTargets, { autoAlpha: 0, y: 14 });
+      gsap.set(routeTargets, { autoAlpha: 0, y: 16 });
+      gsap.set(mergeTargets, { autoAlpha: 0, y: 12 });
+
+      ScrollTrigger.create({
+        trigger: rootRef.current,
+        start: "top 78%",
+        once: true,
+        onEnter: () => {
+          const tl = gsap.timeline();
+          tl.to(spineTargets, { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.1, ease: "power3.out" });
+          tl.to(routeTargets, { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.09, ease: "power3.out" }, "-=0.1");
+          tl.to(mergeTargets, { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.08, ease: "power3.out" }, "-=0.15");
+        },
+      });
+    },
+    { scope: rootRef, dependencies: [reduceMotion], revertOnUpdate: true },
+  );
+
   return (
-    <div className="mt-8">
-      <p className="max-w-3xl text-sm leading-7 text-[#6e6e73]">
-        The Devil Wears Prada demo in section 01 is a real run through this Schema, not a mockup. Every field below (character psychology, relationship evolution, world structure, plotline arcs) is the same shape that produced that demo&apos;s character and world tabs.
-      </p>
+    <div ref={rootRef} className="mt-8 overflow-hidden rounded-[2rem] border border-black/8 bg-gradient-to-br from-white via-white to-[#f5f9ff] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.06)] sm:p-9">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">System map</p>
+      <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">Not every question should be solved with RAG.</h3>
 
-      <p className="mt-8 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Entity Schema, four dimensions</p>
-      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {entities.map((entity) => (
-          <div key={entity.code} className="rounded-[1.4rem] bg-[#f5f5f7] p-5">
-            <div className="flex items-center justify-between">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-[10px] font-semibold text-[#0071e3] shadow-sm">{entity.code}</span>
-              <span className="text-[9px] font-medium text-[#86868b]">{entity.count}</span>
-            </div>
-            <h3 className="mt-4 font-semibold text-[#1d1d1f]">{entity.title}</h3>
-            <div className="mt-3 space-y-1">
-              {entity.fields.map((field) => (
-                <p key={field} className="text-[10.5px] leading-4 text-[#86868b]">{field}</p>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <p className="mt-9 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Retrieval architecture, three channels</p>
-      <div className="mt-4 grid gap-3 lg:grid-cols-3">
-        {channels.map((channel) => (
-          <div key={channel.name} className="rounded-[1.6rem] border border-black/8 bg-white p-5 shadow-sm">
-            <div className="flex items-center gap-2">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#eaf4ff] text-[#0071e3]"><channel.icon className="h-[18px] w-[18px]" /></span>
+      <div className="mt-7 flex flex-col items-center gap-2 sm:flex-row sm:justify-center sm:gap-3">
+        {spine.map((node, index) => (
+          <Fragment key={node.title}>
+            <div data-retrieval-spine className="flex items-center gap-2.5 rounded-2xl border border-black/8 bg-white px-4 py-2.5 shadow-sm">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#eaf4ff] text-[#0071e3]"><node.icon className="h-4 w-4" /></span>
               <div>
-                <p className="text-sm font-semibold text-[#1d1d1f]">{channel.name}</p>
-                <p className="text-[9px] font-medium text-[#86868b]">{channel.grain}</p>
+                <p className="text-xs font-semibold text-[#1d1d1f]">{node.title}</p>
+                <p className="text-[9.5px] text-[#86868b]">{node.note}</p>
               </div>
             </div>
-            <p className="mt-4 text-[11px] leading-5 text-[#515154]">{channel.returns}</p>
-            <p className="mt-3 rounded-lg bg-[#f5f5f7] px-3 py-2 text-[10px] italic leading-4 text-[#6e6e73]">{channel.fit}</p>
-            <p className="mt-3 text-[10px] leading-4 text-[#86868b]">{channel.note}</p>
-          </div>
+            {index < spine.length - 1 && <ArrowDown className="h-4 w-4 rotate-90 text-[#b0b0b5] sm:rotate-0" />}
+          </Fragment>
         ))}
       </div>
-      <p className="mt-3 text-[10.5px] leading-4 text-[#86868b]">All three channels sit on top of one shared data source, they differ only in index granularity. If the structural channel has no match, the fragment channel almost never does either, so a request falls straight through to the web channel instead of trying every level in between.</p>
 
-      <p className="mt-9 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Turning 4,700+ unstructured works into that Schema</p>
-      <div className="mt-4 grid gap-2 md:grid-cols-5">
-        {[
-          ["1", "LLM extraction"],
-          ["2", "Confidence gate"],
-          ["3", "Consistency check"],
-          ["4", "Dual storage"],
-          ["5", "Filtered recall"],
-        ].map(([number, title], index) => (
-          <div key={number} className="relative rounded-2xl border border-black/8 bg-white p-4">
-            <span className="text-[10px] font-semibold text-[#0071e3]">{number}</span>
-            <p className="mt-2 text-sm font-semibold text-[#1d1d1f]">{title}</p>
-            {index < 4 && <ChevronRight className="absolute -right-3 top-1/2 z-10 hidden h-5 w-5 -translate-y-1/2 text-[#b0b0b5] md:block" />}
+      <div className="mt-4 flex justify-center">
+        <ArrowDown className="h-4 w-4 text-[#b0b0b5]" />
+      </div>
+
+      <div className="mt-2 grid gap-3 lg:grid-cols-3">
+        {routes.map((route) => (
+          <div key={route.name} data-retrieval-route className="rounded-[1.6rem] border border-black/8 bg-white p-5 shadow-sm">
+            <div className="flex items-center gap-2">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#eaf4ff] text-[#0071e3]"><route.icon className="h-[18px] w-[18px]" /></span>
+              <p className="text-sm font-semibold text-[#1d1d1f]">{route.name}</p>
+            </div>
+            <p className="mt-4 rounded-lg bg-[#f5f5f7] px-3 py-2 text-[10px] italic leading-4 text-[#6e6e73]">{route.example}</p>
+            <p className="mt-3 text-[10px] leading-4 text-[#86868b]"><span className="font-semibold text-[#515154]">When: </span>{route.when}</p>
+            <p className="mt-2 text-[10px] leading-4 text-[#86868b]"><span className="font-semibold text-[#515154]">Flow: </span>{route.flow}</p>
           </div>
         ))}
       </div>
 
-      <p className="mt-9 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Key design decisions</p>
-      <div className="mt-4 grid gap-2 sm:grid-cols-2">
-        {decisions.map(([decision, why]) => (
-          <div key={decision} className="rounded-2xl border border-black/8 bg-white p-4">
-            <p className="text-xs font-semibold text-[#1d1d1f]">{decision}</p>
-            <p className="mt-2 text-[10.5px] leading-4 text-[#86868b]">{why}</p>
+      <div className="mt-4 flex justify-center">
+        <ArrowDown className="h-4 w-4 text-[#b0b0b5]" />
+      </div>
+
+      <div className="mt-2 grid gap-2 sm:grid-cols-4">
+        {merge.map((node, index) => (
+          <div key={node.title} data-retrieval-merge className="relative rounded-2xl border border-black/8 bg-white p-4">
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#eaf4ff] text-[#0071e3]"><node.icon className="h-3.5 w-3.5" /></span>
+            <p className="mt-3 text-sm font-semibold text-[#1d1d1f]">{node.title}</p>
+            <p className="mt-1 text-[10px] leading-4 text-[#86868b]">{node.note}</p>
+            {index < merge.length - 1 && <ChevronRight className="absolute -right-3 top-1/2 z-10 hidden h-5 w-5 -translate-y-1/2 text-[#b0b0b5] sm:block" />}
           </div>
         ))}
       </div>
 
       <div className="mt-6 rounded-2xl bg-[#eaf4ff] p-5 text-sm leading-7 text-[#3f5f78]">
-        Boundary: I designed the entity Schema and the three-channel retrieval architecture. This does not claim I personally shipped the full production extraction and storage pipeline behind it.
+        We designed a hybrid retrieval system that routes between IP-level retrieval, chunk-level RAG, and web fallback based on user intent.
+      </div>
+    </div>
+  );
+}
+
+function KnowledgeAssistantDemo({ onOpenDetail }: { onOpenDetail: (detail: "characterBio") => void }) {
+  const steps = [
+    ["IP detected", "The Devil Wears Prada"],
+    ["Knowledge source found", "ip channel, structural match"],
+    ["Character biography", "loaded from the knowledgeFile"],
+    ["Story overview", "loaded for narrative context"],
+  ] as const;
+
+  return (
+    <div className="ml-auto mt-8 w-full max-w-[36rem] overflow-hidden rounded-[1.6rem] border border-black/10 bg-[#f5f5f7] shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
+      <div className="flex h-11 items-center gap-2 border-b border-black/8 bg-white/85 px-4 backdrop-blur-2xl">
+        <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
+        <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
+        <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+        <span className="ml-2 text-[10px] font-medium text-[#86868b]">Alpha desktop app</span>
+      </div>
+
+      <div className="bg-white p-5 sm:p-6">
+        <div className="flex justify-end">
+          <div className="max-w-[28rem] rounded-2xl bg-[#eaf4ff] px-4 py-3">
+            <p className="flex items-center gap-1.5 text-[10px] font-semibold text-[#0071e3]"><AtSign className="h-3 w-3" />The Devil Wears Prada</p>
+            <p className="mt-1.5 text-sm leading-6 text-[#1d1d1f]">Analyze Andy&apos;s character arc.</p>
+          </div>
+        </div>
+
+        <div className="mt-5 flex items-start gap-3">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#111318] font-serif text-xs italic text-white">α</span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-semibold text-[#1d1d1f]">Understanding your request&hellip;</p>
+
+            <div className="mt-3 space-y-1.5">
+              {steps.map(([verb, detail]) => (
+                <div key={verb} className="flex items-center gap-2 rounded-lg px-1 py-1 text-[10px] text-[#86868b]">
+                  <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#e8f7ee] text-[#248a3d]">
+                    <Check className="h-2.5 w-2.5" strokeWidth={3} />
+                  </span>
+                  <span><strong className="font-semibold text-[#515154]">{verb}</strong> · {detail}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-4 max-w-[31rem] text-[11px] leading-[1.65] text-[#515154]">
+              <h4 className="text-[13px] font-semibold tracking-[-0.02em] text-[#1d1d1f]">Andy Sachs, character arc</h4>
+              <div className="mt-3 space-y-2.5">
+                <div className="rounded-lg bg-[#f5f5f7] p-3">
+                  <p className="text-[10px] font-semibold text-[#1d1d1f]">Initial state</p>
+                  <p className="mt-1.5 text-[10px] leading-4 text-[#86868b]">An ambitious journalist who dismisses fashion as superficial, treating the assistant job as a stepping-stone she has to endure.</p>
+                </div>
+                <div className="rounded-lg bg-[#f5f5f7] p-3">
+                  <p className="text-[10px] font-semibold text-[#1d1d1f]">Turning point</p>
+                  <p className="mt-1.5 text-[10px] leading-4 text-[#86868b]">Miranda&apos;s cerulean-sweater speech exposes Andy&apos;s ignorance, revealing the professional depth of a field she had already judged.</p>
+                </div>
+                <div className="rounded-lg bg-[#f5f5f7] p-3">
+                  <p className="text-[10px] font-semibold text-[#1d1d1f]">Transformation</p>
+                  <p className="mt-1.5 text-[10px] leading-4 text-[#86868b]">Andy gradually masters the rules of the fashion world, and the same competence that saves her career starts to cost her the relationships outside it.</p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => onOpenDetail("characterBio")}
+                className="mt-4 flex w-full items-center gap-2 rounded-xl border border-black/8 bg-white px-3 py-2 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.06)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3]"
+              >
+                <FileText className="h-3.5 w-3.5 shrink-0 text-[#0071e3]" />
+                <span className="min-w-0 flex-1 truncate text-[10px] font-semibold text-[#0066cc]">character-biography.md</span>
+                <span className="shrink-0 text-[9px] text-[#86868b]">Full record</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-6 rounded-xl border border-black/8 bg-[#fafafa] p-3.5">
+          <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-[#86868b]">Behind the scenes</p>
+          <div className="mt-2.5 flex flex-wrap items-center gap-1.5 text-[9.5px] text-[#6e6e73]">
+            <span className="rounded-full bg-white px-2 py-1 font-medium shadow-sm">@ IP</span>
+            <ArrowRight className="h-3 w-3 text-[#b0b0b5]" />
+            <span className="rounded-full bg-white px-2 py-1 font-medium shadow-sm">IP retrieval</span>
+            <ArrowRight className="h-3 w-3 text-[#b0b0b5]" />
+            <span className="rounded-full bg-white px-2 py-1 font-medium shadow-sm">Character biography</span>
+            <ArrowRight className="h-3 w-3 text-[#b0b0b5]" />
+            <span className="rounded-full bg-white px-2 py-1 font-medium shadow-sm">Context</span>
+            <ArrowRight className="h-3 w-3 text-[#b0b0b5]" />
+            <span className="rounded-full bg-[#111318] px-2 py-1 font-medium text-white shadow-sm">LLM analysis</span>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -1503,12 +1631,43 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
             <SectionHeading
               number="04"
               label="Designing the Knowledge Base"
-              title="I designed the Schema and the retrieval architecture underneath it."
-              description="The knowledge base already held 4,700-plus works, but every one of them was unstructured text. Recommendation and precise citation both depend on structured fields, not on hoping the right words show up in a wall of prose. I designed the entity Schema that breaks each work into queryable fields, and the three-channel retrieval architecture that decides, per request, whether the Agent needs a full document, a matched fragment, or a web fallback."
+              title="Build the knowledge, make it intelligent, show how a writer experiences it."
+              description="This is the other thing I own in this project besides the Skill catalog. It breaks into three layers: the knowledge design that turns raw stories into queryable fields, the Agent routing that decides which retrieval channel a question actually needs, and the moment a writer sees it work inside a real request."
             />
 
-            <KnowledgeSystemDiagram />
-            <KnowledgeSchemaDetail />
+            <div className="mt-8 flex items-baseline gap-2">
+              <span className="text-[13px] font-semibold text-[#0071e3]">01</span>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Knowledge Foundation</p>
+            </div>
+            <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">Building a domain-specific knowledge base for storytelling.</h3>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-[#6e6e73]">
+              The library already held 4,700-plus works, but every one of them was unstructured text. Recommendation and precise citation both depend on structured fields, not on hoping the right words show up in a wall of prose. I designed the entity Schema that breaks each work into queryable fields, four dimensions deep.
+            </p>
+            <KnowledgeFoundationDetail />
+
+            <div className="mt-12 flex items-baseline gap-2">
+              <span className="text-[13px] font-semibold text-[#0071e3]">02</span>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Agentic Retrieval</p>
+            </div>
+            <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">Routing every question to the right knowledge source.</h3>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-[#6e6e73]">
+              Knowing the fields is not enough. The Agent still has to decide, per request, whether it needs a full document, a matched fragment, or the open web. I designed the three-channel retrieval architecture that makes that call, so a named-work question and an open-ended one never hit the same path.
+            </p>
+            <AgenticRetrievalDiagram />
+
+            <div className="mt-12 flex items-baseline gap-2">
+              <span className="text-[13px] font-semibold text-[#0071e3]">03</span>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Knowledge Assistant in Action</p>
+            </div>
+            <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">Turning structured knowledge into an intuitive creative experience.</h3>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-[#6e6e73]">
+              This is where the first two layers meet a real request. One @ mention, a visible retrieval trace, and an answer grounded in the actual character record instead of a plausible-sounding guess.
+            </p>
+            <KnowledgeAssistantDemo onOpenDetail={setDetail} />
+
+            <div className="mt-8 rounded-2xl bg-[#eaf4ff] p-5 text-sm leading-7 text-[#3f5f78]">
+              Boundary: I designed the entity Schema and the three-channel retrieval architecture. This does not claim I personally shipped the full production extraction and storage pipeline behind it.
+            </div>
           </AnimatedSection>
 
           <AnimatedSection>
