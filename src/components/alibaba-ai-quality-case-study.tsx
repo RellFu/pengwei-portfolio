@@ -619,194 +619,205 @@ function ArchitectureDetail() {
 
 function RawMaterialStack() {
   const documents = [
-    { icon: FileText, title: "script.txt", note: "INT. OFFICE, DAY. MIRANDA enters. EVERYONE stiffens...", rotate: "-rotate-3", offset: "translate-x-0 translate-y-0" },
-    { icon: ScrollText, title: "synopsis.doc", note: "A recent college grad lands a job as assistant to the powerful editor in chief of Runway magazine.", rotate: "rotate-2", offset: "translate-x-4 translate-y-3" },
-    { icon: StickyNote, title: "character-notes.md", note: "Andy Sachs: smart, earnest, hardworking. Miranda Priestly: commanding, perfectionist.", rotate: "-rotate-1", offset: "translate-x-8 translate-y-6" },
-    { icon: Folder, title: "story-materials/", note: "Key scenes: Andy's interview, the cerulean speech, meeting the designers, the choice.", rotate: "rotate-1", offset: "translate-x-12 translate-y-9" },
+    { icon: ScrollText, title: "story-overview.txt", note: "3,322 words \u00b7 one continuous narrative document", rotate: "-rotate-2", offset: "translate-x-0 translate-y-0" },
+    { icon: StickyNote, title: "character-biography.txt", note: "~8,000 words \u00b7 every character in one prose file", rotate: "rotate-2", offset: "translate-x-5 translate-y-4" },
+    { icon: FileText, title: "world-building.txt", note: "Setting, class ecology, and themes, written as chapters", rotate: "-rotate-1", offset: "translate-x-10 translate-y-8" },
+  ] as const;
+
+  const limits = [
+    "No field to filter on, only wording to match",
+    "Relationship stages have to be inferred from prose",
+    "World rules cannot be compared across works",
+    "Match rate dilutes as the library grows",
   ] as const;
 
   return (
-    <div className="relative h-[10.5rem]">
-      {documents.map((doc, index) => (
-        <div
-          key={doc.title}
-          className={`absolute inset-x-4 top-0 ${doc.offset} ${doc.rotate} rounded-2xl border border-black/8 bg-white p-3 shadow-[0_10px_28px_rgba(0,0,0,0.08)]`}
-          style={{ zIndex: index }}
-        >
-          <div className="flex items-center gap-2">
-            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[#f5f5f7] text-[#86868b]"><doc.icon className="h-3 w-3" /></span>
-            <p className="text-[9.5px] font-semibold text-[#515154]">{doc.title}</p>
+    <div className="flex h-full flex-col">
+      <div className="relative h-[9.5rem]">
+        {documents.map((doc, index) => (
+          <div
+            key={doc.title}
+            className={`absolute inset-x-4 top-0 ${doc.offset} ${doc.rotate} rounded-2xl border border-black/8 bg-white p-3 shadow-[0_10px_28px_rgba(0,0,0,0.08)]`}
+            style={{ zIndex: index }}
+          >
+            <div className="flex items-center gap-2">
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[#f5f5f7] text-[#86868b]"><doc.icon className="h-3 w-3" /></span>
+              <p className="text-[9.5px] font-semibold text-[#515154]">{doc.title}</p>
+            </div>
+            <p className="mt-1.5 line-clamp-2 text-[9px] leading-[1.45] text-[#a1a1a6]">{doc.note}</p>
           </div>
-          <p className="mt-1.5 line-clamp-2 text-[9px] leading-[1.45] text-[#a1a1a6]">{doc.note}</p>
+        ))}
+      </div>
+
+      <div className="mt-3 rounded-2xl bg-[#f5f5f7] p-3.5">
+        <p className="text-[9px] font-semibold uppercase tracking-[0.12em] text-[#86868b]">How a work was stored</p>
+        <div className="mt-2.5 flex items-start gap-2">
+          <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white text-[#86868b] shadow-sm"><Film className="h-3 w-3" /></span>
+          <p className="text-[9.5px] leading-[1.5] text-[#515154]"><strong className="font-semibold text-[#1d1d1f]">Record</strong> Title, type, genre tags, cover, and a synopsis under 300 characters.</p>
         </div>
-      ))}
+        <div className="mt-2 flex items-start gap-2">
+          <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white text-[#86868b] shadow-sm"><Database className="h-3 w-3" /></span>
+          <p className="text-[9.5px] leading-[1.5] text-[#515154]"><strong className="font-semibold text-[#1d1d1f]">Knowledge</strong> A JSON map pointing each dimension to one complete text file on object storage. A single work can carry tens of thousands of words this way.</p>
+        </div>
+      </div>
+
+      <div className="mt-3 rounded-2xl border border-dashed border-black/10 p-3.5">
+        <p className="text-[9px] font-semibold uppercase tracking-[0.12em] text-[#86868b]">What the Agent actually received</p>
+        <p className="mt-2 font-mono text-[9px] leading-[1.6] text-[#a1a1a6]">
+          &hellip; a rigidly tiered micro-society whose central standard of classification is fashion. Miranda occupies the top as the absolute monarch: her taste, decisions, and will become industry law. Nigel and Emily form the inner power circle. Andy enters at the bottom as an outsider &hellip;
+        </p>
+        <p className="mt-2.5 text-[9px] leading-[1.5] text-[#86868b]">The class structure is in there. It is a paragraph, so nothing can filter on it, rank it, or line it up against another work.</p>
+      </div>
+
+      <div className="mt-auto grid gap-1 pt-3">
+        {limits.map((limit) => (
+          <div key={limit} className="flex items-start gap-1.5 text-[9.5px] leading-[1.5] text-[#86868b]">
+            <X className="mt-0.5 h-3 w-3 shrink-0 text-[#c7c7cc]" />
+            {limit}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
 function StructuredKnowledgeCard() {
-  const metadata = [
-    ["Subject", "Workplace \u00b7 Fashion"],
-    ["Story type", "Drama \u00b7 Comedy"],
-    ["Structure", "Linear narrative"],
-    ["Narrative form", "Dramatic form"],
+  const character = [
+    ["Summary and tags", ["One-line summary", "Core trait tags", "Growth type"]],
+    ["Basic profile", ["Name", "Gender", "Age", "Appearance", "Personality", "Regional traits", "Role and occupation", "Education", "Family background", "Skills"]],
+    ["Psychology", ["Psychological portrait", "Core desire", "Core need"]],
+    ["History and action", ["Backstory", "Action-line summary"]],
+    ["Arc", ["Arc type", "Arc analysis", "Core lie", "Core fear"]],
   ] as const;
 
-  const threads = [
-    ["Primary", "Andy's workplace survival challenge"],
-    ["Secondary", "Andy's fashion transformation"],
-    ["Secondary", "The fracture between Andy and Nate"],
-    ["Secondary", "Miranda Priestly's display of power"],
+  const relationship = [
+    ["Fields", ["Counterpart character", "Relationship definition", "Relationship description"]],
+    ["Evolution beats", ["Stage label", "Scene anchor", "Beat description"]],
+  ] as const;
+
+  const world = [
+    ["Part I, setting", ["Physical law and geography", "Science and technology", "Social structure and class ecology", "Political and legal system", "Economic system and livelihood", "Culture, belief, and history"]],
+    ["High concept, when the genre calls for it", ["Core concept summary", "Custom fields, itemized"]],
+    ["Part II, themes", ["One field per core theme"]],
+  ] as const;
+
+  const plotline = [
+    ["Fields", ["Line name", "Primary or secondary", "Core dramatic question"]],
+    ["Arc, each beat scene-anchored", ["Beginning", "Rising action", "Climax", "Resolution"]],
+  ] as const;
+
+  const dimensions = [
+    { code: "CH", title: "Character", count: "22 fields", icon: CircleUserRound, groups: character },
+    { code: "RE", title: "Relationship", count: "3 fields + beats", icon: Users, groups: relationship },
+    { code: "WO", title: "World", count: "6 + 1 fields, plus themes", icon: Globe, groups: world },
+    { code: "PL", title: "Plotline", count: "4 fields", icon: Route, groups: plotline },
   ] as const;
 
   return (
-    <div className="rounded-[1.6rem] border border-black/8 bg-white p-5 shadow-[0_10px_28px_rgba(0,0,0,0.08)]">
+    <div className="rounded-[1.6rem] border border-black/8 bg-white p-4 shadow-[0_10px_28px_rgba(0,0,0,0.08)]">
       <div className="flex items-center gap-3">
         <span className="flex h-9 w-11 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#ef4444] to-[#7f1d1d] text-[9px] font-bold text-white">DWP</span>
         <div className="min-w-0">
           <p className="text-sm font-semibold text-[#1d1d1f]">The Devil Wears Prada</p>
-          <div className="mt-1 flex flex-wrap gap-1">
-            {["Workplace", "Comedy-drama", "Linear narrative"].map((tag) => (
-              <span key={tag} className="rounded-full bg-[#f5f5f7] px-1.5 py-0.5 text-[7.5px] text-[#6e6e73]">{tag}</span>
-            ))}
-          </div>
+          <p className="mt-0.5 text-[9px] text-[#86868b]">Four queryable dimensions, the same shape every work is broken into</p>
         </div>
       </div>
 
-      <div className="mt-4 grid gap-3 sm:grid-cols-2">
-        <div>
-          <p className="text-[9px] font-semibold uppercase tracking-[0.12em] text-[#0071e3]">Story overview</p>
-          <div className="mt-2 grid grid-cols-2 gap-1">
-            {metadata.map(([label, value]) => (
-              <div key={label} className="rounded-lg bg-[#f5f5f7] px-2 py-1.5">
-                <p className="text-[7.5px] font-medium text-[#86868b]">{label}</p>
-                <p className="mt-0.5 text-[9px] font-semibold leading-[1.3] text-[#1d1d1f]">{value}</p>
-              </div>
-            ))}
+      <div className="mt-3.5 grid gap-2.5 lg:grid-cols-2">
+        {dimensions.map((dimension) => (
+          <div key={dimension.code} className="rounded-[1.2rem] bg-[#f5f5f7] p-3.5">
+            <div className="flex items-center gap-2">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white text-[#0071e3] shadow-sm"><dimension.icon className="h-3 w-3" /></span>
+              <p className="text-[11px] font-semibold text-[#1d1d1f]">{dimension.title}</p>
+              <span className="ml-auto text-[8px] font-medium text-[#86868b]">{dimension.count}</span>
+            </div>
+
+            <div className="mt-2.5 space-y-2">
+              {dimension.groups.map(([group, fields]) => (
+                <div key={group}>
+                  <p className="text-[8px] font-semibold uppercase tracking-[0.1em] text-[#0071e3]">{group}</p>
+                  <div className="mt-1 flex flex-wrap gap-1">
+                    {fields.map((field) => (
+                      <span key={field} className="rounded-md bg-white px-1.5 py-[3px] text-[8.5px] leading-[1.3] text-[#515154] shadow-sm">{field}</span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-        <div>
-          <p className="text-[9px] font-semibold uppercase tracking-[0.12em] text-[#0071e3]">Main structural threads</p>
-          <div className="mt-2 space-y-1">
-            {threads.map(([label, copy]) => (
-              <div key={copy} className="rounded-lg bg-[#f5f5f7] px-2 py-1.5">
-                <p className="text-[7.5px] font-medium text-[#86868b]">{label}</p>
-                <p className="mt-0.5 text-[9px] font-semibold leading-[1.3] text-[#1d1d1f]">{copy}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
 }
 
 function KnowledgeBeforeAfter() {
+  const rationale = [
+    {
+      title: "Wording match dilutes, field match does not",
+      body: "Searching prose for \u201coppression\u201d misses a work that wrote \u201csevere demands.\u201d Across 4,700 works, any hit rate that depends on word choice gets worse as the library grows. A field query does not.",
+    },
+    {
+      title: "Relationship stages become a defined value",
+      body: "In prose, asking how many stages Andy and Miranda go through means the model segments 3,322 words itself, and it might answer three or five. Structured, the stage count, the labels, and the scene anchors are all fixed. It reads them instead of guessing.",
+    },
+    {
+      title: "World rules become comparable across works",
+      body: "With class ecology as its own field, you can pull every work that names a top tier, a power circle, and an outsider, then compare how each one draws the lines. Reading 4,700 worldbuilding documents by hand is not an option.",
+    },
+    {
+      title: "Structure becomes a Skill input, not a parsing task",
+      body: "The Three-Act Diagnosis Skill in section 03 has to identify plotlines from raw script text first. Hand it plotlines that already carry a dramatic question and a scene-anchored arc, and its input precision moves up a level.",
+    },
+  ] as const;
+
   return (
     <div className="mt-4">
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-[0.85fr_1.15fr]">
-        <GlassSurface className="overflow-hidden rounded-[1.9rem] p-0">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-[0.72fr_1.28fr]">
+        <GlassSurface className="flex flex-col overflow-hidden rounded-[1.9rem] p-0">
           <div className="border-b border-black/5 px-5 py-4">
             <SectionLabel>
-              Before: <span className="font-semibold text-[#1d1d1f]">Raw Story Materials</span>
+              Before: <span className="font-semibold text-[#1d1d1f]">Long-form documents</span>
             </SectionLabel>
           </div>
-          <div className="p-5">
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#111318] px-3 py-1.5 text-xs font-semibold text-white">4,700+ Works</div>
-            <RawMaterialStack />
-            <div className="mt-2 flex items-center gap-2 text-[10px] text-[#86868b]"><FileText className="h-3.5 w-3.5" />Long-form, unstructured text, readable but hard to query</div>
+          <div className="flex flex-1 flex-col p-5">
+            <div className="inline-flex w-fit items-center gap-2 rounded-full bg-[#111318] px-3 py-1.5 text-xs font-semibold text-white">4,700+ Works</div>
+            <div className="mt-3 flex-1">
+              <RawMaterialStack />
+            </div>
           </div>
         </GlassSurface>
 
         <WarmSurface className="overflow-hidden rounded-[1.9rem] p-0">
           <div className="border-b border-black/5 px-5 py-4">
             <SectionLabel>
-              After: <span className="font-semibold text-[#1d1d1f]">Structured Knowledge Base</span>
+              After: <span className="font-semibold text-[#1d1d1f]">The Schema I designed</span>
             </SectionLabel>
           </div>
           <div className="p-5">
             <StructuredKnowledgeCard />
-            <div className="mt-3 flex items-center gap-2 text-[10px] text-[#86868b]"><ScanSearch className="h-3.5 w-3.5" />Field-level story knowledge, searchable, comparable, usable by AI</div>
+            <div className="mt-3 flex items-center gap-2 text-[10px] text-[#86868b]"><ScanSearch className="h-3.5 w-3.5" />Every field is queryable on its own, comparable across works, and readable by the Agent without inference</div>
           </div>
         </WarmSurface>
       </div>
-      <p className="mt-5 max-w-3xl text-center text-sm leading-6 text-[#6e6e73] sm:mx-auto">We turned story knowledge hidden in long-form text into structured, field-level records for characters, relationships, worldbuilding, and plot.</p>
+
+      <p className="mt-9 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Why cut it this way</p>
+      <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
+        {rationale.map((item) => (
+          <div key={item.title} className="rounded-[1.4rem] border border-black/8 bg-white p-4 shadow-sm">
+            <p className="text-xs font-semibold text-[#1d1d1f]">{item.title}</p>
+            <p className="mt-2 text-[10.5px] leading-[1.55] text-[#86868b]">{item.body}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
 function KnowledgeFoundationDetail() {
-  const entities = [
-    {
-      code: "CH",
-      title: "Character",
-      count: "20+ fields",
-      fields: ["One-line summary", "Core trait tags", "Growth type", "Name, gender, age", "Appearance, personality", "Occupation, education, family", "Psychological portrait", "Core desire, core need", "Backstory", "Action-line summary", "Arc type, arc analysis", "Core lie, core fear"],
-    },
-    {
-      code: "RE",
-      title: "Relationship",
-      count: "3 fields",
-      fields: ["Relationship definition", "Relationship description", "Evolution beats, with scene anchors"],
-    },
-    {
-      code: "WO",
-      title: "World",
-      count: "6 fields",
-      fields: ["Physical law and geography", "Science and technology", "Social structure and class", "Political and legal system", "Economic system", "Culture, belief, and history"],
-    },
-    {
-      code: "PL",
-      title: "Plotline",
-      count: "4 fields",
-      fields: ["Line name", "Primary or secondary", "Core dramatic question", "Arc, beginning to resolution"],
-    },
-  ] as const;
-
   return (
     <div className="mt-8">
       <KnowledgeBeforeAfter />
-
-      <p className="mt-10 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Entity Schema, four dimensions</p>
-      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {entities.map((entity) => (
-          <div key={entity.code} className="rounded-[1.4rem] bg-[#f5f5f7] p-5">
-            <div className="flex items-center justify-between">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-[10px] font-semibold text-[#0071e3] shadow-sm">{entity.code}</span>
-              <span className="text-[9px] font-medium text-[#86868b]">{entity.count}</span>
-            </div>
-            <h3 className="mt-4 font-semibold text-[#1d1d1f]">{entity.title}</h3>
-            <div className="mt-3 space-y-1">
-              {entity.fields.map((field) => (
-                <p key={field} className="text-[10.5px] leading-4 text-[#86868b]">{field}</p>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <p className="mt-9 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">How a work is actually stored</p>
-      <div className="mt-4 grid gap-3 sm:grid-cols-2">
-        <div className="rounded-[1.6rem] border border-black/8 bg-white p-5 shadow-sm">
-          <div className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#eaf4ff] text-[#0071e3]"><Film className="h-[18px] w-[18px]" /></span>
-            <p className="text-sm font-semibold text-[#1d1d1f]">IP metadata</p>
-          </div>
-          <p className="mt-4 text-[11px] leading-5 text-[#515154]">Name, type, genre tags, cover, and a short synopsis, the record that lets a title get matched by name in the first place.</p>
-        </div>
-        <div className="rounded-[1.6rem] border border-black/8 bg-white p-5 shadow-sm">
-          <div className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#eaf4ff] text-[#0071e3]"><Database className="h-[18px] w-[18px]" /></span>
-            <p className="text-sm font-semibold text-[#1d1d1f]">Knowledge files, on object storage</p>
-          </div>
-          <div className="mt-4 space-y-1.5">
-            {["Character biography", "World building", "Story overview"].map((file) => (
-              <p key={file} className="rounded-lg bg-[#f5f5f7] px-3 py-2 text-[10.5px] leading-4 text-[#515154]">{file}</p>
-            ))}
-          </div>
-        </div>
-      </div>
-      <p className="mt-3 text-[10.5px] leading-4 text-[#86868b]">Each dimension is its own file rather than one long document. A single work can carry tens of thousands of words of knowledge, splitting by dimension lets a request pull only the piece it actually needs.</p>
     </div>
   );
 }
