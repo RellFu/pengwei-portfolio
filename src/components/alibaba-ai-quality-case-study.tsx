@@ -6,9 +6,11 @@ import Link from "next/link";
 import { useGSAP } from "@gsap/react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
 import {
   ArrowLeft,
   ArrowRight,
+  BarChart3,
   BookOpenCheck,
   Bot,
   Braces,
@@ -17,17 +19,16 @@ import {
   Check,
   CheckCircle2,
   ChevronRight,
-  CircleDot,
   Cloud,
   Code2,
   Cog,
   Database,
   Eye,
-  FileSearch,
   FileText,
   Folder,
   GitBranch,
   Globe,
+  Info,
   Layers3,
   LayoutTemplate,
   LockKeyhole,
@@ -36,6 +37,8 @@ import {
   Radar,
   Route,
   ScanSearch,
+  Search,
+  ShieldCheck,
   Sparkles,
   Split,
   Users,
@@ -54,7 +57,7 @@ type ProductScenarioId = "diagnose" | "bible" | "brief";
 type InspectorTab = "artifact" | "trace" | "knowledge" | "files";
 type CapabilityId = "context" | "skills" | "knowledge" | "action" | "orchestration";
 
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const productScenarios = {
   diagnose: {
@@ -686,10 +689,170 @@ function KnowledgeSchemaDetail() {
   );
 }
 
+function SkillEcosystemAuditPanel() {
+  const reduceMotion = useReducedMotion();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const countRef = useRef<HTMLParagraphElement>(null);
+
+  const scopeStats = [
+    { icon: Layers3, label: "55 Skills in catalog" },
+    { icon: Cog, label: "10 engineering dimensions" },
+    { icon: Split, label: "3 variant types analyzed" },
+    { icon: ShieldCheck, label: "Automated conflict detection" },
+  ] as const;
+
+  const compassIcons = [Search, Zap, ShieldCheck, BarChart3] as const;
+
+  const findings = [
+    {
+      icon: X,
+      tone: "critical" as const,
+      label: "Identical descriptions",
+      title: "Two expert whitepaper Skills shipped with the same description.",
+      body: "The Agent had no basis to prefer one, so selection was effectively random.",
+    },
+    {
+      icon: Split,
+      tone: "warning" as const,
+      label: "Trigger collision",
+      title: "Overlapping trigger words across the story structure Skill.",
+      body: "The words that should route to a diagnostic check overlapped with generation mode.",
+    },
+    {
+      icon: Info,
+      tone: "info" as const,
+      label: "Scale insight",
+      title: "Failures only show up at scale.",
+      body: "One Skill in isolation always looks correct. These are catalog-level properties.",
+    },
+  ] as const;
+
+  const toneClasses: Record<(typeof findings)[number]["tone"], { border: string; bg: string; iconBg: string; iconText: string; label: string }> = {
+    critical: { border: "border-[#ff6b6b]/20", bg: "bg-[#fff5f5]", iconBg: "bg-white", iconText: "text-[#e5484d]", label: "text-[#e5484d]" },
+    warning: { border: "border-[#ff9500]/20", bg: "bg-[#fffaf0]", iconBg: "bg-white", iconText: "text-[#c2760c]", label: "text-[#c2760c]" },
+    info: { border: "border-[#0071e3]/15", bg: "bg-[#f5f9ff]", iconBg: "bg-white", iconText: "text-[#0071e3]", label: "text-[#0071e3]" },
+  };
+
+  useGSAP(
+    () => {
+      const iconTargets = gsap.utils.toArray<HTMLElement>("[data-audit-icon]", rootRef.current);
+      const findingTargets = gsap.utils.toArray<HTMLElement>("[data-audit-finding]", rootRef.current);
+      const scopeTargets = gsap.utils.toArray<HTMLElement>("[data-audit-scope]", rootRef.current);
+      const ring = rootRef.current?.querySelector<HTMLElement>("[data-audit-ring]");
+
+      if (reduceMotion) {
+        gsap.set([...iconTargets, ...findingTargets, ...scopeTargets, ring].filter(Boolean), { clearProps: "all" });
+        if (countRef.current) countRef.current.textContent = "55";
+        return;
+      }
+
+      gsap.set(iconTargets, { autoAlpha: 0, scale: 0.6 });
+      gsap.set(findingTargets, { autoAlpha: 0, y: 14 });
+      gsap.set(scopeTargets, { autoAlpha: 0, y: 8 });
+      if (ring) gsap.set(ring, { scale: 0.85, autoAlpha: 0 });
+      if (countRef.current) countRef.current.textContent = "0";
+
+      ScrollTrigger.create({
+        trigger: rootRef.current,
+        start: "top 78%",
+        once: true,
+        onEnter: () => {
+          const tl = gsap.timeline();
+          if (ring) tl.to(ring, { scale: 1, autoAlpha: 1, duration: 0.5, ease: "power3.out" });
+          tl.to(iconTargets, { autoAlpha: 1, scale: 1, duration: 0.4, stagger: 0.08, ease: "power3.out" }, "-=0.25");
+          if (countRef.current) {
+            const counter = { value: 0 };
+            tl.to(counter, {
+              value: 55,
+              duration: 0.7,
+              ease: "power2.out",
+              onUpdate: () => {
+                if (countRef.current) countRef.current.textContent = String(Math.round(counter.value));
+              },
+            }, "-=0.35");
+          }
+          tl.to(scopeTargets, { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.06, ease: "power3.out" }, "-=0.3");
+          tl.to(findingTargets, { autoAlpha: 1, y: 0, duration: 0.45, stagger: 0.09, ease: "power3.out" }, "-=0.15");
+        },
+      });
+    },
+    { scope: rootRef, dependencies: [reduceMotion], revertOnUpdate: true },
+  );
+
+  return (
+    <div ref={rootRef} className="mt-4 overflow-hidden rounded-[2rem] border border-black/8 bg-gradient-to-br from-white via-white to-[#f2f6ff] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.06)] sm:p-9">
+      <div className="grid gap-8 lg:grid-cols-[1fr_auto_1fr] lg:items-center">
+        <div>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Full ecosystem audit</p>
+          <h3 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">Testing the catalog, not one Skill</h3>
+          <p className="mt-3 max-w-xs text-sm leading-6 text-[#6e6e73]">Running comprehensive checks across the full catalog to make sure fast, expert, and generate variants stay cleanly distinguishable to the router.</p>
+        </div>
+
+        <div className="relative mx-auto flex h-56 w-56 shrink-0 items-center justify-center">
+          <div data-audit-ring className="absolute inset-0 rounded-full border border-black/8 bg-[conic-gradient(from_180deg,#eaf4ff,#ffffff,#eaf4ff)]" />
+          <div className="absolute inset-3 rounded-full border border-[#0071e3]/12" />
+          <div className="relative flex flex-col items-center">
+            <p ref={countRef} className="text-6xl font-semibold tracking-[-0.04em] text-[#1d1d1f]">55</p>
+            <p className="mt-1 text-xs font-semibold text-[#515154]">Skills audited</p>
+            <p className="mt-0.5 text-[10px] text-[#86868b]">10 engineering dimensions</p>
+          </div>
+          {compassIcons.map((Icon, index) => {
+            const angle = index * 90 - 45;
+            const radius = 96;
+            const x = Math.cos((angle * Math.PI) / 180) * radius;
+            const y = Math.sin((angle * Math.PI) / 180) * radius;
+            return (
+              <span
+                key={index}
+                data-audit-icon
+                className="absolute flex h-9 w-9 items-center justify-center rounded-full border border-black/8 bg-white text-[#0071e3] shadow-[0_8px_20px_rgba(0,0,0,0.08)]"
+                style={{ transform: `translate(${x}px, ${y}px)` }}
+              >
+                <Icon className="h-4 w-4" />
+              </span>
+            );
+          })}
+        </div>
+
+        <div className="space-y-2.5">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Audit scope</p>
+          {scopeStats.map((stat) => (
+            <div key={stat.label} data-audit-scope className="flex items-center gap-2.5">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-[#eaf4ff] text-[#0071e3]"><stat.icon className="h-3.5 w-3.5" /></span>
+              <span className="text-xs font-medium text-[#515154]">{stat.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-9 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <span className="h-2 w-2 rounded-full bg-[#0071e3]" />
+          <p className="text-sm font-semibold text-[#1d1d1f]">Key findings</p>
+        </div>
+      </div>
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        {findings.map((finding) => {
+          const tone = toneClasses[finding.tone];
+          return (
+            <div key={finding.label} data-audit-finding className={`rounded-[1.4rem] border ${tone.border} ${tone.bg} p-5 transition hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(0,0,0,0.06)]`}>
+              <span className={`flex h-9 w-9 items-center justify-center rounded-full ${tone.iconBg} ${tone.iconText} shadow-sm`}><finding.icon className="h-4 w-4" /></span>
+              <p className={`mt-3 text-[10px] font-semibold uppercase tracking-[0.13em] ${tone.label}`}>{finding.label}</p>
+              <p className="mt-2 text-sm font-semibold leading-5 text-[#1d1d1f]">{finding.title}</p>
+              <p className="mt-2 text-xs leading-5 text-[#86868b]">{finding.body}</p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function SkillDiagnosisPanel({ onOpenDetail }: { onOpenDetail: (detail: "script" | "report") => void }) {
   const commands = [
     ["Read file", "bad_parasite_v2.txt · attached"],
     ["Loaded Skill", "Three-Act Diagnosis, explicit @mention"],
+
     ["Parsed script", "110 pages · 12 beats extracted"],
     ["Evaluated", "8 dimensions against the misjudgment checklist"],
     ["Checked checklist", "midpoint-vs-escalation triggered, correctly rejected p.44"],
@@ -1199,54 +1362,7 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
             <p className="mt-4 max-w-3xl text-sm leading-7 text-[#6e6e73]">
               Running checks across the full catalog, I found trigger words colliding between Skills, fast and expert variants that were indistinguishable to the router, and check versus generate entry points stepping on each other. I did not read this in a bug report. I found it by testing the catalog myself, and I built the tool that catches it going forward.
             </p>
-            <div className="mt-4 grid gap-5 lg:grid-cols-[0.92fr_1.08fr]">
-              <div className="rounded-[2rem] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Full ecosystem audit</p>
-                    <p className="mt-3 text-5xl font-semibold tracking-[-0.05em] text-[#1d1d1f]">55</p>
-                    <p className="mt-2 text-sm text-[#6e6e73]">Skills × 10 engineering dimensions</p>
-                  </div>
-                  <FileSearch className="h-6 w-6 text-[#0071e3]" />
-                </div>
-                <div className="mt-7 grid gap-2">
-                  {[
-                    "Check and generation trigger conflicts",
-                    "Fast and expert variants indistinguishable",
-                    "Missing domain and task granularity",
-                    "Capability promises exceeded execution",
-                    "Validation and exit rules missing",
-                    "Duplicate workflow patterns",
-                  ].map((item) => (
-                    <div key={item} className="flex gap-2 rounded-xl bg-[#f5f5f7] p-3 text-xs leading-5 text-[#6e6e73]"><CircleDot className="mt-1 h-3 w-3 shrink-0 text-[#0071e3]" />{item}</div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="rounded-[2rem] bg-[#111318] p-6 text-white shadow-[0_28px_80px_rgba(0,0,0,0.18)] sm:p-8">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">Two findings that mattered</p>
-                    <h3 className="mt-2 text-xl font-semibold">The router was guessing</h3>
-                  </div>
-                  <Split className="h-5 w-5 text-[#65b5ff]" />
-                </div>
-                <div className="mt-6 space-y-3">
-                  <div className="rounded-2xl border border-[#ff6b6b]/20 bg-[#ff6b6b]/8 p-5">
-                    <div className="flex items-center gap-2 text-[#ff9b9b]"><X className="h-4 w-4" /><span className="text-[10px] font-semibold uppercase tracking-[0.13em]">Identical descriptions</span></div>
-                    <p className="mt-4 text-sm leading-6 text-white/75">Two expert whitepaper Skills shipped with the same description text. The Agent had no basis to prefer one, so selection was effectively random.</p>
-                  </div>
-                  <div className="rounded-2xl border border-[#ff9500]/25 bg-[#ff9500]/10 p-5">
-                    <div className="flex items-center gap-2 text-[#ffc078]"><Split className="h-4 w-4" /><span className="text-[10px] font-semibold uppercase tracking-[0.13em]">Trigger collision</span></div>
-                    <p className="mt-4 text-sm leading-6 text-white/75">On the story structure Skill, the words that should route to a diagnostic check overlapped the words that should route to generation. Users got the wrong mode.</p>
-                  </div>
-                  <div className="rounded-2xl border border-[#65b5ff]/20 bg-[#65b5ff]/10 p-4">
-                    <p className="text-xs font-semibold text-[#a9d5ff]">Why it only appears at scale</p>
-                    <p className="mt-2 text-xs leading-5 text-white/50">One Skill in isolation always looks correct. These failures are properties of the catalog, not of any single Skill.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <SkillEcosystemAuditPanel />
 
             <div className="mt-5 rounded-[2rem] bg-[#111318] p-6 text-white shadow-[0_28px_80px_rgba(0,0,0,0.18)] sm:p-8">
               <div className="flex items-start justify-between">
