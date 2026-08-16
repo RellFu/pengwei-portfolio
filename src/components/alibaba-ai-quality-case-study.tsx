@@ -47,8 +47,6 @@ import {
   ShieldCheck,
   Sparkles,
   Split,
-  StickyNote,
-  ScrollText,
   Users,
   Wrench,
   X,
@@ -617,71 +615,188 @@ function ArchitectureDetail() {
   );
 }
 
-function RawMaterialStack() {
-  const documents = [
-    { icon: ScrollText, title: "story-overview.txt", note: "3,322 words \u00b7 one continuous narrative document", rotate: "-rotate-2", offset: "translate-x-0 translate-y-0" },
-    { icon: StickyNote, title: "character-biography.txt", note: "~8,000 words \u00b7 every character in one prose file", rotate: "rotate-2", offset: "translate-x-5 translate-y-4" },
-    { icon: FileText, title: "world-building.txt", note: "Setting, class ecology, and themes, written as chapters", rotate: "-rotate-1", offset: "translate-x-10 translate-y-8" },
-  ] as const;
+const SCRIPT_PAGE = `INT. OFFICE - DAY
 
-  const limits = [
-    "No field to filter on, only wording to match",
-    "Relationship stages have to be inferred from prose",
-    "World rules cannot be compared across works",
-    "Match rate dilutes as the library grows",
-  ] as const;
+ANDY sits at her desk.
+MIRANDA enters.
 
+        MIRANDA
+  We need that story
+  by noon.
+
+        ANDY
+  Yes, Miranda.
+     (beat)
+  I'll have it.
+
+EXT. STREET - DAY
+
+Andy walks quickly
+through the crowd.
+
+        FADE OUT.`;
+
+const PAPER_LINE_WIDTHS = [96, 88, 92, 74, 90, 84, 66, 94, 80, 88] as const;
+
+function PaperLines({ count, seed = 0 }: { count: number; seed?: number }) {
   return (
-    <div className="flex h-full flex-col">
-      <div className="relative h-[9.5rem]">
-        {documents.map((doc, index) => (
-          <div
-            key={doc.title}
-            className={`absolute inset-x-4 top-0 ${doc.offset} ${doc.rotate} rounded-2xl border border-black/8 bg-white p-3 shadow-[0_10px_28px_rgba(0,0,0,0.08)]`}
-            style={{ zIndex: index }}
-          >
-            <div className="flex items-center gap-2">
-              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[#f5f5f7] text-[#86868b]"><doc.icon className="h-3 w-3" /></span>
-              <p className="text-[9.5px] font-semibold text-[#515154]">{doc.title}</p>
-            </div>
-            <p className="mt-1.5 line-clamp-2 text-[9px] leading-[1.45] text-[#a1a1a6]">{doc.note}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="mt-3 rounded-2xl bg-[#f5f5f7] p-3.5">
-        <p className="text-[9px] font-semibold uppercase tracking-[0.12em] text-[#86868b]">How a work was stored</p>
-        <div className="mt-2.5 flex items-start gap-2">
-          <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white text-[#86868b] shadow-sm"><Film className="h-3 w-3" /></span>
-          <p className="text-[9.5px] leading-[1.5] text-[#515154]"><strong className="font-semibold text-[#1d1d1f]">Record</strong> Title, type, genre tags, cover, and a synopsis under 300 characters.</p>
-        </div>
-        <div className="mt-2 flex items-start gap-2">
-          <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white text-[#86868b] shadow-sm"><Database className="h-3 w-3" /></span>
-          <p className="text-[9.5px] leading-[1.5] text-[#515154]"><strong className="font-semibold text-[#1d1d1f]">Knowledge</strong> A JSON map pointing each dimension to one complete text file on object storage. A single work can carry tens of thousands of words this way.</p>
-        </div>
-      </div>
-
-      <div className="mt-3 rounded-2xl border border-dashed border-black/10 p-3.5">
-        <p className="text-[9px] font-semibold uppercase tracking-[0.12em] text-[#86868b]">What the Agent actually received</p>
-        <p className="mt-2 font-mono text-[9px] leading-[1.6] text-[#a1a1a6]">
-          &hellip; a rigidly tiered micro-society whose central standard of classification is fashion. Miranda occupies the top as the absolute monarch: her taste, decisions, and will become industry law. Nigel and Emily form the inner power circle. Andy enters at the bottom as an outsider &hellip;
-        </p>
-        <p className="mt-2.5 text-[9px] leading-[1.5] text-[#86868b]">The class structure is in there. It is a paragraph, so nothing can filter on it, rank it, or line it up against another work.</p>
-      </div>
-
-      <div className="mt-auto grid gap-1 pt-3">
-        {limits.map((limit) => (
-          <div key={limit} className="flex items-start gap-1.5 text-[9.5px] leading-[1.5] text-[#86868b]">
-            <X className="mt-0.5 h-3 w-3 shrink-0 text-[#c7c7cc]" />
-            {limit}
-          </div>
-        ))}
-      </div>
+    <div className="mt-1.5 space-y-[3px]">
+      {Array.from({ length: count }).map((_, index) => (
+        <div
+          key={index}
+          className="h-[2px] rounded-full bg-[#e3e3e8]"
+          style={{ width: `${PAPER_LINE_WIDTHS[(index + seed) % PAPER_LINE_WIDTHS.length]}%` }}
+        />
+      ))}
     </div>
   );
 }
 
-function StructuredKnowledgeCard() {
+function PileSheet({
+  left,
+  top,
+  rotate,
+  width,
+  z,
+  children,
+}: {
+  left: string;
+  top: string;
+  rotate: number;
+  width: string;
+  z: number;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      data-pile-front
+      data-rotate={rotate}
+      className="absolute overflow-hidden rounded-xl border border-black/[0.06] bg-white p-3 shadow-[0_8px_22px_rgba(0,0,0,0.10)]"
+      style={{ left, top, width, zIndex: z, transform: `rotate(${rotate}deg)` }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function RawMaterialPile() {
+  const reduceMotion = useReducedMotion();
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  const backSheets = [
+    { left: "-8%", top: "1%", rotate: -13, width: "54%", lines: 7 },
+    { left: "50%", top: "-5%", rotate: 9, width: "52%", lines: 6 },
+    { left: "60%", top: "20%", rotate: -6, width: "48%", lines: 8 },
+    { left: "-12%", top: "33%", rotate: 11, width: "52%", lines: 7 },
+    { left: "20%", top: "57%", rotate: -10, width: "56%", lines: 8 },
+    { left: "58%", top: "60%", rotate: 6, width: "50%", lines: 7 },
+    { left: "2%", top: "78%", rotate: 4, width: "60%", lines: 6 },
+    { left: "44%", top: "84%", rotate: -4, width: "54%", lines: 5 },
+  ] as const;
+
+  useGSAP(
+    () => {
+      const back = gsap.utils.toArray<HTMLElement>("[data-pile-back]", rootRef.current);
+      const front = gsap.utils.toArray<HTMLElement>("[data-pile-front]", rootRef.current);
+      const targetRotation = (el: HTMLElement) => Number(el.dataset.rotate ?? 0);
+
+      if (reduceMotion) {
+        [...back, ...front].forEach((el) => {
+          gsap.set(el, { autoAlpha: 1, y: 0, scale: 1, rotation: targetRotation(el) });
+        });
+        return;
+      }
+
+      [...back, ...front].forEach((el) => {
+        gsap.set(el, { autoAlpha: 0, y: 26, scale: 0.95, rotation: 0 });
+      });
+
+      ScrollTrigger.create({
+        trigger: rootRef.current,
+        start: "top 80%",
+        once: true,
+        onEnter: () => {
+          const tl = gsap.timeline();
+          back.forEach((el, index) => {
+            tl.to(el, { autoAlpha: 1, y: 0, scale: 1, rotation: targetRotation(el), duration: 0.5, ease: "power3.out" }, index * 0.045);
+          });
+          front.forEach((el, index) => {
+            tl.to(el, { autoAlpha: 1, y: 0, scale: 1, rotation: targetRotation(el), duration: 0.55, ease: "power3.out" }, 0.24 + index * 0.09);
+          });
+        },
+      });
+    },
+    { scope: rootRef, dependencies: [reduceMotion], revertOnUpdate: true },
+  );
+
+  return (
+    <div
+      ref={rootRef}
+      className="relative h-full min-h-[27rem] overflow-hidden rounded-[1.4rem] bg-gradient-to-br from-[#f1f1f4] to-[#e5e5ea]"
+    >
+      {backSheets.map((sheet, index) => (
+        <div
+          key={`${sheet.left}-${sheet.top}`}
+          data-pile-back
+          data-rotate={sheet.rotate}
+          className="absolute rounded-xl border border-black/[0.05] bg-white/85 p-3 shadow-[0_4px_14px_rgba(0,0,0,0.06)]"
+          style={{ left: sheet.left, top: sheet.top, width: sheet.width, zIndex: index, transform: `rotate(${sheet.rotate}deg)` }}
+        >
+          <PaperLines count={sheet.lines} seed={index * 3} />
+        </div>
+      ))}
+
+      <PileSheet left="-3%" top="7%" rotate={-7} width="57%" z={20}>
+        <p className="font-mono text-[10px] font-semibold text-[#1d1d1f]">script</p>
+        <p className="mt-2 whitespace-pre font-mono text-[7px] leading-[1.55] text-[#6e6e73]">{SCRIPT_PAGE}</p>
+      </PileSheet>
+
+      <PileSheet left="32%" top="2%" rotate={4} width="55%" z={21}>
+        <p className="text-[10px] font-semibold text-[#1d1d1f]">synopsis</p>
+        <p className="mt-2 font-mono text-[7px] leading-[1.6] text-[#6e6e73]">
+          Andy Sachs, a recent college graduate, lands a job as assistant to the powerful editor in chief of Runway magazine. Over time she navigates the demanding world of fashion journalism, struggles with identity and values, and ultimately chooses her own path.
+        </p>
+        <PaperLines count={5} seed={2} />
+      </PileSheet>
+
+      <PileSheet left="6%" top="38%" rotate={-2} width="56%" z={22}>
+        <p className="text-[10px] font-semibold text-[#1d1d1f]">character notes</p>
+        <div className="mt-2 space-y-1.5 font-mono text-[7px] leading-[1.5] text-[#6e6e73]">
+          <div>
+            <p className="font-semibold text-[#515154]">Andy Sachs</p>
+            <p>Smart, earnest, hard-working. Needs growth in confidence.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-[#515154]">Miranda Priestly</p>
+            <p>Commanding, perfectionist, intimidating.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-[#515154]">Nigel</p>
+            <p>Witty, loyal, creative director.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-[#515154]">Nate Cooper</p>
+            <p>Warm, supportive, grounded.</p>
+          </div>
+        </div>
+      </PileSheet>
+
+      <PileSheet left="43%" top="52%" rotate={7} width="54%" z={23}>
+        <p className="text-[10px] font-semibold text-[#1d1d1f]">story materials</p>
+        <p className="mt-2 font-mono text-[7px] font-semibold text-[#515154]">Key Scenes / Ideas</p>
+        <div className="mt-1 space-y-[3px] font-mono text-[7px] leading-[1.5] text-[#6e6e73]">
+          {["Andy's interview", "First day at Runway", "The cerulean speech", "Meeting the designers", "Paris Fashion Week", "The choice"].map((item) => (
+            <p key={item}>&middot; {item}</p>
+          ))}
+        </div>
+        <p className="mt-2 font-mono text-[7px] font-semibold text-[#515154]">Notes</p>
+        <PaperLines count={4} seed={5} />
+      </PileSheet>
+    </div>
+  );
+}
+
+function SchemaDimensionGrid() {
   const character = [
     ["Summary and tags", ["One-line summary", "Core trait tags", "Growth type"]],
     ["Basic profile", ["Name", "Gender", "Age", "Appearance", "Personality", "Regional traits", "Role and occupation", "Education", "Family background", "Skills"]],
@@ -707,46 +822,39 @@ function StructuredKnowledgeCard() {
   ] as const;
 
   const dimensions = [
-    { code: "CH", title: "Character", count: "22 fields", icon: CircleUserRound, groups: character },
-    { code: "RE", title: "Relationship", count: "3 fields + beats", icon: Users, groups: relationship },
-    { code: "WO", title: "World", count: "6 + 1 fields, plus themes", icon: Globe, groups: world },
-    { code: "PL", title: "Plotline", count: "4 fields", icon: Route, groups: plotline },
+    { title: "Character", count: "22 fields", icon: CircleUserRound, groups: character, span: "lg:col-span-12" },
+    { title: "World", count: "6 + 1 fields, plus themes", icon: Globe, groups: world, span: "lg:col-span-4" },
+    { title: "Relationship", count: "3 fields + beats", icon: Users, groups: relationship, span: "lg:col-span-4" },
+    { title: "Plotline", count: "4 fields", icon: Route, groups: plotline, span: "lg:col-span-4" },
   ] as const;
 
   return (
-    <div className="rounded-[1.6rem] border border-black/8 bg-white p-4 shadow-[0_10px_28px_rgba(0,0,0,0.08)]">
-      <div className="flex items-center gap-3">
-        <span className="flex h-9 w-11 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#ef4444] to-[#7f1d1d] text-[9px] font-bold text-white">DWP</span>
-        <div className="min-w-0">
-          <p className="text-sm font-semibold text-[#1d1d1f]">The Devil Wears Prada</p>
-          <p className="mt-0.5 text-[9px] text-[#86868b]">Four queryable dimensions, the same shape every work is broken into</p>
-        </div>
-      </div>
-
-      <div className="mt-3.5 grid gap-2.5 lg:grid-cols-2">
-        {dimensions.map((dimension) => (
-          <div key={dimension.code} className="rounded-[1.2rem] bg-[#f5f5f7] p-3.5">
-            <div className="flex items-center gap-2">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white text-[#0071e3] shadow-sm"><dimension.icon className="h-3 w-3" /></span>
-              <p className="text-[11px] font-semibold text-[#1d1d1f]">{dimension.title}</p>
-              <span className="ml-auto text-[8px] font-medium text-[#86868b]">{dimension.count}</span>
-            </div>
-
-            <div className="mt-2.5 space-y-2">
-              {dimension.groups.map(([group, fields]) => (
-                <div key={group}>
-                  <p className="text-[8px] font-semibold uppercase tracking-[0.1em] text-[#0071e3]">{group}</p>
-                  <div className="mt-1 flex flex-wrap gap-1">
-                    {fields.map((field) => (
-                      <span key={field} className="rounded-md bg-white px-1.5 py-[3px] text-[8.5px] leading-[1.3] text-[#515154] shadow-sm">{field}</span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-12 lg:items-start">
+      {dimensions.map((dimension) => (
+        <div
+          key={dimension.title}
+          className={`rounded-[1.3rem] border border-black/[0.06] bg-white p-4 shadow-[0_4px_16px_rgba(0,0,0,0.05)] ${dimension.span}`}
+        >
+          <div className="flex items-center gap-2">
+            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-[#eaf4ff] text-[#0071e3]"><dimension.icon className="h-3 w-3" /></span>
+            <p className="text-[11.5px] font-semibold tracking-[-0.01em] text-[#1d1d1f]">{dimension.title}</p>
+            <span className="ml-auto shrink-0 text-[8.5px] font-medium text-[#a1a1a6]">{dimension.count}</span>
           </div>
-        ))}
-      </div>
+
+          <div className="mt-3 space-y-2">
+            {dimension.groups.map(([group, fields]) => (
+              <div key={group}>
+                <p className="text-[8px] font-semibold uppercase tracking-[0.11em] text-[#86868b]">{group}</p>
+                <div className="mt-1 flex flex-wrap gap-1">
+                  {fields.map((field) => (
+                    <span key={field} className="rounded-md bg-[#f5f5f7] px-1.5 py-[3px] text-[8.5px] leading-[1.35] text-[#515154]">{field}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
@@ -773,18 +881,15 @@ function KnowledgeBeforeAfter() {
 
   return (
     <div className="mt-4">
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-[0.72fr_1.28fr]">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-[0.58fr_1.42fr]">
         <GlassSurface className="flex flex-col overflow-hidden rounded-[1.9rem] p-0">
           <div className="border-b border-black/5 px-5 py-4">
             <SectionLabel>
               Before: <span className="font-semibold text-[#1d1d1f]">Long-form documents</span>
             </SectionLabel>
           </div>
-          <div className="flex flex-1 flex-col p-5">
-            <div className="inline-flex w-fit items-center gap-2 rounded-full bg-[#111318] px-3 py-1.5 text-xs font-semibold text-white">4,700+ Works</div>
-            <div className="mt-3 flex-1">
-              <RawMaterialStack />
-            </div>
+          <div className="flex flex-1 flex-col p-4">
+            <RawMaterialPile />
           </div>
         </GlassSurface>
 
@@ -794,9 +899,8 @@ function KnowledgeBeforeAfter() {
               After: <span className="font-semibold text-[#1d1d1f]">The Schema I designed</span>
             </SectionLabel>
           </div>
-          <div className="p-5">
-            <StructuredKnowledgeCard />
-            <div className="mt-3 flex items-center gap-2 text-[10px] text-[#86868b]"><ScanSearch className="h-3.5 w-3.5" />Every field is queryable on its own, comparable across works, and readable by the Agent without inference</div>
+          <div className="p-4">
+            <SchemaDimensionGrid />
           </div>
         </WarmSurface>
       </div>
@@ -1758,7 +1862,13 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
             </div>
             <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">Building a domain-specific knowledge base for storytelling.</h3>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-[#6e6e73]">
-              The library already held 4,700-plus works, but every one of them was unstructured text. Recommendation and precise citation both depend on structured fields, not on hoping the right words show up in a wall of prose. I designed the entity Schema that breaks each work into queryable fields, four dimensions deep.
+              The library already held 4,700-plus works, and each one arrived as prose. A work was stored as a short record, title, type, genre tags, cover, and a synopsis under 300 characters, plus a map pointing each knowledge dimension to one complete text file on object storage. A single story overview ran 3,322 words, a character biography closer to 8,000, and one work could carry tens of thousands.
+            </p>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-[#6e6e73]">
+              The information was in there. It was just paragraphs. The passage describing this world&apos;s class ecology names a top tier, an inner power circle, and an outsider at the bottom, but as prose nothing can filter on it, rank it, or line it up against another work. Recommendation and precise citation both need fields, not the hope that the right words show up in a wall of text.
+            </p>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-[#6e6e73]">
+              So I designed the entity Schema below. Every work breaks into the same four dimensions, and every field is queryable on its own, comparable across works, and readable by the Agent without inference.
             </p>
             <KnowledgeFoundationDetail />
 
