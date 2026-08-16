@@ -27,6 +27,7 @@ import {
   FileText,
   Folder,
   GitBranch,
+  Globe,
   Layers3,
   LayoutTemplate,
   LockKeyhole,
@@ -48,7 +49,7 @@ import { PhaiProductSimulator } from "@/components/phai-product-simulator";
 import type { CaseStudyProject } from "@/data/projects";
 
 type Props = { project: CaseStudyProject };
-type DetailType = "knowledge" | "script" | "report" | null;
+type DetailType = "script" | "report" | null;
 type ProductScenarioId = "diagnose" | "bible" | "brief";
 type InspectorTab = "artifact" | "trace" | "knowledge" | "files";
 type CapabilityId = "context" | "skills" | "knowledge" | "action" | "orchestration";
@@ -180,13 +181,8 @@ function DetailModal({ detail, onClose }: { detail: Exclude<DetailType, null>; o
     };
   }, [onClose]);
 
-  const eyebrow = detail === "knowledge" ? "Knowledge system" : detail === "script" ? "Input, attached to the request" : "Skill output, generated";
-  const title =
-    detail === "knowledge"
-      ? "Structuring 4,700+ knowledge items for contextual retrieval"
-      : detail === "script"
-        ? "bad_parasite_v2.txt"
-        : "three-act-diagnostic-report.md";
+  const eyebrow = detail === "script" ? "Input, attached to the request" : "Skill output, generated";
+  const title = detail === "script" ? "bad_parasite_v2.txt" : "three-act-diagnostic-report.md";
 
   return (
     <motion.div
@@ -221,57 +217,14 @@ function DetailModal({ detail, onClose }: { detail: Exclude<DetailType, null>; o
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#0071e3]">
           {eyebrow}
         </p>
-        <h2 id="alibaba-detail-title" className={`mt-4 pr-12 font-semibold tracking-[-0.04em] text-[#1d1d1f] ${detail === "knowledge" ? "text-3xl sm:text-4xl" : "font-mono text-xl sm:text-2xl"}`}>
+        <h2 id="alibaba-detail-title" className="mt-4 pr-12 font-mono text-xl font-semibold tracking-[-0.04em] text-[#1d1d1f] sm:text-2xl">
           {title}
         </h2>
 
-        {detail === "knowledge" && <KnowledgeDetail />}
         {detail === "script" && <ScriptDetail />}
         {detail === "report" && <ReportDetail />}
       </motion.div>
     </motion.div>
-  );
-}
-
-function KnowledgeDetail() {
-  return (
-    <div className="mt-8">
-      <p className="max-w-3xl text-base leading-8 text-[#6e6e73]">
-        I proposed the knowledge-base Schema and advanced it through review. The design converted an unstructured creative corpus into entities with source context, scene anchors, confidence, and explicit relationships.
-      </p>
-      <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {[
-          ["Character", "Identity · motivation · arc", "CH"],
-          ["Relationship", "Actors · state · evolution", "RE"],
-          ["World", "Rules · entities · constraints", "WO"],
-          ["Plotline", "Beats · scenes · dependencies", "PL"],
-        ].map(([title, text, code]) => (
-          <div key={code} className="rounded-[1.4rem] bg-[#f5f5f7] p-5">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-[10px] font-semibold text-[#0071e3] shadow-sm">{code}</span>
-            <h3 className="mt-5 font-semibold text-[#1d1d1f]">{title}</h3>
-            <p className="mt-2 text-xs leading-5 text-[#86868b]">{text}</p>
-          </div>
-        ))}
-      </div>
-      <div className="mt-7 grid gap-2 md:grid-cols-5">
-        {[
-          ["1", "LLM extraction"],
-          ["2", "Confidence gate"],
-          ["3", "Consistency check"],
-          ["4", "Dual storage"],
-          ["5", "Filtered recall"],
-        ].map(([number, title], index) => (
-          <div key={number} className="relative rounded-2xl border border-black/8 bg-white p-4">
-            <span className="text-[10px] font-semibold text-[#0071e3]">{number}</span>
-            <p className="mt-2 text-sm font-semibold text-[#1d1d1f]">{title}</p>
-            {index < 4 && <ChevronRight className="absolute -right-3 top-1/2 z-10 hidden h-5 w-5 -translate-y-1/2 text-[#b0b0b5] md:block" />}
-          </div>
-        ))}
-      </div>
-      <div className="mt-6 rounded-2xl bg-[#eaf4ff] p-5 text-sm leading-7 text-[#3f5f78]">
-        Boundary: I proposed the Schema and drove review. This does not claim that I personally shipped the full production extraction and retrieval pipeline.
-      </div>
-    </div>
   );
 }
 
@@ -594,7 +547,144 @@ function ArchitectureDetail() {
   );
 }
 
+function KnowledgeSchemaDetail() {
+  const entities = [
+    {
+      code: "CH",
+      title: "Character",
+      count: "20+ fields",
+      fields: ["One-line summary", "Core trait tags", "Growth type", "Name, gender, age", "Appearance, personality", "Occupation, education, family", "Psychological portrait", "Core desire, core need", "Backstory", "Action-line summary", "Arc type, arc analysis", "Core lie, core fear"],
+    },
+    {
+      code: "RE",
+      title: "Relationship",
+      count: "3 fields",
+      fields: ["Relationship definition", "Relationship description", "Evolution beats, with scene anchors"],
+    },
+    {
+      code: "WO",
+      title: "World",
+      count: "6 fields",
+      fields: ["Physical law and geography", "Science and technology", "Social structure and class", "Political and legal system", "Economic system", "Culture, belief, and history"],
+    },
+    {
+      code: "PL",
+      title: "Plotline",
+      count: "4 fields",
+      fields: ["Line name", "Primary or secondary", "Core dramatic question", "Arc, beginning to resolution"],
+    },
+  ] as const;
 
+  const channels = [
+    {
+      icon: Layers3,
+      name: "Structural channel",
+      grain: "Coarse grain",
+      returns: "The complete document for a knowledge dimension, world, character archive, story spine, addressed by field.",
+      fit: "\u201cGive me the full picture of this work.\u201d",
+      note: "No embedding step. The work is already a structured, complete document, so matching the title is enough to return the whole thing.",
+    },
+    {
+      icon: ScanSearch,
+      name: "Fragment channel",
+      grain: "Fine grain",
+      returns: "Ranked passages pulled from across the corpus, query rewritten into several angles, retrieved in parallel, then reranked.",
+      fit: "\u201cFind me a beat like this\u201d or \u201ca character arc like that.\u201d",
+      note: "This is where retrieval-augmented generation earns its cost, open-ended search across thousands of works needs fragment-level recall plus a reranker, not a single document match.",
+    },
+    {
+      icon: Globe,
+      name: "Fallback channel",
+      grain: "Outside the corpus",
+      returns: "A streamed general web search, used only when the first two channels return nothing.",
+      fit: "The work or the detail simply is not in the library yet.",
+      note: "A fully independent data source, kept as a last resort so the Agent never dead-ends on a query.",
+    },
+  ] as const;
+
+  const decisions = [
+    ["Structural channel skips embedding entirely", "The knowledge is pre-structured into complete documents. There is nothing to chunk, you either need the whole thing or you do not."],
+    ["Fragment channel pairs retrieval with a reranker", "Open queries like \u201cfind a similar reversal\u201d need broad recall first, then precision ranking on top, a single-pass match is not enough."],
+    ["Two-step reveal, summary before detail", "Pulling every matching work's full text at once could mean hundreds of thousands of words. Show the list first, let the request decide what to expand."],
+    ["Each work's fields are split by dimension", "A single work can carry tens of thousands of words of knowledge. Splitting by world, character, and plot lets a request pull only the dimension it actually needs."],
+  ] as const;
+
+  return (
+    <div className="mt-8">
+      <p className="max-w-3xl text-sm leading-7 text-[#6e6e73]">
+        The Devil Wears Prada demo in section 01 is a real run through this Schema, not a mockup. Every field below (character psychology, relationship evolution, world structure, plotline arcs) is the same shape that produced that demo&apos;s character and world tabs.
+      </p>
+
+      <p className="mt-8 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Entity Schema, four dimensions</p>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {entities.map((entity) => (
+          <div key={entity.code} className="rounded-[1.4rem] bg-[#f5f5f7] p-5">
+            <div className="flex items-center justify-between">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-[10px] font-semibold text-[#0071e3] shadow-sm">{entity.code}</span>
+              <span className="text-[9px] font-medium text-[#86868b]">{entity.count}</span>
+            </div>
+            <h3 className="mt-4 font-semibold text-[#1d1d1f]">{entity.title}</h3>
+            <div className="mt-3 space-y-1">
+              {entity.fields.map((field) => (
+                <p key={field} className="text-[10.5px] leading-4 text-[#86868b]">{field}</p>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <p className="mt-9 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Retrieval architecture, three channels</p>
+      <div className="mt-4 grid gap-3 lg:grid-cols-3">
+        {channels.map((channel) => (
+          <div key={channel.name} className="rounded-[1.6rem] border border-black/8 bg-white p-5 shadow-sm">
+            <div className="flex items-center gap-2">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#eaf4ff] text-[#0071e3]"><channel.icon className="h-[18px] w-[18px]" /></span>
+              <div>
+                <p className="text-sm font-semibold text-[#1d1d1f]">{channel.name}</p>
+                <p className="text-[9px] font-medium text-[#86868b]">{channel.grain}</p>
+              </div>
+            </div>
+            <p className="mt-4 text-[11px] leading-5 text-[#515154]">{channel.returns}</p>
+            <p className="mt-3 rounded-lg bg-[#f5f5f7] px-3 py-2 text-[10px] italic leading-4 text-[#6e6e73]">{channel.fit}</p>
+            <p className="mt-3 text-[10px] leading-4 text-[#86868b]">{channel.note}</p>
+          </div>
+        ))}
+      </div>
+      <p className="mt-3 text-[10.5px] leading-4 text-[#86868b]">All three channels sit on top of one shared data source, they differ only in index granularity. If the structural channel has no match, the fragment channel almost never does either, so a request falls straight through to the web channel instead of trying every level in between.</p>
+
+      <p className="mt-9 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Turning 4,700+ unstructured works into that Schema</p>
+      <div className="mt-4 grid gap-2 md:grid-cols-5">
+        {[
+          ["1", "LLM extraction"],
+          ["2", "Confidence gate"],
+          ["3", "Consistency check"],
+          ["4", "Dual storage"],
+          ["5", "Filtered recall"],
+        ].map(([number, title], index) => (
+          <div key={number} className="relative rounded-2xl border border-black/8 bg-white p-4">
+            <span className="text-[10px] font-semibold text-[#0071e3]">{number}</span>
+            <p className="mt-2 text-sm font-semibold text-[#1d1d1f]">{title}</p>
+            {index < 4 && <ChevronRight className="absolute -right-3 top-1/2 z-10 hidden h-5 w-5 -translate-y-1/2 text-[#b0b0b5] md:block" />}
+          </div>
+        ))}
+      </div>
+
+      <p className="mt-9 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Key design decisions</p>
+      <div className="mt-4 grid gap-2 sm:grid-cols-2">
+        {decisions.map(([decision, why]) => (
+          <div key={decision} className="rounded-2xl border border-black/8 bg-white p-4">
+            <p className="text-xs font-semibold text-[#1d1d1f]">{decision}</p>
+            <p className="mt-2 text-[10.5px] leading-4 text-[#86868b]">{why}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-6 rounded-2xl bg-[#eaf4ff] p-5 text-sm leading-7 text-[#3f5f78]">
+        Boundary: I designed the entity Schema and the three-channel retrieval architecture. This does not claim I personally shipped the full production extraction and storage pipeline behind it.
+      </div>
+    </div>
+  );
+}
 
 function SkillDiagnosisPanel({ onOpenDetail }: { onOpenDetail: (detail: "script" | "report") => void }) {
   const commands = [
@@ -1066,16 +1156,21 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
           <AnimatedSection>
             <SectionHeading
               number="03"
-              label="The Skill I Own"
-              title="I turned a structure-diagnosis method into a check the model could not fake."
+              label="Skills, from One to Fifty-Five"
+              title="I owned one Skill end to end, then found what only shows up at scale."
             />
 
-            <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-start">
+            <p className="mt-8 max-w-3xl text-sm leading-7 text-[#6e6e73]">
+              Screenwriters already know three-act theory. Knowing the theory and applying it to your own draft without bias are different things. A writer under deadline will call the loudest scene a turning point and the busiest stretch good pacing, because gut instinct has no way to check itself.
+            </p>
+
+            <div className="mt-6 flex items-baseline justify-between gap-2">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Three-Act Diagnosis, the Skill I own</p>
+            </div>
+
+            <div className="mt-4 grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-start">
               <div className="lg:pr-4">
                 <p className="text-sm leading-7 text-[#6e6e73]">
-                  Screenwriters already know three-act theory. Knowing the theory and applying it to your own draft without bias are different things. A writer under deadline will call the loudest scene a turning point and the busiest stretch good pacing, because gut instinct has no way to check itself.
-                </p>
-                <p className="mt-4 text-sm leading-7 text-[#6e6e73]">
                   On the product side, a Skill only runs if the Agent picks it. The router matches on description text alone, so I wrote the trigger language to fire on structural intent, not just the words &quot;three-act,&quot; and paired it with an explicit @mention path for writers who want to call it directly.
                 </p>
                 <p className="mt-4 text-sm leading-7 text-[#6e6e73]">
@@ -1098,28 +1193,13 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
               </p>
             </div>
 
-            <button
-              type="button"
-              onClick={() => setDetail("knowledge")}
-              className="group mt-4 flex w-full items-center gap-4 rounded-[1.4rem] border border-black/8 bg-white p-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(0,0,0,0.08)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3] motion-reduce:transform-none motion-reduce:transition-none"
-            >
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#eaf4ff] text-[#0071e3]"><Database className="h-5 w-5" /></span>
-              <span className="min-w-0">
-                <span className="block text-sm font-semibold text-[#1d1d1f]">Open the knowledge Schema I proposed</span>
-                <span className="mt-1 block text-xs leading-5 text-[#86868b]">4,700+ unstructured items turned into retrievable entities with source context.</span>
-              </span>
-              <ArrowRight className="ml-auto h-5 w-5 shrink-0 text-[#b0b0b5] transition group-hover:translate-x-1 group-hover:text-[#0071e3] motion-reduce:transform-none" />
-            </button>
-          </AnimatedSection>
-
-          <AnimatedSection>
-            <SectionHeading
-              number="04"
-              label="Where the Cracks Showed Up"
-              title="Putting all 55 Skills together is where I found the real problem."
-              description="Running checks across the full catalog, I found trigger words colliding between Skills, fast and expert variants that were indistinguishable to the router, and check versus generate entry points stepping on each other. I did not read this in a bug report. I found it by testing the catalog myself, and I built the tool that catches it going forward."
-            />
-            <div className="mt-8 grid gap-5 lg:grid-cols-[0.92fr_1.08fr]">
+            <div className="mt-10 flex items-baseline justify-between gap-2">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Where the cracks showed up, all 55 Skills together</p>
+            </div>
+            <p className="mt-4 max-w-3xl text-sm leading-7 text-[#6e6e73]">
+              Running checks across the full catalog, I found trigger words colliding between Skills, fast and expert variants that were indistinguishable to the router, and check versus generate entry points stepping on each other. I did not read this in a bug report. I found it by testing the catalog myself, and I built the tool that catches it going forward.
+            </p>
+            <div className="mt-4 grid gap-5 lg:grid-cols-[0.92fr_1.08fr]">
               <div className="rounded-[2rem] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
                 <div className="flex items-start justify-between">
                   <div>
@@ -1192,6 +1272,17 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
               </div>
               <p className="mt-4 text-[11px] leading-5 text-white/35">Static review is used to catch catalog conflicts. It is not used to claim runtime quality.</p>
             </div>
+          </AnimatedSection>
+
+          <AnimatedSection>
+            <SectionHeading
+              number="04"
+              label="Designing the Knowledge Base"
+              title="I designed the Schema and the retrieval architecture underneath it."
+              description="The knowledge base already held 4,700-plus works, but every one of them was unstructured text. Recommendation and precise citation both depend on structured fields, not on hoping the right words show up in a wall of prose. I designed the entity Schema that breaks each work into queryable fields, and the three-channel retrieval architecture that decides, per request, whether the Agent needs a full document, a matched fragment, or a web fallback."
+            />
+
+            <KnowledgeSchemaDetail />
           </AnimatedSection>
 
           <AnimatedSection>
