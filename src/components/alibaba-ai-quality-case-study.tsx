@@ -24,6 +24,7 @@ import {
   Database,
   Eye,
   FileSearch,
+  FileText,
   Folder,
   GitBranch,
   Layers3,
@@ -36,7 +37,6 @@ import {
   ScanSearch,
   Sparkles,
   Split,
-  User,
   Users,
   Wrench,
   X,
@@ -48,7 +48,7 @@ import { PhaiProductSimulator } from "@/components/phai-product-simulator";
 import type { CaseStudyProject } from "@/data/projects";
 
 type Props = { project: CaseStudyProject };
-type DetailType = "knowledge" | null;
+type DetailType = "knowledge" | "script" | "report" | null;
 type ProductScenarioId = "diagnose" | "bible" | "brief";
 type InspectorTab = "artifact" | "trace" | "knowledge" | "files";
 type CapabilityId = "context" | "skills" | "knowledge" | "action" | "orchestration";
@@ -180,7 +180,13 @@ function DetailModal({ detail, onClose }: { detail: Exclude<DetailType, null>; o
     };
   }, [onClose]);
 
-  const isKnowledge = detail === "knowledge";
+  const eyebrow = detail === "knowledge" ? "Knowledge system" : detail === "script" ? "Input, attached to the request" : "Skill output, generated";
+  const title =
+    detail === "knowledge"
+      ? "Structuring 4,700+ knowledge items for contextual retrieval"
+      : detail === "script"
+        ? "bad_parasite_v2.txt"
+        : "three-act-diagnostic-report.md";
 
   return (
     <motion.div
@@ -213,13 +219,15 @@ function DetailModal({ detail, onClose }: { detail: Exclude<DetailType, null>; o
         </button>
 
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#0071e3]">
-          {isKnowledge ? "Knowledge system" : "Engineering lens"}
+          {eyebrow}
         </p>
-        <h2 id="alibaba-detail-title" className="mt-4 pr-12 text-3xl font-semibold tracking-[-0.04em] text-[#1d1d1f] sm:text-4xl">
-          Structuring 4,700+ knowledge items for contextual retrieval
+        <h2 id="alibaba-detail-title" className={`mt-4 pr-12 font-semibold tracking-[-0.04em] text-[#1d1d1f] ${detail === "knowledge" ? "text-3xl sm:text-4xl" : "font-mono text-xl sm:text-2xl"}`}>
+          {title}
         </h2>
 
-        <KnowledgeDetail />
+        {detail === "knowledge" && <KnowledgeDetail />}
+        {detail === "script" && <ScriptDetail />}
+        {detail === "report" && <ReportDetail />}
       </motion.div>
     </motion.div>
   );
@@ -267,6 +275,112 @@ function KnowledgeDetail() {
   );
 }
 
+function ScriptDetail() {
+  const pages = [
+    { page: "p.1", heading: "INT. KIM FAMILY HALF-BASEMENT APARTMENT, DAY", lines: ["KI-WOO scrolls his phone. A friend texts: the Parks need an English tutor for their daughter. \u201cSure, why not.\u201d"] },
+    { page: "p.5", heading: "INT. PARK HOME, STUDY, DAY", lines: ["MRS. PARK reviews his transcript. \u201cYour grades are solid. Start Monday?\u201d He accepts. Easy."] },
+    { page: "p.12", heading: "INT. PARK HOME, STUDIO, DAY", lines: ["KI-JUNG lays out an art portfolio for DA-SONG. MRS. PARK is impressed. \u201cYou\u2019re hired.\u201d"] },
+    { page: "p.20", heading: "INT. PARK HOME, KITCHEN, DAY", lines: ["Through a staffing agency, CHUNG-SOOK is introduced as the new live-in housekeeper."] },
+    { page: "p.28", heading: "EXT. PARK HOME, DRIVEWAY, DAY", lines: ["KI-TAEK gets the driver job via a neighbor\u2019s referral. MR. PARK: \u201cDon\u2019t scratch it.\u201d"] },
+    { page: "p.44", heading: "INT. PARK HOME, KITCHEN, NIGHT", lines: ["MOON-GWANG mentions her husband has lived in the basement for years, \u201cjust a quirky thing about this house.\u201d CHUNG-SOOK: \u201cHuh. Okay.\u201d The secret sits there, harmless."] },
+    { page: "p.55", heading: "INT. PARK HOME, DINING ROOM, NIGHT", lines: ["The Kims, now all on staff, share a quiet meal. Warm. MR. PARK joins for a toast: \u201cGood team we\u2019ve got.\u201d"] },
+    { page: "p.75", heading: "INT. PARK HOME, LIVING ROOM, NIGHT", lines: ["KI-WOO worries he might be found out, hides his fake diploma deeper in the drawer, then shrugs it off. Nothing happens."] },
+    { page: "p.88", heading: "INT. PARK HOME, LIVING ROOM, NIGHT", lines: ["MOON-GWANG finds the diploma while tidying. She reads it, sighs. \u201cI think the tutor isn\u2019t who he said.\u201d"] },
+    { page: "p.95", heading: "INT. PARK HOME, STUDY, NIGHT", lines: ["MR. PARK sits the Kims down. \u201cWe suspected something. It\u2019s alright. Everyone deserves a chance.\u201d He writes a reference letter and counts out severance."] },
+    { page: "p.110", heading: "EXT. KIM HALF-BASEMENT APARTMENT, DAY", lines: ["The Kims return, poorer but wiser, smiling as they unlock their door. FADE OUT."] },
+  ] as const;
+
+  return (
+    <div className="mt-8">
+      <p className="max-w-3xl text-base leading-8 text-[#6e6e73]">
+        A screenplay excerpt I wrote specifically to break, a competent surface with a structural collapse underneath, so I could verify the Skill catches what a friendly read-through would miss. Eleven key beats, 110 pages.
+      </p>
+      <div className="mt-7 space-y-4 rounded-[1.4rem] border border-black/8 bg-[#fbfbfc] p-5 font-mono text-[12px] leading-6 text-[#3a3a3c] sm:p-7">
+        {pages.map((beat) => (
+          <div key={beat.page}>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#0071e3]">{beat.page} · {beat.heading}</p>
+            {beat.lines.map((line) => (
+              <p key={line} className="mt-1.5 text-[#515154]">{line}</p>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ReportDetail() {
+  const scorecard = [
+    ["D1", "Act 1 proportion and setup", "FAIL", "Major"],
+    ["D2", "Inciting incident placement", "PASS", "-"],
+    ["D3", "Plot Point 1 irreversibility", "FAIL", "Critical"],
+    ["D4", "Midpoint reversal", "FAIL", "Critical"],
+    ["D5", "Act 2 escalation and pinch", "FAIL", "Major"],
+    ["D6", "Plot Point 2 lowest point", "FAIL", "Critical"],
+    ["D7", "Act 3 resolution and early-wrap", "FAIL", "Critical"],
+    ["D8", "Rhythmic deviation intent", "FAIL", "Major"],
+  ] as const;
+
+  const checklist = [
+    ["Midpoint vs. escalation", "PASSED", "Correctly rejected the p.44 reveal as a midpoint. It adds information, it does not reverse anything."],
+    ["Open ending", "N/A", "This is an early wrap, not an open ending."],
+    ["Creative choice vs. execution flaw", "FLAGGED", "The happy ending is an execution flaw, premise abandonment, not a protected creative choice."],
+  ] as const;
+
+  const strategy = [
+    ["D3", "Install an irreversible lock. The family engineers the firing of the real housekeeper so returning home means total exposure. Plot Point 1 lands near p.31."],
+    ["D4", "Demote the basement reveal to an Act 2 pinch. Install a later, higher-stakes event as the true midpoint that flips comedy to thriller."],
+    ["D5", "Let the fired housekeeper return and expose the secret. Escalate every beat toward irreversible cost."],
+    ["D6", "Move the darkest hour to roughly 75 percent through the script, with an irreversible loss the family cannot undo."],
+    ["D7", "Cut the reconciliation. Close the thematic loop the story opened instead of resolving it with a heart-to-heart."],
+  ] as const;
+
+  return (
+    <div className="mt-8">
+      <div className="rounded-2xl bg-[#fdeae9] p-5">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#d70015]">Verdict</p>
+        <p className="mt-2 text-base font-semibold leading-7 text-[#1d1d1f]">NOT PASSED. Five critical structural failures.</p>
+        <p className="mt-2 text-sm leading-6 text-[#6e6e73]">The draft is a competent family-gets-jobs dramedy, but it collapses its class thesis into a feel-good reconciliation. The blocker is structure, not prose. The Skill does not rewrite the script. It returns this report and a revision strategy for the author to execute.</p>
+      </div>
+
+      <p className="mt-7 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#86868b]">Scorecard, 8 dimensions</p>
+      <div className="mt-3 overflow-hidden rounded-2xl border border-black/8">
+        {scorecard.map(([id, name, verdict, severity], index) => (
+          <div key={id} className={`flex items-center gap-3 px-4 py-3 text-sm ${index % 2 === 0 ? "bg-white" : "bg-[#fbfbfc]"}`}>
+            <span className="w-7 shrink-0 text-[10px] font-semibold text-[#0071e3]">{id}</span>
+            <span className="flex-1 text-[#1d1d1f]">{name}</span>
+            <span className={`shrink-0 text-[10px] font-semibold ${verdict === "PASS" ? "text-[#248a3d]" : "text-[#d70015]"}`}>{verdict}</span>
+            {severity !== "-" && <span className="w-16 shrink-0 text-right text-[9px] text-[#86868b]">{severity}</span>}
+          </div>
+        ))}
+      </div>
+
+      <p className="mt-7 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#86868b]">Misjudgment checklist</p>
+      <div className="mt-3 grid gap-3 sm:grid-cols-3">
+        {checklist.map(([name, status, note]) => (
+          <div key={name} className="rounded-2xl bg-[#f5f5f7] p-4">
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-xs font-semibold text-[#1d1d1f]">{name}</p>
+              <span className={`shrink-0 rounded-full px-2 py-0.5 text-[8px] font-semibold ${status === "PASSED" ? "bg-[#dff2e5] text-[#248a3d]" : status === "FLAGGED" ? "bg-[#fff3df] text-[#9a6400]" : "bg-[#eeeeef] text-[#86868b]"}`}>{status}</span>
+            </div>
+            <p className="mt-2 text-[10px] leading-4 text-[#86868b]">{note}</p>
+          </div>
+        ))}
+      </div>
+
+      <p className="mt-7 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#86868b]">Revision strategy, author executes</p>
+      <div className="mt-3 space-y-2">
+        {strategy.map(([id, text]) => (
+          <div key={id} className="flex items-start gap-3 rounded-xl bg-[#f5f5f7] p-3.5">
+            <span className="mt-0.5 shrink-0 text-[10px] font-semibold text-[#0071e3]">{id}</span>
+            <p className="text-xs leading-5 text-[#515154]">{text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function ArchitectureDetail() {
   const capabilityLayer = [
     "Unified model abstraction",
@@ -292,18 +406,18 @@ function ArchitectureDetail() {
   ] as const;
 
   const externalLayer = [
-    { title: "Local storage", text: "SQLite / JSON / JSONL / local files", icon: "folder" as const },
-    { title: "Managed data", text: "PostgreSQL + Redis", icon: "database-cluster" as const },
-    { title: "Skill market", text: "Repo pull + object storage", icon: "wrench" as const },
-    { title: "Model providers", text: "Anthropic / OpenAI / regional models", icon: "models" as const },
-    { title: "External channels", text: "Chat platform bridges", icon: "channels" as const },
-    { title: "System automation", text: "OS / MCP / browser / Git", icon: "cog" as const },
+    { title: "Local storage", tags: ["SQLite", "JSON", "JSONL", "Local files"], icon: "folder" as const },
+    { title: "Managed data", tags: ["PostgreSQL", "Redis"], icon: "database-cluster" as const },
+    { title: "Skill market", tags: ["Repo pull", "Object storage"], icon: "wrench" as const },
+    { title: "Model providers", tags: ["Anthropic", "OpenAI", "Regional models"], icon: "models" as const },
+    { title: "External channels", tags: ["Chat platform bridges"], icon: "channels" as const },
+    { title: "System automation", tags: ["OS", "MCP", "Browser", "Git"], icon: "cog" as const },
   ];
 
   return (
     <div className="mt-8">
       <div className="flex flex-col gap-2">
-        <div className="grid grid-cols-[108px_1fr_108px] items-stretch gap-2">
+        <div className="grid grid-cols-[108px_1fr] items-stretch gap-2">
           <div className="flex flex-col items-center justify-center gap-1.5 rounded-xl bg-[#0071e3] p-3 text-center">
             <span className="text-[9px] font-medium text-white/70">01</span>
             <p className="text-[11px] font-medium leading-[1.3] text-white">Top layer</p>
@@ -344,13 +458,9 @@ function ArchitectureDetail() {
               </div>
             </div>
           </div>
-          <div className="flex flex-col items-center justify-center gap-1 rounded-xl border border-black/8 bg-[#fafafa] p-3 text-center">
-            <User className="h-4 w-4 text-[#86868b]" strokeWidth={2} />
-            <p className="mt-0.5 text-[10px] font-medium text-[#1d1d1f]">User</p>
-          </div>
         </div>
 
-        <div className="grid grid-cols-[108px_1fr_auto] items-center gap-2">
+        <div className="grid grid-cols-[108px_1fr] items-center gap-2">
           <div className="flex flex-col items-center justify-center gap-1.5 self-stretch rounded-xl bg-[#0071e3] p-3 text-center">
             <span className="text-[9px] font-medium text-white/70">02</span>
             <p className="text-[11px] font-medium leading-[1.3] text-white">Ingress layer</p>
@@ -359,14 +469,21 @@ function ArchitectureDetail() {
           <div className="grid grid-cols-2 gap-2 self-stretch rounded-xl border border-black/8 bg-[#fafafa] p-2.5 px-3">
             <div className="rounded-lg border border-black/6 bg-white p-2 px-2.5">
               <p className="text-[11px] font-medium text-[#1d1d1f]">Channel adapters</p>
-              <p className="mt-0.5 text-[9px] text-[#86868b]">IPC, SSE, cloud Stream bridge, chat long-poll</p>
+              <div className="mt-1.5 flex flex-wrap gap-1">
+                {["IPC", "SSE", "Cloud Stream bridge", "Chat long-poll"].map((tag) => (
+                  <span key={tag} className="rounded border border-black/8 px-1 py-0.5 text-[7.5px] font-medium text-[#6e6e73]">{tag}</span>
+                ))}
+              </div>
             </div>
             <div className="rounded-lg border border-black/6 bg-white p-2 px-2.5">
               <p className="text-[11px] font-medium text-[#1d1d1f]">CLI entry</p>
-              <p className="mt-0.5 text-[9px] text-[#86868b]">Sub-commands, prompt injection</p>
+              <div className="mt-1.5 flex flex-wrap gap-1">
+                {["Sub-commands", "Prompt injection"].map((tag) => (
+                  <span key={tag} className="rounded border border-black/8 px-1 py-0.5 text-[7.5px] font-medium text-[#6e6e73]">{tag}</span>
+                ))}
+              </div>
             </div>
           </div>
-          <p className="whitespace-nowrap text-[9px] font-medium text-[#0071e3]">Unified ingress and routing</p>
         </div>
 
         <div className="grid grid-cols-[108px_1fr] gap-2">
@@ -392,7 +509,7 @@ function ArchitectureDetail() {
                 <p className="text-[11px] font-medium text-[#3c3489]">Actor dispatcher</p>
               </div>
               <div className="mt-2 grid grid-cols-3 gap-1">
-                {["Dispatcher", "Inbox", "Lifecycle", "Parent / child", "Abort cascade"].map((tag) => (
+                {["Dispatcher", "Inbox", "Lifecycle", "Parent Agent", "Child Agent", "Abort cascade"].map((tag) => (
                   <span key={tag} className="rounded border border-[#534AB7]/15 bg-[#534AB7]/[0.04] px-1 py-1 text-center text-[7.5px] font-medium leading-[1.3] text-[#3c3489]">{tag}</span>
                 ))}
               </div>
@@ -434,7 +551,7 @@ function ArchitectureDetail() {
             <p className="text-[11px] font-medium leading-[1.3] text-white">External systems</p>
           </div>
           <div className="grid grid-cols-2 gap-2 rounded-xl border border-black/8 bg-[#fafafa] p-2.5 px-3 sm:grid-cols-3">
-            {externalLayer.map(({ title, text, icon }) => (
+            {externalLayer.map(({ title, tags, icon }) => (
               <div key={title} className="rounded-lg border border-black/6 bg-white p-2 px-2.5">
                 <div className="flex items-center gap-1.5">
                   {icon === "folder" && <Folder className="h-4 w-4 shrink-0 text-[#0071e3]" strokeWidth={2} />}
@@ -461,7 +578,11 @@ function ArchitectureDetail() {
                   {icon === "cog" && <Cog className="h-4 w-4 shrink-0 text-[#0071e3]" strokeWidth={2} />}
                   <p className="text-[10.5px] font-medium text-[#1d1d1f]">{title}</p>
                 </div>
-                <p className="mt-1 text-[9px] leading-[1.4] text-[#86868b]">{text}</p>
+                <div className="mt-1.5 flex flex-wrap gap-1">
+                  {tags.map((tag) => (
+                    <span key={tag} className="rounded border border-black/8 px-1 py-0.5 text-[7.5px] font-medium text-[#6e6e73]">{tag}</span>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
@@ -474,6 +595,80 @@ function ArchitectureDetail() {
 }
 
 
+
+function SkillDiagnosisPanel({ onOpenDetail }: { onOpenDetail: (detail: "script" | "report") => void }) {
+  const commands = [
+    ["Read file", "bad_parasite_v2.txt · attached"],
+    ["Loaded Skill", "Three-Act Diagnosis, explicit @mention"],
+    ["Parsed script", "110 pages · 12 beats extracted"],
+    ["Evaluated", "8 dimensions against the misjudgment checklist"],
+    ["Checked checklist", "midpoint-vs-escalation triggered, correctly rejected p.44"],
+    ["Generated report", "three-act-diagnostic-report.md + revision strategy"],
+  ] as const;
+
+  return (
+    <div className="ml-auto w-full max-w-[34rem] overflow-hidden rounded-[1.6rem] border border-black/10 bg-[#f5f5f7] shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
+      <div className="flex h-11 items-center gap-2 border-b border-black/8 bg-white/85 px-4 backdrop-blur-2xl">
+        <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
+        <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
+        <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+        <span className="ml-2 text-[10px] font-medium text-[#86868b]">Alpha desktop app</span>
+      </div>
+
+      <div className="bg-white p-5 sm:p-6">
+        <div className="flex justify-end">
+          <div className="max-w-[27rem] rounded-2xl bg-[#eaf4ff] px-4 py-3">
+            <p className="text-sm leading-6 text-[#1d1d1f]">
+              Run the three-act diagnostic on this draft. <span className="font-semibold text-[#0071e3]">@Three-Act Diagnosis</span>
+            </p>
+            <button
+              type="button"
+              onClick={() => onOpenDetail("script")}
+              className="mt-2.5 inline-flex items-center gap-1.5 rounded-lg bg-white/70 px-2.5 py-1.5 transition hover:bg-white active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3]"
+            >
+              <FileText className="h-3 w-3 text-[#0071e3]" />
+              <span className="text-[10px] font-medium text-[#0066cc]">bad_parasite_v2.txt</span>
+            </button>
+          </div>
+        </div>
+
+        <div className="mt-5 flex items-start gap-3">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#111318] font-serif text-xs italic text-white">α</span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-semibold text-[#1d1d1f]">Loaded. I&apos;ll run the full eight-dimension contract before returning a verdict.</p>
+
+            <div className="mt-3 space-y-1.5">
+              {commands.map(([verb, detail]) => (
+                <div key={`${verb}-${detail}`} className="flex items-center gap-2 rounded-lg px-1 py-1 text-[10px] text-[#86868b]">
+                  <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#e8f7ee] text-[#248a3d]">
+                    <Check className="h-2.5 w-2.5" strokeWidth={3} />
+                  </span>
+                  <span><strong className="font-semibold text-[#515154]">{verb}</strong> · {detail}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-4 max-w-[30rem] text-[11px] leading-[1.65] text-[#515154]">
+              <h4 className="text-[13px] font-semibold tracking-[-0.02em] text-[#1d1d1f]">NOT PASSED. Five critical structural failures.</h4>
+              <p className="mt-2">The draft is a competent family-gets-jobs dramedy, but it collapses its own class thesis into a feel-good reconciliation. By page 28 the family is employed through ordinary, at-will jobs, so there is no irreversible Plot Point 1. The basement reveal at page 44 reads as a midpoint, but the checklist correctly rejects it. It only adds information, it does not reverse anything, so Act 2 has no spine.</p>
+
+              <button
+                type="button"
+                onClick={() => onOpenDetail("report")}
+                className="mt-4 flex w-full items-center gap-2 rounded-xl border border-black/8 bg-white px-3 py-2 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.06)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3]"
+              >
+                <FileText className="h-3.5 w-3.5 shrink-0 text-[#0071e3]" />
+                <span className="min-w-0 flex-1 truncate text-[10px] font-semibold text-[#0066cc]">three-act-diagnostic-report.md</span>
+                <span className="shrink-0 text-[9px] text-[#86868b]">created</span>
+                <ArrowRight className="h-3.5 w-3.5 shrink-0 text-[#b0b0b5]" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function ProductInspector({ scenarioId, tab }: { scenarioId: ProductScenarioId; tab: InspectorTab }) {
   if (tab === "trace") {
@@ -871,96 +1066,58 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
           <AnimatedSection>
             <SectionHeading
               number="03"
-              label="Designing the Evaluation Framework"
-              title="I designed the evaluation framework, then built what it needed to run."
-              description="A single quality score could not tell anyone where an Agent actually failed, so I designed a five-layer evaluation architecture: Task (did the end-to-end delivery satisfy the user), Query (was this one turn a good response), Agent (were orchestration and memory decisions correct), Skill (was the right capability triggered with the right parameters), and Sub-agent (did delegated work meet its own bar). Each layer traces to the next, so a failure at the top can be pushed down to the exact mechanism that caused it. I set four constraints going in: metrics inside a layer cannot overlap, every metric is attributable to AI, user, or system, every metric has a formula that real trace data can compute, and every metric holds up across versions and time."
+              label="The Skill I Own"
+              title="I turned a structure-diagnosis method into a check the model could not fake."
             />
-            <div className="mt-8 rounded-[2rem] border border-black/8 bg-white p-6 shadow-[0_20px_60px_rgba(0,0,0,0.06)] sm:p-8">
-              <div className="flex items-center justify-between">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Five-layer attribution stack</p>
-                <GitBranch className="h-5 w-5 text-[#0071e3]" />
-              </div>
-              <div className="mt-6 grid gap-2 sm:grid-cols-5">
-                {[
-                  ["Task", "End-to-end delivery"],
-                  ["Query", "Single-turn response"],
-                  ["Agent", "Orchestration + memory"],
-                  ["Skill", "Trigger + parameters"],
-                  ["Sub-agent", "Delegated execution"],
-                ].map(([layer, note], index) => (
-                  <div key={layer} className="flex items-center gap-2 sm:contents">
-                    <div className="flex-1 rounded-xl bg-[#f5f5f7] p-4 sm:flex-none">
-                      <p className="text-sm font-semibold text-[#1d1d1f]">{layer}</p>
-                      <p className="mt-1 text-[11px] leading-4 text-[#86868b]">{note}</p>
-                    </div>
-                    {index < 4 && <ChevronRight className="h-4 w-4 shrink-0 text-[#b0b0b5] sm:hidden" />}
-                  </div>
-                ))}
-              </div>
-              <p className="mt-5 text-xs leading-5 text-[#86868b]">A failure found at the Task layer gets pushed down through Query, Agent, and Skill until it reaches the mechanism responsible. That is the difference between a score and a diagnosis.</p>
-            </div>
 
-            <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              {challengeCards.map(([title, text, Icon], index) => (
-                <FadeInCard key={title} delay={index * 0.04} className="h-full rounded-[1.6rem] border border-black/8 bg-white p-6 shadow-[0_16px_44px_rgba(0,0,0,0.05)]">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#eaf4ff] text-[#0071e3]"><Icon className="h-5 w-5" /></div>
-                  <h3 className="mt-5 text-lg font-semibold text-[#1d1d1f]">{title}</h3>
-                  <p className="mt-3 text-sm leading-7 text-[#6e6e73]">{text}</p>
-                </FadeInCard>
-              ))}
-            </div>
-
-            <div className="mt-5 rounded-[2rem] border border-black/8 bg-white p-6 shadow-[0_22px_70px_rgba(0,0,0,0.07)] sm:p-8">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">The data layer underneath the framework</p>
-              <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">I designed the feedback instrumentation the framework needed to run on real usage.</h3>
-              <p className="mt-4 max-w-3xl text-sm leading-7 text-[#6e6e73]">Each event ties back to a session, a run, and an Agent through a shared identifier scheme, so a like, a copy, a dislike, or a stop can be traced to the exact Skill and turn that produced it.</p>
-              <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
-                {[["18", "product surfaces instrumented"], ["12", "positive touchpoints"], ["2", "negative signals"], ["6 + 4", "event types + trace contexts"]].map(([value, label]) => (
-                  <div key={label} className="rounded-xl border border-black/8 bg-white px-4 py-3"><p className="text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">{value}</p><p className="mt-1 text-[11px] text-[#86868b]">{label}</p></div>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-5 rounded-[2rem] border border-black/8 bg-white p-6 shadow-[0_22px_70px_rgba(0,0,0,0.07)] sm:p-8">
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Agent I built · 01</p>
-                  <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">A scheme only holds if it stays correct, so I built a bot to patrol it.</h3>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="relative flex h-3 w-3"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#30a46c] opacity-50 motion-reduce:animate-none" /><span className="relative inline-flex h-3 w-3 rounded-full bg-[#30a46c]" /></span>
-                  <span className="rounded-full bg-[#eaf8ef] px-3 py-1.5 text-xs font-semibold text-[#207a4b]">Deployed · runs daily</span>
+            <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-start">
+              <div className="lg:pr-4">
+                <p className="text-sm leading-7 text-[#6e6e73]">
+                  Screenwriters already know three-act theory. Knowing the theory and applying it to your own draft without bias are different things. A writer under deadline will call the loudest scene a turning point and the busiest stretch good pacing, because gut instinct has no way to check itself.
+                </p>
+                <p className="mt-4 text-sm leading-7 text-[#6e6e73]">
+                  On the product side, a Skill only runs if the Agent picks it. The router matches on description text alone, so I wrote the trigger language to fire on structural intent, not just the words &quot;three-act,&quot; and paired it with an explicit @mention path for writers who want to call it directly.
+                </p>
+                <p className="mt-4 text-sm leading-7 text-[#6e6e73]">
+                  On the technical side, I built an eight-dimension manual covering setup proportion, plot points, midpoint, and resolution, backed by a misjudgment checklist that catches the traps writers fall into on their own work, and a strategy library that turns each failure into a concrete fix instead of a vague note.
+                </p>
+                <p className="mt-4 text-sm leading-7 text-[#6e6e73]">
+                  The panel on the right is a real run against a draft I deliberately broke to test the Skill. It returned the same verdict every time, caught five critical structural failures a writer&apos;s gut call would likely miss, and handed back a revision strategy instead of just a grade.
+                </p>
+                <div className="mt-6 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#0071e3]">
+                  <Braces className="h-4 w-4" />
+                  Why a forced check, not free analysis
                 </div>
               </div>
-              <p className="mt-4 max-w-3xl text-sm leading-7 text-[#6e6e73]">
-                It cross-checks the event types, the documentation, and the analytics code for consistency, then reports coverage gaps to the work group before they become blind spots in the data.
+              <SkillDiagnosisPanel onOpenDetail={setDetail} />
+            </div>
+
+            <div className="mt-5 rounded-[2rem] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
+              <p className="text-sm leading-7 text-[#6e6e73]">
+                I also designed two companion Skills, script-bible and project-bible, that apply the same anti-hallucination logic to a generative workflow instead of a diagnostic one. One walks a writer through unresolved story decisions turn by turn. The other assembles a pitch document once the material is ready, without the back and forth.
               </p>
-              <div className="mt-7 grid gap-3 lg:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] lg:items-center">
-                {[
-                  ["01", "Event spec", "18 surfaces · privacy boundary", Radar],
-                  ["02", "Code callsite", "Verify implementation", Code2],
-                  ["03", "Data pipeline", "Trace event to warehouse", Database],
-                  ["04", "Group report", "Changes · gaps · severity", MessageSquareText],
-                ].map(([number, title, text, Icon], index) => (
-                  <div key={number as string} className="contents">
-                    <div className="h-full rounded-[1.4rem] bg-[#f5f5f7] p-5">
-                      <div className="flex justify-between"><Icon className="h-5 w-5 text-[#0071e3]" /><span className="text-[10px] text-[#b0b0b5]">{number as string}</span></div>
-                      <p className="mt-5 text-sm font-semibold text-[#1d1d1f]">{title as string}</p>
-                      <p className="mt-2 text-xs leading-5 text-[#86868b]">{text as string}</p>
-                    </div>
-                    {index < 3 && <ArrowRight className="m-auto hidden h-4 w-4 text-[#b0b0b5] lg:block" />}
-                  </div>
-                ))}
-              </div>
             </div>
+
+            <button
+              type="button"
+              onClick={() => setDetail("knowledge")}
+              className="group mt-4 flex w-full items-center gap-4 rounded-[1.4rem] border border-black/8 bg-white p-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(0,0,0,0.08)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3] motion-reduce:transform-none motion-reduce:transition-none"
+            >
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#eaf4ff] text-[#0071e3]"><Database className="h-5 w-5" /></span>
+              <span className="min-w-0">
+                <span className="block text-sm font-semibold text-[#1d1d1f]">Open the knowledge Schema I proposed</span>
+                <span className="mt-1 block text-xs leading-5 text-[#86868b]">4,700+ unstructured items turned into retrievable entities with source context.</span>
+              </span>
+              <ArrowRight className="ml-auto h-5 w-5 shrink-0 text-[#b0b0b5] transition group-hover:translate-x-1 group-hover:text-[#0071e3] motion-reduce:transform-none" />
+            </button>
           </AnimatedSection>
 
           <AnimatedSection>
             <SectionHeading
               number="04"
               label="Where the Cracks Showed Up"
-              title="Instrumenting 55 Skills is where I found the real problem."
-              description="Running checks across the full catalog, I found trigger words colliding between Skills, fast and expert variants that were indistinguishable to the router, and check versus generate entry points stepping on each other. I did not read this in a bug report. I found it by testing the catalog myself."
+              title="Putting all 55 Skills together is where I found the real problem."
+              description="Running checks across the full catalog, I found trigger words colliding between Skills, fast and expert variants that were indistinguishable to the router, and check versus generate entry points stepping on each other. I did not read this in a bug report. I found it by testing the catalog myself, and I built the tool that catches it going forward."
             />
             <div className="mt-8 grid gap-5 lg:grid-cols-[0.92fr_1.08fr]">
               <div className="rounded-[2rem] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
@@ -1010,83 +1167,116 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
                 </div>
               </div>
             </div>
+
+            <div className="mt-5 rounded-[2rem] bg-[#111318] p-6 text-white shadow-[0_28px_80px_rgba(0,0,0,0.18)] sm:p-8">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">Agent I built · 02</p>
+                  <h3 className="mt-2 text-xl font-semibold">skill-evaluator, so finding a crack is not a one-time act</h3>
+                </div>
+                <Zap className="h-5 w-5 text-[#65b5ff]" />
+              </div>
+              <p className="mt-4 max-w-3xl text-sm leading-6 text-white/65">It runs a five dimension diagnostic, produces a graded gap analysis, and returns a rewritten description. It writes a report and stops there. It never edits a Skill on its own, because I kept the human in the loop on purpose.</p>
+              <div className="mt-6 grid gap-2 sm:grid-cols-5">
+                {evaluatorChecks.map(([code, label]) => (
+                  <div key={code} className="flex items-center gap-2 rounded-xl border border-white/8 bg-white/[0.055] px-3 py-3">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-[#0071e3] text-[9px] font-semibold">{code}</span>
+                    <span className="text-xs font-semibold">{label}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-5 grid gap-3 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
+                <div className="rounded-xl bg-white/[0.055] p-4"><p className="text-[9px] text-[#65b5ff]">INPUT</p><p className="mt-2 text-xs text-white/55">Directory or CSV</p></div>
+                <ArrowRight className="m-auto hidden h-4 w-4 text-white/25 sm:block" />
+                <div className="rounded-xl bg-white/[0.055] p-4"><p className="text-[9px] text-[#65b5ff]">OUTPUT</p><p className="mt-2 text-xs text-white/55">Conflicts · severity · rewrite</p></div>
+              </div>
+              <p className="mt-4 text-[11px] leading-5 text-white/35">Static review is used to catch catalog conflicts. It is not used to claim runtime quality.</p>
+            </div>
           </AnimatedSection>
 
           <AnimatedSection>
             <SectionHeading
               number="05"
-              label="What I Built"
-              title="Finding the cracks meant I needed a repeatable way to catch them."
-              description="So I built skill-evaluator. It runs a five dimension diagnostic, produces a graded gap analysis, and returns a rewritten description. It writes a report and stops there. It never edits a Skill on its own, because I kept the human in the loop on purpose."
+              label="Designing the Evaluation Framework"
+              title="I designed the evaluation framework, then built what it needed to run."
+              description="A single quality score could not tell anyone where an Agent actually failed, so I designed a five-layer evaluation architecture: Task (did the end-to-end delivery satisfy the user), Query (was this one turn a good response), Agent (were orchestration and memory decisions correct), Skill (was the right capability triggered with the right parameters), and Sub-agent (did delegated work meet its own bar). Each layer traces to the next, so a failure at the top can be pushed down to the exact mechanism that caused it. I set four constraints going in: metrics inside a layer cannot overlap, every metric is attributable to AI, user, or system, every metric has a formula that real trace data can compute, and every metric holds up across versions and time."
             />
-            <div className="mt-8 grid gap-5 lg:grid-cols-2">
-              <div className="rounded-[2rem] bg-[#111318] p-6 text-white shadow-[0_28px_80px_rgba(0,0,0,0.18)] sm:p-8">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">Agent I built · 02</p>
-                    <h3 className="mt-2 text-xl font-semibold">skill-evaluator</h3>
-                  </div>
-                  <Zap className="h-5 w-5 text-[#65b5ff]" />
-                </div>
-                <div className="mt-6 space-y-2">
-                  {evaluatorChecks.map(([code, label]) => (
-                    <div key={code} className="flex items-center gap-4 rounded-xl border border-white/8 bg-white/[0.055] px-4 py-3">
-                      <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0071e3] text-[9px] font-semibold">{code}</span>
-                      <span className="text-sm font-semibold">{label}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-5 grid gap-3 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
-                  <div className="rounded-xl bg-white/[0.055] p-4"><p className="text-[9px] text-[#65b5ff]">INPUT</p><p className="mt-2 text-xs text-white/55">Directory or CSV</p></div>
-                  <ArrowRight className="m-auto hidden h-4 w-4 text-white/25 sm:block" />
-                  <div className="rounded-xl bg-white/[0.055] p-4"><p className="text-[9px] text-[#65b5ff]">OUTPUT</p><p className="mt-2 text-xs text-white/55">Conflicts · severity · rewrite</p></div>
-                </div>
-                <p className="mt-4 text-[11px] leading-5 text-white/35">Static review is used to catch catalog conflicts. It is not used to claim runtime quality.</p>
+            <div className="mt-8 rounded-[2rem] border border-black/8 bg-white p-6 shadow-[0_20px_60px_rgba(0,0,0,0.06)] sm:p-8">
+              <div className="flex items-center justify-between">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Five-layer attribution stack</p>
+                <GitBranch className="h-5 w-5 text-[#0071e3]" />
               </div>
+              <div className="mt-6 grid gap-2 sm:grid-cols-5">
+                {[
+                  ["Task", "End-to-end delivery"],
+                  ["Query", "Single-turn response"],
+                  ["Agent", "Orchestration + memory"],
+                  ["Skill", "Trigger + parameters"],
+                  ["Sub-agent", "Delegated execution"],
+                ].map(([layer, note], index) => (
+                  <div key={layer} className="flex items-center gap-2 sm:contents">
+                    <div className="flex-1 rounded-xl bg-[#f5f5f7] p-4 sm:flex-none">
+                      <p className="text-sm font-semibold text-[#1d1d1f]">{layer}</p>
+                      <p className="mt-1 text-[11px] leading-4 text-[#86868b]">{note}</p>
+                    </div>
+                    {index < 4 && <ChevronRight className="h-4 w-4 shrink-0 text-[#b0b0b5] sm:hidden" />}
+                  </div>
+                ))}
+              </div>
+              <p className="mt-5 text-xs leading-5 text-[#86868b]">A failure found at the Task layer gets pushed down through Query, Agent, and Skill until it reaches the mechanism responsible. That is the difference between a score and a diagnosis.</p>
+            </div>
 
-              <div>
-                <div className="rounded-[2rem] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">The Skill I authored</p>
-                      <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">I turned narrative theory into something the Agent could execute</h3>
-                    </div>
-                    <Braces className="h-5 w-5 shrink-0 text-[#0071e3]" />
-                  </div>
-                  <p className="mt-4 text-sm leading-7 text-[#6e6e73]">
-                    For the Three-Act and Bible Skills I owned product design, Skill authoring, and test iteration. The hard part was not writing the theory down. It was defining a check the model could not fake.
-                  </p>
-                  <div className="mt-6 grid gap-2 sm:grid-cols-2">
-                    <div className="rounded-2xl border border-[#ff6b6b]/25 bg-[#fff5f5] p-4">
-                      <div className="flex items-center gap-2 text-[#b3251f]"><X className="h-3.5 w-3.5" /><span className="text-[9px] font-semibold uppercase tracking-[0.13em]">Event only</span></div>
-                      <p className="mt-3 text-sm font-semibold text-[#1d1d1f]">The proposal is rejected.</p>
-                      <p className="mt-2 text-xs leading-5 text-[#86868b]">Dramatic, but the previous plan can still resume.</p>
-                    </div>
-                    <div className="rounded-2xl border border-[#30d158]/30 bg-[#f2fbf5] p-4">
-                      <div className="flex items-center gap-2 text-[#207a4b]"><Check className="h-3.5 w-3.5" /><span className="text-[9px] font-semibold uppercase tracking-[0.13em]">State change</span></div>
-                      <p className="mt-3 text-sm font-semibold text-[#1d1d1f]">She decides to leave the company.</p>
-                      <p className="mt-2 text-xs leading-5 text-[#86868b]">Goal, relationships, and available choices all shift.</p>
-                    </div>
-                  </div>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {["Episode + season", "Lazy references", "Anti-hallucination", "Graceful exit"].map((item) => (
-                      <span key={item} className="rounded-full bg-[#f5f5f7] px-3 py-2 text-[11px] font-medium text-[#6e6e73]">{item}</span>
-                    ))}
-                  </div>
+            <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              {challengeCards.map(([title, text, Icon], index) => (
+                <FadeInCard key={title} delay={index * 0.04} className="h-full rounded-[1.6rem] border border-black/8 bg-white p-6 shadow-[0_16px_44px_rgba(0,0,0,0.05)]">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#eaf4ff] text-[#0071e3]"><Icon className="h-5 w-5" /></div>
+                  <h3 className="mt-5 text-lg font-semibold text-[#1d1d1f]">{title}</h3>
+                  <p className="mt-3 text-sm leading-7 text-[#6e6e73]">{text}</p>
+                </FadeInCard>
+              ))}
+            </div>
+
+            <div className="mt-5 rounded-[2rem] border border-black/8 bg-white p-6 shadow-[0_22px_70px_rgba(0,0,0,0.07)] sm:p-8">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">The data layer underneath the framework</p>
+              <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">I designed the feedback instrumentation the framework needed to run on real usage.</h3>
+              <p className="mt-4 max-w-3xl text-sm leading-7 text-[#6e6e73]">Each event ties back to a session, a run, and an Agent through a shared identifier scheme, so a like, a copy, a dislike, or a stop can be traced to the exact Skill and turn that produced it. Positive signals span four event types (likes, copies, references, memory saves, and shares) across 12 interaction points. Negative signals cover two (dislikes and stopped generations).</p>
+              <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
+                {[["18", "product surfaces instrumented"], ["12", "positive touchpoints · 4 event types"], ["2", "negative signals · 2 event types"], ["6 + 4", "event types + trace contexts"]].map(([value, label]) => (
+                  <div key={label} className="rounded-xl border border-black/8 bg-white px-4 py-3"><p className="text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">{value}</p><p className="mt-1 text-[11px] text-[#86868b]">{label}</p></div>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-5 rounded-[2rem] border border-black/8 bg-white p-6 shadow-[0_22px_70px_rgba(0,0,0,0.07)] sm:p-8">
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Agent I built · 01</p>
+                  <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">A scheme only holds if it stays correct, so I built a bot to patrol it.</h3>
                 </div>
-
-                <button
-                  type="button"
-                  onClick={() => setDetail("knowledge")}
-                  className="group mt-4 flex w-full items-center gap-4 rounded-[1.4rem] border border-black/8 bg-white p-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(0,0,0,0.08)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3] motion-reduce:transform-none motion-reduce:transition-none"
-                >
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#eaf4ff] text-[#0071e3]"><Database className="h-5 w-5" /></span>
-                  <span className="min-w-0">
-                    <span className="block text-sm font-semibold text-[#1d1d1f]">Open the knowledge Schema I proposed</span>
-                    <span className="mt-1 block text-xs leading-5 text-[#86868b]">4,700+ unstructured items turned into retrievable entities with source context.</span>
-                  </span>
-                  <ArrowRight className="ml-auto h-5 w-5 shrink-0 text-[#b0b0b5] transition group-hover:translate-x-1 group-hover:text-[#0071e3] motion-reduce:transform-none" />
-                </button>
+                <div className="flex items-center gap-3">
+                  <span className="relative flex h-3 w-3"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#30a46c] opacity-50 motion-reduce:animate-none" /><span className="relative inline-flex h-3 w-3 rounded-full bg-[#30a46c]" /></span>
+                  <span className="rounded-full bg-[#eaf8ef] px-3 py-1.5 text-xs font-semibold text-[#207a4b]">Deployed · runs daily</span>
+                </div>
+              </div>
+              <p className="mt-4 max-w-3xl text-sm leading-7 text-[#6e6e73]">
+                It cross-checks the event types, the documentation, and the analytics code for consistency, then reports coverage gaps to the work group before they become blind spots in the data.
+              </p>
+              <div className="mt-7 grid gap-3 lg:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] lg:items-center">
+                {[
+                  ["01", "Event spec", "18 surfaces · privacy boundary", Radar],
+                  ["02", "Code callsite", "Verify implementation", Code2],
+                  ["03", "Data pipeline", "Trace event to warehouse", Database],
+                  ["04", "Group report", "Changes · gaps · severity", MessageSquareText],
+                ].map(([number, title, text, Icon], index) => (
+                  <div key={number as string} className="contents">
+                    <div className="h-full rounded-[1.4rem] bg-[#f5f5f7] p-5">
+                      <div className="flex justify-between"><Icon className="h-5 w-5 text-[#0071e3]" /><span className="text-[10px] text-[#b0b0b5]">{number as string}</span></div>
+                      <p className="mt-5 text-sm font-semibold text-[#1d1d1f]">{title as string}</p>
+                      <p className="mt-2 text-xs leading-5 text-[#86868b]">{text as string}</p>
+                    </div>
+                    {index < 3 && <ArrowRight className="m-auto hidden h-4 w-4 text-[#b0b0b5] lg:block" />}
+                  </div>
+                ))}
               </div>
             </div>
           </AnimatedSection>
