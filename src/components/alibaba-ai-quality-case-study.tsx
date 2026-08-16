@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useGSAP } from "@gsap/react";
@@ -546,6 +546,115 @@ function ArchitectureDetail() {
       </div>
 
       <p className="mt-3.5 text-[9.5px] leading-[1.5] text-[#b0b0b5]">Six layers reconstructed from source. Anonymized for public use; real product name and package names are kept in a private evidence layer.</p>
+    </div>
+  );
+}
+
+function KnowledgeSystemDiagram() {
+  const reduceMotion = useReducedMotion();
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  const stages = [
+    {
+      icon: Database,
+      title: "Knowledge base",
+      note: "Official library, 4,700+ works · My library, user imports",
+      items: ["Structured by dimension", "World · character · plot · relationship", "Stored as dimension files"],
+    },
+    {
+      icon: MessageSquareText,
+      title: "Writer query",
+      note: "Natural language, in the conversation",
+      items: ["\u201cCheck this against the Prada IP\u201d", "\u201cFind me a reversal like this\u201d"],
+    },
+    {
+      icon: Bot,
+      title: "Agent",
+      note: "Intent understanding · channel routing",
+      items: ["Full document, or a fragment, or the web", "Decided per request, not per work"],
+    },
+    {
+      icon: ScanSearch,
+      title: "Retrieval layer",
+      note: "Three channels, one shared source",
+      items: ["Structural · coarse grain", "Fragment · RAG + rerank", "Web · fallback only"],
+    },
+    {
+      icon: Route,
+      title: "Context assembly",
+      note: "Query rewrite · rerank · merge",
+      items: ["Splits one query into angles", "Dedupes across parallel calls"],
+    },
+    {
+      icon: Sparkles,
+      title: "Used in the draft",
+      note: "Back in the writer's hands",
+      items: ["@ reference an IP", "Character, world, and plot lookup", "Beat and character comps"],
+    },
+  ] as const;
+
+  useGSAP(
+    () => {
+      const nodeTargets = gsap.utils.toArray<HTMLElement>("[data-diagram-node]", rootRef.current);
+      const connectorTargets = gsap.utils.toArray<HTMLElement>("[data-diagram-connector]", rootRef.current);
+
+      if (reduceMotion) {
+        gsap.set([...nodeTargets, ...connectorTargets], { clearProps: "all" });
+        return;
+      }
+
+      gsap.set(nodeTargets, { autoAlpha: 0, y: 16 });
+      gsap.set(connectorTargets, { autoAlpha: 0, scaleX: 0, transformOrigin: "left center" });
+
+      ScrollTrigger.create({
+        trigger: rootRef.current,
+        start: "top 78%",
+        once: true,
+        onEnter: () => {
+          const tl = gsap.timeline();
+          nodeTargets.forEach((node, index) => {
+            tl.to(node, { autoAlpha: 1, y: 0, duration: 0.45, ease: "power3.out" }, index * 0.16);
+            if (connectorTargets[index]) {
+              tl.to(connectorTargets[index], { autoAlpha: 1, scaleX: 1, duration: 0.3, ease: "power3.out" }, index * 0.16 + 0.2);
+            }
+          });
+        },
+      });
+    },
+    { scope: rootRef, dependencies: [reduceMotion], revertOnUpdate: true },
+  );
+
+  return (
+    <div ref={rootRef} className="mt-8 overflow-hidden rounded-[2rem] border border-black/8 bg-gradient-to-br from-white via-white to-[#f5f9ff] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.06)] sm:p-9">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">System map</p>
+      <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">From an unstructured library to a citation the Agent can use mid-draft.</h3>
+
+      <div className="mt-8 flex flex-col gap-2 lg:flex-row lg:items-stretch lg:gap-0">
+        {stages.map((stage, index) => (
+          <Fragment key={stage.title}>
+            <div data-diagram-node className="flex-1 rounded-[1.4rem] border border-black/8 bg-white p-4">
+              <div className="flex items-center gap-2">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#eaf4ff] text-[#0071e3]"><stage.icon className="h-4 w-4" /></span>
+                <p className="text-sm font-semibold text-[#1d1d1f]">{stage.title}</p>
+              </div>
+              <p className="mt-2.5 text-[10px] leading-4 text-[#86868b]">{stage.note}</p>
+              <div className="mt-3 space-y-1">
+                {stage.items.map((item) => (
+                  <p key={item} className="text-[10px] leading-4 text-[#515154]">{item}</p>
+                ))}
+              </div>
+            </div>
+            {index < stages.length - 1 && (
+              <div className="flex items-center justify-center px-1 lg:w-6">
+                <div data-diagram-connector className="hidden h-px w-full bg-gradient-to-r from-[#0071e3]/40 to-[#0071e3]/10 lg:block" />
+                <ArrowRight className="my-1 h-4 w-4 rotate-90 text-[#b0b0b5] lg:hidden" />
+              </div>
+            )}
+          </Fragment>
+        ))}
+      </div>
+
+      <p className="mt-5 text-[10.5px] leading-4 text-[#86868b]">The same six-stage path runs whether the request needs a full document, a fragment, or a web fallback, only the retrieval layer&apos;s channel choice changes underneath it. Field-level Schema and channel detail are below.</p>
     </div>
   );
 }
@@ -1398,6 +1507,7 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
               description="The knowledge base already held 4,700-plus works, but every one of them was unstructured text. Recommendation and precise citation both depend on structured fields, not on hoping the right words show up in a wall of prose. I designed the entity Schema that breaks each work into queryable fields, and the three-channel retrieval architecture that decides, per request, whether the Agent needs a full document, a matched fragment, or a web fallback."
             />
 
+            <KnowledgeSystemDiagram />
             <KnowledgeSchemaDetail />
           </AnimatedSection>
 
