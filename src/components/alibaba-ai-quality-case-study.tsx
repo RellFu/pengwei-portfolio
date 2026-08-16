@@ -31,7 +31,6 @@ import {
   FileText,
   Film,
   Folder,
-  Frown,
   GitBranch,
   GitMerge,
   Globe,
@@ -48,7 +47,6 @@ import {
   ShieldCheck,
   Sparkles,
   Split,
-  Star,
   StickyNote,
   ScrollText,
   Users,
@@ -621,116 +619,81 @@ function ArchitectureDetail() {
 
 function RawMaterialStack() {
   const documents = [
-    { icon: FileText, title: "script.txt", note: "INT. OFFICE, DAY\nMIRANDA enters.\nEVERYONE stiffens...", rotate: "-rotate-3", offset: "translate-x-0 translate-y-0" },
-    { icon: ScrollText, title: "synopsis.doc", note: "A recent college grad lands a job as assistant to the powerful editor in chief of Runway magazine. Over time, Andy navigates the demanding world of fashion journalism, struggles with identity and values, and ultimately chooses her own path.", rotate: "rotate-2", offset: "translate-x-3 translate-y-6" },
-    { icon: StickyNote, title: "character-notes.md", note: "Andy Sachs\nSmart, earnest, hardworking. Needs growth in confidence.\n\nMiranda Priestly\nCommanding, perfectionist, intimidating.", rotate: "-rotate-1", offset: "translate-x-6 translate-y-12" },
-    { icon: Folder, title: "story-materials/", note: "Key Scenes / Ideas\n\u2013 Andy's interview\n\u2013 First day at Runway\n\u2013 The cerulean speech\n\u2013 Meeting the designers\n\u2013 Fashion Week\n\u2013 The choice", rotate: "rotate-1", offset: "translate-x-9 translate-y-[4.5rem]" },
+    { icon: FileText, title: "script.txt", note: "INT. OFFICE, DAY. MIRANDA enters. EVERYONE stiffens...", rotate: "-rotate-3", offset: "translate-x-0 translate-y-0" },
+    { icon: ScrollText, title: "synopsis.doc", note: "A recent college grad lands a job as assistant to the powerful editor in chief of Runway magazine.", rotate: "rotate-2", offset: "translate-x-4 translate-y-3" },
+    { icon: StickyNote, title: "character-notes.md", note: "Andy Sachs: smart, earnest, hardworking. Miranda Priestly: commanding, perfectionist.", rotate: "-rotate-1", offset: "translate-x-8 translate-y-6" },
+    { icon: Folder, title: "story-materials/", note: "Key scenes: Andy's interview, the cerulean speech, meeting the designers, the choice.", rotate: "rotate-1", offset: "translate-x-12 translate-y-9" },
   ] as const;
 
   return (
-    <div className="relative h-[26rem]">
+    <div className="relative h-[10.5rem]">
       {documents.map((doc, index) => (
         <div
           key={doc.title}
-          className={`absolute inset-x-6 top-2 ${doc.offset} ${doc.rotate} rounded-2xl border border-black/8 bg-white p-4 shadow-[0_10px_28px_rgba(0,0,0,0.08)]`}
+          className={`absolute inset-x-4 top-0 ${doc.offset} ${doc.rotate} rounded-2xl border border-black/8 bg-white p-3 shadow-[0_10px_28px_rgba(0,0,0,0.08)]`}
           style={{ zIndex: index }}
         >
           <div className="flex items-center gap-2">
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-[#f5f5f7] text-[#86868b]"><doc.icon className="h-3.5 w-3.5" /></span>
-            <p className="text-[10px] font-semibold text-[#515154]">{doc.title}</p>
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[#f5f5f7] text-[#86868b]"><doc.icon className="h-3 w-3" /></span>
+            <p className="text-[9.5px] font-semibold text-[#515154]">{doc.title}</p>
           </div>
-          <p className="mt-2.5 whitespace-pre-line text-[9.5px] leading-[1.5] text-[#a1a1a6]">{doc.note}</p>
+          <p className="mt-1.5 line-clamp-2 text-[9px] leading-[1.45] text-[#a1a1a6]">{doc.note}</p>
         </div>
       ))}
-
-      <div className="absolute -bottom-2 right-0 w-[9.5rem] rounded-[1.2rem] border border-black/5 bg-white/95 p-3 shadow-[0_12px_30px_rgba(0,0,0,0.1)] backdrop-blur-sm">
-        <div className="mb-2 flex items-center gap-1.5">
-          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#f5f5f7] text-[#86868b]"><Frown className="h-3.5 w-3.5" /></span>
-          <p className="text-[9px] font-medium tracking-[0.1em] text-[#86868b]">Hard to use</p>
-        </div>
-        <div className="flex flex-col gap-1.5">
-          {["Not queryable", "No shared fields", "Slow to compare", "Easy to lose track"].map((hint) => (
-            <div key={hint} className="rounded-lg border border-black/5 bg-[#f5f5f7]/70 px-2 py-1.5 text-[9px] leading-4 text-[#6e6e73]">{hint}</div>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }
 
 function StructuredKnowledgeCard() {
-  const character = [
-    ["One-line summary", "Intelligent, hardworking assistant who finds her own voice"],
-    ["Core traits", "Determined, sincere, adaptable, observant, ground-minded"],
-    ["Growth type", "Identity \u2192 self-trust"],
-    ["Core desire", "To prove herself and build a meaningful life"],
-    ["Core need", "To be enough for herself"],
-    ["Core lie", "I need approval to be worthy"],
-    ["Core fear", "Being ordinary and unimportant"],
+  const metadata = [
+    ["Subject", "Workplace \u00b7 Fashion"],
+    ["Story type", "Drama \u00b7 Comedy"],
+    ["Structure", "Linear narrative"],
+    ["Narrative form", "Dramatic form"],
   ] as const;
 
-  const relationships = [
-    ["Miranda", "Authority figure", "Demanding editor in chief who challenges and shapes Andy's growth"],
-    ["Nigel", "Mentor / ally", "Creative director who encourages Andy and sees her potential"],
-    ["Nate", "Love interest", "Warm, grounded partner who represents Andy's life outside Runway"],
-  ] as const;
-
-  const world = [
-    ["Social structure", "Fashion industry hierarchy, elites and gatekeepers"],
-    ["Politics & law", "Corporate media rules, HR and employment norms"],
-    ["Economy", "Luxury fashion economy, brand-driven"],
-    ["Culture & history", "High fashion culture, image, exclusivity, legacy"],
+  const threads = [
+    ["Primary", "Andy's workplace survival challenge"],
+    ["Secondary", "Andy's fashion transformation"],
+    ["Secondary", "The fracture between Andy and Nate"],
+    ["Secondary", "Miranda Priestly's display of power"],
   ] as const;
 
   return (
     <div className="rounded-[1.6rem] border border-black/8 bg-white p-5 shadow-[0_10px_28px_rgba(0,0,0,0.08)]">
       <div className="flex items-center gap-3">
         <span className="flex h-9 w-11 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#ef4444] to-[#7f1d1d] text-[9px] font-bold text-white">DWP</span>
-        <p className="text-sm font-semibold text-[#1d1d1f]">The Devil Wears Prada</p>
-      </div>
-
-      <div className="mt-4 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#0071e3]"><CircleUserRound className="h-3 w-3" />Character &middot; Andy Sachs</div>
-      <div className="mt-2 grid grid-cols-2 gap-1 sm:grid-cols-1">
-        {character.map(([label, value]) => (
-          <div key={label} className="rounded-lg bg-[#f5f5f7] px-2.5 py-1.5">
-            <p className="text-[8.5px] font-medium text-[#0071e3]">{label}</p>
-            <p className="mt-0.5 text-[9.5px] leading-[1.4] text-[#515154]">{value}</p>
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-[#1d1d1f]">The Devil Wears Prada</p>
+          <div className="mt-1 flex flex-wrap gap-1">
+            {["Workplace", "Comedy-drama", "Linear narrative"].map((tag) => (
+              <span key={tag} className="rounded-full bg-[#f5f5f7] px-1.5 py-0.5 text-[7.5px] text-[#6e6e73]">{tag}</span>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
 
-      <div className="mt-4 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#0071e3]"><Users className="h-3 w-3" />Relationships</div>
-      <div className="mt-2 space-y-1">
-        {relationships.map(([name, def, desc]) => (
-          <div key={name} className="rounded-lg bg-[#f5f5f7] px-2.5 py-1.5">
-            <p className="text-[9.5px] font-semibold text-[#1d1d1f]">{name} <span className="font-normal text-[#86868b]">&middot; {def}</span></p>
-            <p className="mt-0.5 text-[9.5px] leading-[1.4] text-[#86868b]">{desc}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="mt-4 grid gap-2 sm:grid-cols-2">
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <div>
-          <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#0071e3]"><Globe className="h-3 w-3" />World</div>
-          <div className="mt-2 space-y-1">
-            {world.map(([label, value]) => (
-              <div key={label} className="rounded-lg bg-[#f5f5f7] px-2.5 py-1.5">
-                <p className="text-[8.5px] font-medium text-[#0071e3]">{label}</p>
-                <p className="mt-0.5 text-[9.5px] leading-[1.4] text-[#515154]">{value}</p>
+          <p className="text-[9px] font-semibold uppercase tracking-[0.12em] text-[#0071e3]">Story overview</p>
+          <div className="mt-2 grid grid-cols-2 gap-1">
+            {metadata.map(([label, value]) => (
+              <div key={label} className="rounded-lg bg-[#f5f5f7] px-2 py-1.5">
+                <p className="text-[7.5px] font-medium text-[#86868b]">{label}</p>
+                <p className="mt-0.5 text-[9px] font-semibold leading-[1.3] text-[#1d1d1f]">{value}</p>
               </div>
             ))}
           </div>
         </div>
         <div>
-          <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#0071e3]"><Star className="h-3 w-3" />Theme</div>
-          <div className="mt-2 rounded-lg bg-[#f5f5f7] px-2.5 py-1.5">
-            <p className="text-[8.5px] font-medium text-[#0071e3]">Core themes &amp; universal values</p>
-            <p className="mt-0.5 text-[9.5px] leading-[1.4] text-[#515154]">Identity vs. conformity, ambition, integrity, self-worth, choice</p>
-          </div>
-          <div className="mt-4 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#0071e3]"><Route className="h-3 w-3" />Plot</div>
-          <div className="mt-2 rounded-lg bg-[#f5f5f7] px-2.5 py-1.5">
-            <p className="text-[8.5px] font-medium text-[#0071e3]">Main / subplot</p>
-            <p className="mt-0.5 text-[9.5px] leading-[1.4] text-[#515154]">Main: Andy&apos;s journey of self-discovery at a cutthroat industry. Subplot: Andy&apos;s relationship with Nate.</p>
+          <p className="text-[9px] font-semibold uppercase tracking-[0.12em] text-[#0071e3]">Main structural threads</p>
+          <div className="mt-2 space-y-1">
+            {threads.map(([label, copy]) => (
+              <div key={copy} className="rounded-lg bg-[#f5f5f7] px-2 py-1.5">
+                <p className="text-[7.5px] font-medium text-[#86868b]">{label}</p>
+                <p className="mt-0.5 text-[9px] font-semibold leading-[1.3] text-[#1d1d1f]">{copy}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -741,7 +704,7 @@ function StructuredKnowledgeCard() {
 function KnowledgeBeforeAfter() {
   return (
     <div className="mt-4">
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-[0.85fr_1.15fr]">
         <GlassSurface className="overflow-hidden rounded-[1.9rem] p-0">
           <div className="border-b border-black/5 px-5 py-4">
             <SectionLabel>
@@ -767,7 +730,7 @@ function KnowledgeBeforeAfter() {
           </div>
         </WarmSurface>
       </div>
-      <p className="mt-5 max-w-3xl text-center text-sm leading-6 text-[#6e6e73] sm:mx-auto">We turned story knowledge hidden in long-form text into structured knowledge for characters, relationships, worldbuilding, themes, and plot.</p>
+      <p className="mt-5 max-w-3xl text-center text-sm leading-6 text-[#6e6e73] sm:mx-auto">We turned story knowledge hidden in long-form text into structured, field-level records for characters, relationships, worldbuilding, and plot.</p>
     </div>
   );
 }
