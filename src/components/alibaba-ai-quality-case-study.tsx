@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useGSAP } from "@gsap/react";
@@ -25,14 +25,12 @@ import {
   Cloud,
   Code2,
   Cog,
-  Cpu,
   Database,
   Eye,
   FileText,
   Film,
   Folder,
   GitBranch,
-  GitMerge,
   Globe,
   Info,
   Layers3,
@@ -930,41 +928,27 @@ function AgenticRetrievalDiagram() {
   const reduceMotion = useReducedMotion();
   const rootRef = useRef<HTMLDivElement>(null);
 
-  const spine = [
-    { icon: MessageSquareText, title: "User query", note: "Natural language, in the conversation" },
-    { icon: Bot, title: "Phai Agent", note: "Intent understanding" },
-    { icon: Route, title: "Routing", note: "Picks the channel for this request" },
-  ] as const;
+  const agentStages = ["Intent", "Entity", "Router"] as const;
 
   const routes = [
     {
       icon: Film,
       name: "IP Retrieval",
-      example: "\u201cTell me about Andy's character arc in The Devil Wears Prada.\u201d",
-      when: "A named work, a full picture requested.",
-      flow: "Find the IP, find its knowledgeFile, pull the complete character archive.",
+      bullets: ["Specific IP", "Full context", "Full Docs"],
+      note: "Full knowledge documents",
     },
     {
       icon: ScanSearch,
       name: "RAG Search",
-      example: "\u201cFind scenes where a junior employee is humiliated and decides to change.\u201d",
-      when: "No named work, a beat or feeling instead.",
-      flow: "Query rewrite, parallel retrieval, reranker, matched passages.",
+      bullets: ["Pattern", "Inspiration", "Relevant Chunks"],
+      note: "Chunk-level retrieval",
     },
     {
       icon: Globe,
       name: "Web Fallback",
-      example: "The internal library has no record of this at all.",
-      when: "Both channels above return nothing.",
-      flow: "Stream a general web search instead of dead-ending the request.",
+      bullets: ["Internal KB insufficient", "External Web"],
+      note: "Fallback only",
     },
-  ] as const;
-
-  const merge = [
-    { icon: Cpu, title: "Query rewrite", note: "One query, split into angles" },
-    { icon: GitMerge, title: "Retrieval / rerank", note: "Parallel calls, deduped and ranked" },
-    { icon: Layers3, title: "Context", note: "Assembled for the model" },
-    { icon: Sparkles, title: "LLM", note: "Writes with grounded material" },
   ] as const;
 
   useGSAP(
@@ -988,9 +972,9 @@ function AgenticRetrievalDiagram() {
         once: true,
         onEnter: () => {
           const tl = gsap.timeline();
-          tl.to(spineTargets, { autoAlpha: 1, y: 0, duration: 0.38, stagger: 0.09, ease: "power3.out" });
+          tl.to(spineTargets, { autoAlpha: 1, y: 0, duration: 0.38, stagger: 0.1, ease: "power3.out" });
           tl.to(routeTargets, { autoAlpha: 1, y: 0, duration: 0.38, stagger: 0.08, ease: "power3.out" }, "-=0.1");
-          tl.to(mergeTargets, { autoAlpha: 1, y: 0, duration: 0.38, stagger: 0.07, ease: "power3.out" }, "-=0.14");
+          tl.to(mergeTargets, { autoAlpha: 1, y: 0, duration: 0.38, stagger: 0.08, ease: "power3.out" }, "-=0.14");
         },
       });
     },
@@ -1002,71 +986,92 @@ function AgenticRetrievalDiagram() {
       <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">System map</p>
       <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">Not every question should be solved with RAG.</h3>
 
-      <div className="mt-6 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:justify-center sm:gap-2.5">
-        {spine.map((node, index) => (
-          <Fragment key={node.title}>
-            <div data-retrieval-spine className="flex items-center gap-2.5 rounded-2xl border border-black/8 bg-white px-4 py-2.5 shadow-sm">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#eaf4ff] text-[#0071e3]"><node.icon className="h-4 w-4" /></span>
-              <div>
-                <p className="text-xs font-semibold text-[#1d1d1f]">{node.title}</p>
-                <p className="text-[9.5px] text-[#86868b]">{node.note}</p>
-              </div>
+      <div className="mt-7 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:justify-center sm:gap-0">
+        <div data-retrieval-spine className="flex items-center gap-3 rounded-[1.4rem] border border-black/8 bg-white px-5 py-4 shadow-sm">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#eaf4ff] text-[#0071e3]"><MessageSquareText className="h-[18px] w-[18px]" /></span>
+          <p className="text-sm font-semibold text-[#1d1d1f]">User Query</p>
+        </div>
+
+        <div className="flex items-center justify-center py-1 sm:w-16 sm:py-0" aria-hidden="true">
+          <div className="hidden h-px flex-1 bg-[#d8d8dc] sm:block" />
+          <ArrowRight className="h-3.5 w-3.5 shrink-0 rotate-90 text-[#b0b0b5] sm:rotate-0" />
+        </div>
+
+        <div data-retrieval-spine className="flex items-start gap-3 rounded-[1.4rem] border border-black/8 bg-white px-5 py-4 shadow-sm">
+          <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#eaf4ff] text-[#0071e3]"><Bot className="h-[18px] w-[18px]" /></span>
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-[#1d1d1f]">Phai Agent</p>
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {agentStages.map((stage) => (
+                <span key={stage} className="rounded-md bg-[#f5f5f7] px-2.5 py-1 text-[10px] font-medium text-[#515154]">{stage}</span>
+              ))}
             </div>
-            {index < spine.length - 1 && <ArrowDown className="mx-auto h-3.5 w-3.5 rotate-90 text-[#b0b0b5] sm:rotate-0" />}
-          </Fragment>
-        ))}
+          </div>
+        </div>
       </div>
 
-      <div className="mx-auto mt-4 hidden h-7 max-w-2xl lg:block" aria-hidden="true">
+      <div className="mt-5 hidden h-8 lg:block" aria-hidden="true">
         <div className="relative h-full">
-          <div className="absolute left-[16.6%] right-[16.6%] top-0 h-px bg-[#e5e5e7]" />
-          <div className="absolute left-[16.6%] top-0 h-7 w-px bg-[#e5e5e7]" />
-          <div className="absolute left-1/2 top-0 h-7 w-px -translate-x-1/2 bg-[#e5e5e7]" />
-          <div className="absolute right-[16.6%] top-0 h-7 w-px bg-[#e5e5e7]" />
+          <div className="absolute left-[16.667%] right-[16.667%] top-0 h-px bg-[#d8d8dc]" />
+          <div className="absolute left-[16.667%] top-0 h-8 w-px bg-[#d8d8dc]" />
+          <div className="absolute left-1/2 top-0 h-8 w-px -translate-x-1/2 bg-[#d8d8dc]" />
+          <div className="absolute left-[83.333%] top-0 h-8 w-px bg-[#d8d8dc]" />
         </div>
       </div>
       <div className="mt-3 flex justify-center lg:hidden">
         <ArrowDown className="h-3.5 w-3.5 text-[#b0b0b5]" />
       </div>
 
-      <div className="mt-1 grid gap-2.5 lg:grid-cols-3 lg:mt-0">
+      <div className="mt-1 grid gap-3 lg:mt-0 lg:grid-cols-3">
         {routes.map((route) => (
-          <div key={route.name} data-retrieval-route className="rounded-[1.5rem] border border-black/8 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(0,0,0,0.06)] motion-reduce:transform-none motion-reduce:transition-none">
-            <div className="flex items-center gap-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#eaf4ff] text-[#0071e3]"><route.icon className="h-4 w-4" /></span>
+          <div key={route.name} data-retrieval-route className="flex flex-col rounded-[1.5rem] border border-black/8 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(0,0,0,0.06)] motion-reduce:transform-none motion-reduce:transition-none">
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#eaf4ff] text-[#0071e3]"><route.icon className="h-[17px] w-[17px]" /></span>
               <p className="text-sm font-semibold text-[#1d1d1f]">{route.name}</p>
             </div>
-            <p className="mt-3 rounded-lg bg-[#f5f5f7] px-3 py-2 text-[10px] italic leading-4 text-[#6e6e73]">{route.example}</p>
-            <p className="mt-2.5 text-[10px] leading-4 text-[#86868b]"><span className="font-semibold text-[#515154]">When: </span>{route.when}</p>
-            <p className="mt-1.5 text-[10px] leading-4 text-[#86868b]"><span className="font-semibold text-[#515154]">Flow: </span>{route.flow}</p>
+            <div className="mt-3.5 space-y-1.5">
+              {route.bullets.map((bullet) => (
+                <div key={bullet} className="flex items-center gap-2">
+                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-[#0071e3]" />
+                  <p className="text-[11px] leading-4 text-[#515154]">{bullet}</p>
+                </div>
+              ))}
+            </div>
+            <p className="mt-auto border-t border-black/5 pt-2.5 text-[10px] font-medium text-[#86868b] lg:pt-3.5">{route.note}</p>
           </div>
         ))}
       </div>
 
-      <div className="mx-auto mt-4 hidden h-7 max-w-2xl lg:block" aria-hidden="true">
+      <div className="mt-5 hidden h-8 lg:block" aria-hidden="true">
         <div className="relative h-full">
-          <div className="absolute left-[16.6%] top-0 h-7 w-px bg-[#e5e5e7]" />
-          <div className="absolute left-1/2 top-0 h-7 w-px -translate-x-1/2 bg-[#e5e5e7]" />
-          <div className="absolute right-[16.6%] top-0 h-7 w-px bg-[#e5e5e7]" />
-          <div className="absolute left-[16.6%] right-[16.6%] bottom-0 h-px bg-[#e5e5e7]" />
+          <div className="absolute left-[16.667%] top-0 h-8 w-px bg-[#d8d8dc]" />
+          <div className="absolute left-[83.333%] top-0 h-8 w-px bg-[#d8d8dc]" />
+          <div className="absolute left-[16.667%] right-[16.667%] bottom-0 h-px bg-[#d8d8dc]" />
+          <div className="absolute left-1/2 top-0 h-8 w-px -translate-x-1/2 bg-[#d8d8dc]" />
         </div>
       </div>
       <div className="mt-3 flex justify-center lg:hidden">
         <ArrowDown className="h-3.5 w-3.5 text-[#b0b0b5]" />
       </div>
 
-      <div className="mt-1 grid gap-2 sm:grid-cols-4 lg:mt-0">
-        {merge.map((node, index) => (
-          <div key={node.title} data-retrieval-merge className="relative rounded-2xl border border-black/8 bg-white p-3.5 transition hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.05)] motion-reduce:transform-none motion-reduce:transition-none">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#eaf4ff] text-[#0071e3]"><node.icon className="h-3.5 w-3.5" /></span>
-            <p className="mt-2.5 text-sm font-semibold text-[#1d1d1f]">{node.title}</p>
-            <p className="mt-1 text-[10px] leading-4 text-[#86868b]">{node.note}</p>
-            {index < merge.length - 1 && <ChevronRight className="absolute -right-3 top-1/2 z-10 hidden h-5 w-5 -translate-y-1/2 text-[#b0b0b5] sm:block" />}
-          </div>
-        ))}
+      <div className="mt-1 flex flex-col items-center lg:mt-0">
+        <div data-retrieval-merge className="w-full max-w-2xl rounded-[1.4rem] border border-black/8 bg-white px-5 py-4 text-center shadow-sm">
+          <p className="text-sm font-semibold text-[#1d1d1f]">Context Assembly</p>
+          <p className="mt-1 text-[10px] text-[#86868b]">Query rewrite, rerank, dedupe, then assemble what the model sees</p>
+        </div>
+
+        <div className="flex flex-col items-center py-1" aria-hidden="true">
+          <div className="h-4 w-px bg-[#d8d8dc]" />
+          <ArrowDown className="h-3.5 w-3.5 text-[#b0b0b5]" />
+        </div>
+
+        <div data-retrieval-merge className="w-full max-w-sm rounded-[1.4rem] border border-black/8 bg-white px-5 py-4 text-center shadow-sm">
+          <p className="text-sm font-semibold text-[#1d1d1f]">LLM Response</p>
+          <p className="mt-1 text-[10px] text-[#86868b]">Written against grounded material</p>
+        </div>
       </div>
 
-      <div className="mt-5 rounded-2xl bg-[#eaf4ff] p-5 text-sm leading-7 text-[#3f5f78]">
+      <div className="mt-7 rounded-2xl bg-[#eaf4ff] p-5 text-sm leading-7 text-[#3f5f78]">
         We designed a hybrid retrieval system that routes between IP-level retrieval, chunk-level RAG, and web fallback based on user intent.
       </div>
     </div>
