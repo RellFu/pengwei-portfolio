@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useGSAP } from "@gsap/react";
@@ -8,6 +8,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import {
+  ArrowDown,
   ArrowLeft,
   ArrowRight,
   AtSign,
@@ -24,11 +25,14 @@ import {
   Cloud,
   Code2,
   Cog,
+  Cpu,
   Database,
   Eye,
   FileText,
+  Film,
   Folder,
   GitBranch,
+  GitMerge,
   Globe,
   Info,
   Layers3,
@@ -926,24 +930,67 @@ function AgenticRetrievalDiagram() {
   const reduceMotion = useReducedMotion();
   const rootRef = useRef<HTMLDivElement>(null);
 
+  const spine = [
+    { icon: MessageSquareText, title: "User query", note: "Natural language, in the conversation" },
+    { icon: Bot, title: "Phai Agent", note: "Intent understanding" },
+    { icon: Route, title: "Routing", note: "Picks the channel for this request" },
+  ] as const;
+
+  const routes = [
+    {
+      icon: Film,
+      name: "IP Retrieval",
+      example: "\u201cTell me about Andy's character arc in The Devil Wears Prada.\u201d",
+      when: "A named work, a full picture requested.",
+      flow: "Find the IP, find its knowledgeFile, pull the complete character archive.",
+    },
+    {
+      icon: ScanSearch,
+      name: "RAG Search",
+      example: "\u201cFind scenes where a junior employee is humiliated and decides to change.\u201d",
+      when: "No named work, a beat or feeling instead.",
+      flow: "Query rewrite, parallel retrieval, reranker, matched passages.",
+    },
+    {
+      icon: Globe,
+      name: "Web Fallback",
+      example: "The internal library has no record of this at all.",
+      when: "Both channels above return nothing.",
+      flow: "Stream a general web search instead of dead-ending the request.",
+    },
+  ] as const;
+
+  const merge = [
+    { icon: Cpu, title: "Query rewrite", note: "One query, split into angles" },
+    { icon: GitMerge, title: "Retrieval / rerank", note: "Parallel calls, deduped and ranked" },
+    { icon: Layers3, title: "Context", note: "Assembled for the model" },
+    { icon: Sparkles, title: "LLM", note: "Writes with grounded material" },
+  ] as const;
+
   useGSAP(
     () => {
-      const imageTarget = rootRef.current?.querySelector<HTMLElement>("[data-retrieval-image]");
-      if (!imageTarget) return;
+      const spineTargets = gsap.utils.toArray<HTMLElement>("[data-retrieval-spine]", rootRef.current);
+      const routeTargets = gsap.utils.toArray<HTMLElement>("[data-retrieval-route]", rootRef.current);
+      const mergeTargets = gsap.utils.toArray<HTMLElement>("[data-retrieval-merge]", rootRef.current);
 
       if (reduceMotion) {
-        gsap.set(imageTarget, { clearProps: "all" });
+        gsap.set([...spineTargets, ...routeTargets, ...mergeTargets], { clearProps: "all" });
         return;
       }
 
-      gsap.set(imageTarget, { autoAlpha: 0, y: 16 });
+      gsap.set(spineTargets, { autoAlpha: 0, y: 12 });
+      gsap.set(routeTargets, { autoAlpha: 0, y: 14 });
+      gsap.set(mergeTargets, { autoAlpha: 0, y: 10 });
 
       ScrollTrigger.create({
         trigger: rootRef.current,
         start: "top 78%",
         once: true,
         onEnter: () => {
-          gsap.to(imageTarget, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out" });
+          const tl = gsap.timeline();
+          tl.to(spineTargets, { autoAlpha: 1, y: 0, duration: 0.38, stagger: 0.09, ease: "power3.out" });
+          tl.to(routeTargets, { autoAlpha: 1, y: 0, duration: 0.38, stagger: 0.08, ease: "power3.out" }, "-=0.1");
+          tl.to(mergeTargets, { autoAlpha: 1, y: 0, duration: 0.38, stagger: 0.07, ease: "power3.out" }, "-=0.14");
         },
       });
     },
@@ -955,18 +1002,71 @@ function AgenticRetrievalDiagram() {
       <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">System map</p>
       <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">Not every question should be solved with RAG.</h3>
 
-      <div className="mt-7 overflow-x-auto">
-        <Image
-          data-retrieval-image
-          src="/images/agentic-retrieval-diagram.svg"
-          alt="Diagram: a user query enters the Agent, which routes to IP retrieval, RAG search, or web fallback based on intent. IP retrieval finds the named work and returns its full knowledge documents. RAG search runs a query rewrite, parallel retrieval, and reranker to return relevant chunks. Web fallback streams a general web search when the internal library has no record. All three routes converge into context assembly, then the LLM response."
-          width={1600}
-          height={780}
-          className="w-[1200px] min-w-[1200px] sm:w-full sm:min-w-0"
-        />
+      <div className="mt-6 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:justify-center sm:gap-2.5">
+        {spine.map((node, index) => (
+          <Fragment key={node.title}>
+            <div data-retrieval-spine className="flex items-center gap-2.5 rounded-2xl border border-black/8 bg-white px-4 py-2.5 shadow-sm">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#eaf4ff] text-[#0071e3]"><node.icon className="h-4 w-4" /></span>
+              <div>
+                <p className="text-xs font-semibold text-[#1d1d1f]">{node.title}</p>
+                <p className="text-[9.5px] text-[#86868b]">{node.note}</p>
+              </div>
+            </div>
+            {index < spine.length - 1 && <ArrowDown className="mx-auto h-3.5 w-3.5 rotate-90 text-[#b0b0b5] sm:rotate-0" />}
+          </Fragment>
+        ))}
       </div>
 
-      <div className="mt-6 rounded-2xl bg-[#eaf4ff] p-5 text-sm leading-7 text-[#3f5f78]">
+      <div className="mx-auto mt-4 hidden h-7 max-w-2xl lg:block" aria-hidden="true">
+        <div className="relative h-full">
+          <div className="absolute left-[16.6%] right-[16.6%] top-0 h-px bg-[#e5e5e7]" />
+          <div className="absolute left-[16.6%] top-0 h-7 w-px bg-[#e5e5e7]" />
+          <div className="absolute left-1/2 top-0 h-7 w-px -translate-x-1/2 bg-[#e5e5e7]" />
+          <div className="absolute right-[16.6%] top-0 h-7 w-px bg-[#e5e5e7]" />
+        </div>
+      </div>
+      <div className="mt-3 flex justify-center lg:hidden">
+        <ArrowDown className="h-3.5 w-3.5 text-[#b0b0b5]" />
+      </div>
+
+      <div className="mt-1 grid gap-2.5 lg:grid-cols-3 lg:mt-0">
+        {routes.map((route) => (
+          <div key={route.name} data-retrieval-route className="rounded-[1.5rem] border border-black/8 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(0,0,0,0.06)] motion-reduce:transform-none motion-reduce:transition-none">
+            <div className="flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#eaf4ff] text-[#0071e3]"><route.icon className="h-4 w-4" /></span>
+              <p className="text-sm font-semibold text-[#1d1d1f]">{route.name}</p>
+            </div>
+            <p className="mt-3 rounded-lg bg-[#f5f5f7] px-3 py-2 text-[10px] italic leading-4 text-[#6e6e73]">{route.example}</p>
+            <p className="mt-2.5 text-[10px] leading-4 text-[#86868b]"><span className="font-semibold text-[#515154]">When: </span>{route.when}</p>
+            <p className="mt-1.5 text-[10px] leading-4 text-[#86868b]"><span className="font-semibold text-[#515154]">Flow: </span>{route.flow}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="mx-auto mt-4 hidden h-7 max-w-2xl lg:block" aria-hidden="true">
+        <div className="relative h-full">
+          <div className="absolute left-[16.6%] top-0 h-7 w-px bg-[#e5e5e7]" />
+          <div className="absolute left-1/2 top-0 h-7 w-px -translate-x-1/2 bg-[#e5e5e7]" />
+          <div className="absolute right-[16.6%] top-0 h-7 w-px bg-[#e5e5e7]" />
+          <div className="absolute left-[16.6%] right-[16.6%] bottom-0 h-px bg-[#e5e5e7]" />
+        </div>
+      </div>
+      <div className="mt-3 flex justify-center lg:hidden">
+        <ArrowDown className="h-3.5 w-3.5 text-[#b0b0b5]" />
+      </div>
+
+      <div className="mt-1 grid gap-2 sm:grid-cols-4 lg:mt-0">
+        {merge.map((node, index) => (
+          <div key={node.title} data-retrieval-merge className="relative rounded-2xl border border-black/8 bg-white p-3.5 transition hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.05)] motion-reduce:transform-none motion-reduce:transition-none">
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#eaf4ff] text-[#0071e3]"><node.icon className="h-3.5 w-3.5" /></span>
+            <p className="mt-2.5 text-sm font-semibold text-[#1d1d1f]">{node.title}</p>
+            <p className="mt-1 text-[10px] leading-4 text-[#86868b]">{node.note}</p>
+            {index < merge.length - 1 && <ChevronRight className="absolute -right-3 top-1/2 z-10 hidden h-5 w-5 -translate-y-1/2 text-[#b0b0b5] sm:block" />}
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-5 rounded-2xl bg-[#eaf4ff] p-5 text-sm leading-7 text-[#3f5f78]">
         We designed a hybrid retrieval system that routes between IP-level retrieval, chunk-level RAG, and web fallback based on user intent.
       </div>
     </div>
