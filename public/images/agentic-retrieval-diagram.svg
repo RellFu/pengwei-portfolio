@@ -1,0 +1,137 @@
+<svg width="1600" height="780" viewBox="0 190 1600 780" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif">
+  <rect x="0" y="190" width="1600" height="780" fill="#FCFCFE"/>
+
+  <!-- Connectors (drawn first, sit under cards) -->
+  <!-- User Query -> Phai Agent -->
+  <line x1="434" y1="320" x2="596" y2="320" stroke="#B0B0B5" stroke-width="1.5"/>
+  <path d="M596 320 L586 314 M596 320 L586 326" stroke="#B0B0B5" stroke-width="1.5" fill="none"/>
+
+  <!-- Phai Agent -> Routing spine -->
+  <line x1="809" y1="425" x2="809" y2="467" stroke="#B0B0B5" stroke-width="1.5"/>
+  <!-- fan-out: horizontal spine + 3 drops -->
+  <line x1="259" y1="467" x2="1343" y2="467" stroke="#B0B0B5" stroke-width="1.5"/>
+  <line x1="259" y1="467" x2="259" y2="499" stroke="#B0B0B5" stroke-width="1.5"/>
+  <line x1="809" y1="467" x2="809" y2="483" stroke="#B0B0B5" stroke-width="1.5"/>
+  <line x1="1343" y1="467" x2="1343" y2="499" stroke="#B0B0B5" stroke-width="1.5"/>
+
+  <!-- fan-in: 3 rises + horizontal spine -->
+  <line x1="259" y1="690" x2="259" y2="726" stroke="#B0B0B5" stroke-width="1.5"/>
+  <line x1="809" y1="705" x2="809" y2="726" stroke="#B0B0B5" stroke-width="1.5"/>
+  <line x1="1343" y1="690" x2="1343" y2="726" stroke="#B0B0B5" stroke-width="1.5"/>
+  <line x1="259" y1="726" x2="1343" y2="726" stroke="#B0B0B5" stroke-width="1.5"/>
+  <line x1="809" y1="726" x2="809" y2="766" stroke="#B0B0B5" stroke-width="1.5"/>
+  <path d="M809 766 L803 756 M809 766 L815 756" stroke="#B0B0B5" stroke-width="1.5" fill="none"/>
+
+  <!-- Context Assembly -> LLM Response -->
+  <line x1="800" y1="842" x2="800" y2="880" stroke="#B0B0B5" stroke-width="1.5"/>
+  <path d="M800 880 L794 870 M800 880 L806 870" stroke="#B0B0B5" stroke-width="1.5" fill="none"/>
+
+  <!-- User Query card -->
+  <g filter="url(#cardShadow)">
+    <rect x="104" y="245" width="330" height="150" rx="22" fill="white"/>
+    <rect x="104.5" y="245.5" width="329" height="149" rx="21.5" stroke="rgba(0,0,0,0.08)"/>
+  </g>
+  <rect x="135" y="290" width="64" height="64" rx="15" fill="#EAF4FF"/>
+  <g stroke="#0071E3" stroke-width="2.4" stroke-linecap="round" fill="none">
+    <path d="M150 314 h32 M150 322 h32 M150 330 h20"/>
+  </g>
+  <text x="215" y="322" font-size="19" font-weight="600" letter-spacing="-0.3" fill="#1D1D1F">User Query</text>
+  <text x="215" y="346" font-size="13" fill="#86868B">Natural language, in the conversation</text>
+
+  <!-- Phai Agent card -->
+  <g filter="url(#cardShadow)">
+    <rect x="600" y="225" width="420" height="200" rx="26" fill="white"/>
+    <rect x="600.5" y="225.5" width="419" height="199" rx="25.5" stroke="rgba(0,0,0,0.08)"/>
+  </g>
+  <rect x="631" y="255" width="68" height="68" rx="16" fill="#EAF4FF"/>
+  <circle cx="665" cy="279" r="9" fill="none" stroke="#0071E3" stroke-width="2.4"/>
+  <path d="M647 305 c0 -13 36 -13 36 0" stroke="#0071E3" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  <text x="711" y="278" font-size="19" font-weight="600" letter-spacing="-0.3" fill="#1D1D1F">Phai Agent</text>
+  <text x="711" y="298" font-size="12" fill="#86868B">Intent understanding</text>
+
+  <rect x="711" y="311" width="99" height="30" rx="8" fill="#F5F5F7"/>
+  <text x="760.5" y="330" text-anchor="middle" font-size="12" font-weight="500" fill="#515154">Intent</text>
+  <rect x="820" y="311" width="99" height="30" rx="8" fill="#F5F5F7"/>
+  <text x="869.5" y="330" text-anchor="middle" font-size="12" font-weight="500" fill="#515154">Entity</text>
+  <rect x="711" y="349" width="208" height="30" rx="8" fill="#F5F5F7"/>
+  <text x="815" y="368" text-anchor="middle" font-size="12" font-weight="500" fill="#515154">Router</text>
+
+  <!-- IP Retrieval card -->
+  <g filter="url(#cardShadow)">
+    <rect x="90" y="500" width="420" height="190" rx="24" fill="white"/>
+    <rect x="90.5" y="500.5" width="419" height="189" rx="23.5" stroke="rgba(0,0,0,0.08)"/>
+  </g>
+  <rect x="120" y="525" width="64" height="64" rx="15" fill="#EAF4FF"/>
+  <rect x="138" y="543" width="28" height="28" rx="3" fill="none" stroke="#0071E3" stroke-width="2.2"/>
+  <line x1="143" y1="551" x2="161" y2="551" stroke="#0071E3" stroke-width="2"/>
+  <line x1="143" y1="558" x2="161" y2="558" stroke="#0071E3" stroke-width="2"/>
+  <line x1="143" y1="565" x2="153" y2="565" stroke="#0071E3" stroke-width="2"/>
+  <text x="200" y="565" font-size="19" font-weight="600" letter-spacing="-0.2" fill="#1D1D1F">IP Retrieval</text>
+
+  <g fill="#6E6E73" font-size="13">
+    <circle cx="126" cy="611" r="3" fill="#0071E3"/>
+    <text x="140" y="616">Specific IP</text>
+    <circle cx="126" cy="637" r="3" fill="#0071E3"/>
+    <text x="140" y="642">Full context</text>
+    <circle cx="126" cy="663" r="3" fill="#0071E3"/>
+    <text x="140" y="668">Full Docs</text>
+  </g>
+
+  <!-- RAG Search card (same size/style as siblings) -->
+  <g filter="url(#cardShadow)">
+    <rect x="590" y="500" width="420" height="190" rx="24" fill="white"/>
+    <rect x="590.5" y="500.5" width="419" height="189" rx="23.5" stroke="rgba(0,0,0,0.08)"/>
+  </g>
+  <rect x="620" y="525" width="64" height="64" rx="15" fill="#EAF4FF"/>
+  <circle cx="646" cy="551" r="11" fill="none" stroke="#0071E3" stroke-width="2.2"/>
+  <line x1="654" y1="559" x2="663" y2="568" stroke="#0071E3" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="700" y="565" font-size="19" font-weight="600" letter-spacing="-0.2" fill="#1D1D1F">RAG Search</text>
+
+  <g fill="#6E6E73" font-size="13">
+    <circle cx="626" cy="611" r="3" fill="#0071E3"/>
+    <text x="640" y="616">Pattern / Inspiration</text>
+    <circle cx="626" cy="637" r="3" fill="#0071E3"/>
+    <text x="640" y="642">Relevant Chunks</text>
+  </g>
+
+  <!-- Web Fallback card -->
+  <g filter="url(#cardShadow)">
+    <rect x="1090" y="500" width="420" height="190" rx="24" fill="white"/>
+    <rect x="1090.5" y="500.5" width="419" height="189" rx="23.5" stroke="rgba(0,0,0,0.08)"/>
+  </g>
+  <rect x="1120" y="525" width="64" height="64" rx="15" fill="#EAF4FF"/>
+  <circle cx="1152" cy="557" r="17" fill="none" stroke="#0071E3" stroke-width="2.2"/>
+  <ellipse cx="1152" cy="557" rx="7.5" ry="17" fill="none" stroke="#0071E3" stroke-width="1.6"/>
+  <line x1="1135" y1="557" x2="1169" y2="557" stroke="#0071E3" stroke-width="1.6"/>
+  <text x="1200" y="565" font-size="19" font-weight="600" letter-spacing="-0.2" fill="#1D1D1F">Web Fallback</text>
+
+  <g fill="#6E6E73" font-size="13">
+    <circle cx="1126" cy="611" r="3" fill="#0071E3"/>
+    <text x="1140" y="616">Internal KB insufficient</text>
+    <circle cx="1126" cy="637" r="3" fill="#0071E3"/>
+    <text x="1140" y="642">External Web</text>
+  </g>
+
+  <!-- Context Assembly -->
+  <g filter="url(#cardShadowSm)">
+    <rect x="470" y="766" width="660" height="76" rx="22" fill="white"/>
+    <rect x="470.5" y="766.5" width="659" height="75" rx="21.5" stroke="rgba(0,0,0,0.08)"/>
+  </g>
+  <text x="800" y="812" text-anchor="middle" font-size="19" font-weight="600" letter-spacing="-0.3" fill="#1D1D1F">Context Assembly</text>
+
+  <!-- LLM Response -->
+  <g filter="url(#cardShadowSm)">
+    <rect x="650" y="880" width="310" height="70" rx="20" fill="white"/>
+    <rect x="650.5" y="880.5" width="309" height="69" rx="19.5" stroke="rgba(0,0,0,0.08)"/>
+  </g>
+  <text x="805" y="922" text-anchor="middle" font-size="19" font-weight="600" letter-spacing="-0.3" fill="#1D1D1F">LLM Response</text>
+
+  <defs>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="140%" filterUnits="objectBoundingBox" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.06"/>
+    </filter>
+    <filter id="cardShadowSm" x="-10%" y="-10%" width="120%" height="140%" filterUnits="objectBoundingBox" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000000" flood-opacity="0.05"/>
+    </filter>
+  </defs>
+</svg>
