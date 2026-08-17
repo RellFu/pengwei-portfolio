@@ -978,19 +978,15 @@ function AgenticRetrievalDiagram() {
   );
 
   return (
-    <div ref={rootRef} className="mt-8 overflow-hidden rounded-[2rem] border border-black/8 bg-gradient-to-br from-white via-white to-[#f5f9ff] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.06)] sm:p-7">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">System map</p>
-      <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">Not every question should be solved with RAG.</h3>
-
-      <div className="mx-auto mt-5 flex max-w-2xl flex-col items-center gap-2 sm:flex-row sm:justify-center sm:gap-3 lg:grid lg:grid-cols-3 lg:items-center lg:gap-0">
-        <div className="flex justify-center sm:contents lg:flex lg:justify-end lg:pr-3">
+    <div ref={rootRef} className="overflow-hidden rounded-[2rem] border border-black/8 bg-gradient-to-br from-white via-white to-[#f5f9ff] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.06)] sm:p-7">
+      <div className="grid grid-cols-3 items-center gap-0">
+        <div className="flex items-center justify-end gap-2 pr-3">
           <div data-retrieval-spine className="flex items-center gap-3 whitespace-nowrap rounded-[1.2rem] border border-black/8 bg-white px-4 py-3 shadow-sm">
             <p className="text-sm font-semibold text-[#1d1d1f]">User Query</p>
           </div>
-        </div>
-
-        <div className="flex items-center justify-center py-1 sm:py-0 lg:hidden" aria-hidden="true">
-          <ArrowRight className="h-3.5 w-3.5 shrink-0 rotate-90 text-[#b0b0b5] sm:rotate-0" />
+          <div className="relative h-px w-6 shrink-0 bg-[#d8d8dc]" aria-hidden="true">
+            <span className="absolute -right-[3px] top-1/2 h-0 w-0 -translate-y-1/2 border-y-[4px] border-l-[5px] border-y-transparent border-l-[#b0b0b5]" />
+          </div>
         </div>
 
         <div className="flex justify-center">
@@ -1007,22 +1003,22 @@ function AgenticRetrievalDiagram() {
           </div>
         </div>
 
-        <div className="hidden lg:block" aria-hidden="true" />
+        <div aria-hidden="true" />
       </div>
 
-      <div className="mx-auto mt-3.5 hidden h-6 max-w-2xl lg:block" aria-hidden="true">
+      <div className="hidden h-6 lg:block" aria-hidden="true">
         <div className="relative h-full">
           <div className="absolute left-[16.667%] right-[16.667%] top-0 h-px bg-[#d8d8dc]" />
-          <div className="absolute left-[16.667%] top-0 h-6 w-px bg-[#d8d8dc]" />
-          <div className="absolute left-1/2 top-0 h-6 w-px -translate-x-1/2 bg-[#d8d8dc]" />
-          <div className="absolute left-[83.333%] top-0 h-6 w-px bg-[#d8d8dc]" />
+          <div className="absolute left-[16.667%] top-0 h-full w-px bg-[#d8d8dc]" />
+          <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-[#d8d8dc]" />
+          <div className="absolute left-[83.333%] top-0 h-full w-px bg-[#d8d8dc]" />
         </div>
       </div>
       <div className="mt-2.5 flex justify-center lg:hidden">
         <ArrowDown className="h-3.5 w-3.5 text-[#b0b0b5]" />
       </div>
 
-      <div className="mx-auto mt-1 grid max-w-2xl gap-2.5 lg:mt-0 lg:grid-cols-3">
+      <div className="mt-1 grid gap-2.5 lg:mt-0 lg:grid-cols-3">
         {routes.map((route) => (
           <div key={route.name} data-retrieval-route className="flex flex-col rounded-[1.3rem] border border-black/8 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(0,0,0,0.06)] motion-reduce:transform-none motion-reduce:transition-none">
             <p className="text-sm font-semibold text-[#1d1d1f]">{route.name}</p>
@@ -1036,12 +1032,13 @@ function AgenticRetrievalDiagram() {
         ))}
       </div>
 
-      <div className="mx-auto mt-3.5 hidden h-6 max-w-2xl lg:block" aria-hidden="true">
+      <div className="hidden h-6 lg:block" aria-hidden="true">
         <div className="relative h-full">
-          <div className="absolute left-[16.667%] top-0 h-6 w-px bg-[#d8d8dc]" />
-          <div className="absolute left-[83.333%] top-0 h-6 w-px bg-[#d8d8dc]" />
-          <div className="absolute left-[16.667%] right-[16.667%] bottom-0 h-px bg-[#d8d8dc]" />
-          <div className="absolute left-1/2 top-0 h-6 w-px -translate-x-1/2 bg-[#d8d8dc]" />
+          <div className="absolute left-[16.667%] bottom-0 h-3 w-px bg-[#d8d8dc]" />
+          <div className="absolute left-1/2 bottom-0 h-3 w-px -translate-x-1/2 bg-[#d8d8dc]" />
+          <div className="absolute left-[83.333%] bottom-0 h-3 w-px bg-[#d8d8dc]" />
+          <div className="absolute left-[16.667%] right-[16.667%] top-3 h-px bg-[#d8d8dc]" />
+          <div className="absolute left-1/2 top-3 h-3 w-px -translate-x-1/2 bg-[#d8d8dc]" />
         </div>
       </div>
       <div className="mt-2.5 flex justify-center lg:hidden">
@@ -1053,9 +1050,10 @@ function AgenticRetrievalDiagram() {
           <p className="text-sm font-semibold text-[#1d1d1f]">Context Assembly</p>
         </div>
 
-        <div className="flex flex-col items-center py-0.5" aria-hidden="true">
-          <div className="h-3 w-px bg-[#d8d8dc]" />
-          <ArrowDown className="h-3.5 w-3.5 text-[#b0b0b5]" />
+        <div className="flex justify-center py-1" aria-hidden="true">
+          <div className="relative h-5 w-px bg-[#d8d8dc]">
+            <span className="absolute -bottom-px left-1/2 h-0 w-0 -translate-x-1/2 border-x-[4px] border-t-[5px] border-x-transparent border-t-[#b0b0b5]" />
+          </div>
         </div>
 
         <div data-retrieval-merge className="w-full max-w-xs rounded-[1.2rem] border border-black/8 bg-white px-5 py-2.5 text-center shadow-sm">
@@ -1885,11 +1883,18 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
               <span className="text-[13px] font-semibold text-[#0071e3]">02</span>
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Agentic Retrieval</p>
             </div>
-            <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">Routing every question to the right knowledge source.</h3>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-[#6e6e73]">
-              Knowing the fields is not enough. The Agent still has to decide, per request, whether it needs a full document, a matched fragment, or the open web. I designed the three-channel retrieval architecture that makes that call, so a named-work question and an open-ended one never hit the same path.
-            </p>
-            <AgenticRetrievalDiagram />
+            <div className="mt-2 grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-start">
+              <div className="lg:pr-4">
+                <h3 className="text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">Routing every question to the right knowledge source.</h3>
+                <p className="mt-3 text-sm leading-7 text-[#6e6e73]">
+                  Knowing the fields is not enough. The Agent still has to decide, per request, whether it needs a full document, a matched fragment, or the open web. I designed the three-channel retrieval architecture that makes that call, so a named-work question and an open-ended one never hit the same path.
+                </p>
+                <p className="mt-4 text-sm leading-7 text-[#6e6e73]">
+                  Not every question should be solved with RAG. A named work goes straight to its knowledge file. An open-ended one gets rewritten and searched across the corpus. Anything the library has never seen falls through to the open web.
+                </p>
+              </div>
+              <AgenticRetrievalDiagram />
+            </div>
 
             <div className="mt-12 flex items-baseline gap-2">
               <span className="text-[13px] font-semibold text-[#0071e3]">03</span>
