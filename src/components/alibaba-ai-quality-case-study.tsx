@@ -1002,7 +1002,7 @@ function AgenticRetrievalDiagram() {
       <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">System map</p>
       <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">Not every question should be solved with RAG.</h3>
 
-      <div className="mt-7 flex flex-col items-center gap-2 sm:flex-row sm:justify-center sm:gap-3">
+      <div className="mt-9 flex flex-col items-center gap-2 sm:flex-row sm:justify-center sm:gap-3">
         {spine.map((node, index) => (
           <Fragment key={node.title}>
             <div data-retrieval-spine className="flex items-center gap-2.5 rounded-2xl border border-black/8 bg-white px-4 py-2.5 shadow-sm">
@@ -1017,13 +1017,21 @@ function AgenticRetrievalDiagram() {
         ))}
       </div>
 
-      <div className="mt-4 flex justify-center">
+      <div className="mx-auto mt-6 hidden h-9 max-w-2xl lg:block" aria-hidden="true">
+        <div className="relative h-full">
+          <div className="absolute left-[16.6%] right-[16.6%] top-0 h-px bg-[#e5e5e7]" />
+          <div className="absolute left-[16.6%] top-0 h-9 w-px bg-[#e5e5e7]" />
+          <div className="absolute left-1/2 top-0 h-9 w-px -translate-x-1/2 bg-[#e5e5e7]" />
+          <div className="absolute right-[16.6%] top-0 h-9 w-px bg-[#e5e5e7]" />
+        </div>
+      </div>
+      <div className="mt-4 flex justify-center lg:hidden">
         <ArrowDown className="h-4 w-4 text-[#b0b0b5]" />
       </div>
 
-      <div className="mt-2 grid gap-3 lg:grid-cols-3">
+      <div className="grid gap-3 lg:grid-cols-3">
         {routes.map((route) => (
-          <div key={route.name} data-retrieval-route className="rounded-[1.6rem] border border-black/8 bg-white p-5 shadow-sm">
+          <div key={route.name} data-retrieval-route className="rounded-[1.6rem] border border-black/8 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(0,0,0,0.06)] motion-reduce:transform-none motion-reduce:transition-none">
             <div className="flex items-center gap-2">
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#eaf4ff] text-[#0071e3]"><route.icon className="h-[18px] w-[18px]" /></span>
               <p className="text-sm font-semibold text-[#1d1d1f]">{route.name}</p>
@@ -1035,13 +1043,21 @@ function AgenticRetrievalDiagram() {
         ))}
       </div>
 
-      <div className="mt-4 flex justify-center">
+      <div className="mx-auto mt-6 hidden h-9 max-w-2xl lg:block" aria-hidden="true">
+        <div className="relative h-full">
+          <div className="absolute left-[16.6%] top-0 h-9 w-px bg-[#e5e5e7]" />
+          <div className="absolute left-1/2 top-0 h-9 w-px -translate-x-1/2 bg-[#e5e5e7]" />
+          <div className="absolute right-[16.6%] top-0 h-9 w-px bg-[#e5e5e7]" />
+          <div className="absolute left-[16.6%] right-[16.6%] bottom-0 h-px bg-[#e5e5e7]" />
+        </div>
+      </div>
+      <div className="mt-4 flex justify-center lg:hidden">
         <ArrowDown className="h-4 w-4 text-[#b0b0b5]" />
       </div>
 
-      <div className="mt-2 grid gap-2 sm:grid-cols-4">
+      <div className="grid gap-2 sm:grid-cols-4">
         {merge.map((node, index) => (
-          <div key={node.title} data-retrieval-merge className="relative rounded-2xl border border-black/8 bg-white p-4">
+          <div key={node.title} data-retrieval-merge className="relative rounded-2xl border border-black/8 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.05)] motion-reduce:transform-none motion-reduce:transition-none">
             <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#eaf4ff] text-[#0071e3]"><node.icon className="h-3.5 w-3.5" /></span>
             <p className="mt-3 text-sm font-semibold text-[#1d1d1f]">{node.title}</p>
             <p className="mt-1 text-[10px] leading-4 text-[#86868b]">{node.note}</p>
