@@ -28,7 +28,6 @@ import {
   Database,
   Eye,
   FileText,
-  Film,
   Folder,
   GitBranch,
   Globe,
@@ -932,19 +931,16 @@ function AgenticRetrievalDiagram() {
 
   const routes = [
     {
-      icon: Film,
       name: "IP Retrieval",
       bullets: ["Specific IP", "Full context", "Full Docs"],
       note: "Full knowledge documents",
     },
     {
-      icon: ScanSearch,
       name: "RAG Search",
       bullets: ["Pattern", "Inspiration", "Relevant Chunks"],
       note: "Chunk-level retrieval",
     },
     {
-      icon: Globe,
       name: "Web Fallback",
       bullets: ["Internal KB insufficient", "External Web"],
       note: "Fallback only",
@@ -982,26 +978,25 @@ function AgenticRetrievalDiagram() {
   );
 
   return (
-    <div ref={rootRef} className="mt-8 overflow-hidden rounded-[2rem] border border-black/8 bg-gradient-to-br from-white via-white to-[#f5f9ff] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.06)] sm:p-9">
+    <div ref={rootRef} className="mt-8 overflow-hidden rounded-[2rem] border border-black/8 bg-gradient-to-br from-white via-white to-[#f5f9ff] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.06)] sm:p-7">
       <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">System map</p>
       <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">Not every question should be solved with RAG.</h3>
 
-      <div className="mt-7 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:justify-center sm:gap-0">
-        <div data-retrieval-spine className="flex items-center gap-3 rounded-[1.4rem] border border-black/8 bg-white px-5 py-4 shadow-sm">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#eaf4ff] text-[#0071e3]"><MessageSquareText className="h-[18px] w-[18px]" /></span>
+      <div className="mt-5 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:justify-center sm:gap-0">
+        <div data-retrieval-spine className="flex items-center gap-3 rounded-[1.2rem] border border-black/8 bg-white px-4 py-3 shadow-sm">
           <p className="text-sm font-semibold text-[#1d1d1f]">User Query</p>
         </div>
 
-        <div className="flex items-center justify-center py-1 sm:w-16 sm:py-0" aria-hidden="true">
+        <div className="flex items-center justify-center py-1 sm:w-12 sm:py-0" aria-hidden="true">
           <div className="hidden h-px flex-1 bg-[#d8d8dc] sm:block" />
           <ArrowRight className="h-3.5 w-3.5 shrink-0 rotate-90 text-[#b0b0b5] sm:rotate-0" />
         </div>
 
-        <div data-retrieval-spine className="flex items-start gap-3 rounded-[1.4rem] border border-black/8 bg-white px-5 py-4 shadow-sm">
-          <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#eaf4ff] text-[#0071e3]"><Bot className="h-[18px] w-[18px]" /></span>
+        <div data-retrieval-spine className="flex items-start gap-3 rounded-[1.2rem] border border-black/8 bg-white px-4 py-3 shadow-sm">
+          <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#111318] font-serif text-xs italic text-white">α</span>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-[#1d1d1f]">Phai Agent</p>
-            <div className="mt-2 flex flex-wrap gap-1.5">
+            <p className="text-sm font-semibold text-[#1d1d1f]">Alpha Agent</p>
+            <div className="mt-1.5 flex flex-wrap gap-1.5">
               {agentStages.map((stage) => (
                 <span key={stage} className="rounded-md bg-[#f5f5f7] px-2.5 py-1 text-[10px] font-medium text-[#515154]">{stage}</span>
               ))}
@@ -1010,26 +1005,23 @@ function AgenticRetrievalDiagram() {
         </div>
       </div>
 
-      <div className="mt-5 hidden h-8 lg:block" aria-hidden="true">
+      <div className="mt-3.5 hidden h-6 lg:block" aria-hidden="true">
         <div className="relative h-full">
           <div className="absolute left-[16.667%] right-[16.667%] top-0 h-px bg-[#d8d8dc]" />
-          <div className="absolute left-[16.667%] top-0 h-8 w-px bg-[#d8d8dc]" />
-          <div className="absolute left-1/2 top-0 h-8 w-px -translate-x-1/2 bg-[#d8d8dc]" />
-          <div className="absolute left-[83.333%] top-0 h-8 w-px bg-[#d8d8dc]" />
+          <div className="absolute left-[16.667%] top-0 h-6 w-px bg-[#d8d8dc]" />
+          <div className="absolute left-1/2 top-0 h-6 w-px -translate-x-1/2 bg-[#d8d8dc]" />
+          <div className="absolute left-[83.333%] top-0 h-6 w-px bg-[#d8d8dc]" />
         </div>
       </div>
-      <div className="mt-3 flex justify-center lg:hidden">
+      <div className="mt-2.5 flex justify-center lg:hidden">
         <ArrowDown className="h-3.5 w-3.5 text-[#b0b0b5]" />
       </div>
 
-      <div className="mt-1 grid gap-3 lg:mt-0 lg:grid-cols-3">
+      <div className="mt-1 grid gap-2.5 lg:mt-0 lg:grid-cols-3">
         {routes.map((route) => (
-          <div key={route.name} data-retrieval-route className="flex flex-col rounded-[1.5rem] border border-black/8 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(0,0,0,0.06)] motion-reduce:transform-none motion-reduce:transition-none">
-            <div className="flex items-center gap-2.5">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#eaf4ff] text-[#0071e3]"><route.icon className="h-[17px] w-[17px]" /></span>
-              <p className="text-sm font-semibold text-[#1d1d1f]">{route.name}</p>
-            </div>
-            <div className="mt-3.5 space-y-1.5">
+          <div key={route.name} data-retrieval-route className="flex flex-col rounded-[1.3rem] border border-black/8 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(0,0,0,0.06)] motion-reduce:transform-none motion-reduce:transition-none">
+            <p className="text-sm font-semibold text-[#1d1d1f]">{route.name}</p>
+            <div className="mt-2.5 space-y-1.5">
               {route.bullets.map((bullet) => (
                 <div key={bullet} className="flex items-center gap-2">
                   <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-[#0071e3]" />
@@ -1037,41 +1029,41 @@ function AgenticRetrievalDiagram() {
                 </div>
               ))}
             </div>
-            <p className="mt-auto border-t border-black/5 pt-2.5 text-[10px] font-medium text-[#86868b] lg:pt-3.5">{route.note}</p>
+            <p className="mt-auto border-t border-black/5 pt-2.5 text-[10px] font-medium text-[#86868b] lg:pt-3">{route.note}</p>
           </div>
         ))}
       </div>
 
-      <div className="mt-5 hidden h-8 lg:block" aria-hidden="true">
+      <div className="mt-3.5 hidden h-6 lg:block" aria-hidden="true">
         <div className="relative h-full">
-          <div className="absolute left-[16.667%] top-0 h-8 w-px bg-[#d8d8dc]" />
-          <div className="absolute left-[83.333%] top-0 h-8 w-px bg-[#d8d8dc]" />
+          <div className="absolute left-[16.667%] top-0 h-6 w-px bg-[#d8d8dc]" />
+          <div className="absolute left-[83.333%] top-0 h-6 w-px bg-[#d8d8dc]" />
           <div className="absolute left-[16.667%] right-[16.667%] bottom-0 h-px bg-[#d8d8dc]" />
-          <div className="absolute left-1/2 top-0 h-8 w-px -translate-x-1/2 bg-[#d8d8dc]" />
+          <div className="absolute left-1/2 top-0 h-6 w-px -translate-x-1/2 bg-[#d8d8dc]" />
         </div>
       </div>
-      <div className="mt-3 flex justify-center lg:hidden">
+      <div className="mt-2.5 flex justify-center lg:hidden">
         <ArrowDown className="h-3.5 w-3.5 text-[#b0b0b5]" />
       </div>
 
       <div className="mt-1 flex flex-col items-center lg:mt-0">
-        <div data-retrieval-merge className="w-full max-w-2xl rounded-[1.4rem] border border-black/8 bg-white px-5 py-4 text-center shadow-sm">
+        <div data-retrieval-merge className="w-full max-w-xl rounded-[1.2rem] border border-black/8 bg-white px-5 py-3 text-center shadow-sm">
           <p className="text-sm font-semibold text-[#1d1d1f]">Context Assembly</p>
           <p className="mt-1 text-[10px] text-[#86868b]">Query rewrite, rerank, dedupe, then assemble what the model sees</p>
         </div>
 
-        <div className="flex flex-col items-center py-1" aria-hidden="true">
-          <div className="h-4 w-px bg-[#d8d8dc]" />
+        <div className="flex flex-col items-center py-0.5" aria-hidden="true">
+          <div className="h-3 w-px bg-[#d8d8dc]" />
           <ArrowDown className="h-3.5 w-3.5 text-[#b0b0b5]" />
         </div>
 
-        <div data-retrieval-merge className="w-full max-w-sm rounded-[1.4rem] border border-black/8 bg-white px-5 py-4 text-center shadow-sm">
+        <div data-retrieval-merge className="w-full max-w-xs rounded-[1.2rem] border border-black/8 bg-white px-5 py-3 text-center shadow-sm">
           <p className="text-sm font-semibold text-[#1d1d1f]">LLM Response</p>
           <p className="mt-1 text-[10px] text-[#86868b]">Written against grounded material</p>
         </div>
       </div>
 
-      <div className="mt-7 rounded-2xl bg-[#eaf4ff] p-5 text-sm leading-7 text-[#3f5f78]">
+      <div className="mt-5 rounded-2xl bg-[#eaf4ff] p-4 text-sm leading-6 text-[#3f5f78]">
         We designed a hybrid retrieval system that routes between IP-level retrieval, chunk-level RAG, and web fallback based on user intent.
       </div>
     </div>
