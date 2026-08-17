@@ -1822,29 +1822,29 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
             </p>
             <SkillEcosystemAuditPanel />
 
-            <div className="mt-5 rounded-[2rem] bg-[#111318] p-6 text-white shadow-[0_28px_80px_rgba(0,0,0,0.18)] sm:p-8">
+            <div className="mt-5 rounded-[2rem] border border-black/8 bg-white p-6 shadow-[0_22px_70px_rgba(0,0,0,0.07)] sm:p-8">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">Agent I built · 02</p>
-                  <h3 className="mt-2 text-xl font-semibold">skill-evaluator, so finding a crack is not a one-time act</h3>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Agent I built · 02</p>
+                  <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">skill-evaluator, so finding a crack is not a one-time act</h3>
                 </div>
-                <Zap className="h-5 w-5 text-[#65b5ff]" />
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#eaf4ff] text-[#0071e3]"><Zap className="h-4 w-4" /></span>
               </div>
-              <p className="mt-4 max-w-3xl text-sm leading-6 text-white/65">It runs a five dimension diagnostic, produces a graded gap analysis, and returns a rewritten description. It writes a report and stops there. It never edits a Skill on its own, because I kept the human in the loop on purpose.</p>
+              <p className="mt-4 max-w-3xl text-sm leading-7 text-[#6e6e73]">It runs a five dimension diagnostic, produces a graded gap analysis, and returns a rewritten description. It writes a report and stops there. It never edits a Skill on its own, because I kept the human in the loop on purpose.</p>
               <div className="mt-6 grid gap-2 sm:grid-cols-5">
                 {evaluatorChecks.map(([code, label]) => (
-                  <div key={code} className="flex items-center gap-2 rounded-xl border border-white/8 bg-white/[0.055] px-3 py-3">
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-[#0071e3] text-[9px] font-semibold">{code}</span>
-                    <span className="text-xs font-semibold">{label}</span>
+                  <div key={code} className="flex items-center gap-2 rounded-xl border border-black/8 bg-[#f5f5f7] px-3 py-3">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-[#0071e3] text-[9px] font-semibold text-white">{code}</span>
+                    <span className="text-xs font-semibold text-[#1d1d1f]">{label}</span>
                   </div>
                 ))}
               </div>
               <div className="mt-5 grid gap-3 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
-                <div className="rounded-xl bg-white/[0.055] p-4"><p className="text-[9px] text-[#65b5ff]">INPUT</p><p className="mt-2 text-xs text-white/55">Directory or CSV</p></div>
-                <ArrowRight className="m-auto hidden h-4 w-4 text-white/25 sm:block" />
-                <div className="rounded-xl bg-white/[0.055] p-4"><p className="text-[9px] text-[#65b5ff]">OUTPUT</p><p className="mt-2 text-xs text-white/55">Conflicts · severity · rewrite</p></div>
+                <div className="rounded-xl border border-black/8 bg-[#f5f5f7] p-4"><p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-[#0071e3]">Input</p><p className="mt-2 text-xs text-[#6e6e73]">Directory or CSV</p></div>
+                <ArrowRight className="m-auto hidden h-4 w-4 text-[#b0b0b5] sm:block" />
+                <div className="rounded-xl border border-black/8 bg-[#f5f5f7] p-4"><p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-[#0071e3]">Output</p><p className="mt-2 text-xs text-[#6e6e73]">Conflicts · severity · rewrite</p></div>
               </div>
-              <p className="mt-4 text-[11px] leading-5 text-white/35">Static review is used to catch catalog conflicts. It is not used to claim runtime quality.</p>
+              <p className="mt-4 text-[11px] leading-5 text-[#86868b]">Static review is used to catch catalog conflicts. It is not used to claim runtime quality.</p>
             </div>
           </AnimatedSection>
 
