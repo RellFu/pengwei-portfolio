@@ -324,7 +324,7 @@ function DetailModal({ detail, onClose }: { detail: Exclude<DetailType, null>; o
   }, [onClose]);
 
   const eyebrow = detail === "script" ? "Input, attached to the request" : detail === "characterBio" ? "Knowledge base record, ip channel" : "Skill output, generated";
-  const title = detail === "script" ? "bad_parasite_v2.txt" : detail === "characterBio" ? "character-biography.md" : "three-act-diagnostic-report.md";
+  const title = detail === "script" ? "draft.docx" : detail === "characterBio" ? "character-biography.md" : "three-act-diagnostic-report.md";
 
   return (
     <motion.div
@@ -742,7 +742,6 @@ function ArchitectureDetail() {
         </div>
       </div>
 
-      <p className="mt-3.5 text-[9.5px] leading-[1.5] text-[#b0b0b5]">Six layers reconstructed from source. Anonymized for public use; real product name and package names are kept in a private evidence layer.</p>
     </div>
   );
 }
@@ -1830,7 +1829,7 @@ function SkillEcosystemAuditPanel() {
 
 function SkillDiagnosisPanel({ onOpenDetail }: { onOpenDetail: (detail: "script" | "report") => void }) {
   const commands = [
-    ["Read file", "bad_parasite_v2.txt · attached"],
+    ["Read file", "draft.docx · attached"],
     ["Loaded Skill", "Three-Act Diagnosis, explicit @mention"],
 
     ["Parsed script", "110 pages · 12 beats extracted"],
@@ -1841,27 +1840,21 @@ function SkillDiagnosisPanel({ onOpenDetail }: { onOpenDetail: (detail: "script"
 
   return (
     <div className="ml-auto w-full max-w-[34rem] overflow-hidden rounded-[1.6rem] border border-black/10 bg-[#f5f5f7] shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
-      <div className="flex h-11 items-center gap-2 border-b border-black/8 bg-white/85 px-4 backdrop-blur-2xl">
-        <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
-        <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
-        <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
-        <span className="ml-2 text-[10px] font-medium text-[#86868b]">Alpha desktop app</span>
-      </div>
-
       <div className="bg-white p-5 sm:p-6">
         <div className="flex justify-end">
-          <div className="max-w-[27rem] rounded-2xl bg-[#eaf4ff] px-4 py-3">
-            <p className="text-sm leading-6 text-[#1d1d1f]">
-              Run the three-act diagnostic on this draft. <span className="font-semibold text-[#0071e3]">@Three-Act Diagnosis</span>
-            </p>
-            <button
-              type="button"
-              onClick={() => onOpenDetail("script")}
-              className="mt-2.5 inline-flex items-center gap-1.5 rounded-lg bg-white/70 px-2.5 py-1.5 transition hover:bg-white active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3]"
-            >
-              <FileText className="h-3 w-3 text-[#0071e3]" />
-              <span className="text-[10px] font-medium text-[#0066cc]">bad_parasite_v2.txt</span>
-            </button>
+          <div className="max-w-[36rem] rounded-2xl bg-[#eaf4ff] px-4 py-3">
+            <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1.5 text-[11px] leading-[1.65] text-[#1d1d1f]">
+              <span className="font-semibold text-[#0071e3]">@Three-Act Diagnosis</span>
+              <span>Run the three-act diagnostic on this draft.</span>
+              <button
+                type="button"
+                onClick={() => onOpenDetail("script")}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-white/85 px-2 py-1 transition hover:bg-white active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3]"
+              >
+                <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded bg-[#0071e3] text-[9px] font-bold text-white">D</span>
+                <span className="text-[11px] font-medium text-[#1d1d1f]">draft.docx</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -1870,7 +1863,7 @@ function SkillDiagnosisPanel({ onOpenDetail }: { onOpenDetail: (detail: "script"
           <div className="min-w-0 flex-1">
             <p className="text-[11px] font-semibold text-[#1d1d1f]">Loaded. I&apos;ll run the full eight-dimension contract before returning a verdict.</p>
 
-            <div className="mt-3 space-y-1.5">
+            <div className="mt-3 space-y-1">
               {commands.map(([verb, detail]) => (
                 <div key={`${verb}-${detail}`} className="flex items-center gap-2 rounded-lg px-1 py-1 text-[10px] text-[#86868b]">
                   <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#e8f7ee] text-[#248a3d]">
@@ -2274,9 +2267,9 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
           <AnimatedSection>
             <SectionHeading
               number="01"
-              label="Entry Point"
-              title="I had to learn this system before I could evaluate it."
-              description="When I joined, Alpha was already a working desktop AI Agent for screenwriters and production teams, built on Skills, tools, and a knowledge base. Nobody handed me a spec. I had to trace how a request actually moved through the system before I could touch anything."
+              label="Product Introduction"
+              title="Alpha is a desktop AI Agent for screenwriters and production teams."
+              description="Alpha runs as a desktop app on macOS and Windows, with direct access to the user&apos;s files. Underneath, a Skills system packages domain expertise into loadable modules, and a tools layer lets the agent read, write, and run operations on the project directly. Everything lives on the user&apos;s machine. Built to take on the writer&apos;s room."
             />
 
             <PhaiProductSimulator />
@@ -2286,13 +2279,9 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
             <SectionHeading
               number="02"
               label="Reading the Source"
-              title="I went into the repo to see how the Agent actually reasons."
-              description="I traced the runtime myself. An actor model with a dispatcher and inbox drives multi-agent coordination. A Skill router matches each request to the right capability. Context injection pulls in project files and prior turns before the model runs. This was not documentation I read. It was behavior I reconstructed from the codebase, because the instrumentation work ahead of me depended on knowing exactly where in that flow things could go wrong."
+              title="Mapping the product from the inside out, before shipping a line of work."
+              description="Onboarding this product did not start from what it shows on the surface. I went into the repo, read the runtime myself, and built a six-layer framework of how the Agent actually works. Reading the codebase was not optional. The future work downstream depended on having a shared map of the system before any design decisions went in."
             />
-            <div className="mt-8 flex items-baseline justify-between gap-2">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Runtime map I reconstructed · six layers</p>
-              <span className="text-[10px] text-[#b0b0b5]">Anonymized for public use</span>
-            </div>
             <ArchitectureDetail />
           </AnimatedSection>
 
@@ -2303,37 +2292,20 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
               title="I owned one Skill end to end, then found what only shows up at scale."
             />
 
-            <p className="mt-8 max-w-3xl text-sm leading-7 text-[#6e6e73]">
-              Screenwriters already know three-act theory. Knowing the theory and applying it to your own draft without bias are different things. A writer under deadline will call the loudest scene a turning point and the busiest stretch good pacing, because gut instinct has no way to check itself.
-            </p>
-
-            <div className="mt-6 flex items-baseline justify-between gap-2">
+            <div className="mt-8 flex items-baseline justify-between gap-2">
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Three-Act Diagnosis, the Skill I own</p>
             </div>
 
             <div className="mt-4 grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-start">
-              <div className="lg:pr-4">
-                <p className="text-sm leading-7 text-[#6e6e73]">
-                  On the product side, a Skill only runs if the Agent picks it. The router matches on description text alone, so I wrote the trigger language to fire on structural intent, not just the words &quot;three-act,&quot; and paired it with an explicit @mention path for writers who want to call it directly.
+              <div className="lg:pr-4 max-w-2xl">
+                <p className="text-base leading-8 text-[#6e6e73]">
+                  Focus on turning film and TV development methods into Skills that could be used directly inside the Agent. Frameworks such as three-act structure analysis and Script Bible development were broken down into clear steps, decision branches, misjudgment checks, and consistent output formats. The main workflow was defined in SKILL.md, while supporting theory, examples, and detailed criteria were kept in references and loaded only when needed.
                 </p>
-                <p className="mt-4 text-sm leading-7 text-[#6e6e73]">
-                  On the technical side, I built an eight-dimension manual covering setup proportion, plot points, midpoint, and resolution, backed by a misjudgment checklist that catches the traps writers fall into on their own work, and a strategy library that turns each failure into a concrete fix instead of a vague note.
+                <p className="mt-4 text-base leading-8 text-[#6e6e73]">
+                  In practice, a user could @mention a Skill, attach a script or project document, and ask the Agent to run the corresponding workflow. A three-act Skill could review a draft and return a structured diagnosis, while a Script Bible Skill could help organize early story material into a document for further development. This gave each method a clear and repeatable way to be used in the actual writing process.
                 </p>
-                <p className="mt-4 text-sm leading-7 text-[#6e6e73]">
-                  The panel on the right is a real run against a draft I deliberately broke to test the Skill. It returned the same verdict every time, caught five critical structural failures a writer&apos;s gut call would likely miss, and handed back a revision strategy instead of just a grade.
-                </p>
-                <div className="mt-6 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#0071e3]">
-                  <Braces className="h-4 w-4" />
-                  Why a forced check, not free analysis
-                </div>
               </div>
               <SkillDiagnosisPanel onOpenDetail={setDetail} />
-            </div>
-
-            <div className="mt-5 rounded-[2rem] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
-              <p className="text-sm leading-7 text-[#6e6e73]">
-                I also designed two companion Skills, script-bible and project-bible, that apply the same anti-hallucination logic to a generative workflow instead of a diagnostic one. One walks a writer through unresolved story decisions turn by turn. The other assembles a pitch document once the material is ready, without the back and forth.
-              </p>
             </div>
 
             <div className="mt-10 flex items-baseline justify-between gap-2">
