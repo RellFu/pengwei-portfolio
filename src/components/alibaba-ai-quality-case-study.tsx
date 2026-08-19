@@ -60,6 +60,8 @@ type DetailType = "script" | "report" | "characterBio" | null;
 type ProductScenarioId = "diagnose" | "bible" | "brief";
 type InspectorTab = "artifact" | "trace" | "knowledge" | "files";
 type CapabilityId = "context" | "skills" | "knowledge" | "action" | "orchestration";
+type EvalLayerId = "task" | "query" | "agent" | "skill" | "subagent";
+type SignalGroupId = "like" | "copy" | "reference" | "memory" | "share" | "dislike" | "stop";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -115,6 +117,139 @@ const productCapabilities = {
   action: ["Take action", "Alpha can work with files, commands, images, web research, and browser automation. It does more than return text."],
   orchestration: ["Orchestrate work", "Sub-agents, group collaboration, schedules, and messaging channels keep longer workflows moving."],
 } as const;
+
+const evalLayers = {
+  task: {
+    name: "Task",
+    scope: "End-to-end delivery",
+    question: "The user handed the Agent a whole task. Was the final delivery any good?",
+    drillPrompt: "Which turn broke it?",
+    groups: [
+      ["Completion", ["Element coverage, how many requested outputs arrived", "Constraint compliance, how many stated conditions held"]],
+      ["Professional quality", ["Creative and non-creative work scored separately, against live behavior data"]],
+      ["Conversation turns", ["Clarification, correction, and confirmation turns, each attributed to user phrasing or Agent output", "AI fault rate and user ambiguity rate as the two roll-ups"]],
+      ["Token efficiency", ["Total spend, plus a mutually exclusive split across system prompt, memory, Skills, tools, history, and output", "Context inflation, rework ratio, and effective output ratio"]],
+      ["Exception rate", ["Interruptions that killed the task, split by model, tool, timeout, and context overflow", "Self-healing cases where the Agent recovered on its own"]],
+    ],
+  },
+  query: {
+    name: "Query",
+    scope: "Single-turn response",
+    question: "Was this one turn a good response?",
+    drillPrompt: "Wrong orchestration, wrong memory, or wrong delegation?",
+    groups: [
+      ["Intent understanding", ["Intent recognition accuracy", "Context linking accuracy across prior turns"]],
+      ["Response strategy", ["Action choice, execute or ask back or decompose or refuse", "Granularity match against what the user asked for"]],
+      ["Quality assessment", ["Content quality and format compliance, broken out as its own sub-track"]],
+      ["Response latency", ["Time to first token and total generation time", "A mutually exclusive split across inference, tool calls, Skill loading, and external services"]],
+    ],
+  },
+  agent: {
+    name: "Agent",
+    scope: "Orchestration and memory",
+    question: "Did the Agent organize and schedule its own internal resources correctly?",
+    drillPrompt: "Wrong route, wrong parameters, or wrong execution?",
+    groups: [
+      ["Memory strategy", ["Long-term memory, write decision accuracy, granularity, recall rate, precision, staleness handling, conflict resolution", "Short-term memory, context retention, decay detection, contradictory citations, window management", "Memory self-iteration, trigger timing, consolidation quality, eviction accuracy, post-iteration effect"]],
+      ["Sub-agent orchestration", ["Delegation decision accuracy, whether the work should have been handed off at all", "Sub-agent selection accuracy and task description clarity", "Result integration quality and parallel utilization"]],
+      ["Call orchestration", ["Combination optimality, no redundant calls and nothing missing", "Sequence correctness against real dependencies", "Context handoff completeness between consecutive calls"]],
+    ],
+  },
+  skill: {
+    name: "Skill",
+    scope: "Trigger and execution",
+    question: "Should it have been called? Was it called correctly? Did the result hold up?",
+    drillPrompt: "If work was delegated, keep going down.",
+    groups: [
+      ["Routing decision", ["Trigger recall, of the cases that warranted it, how many fired", "Trigger precision, of the cases that fired, how many warranted it", "Skill selection accuracy once triggering was correct"]],
+      ["Parameter construction", ["Completeness of required parameters", "Value accuracy and schema compliance"]],
+      ["Execution result", ["Execution success rate and result correctness", "Result adoption rate, whether the Agent actually used what came back"]],
+      ["Call health", ["Per-call latency and token cost", "Redundant call rate, split into repeat calls and steps that contributed nothing", "Futile retry rate and result usefulness"]],
+    ],
+  },
+  subagent: {
+    name: "Sub-agent",
+    scope: "Delegated execution",
+    question: "Once the sub-agent had the task, did it do the job well?",
+    drillPrompt: "Root cause reached.",
+    groups: [
+      ["Task understanding", ["Instruction parsing accuracy against the parent prompt", "Constraint recognition completeness"]],
+      ["Execution quality", ["Output completeness, accuracy, and domain-level professionalism"]],
+      ["Boundary compliance", ["Scope violation rate, unauthorized operations", "Information leakage, context that should not have left the boundary"]],
+      ["Delivery standards", ["Format compliance and information completeness", "Summary quality when long results get condensed"]],
+      ["Resource cost", ["Token spend, execution time, and internal call volume"]],
+    ],
+  },
+} as const;
+
+const evalLayerOrder: EvalLayerId[] = ["task", "query", "agent", "skill", "subagent"];
+
+const evalConstraints = [
+  ["Mutually exclusive", "Metrics inside a layer cannot overlap."],
+  ["Attributable", "Every metric points at AI, user, or system."],
+  ["Computable", "Every metric has a formula real trace data can run."],
+  ["Comparable", "Every metric holds up across versions and time."],
+] as const;
+
+const signalGroups = [
+  {
+    id: "like" as const,
+    behavior: "Like",
+    event: "message_like.click",
+    tone: "positive" as const,
+    points: ["Message action bar"],
+  },
+  {
+    id: "copy" as const,
+    behavior: "Copy",
+    event: "message_copy.click",
+    tone: "positive" as const,
+    points: [
+      "Message action bar",
+      "Selection toolbar",
+      "Group message",
+      "Keyboard shortcut",
+      "File preview, view mode",
+      "File preview, edit mode",
+      "Code block",
+    ],
+  },
+  {
+    id: "reference" as const,
+    behavior: "Reference",
+    event: "message_reference.click",
+    tone: "positive" as const,
+    points: ["Whole message", "Selected passage"],
+  },
+  {
+    id: "memory" as const,
+    behavior: "Save to memory",
+    event: "annotation_tag.create",
+    tone: "positive" as const,
+    points: ["Selection toolbar"],
+  },
+  {
+    id: "share" as const,
+    behavior: "Share",
+    event: "html_share.click",
+    tone: "positive" as const,
+    points: ["Cloud share, HTML card"],
+  },
+  {
+    id: "dislike" as const,
+    behavior: "Dislike",
+    event: "message_dislike.click",
+    tone: "negative" as const,
+    points: ["Message action bar"],
+  },
+  {
+    id: "stop" as const,
+    behavior: "Stop generating",
+    event: "chat.stop",
+    tone: "negative" as const,
+    points: ["Composer stop button"],
+  },
+] as const;
 
 const challengeCards = [
   ["Subjective quality", "A fluent response could still be structurally weak or creatively unusable.", Sparkles],
@@ -979,12 +1114,12 @@ function AgenticRetrievalDiagram() {
 
   return (
     <div ref={rootRef} className="overflow-hidden rounded-[2rem] border border-black/8 bg-gradient-to-br from-white via-white to-[#f5f9ff] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.06)] sm:p-7">
-      <div className="grid grid-cols-3 items-center gap-0">
-        <div className="flex items-center justify-end gap-2 pr-3">
+      <div className="grid grid-cols-3 items-center gap-8">
+        <div className="flex items-center justify-end gap-2">
           <div data-retrieval-spine className="flex items-center gap-3 whitespace-nowrap rounded-[1.2rem] border border-black/8 bg-white px-4 py-3 shadow-sm">
             <p className="text-sm font-semibold text-[#1d1d1f]">User Query</p>
           </div>
-          <div className="relative h-px w-6 shrink-0 bg-[#d8d8dc]" aria-hidden="true">
+          <div className="relative h-px w-5 shrink-0 bg-[#d8d8dc]" aria-hidden="true">
             <span className="absolute -right-[3px] top-1/2 h-0 w-0 -translate-y-1/2 border-y-[4px] border-l-[5px] border-y-transparent border-l-[#b0b0b5]" />
           </div>
         </div>
@@ -994,9 +1129,9 @@ function AgenticRetrievalDiagram() {
             <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#111318] font-serif text-xs italic text-white">α</span>
             <div className="min-w-0">
               <p className="text-sm font-semibold text-[#1d1d1f]">Alpha Agent</p>
-              <div className="mt-1.5 flex flex-wrap gap-1.5">
+              <div className="mt-1.5 flex flex-nowrap gap-1.5">
                 {agentStages.map((stage) => (
-                  <span key={stage} className="rounded-md bg-[#f5f5f7] px-2.5 py-1 text-[10px] font-medium text-[#515154]">{stage}</span>
+                  <span key={stage} className="whitespace-nowrap rounded-md bg-[#f5f5f7] px-2.5 py-1 text-[10px] font-medium text-[#515154]">{stage}</span>
                 ))}
               </div>
             </div>
@@ -1008,10 +1143,10 @@ function AgenticRetrievalDiagram() {
 
       <div className="hidden h-6 lg:block" aria-hidden="true">
         <div className="relative h-full">
-          <div className="absolute left-[16.667%] right-[16.667%] top-0 h-px bg-[#d8d8dc]" />
-          <div className="absolute left-[16.667%] top-0 h-full w-px bg-[#d8d8dc]" />
           <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-[#d8d8dc]" />
-          <div className="absolute left-[83.333%] top-0 h-full w-px bg-[#d8d8dc]" />
+          <div className="absolute left-[16.667%] right-[16.667%] top-3 h-px bg-[#d8d8dc]" />
+          <div className="absolute left-[16.667%] top-3 h-3 w-px bg-[#d8d8dc]" />
+          <div className="absolute left-[83.333%] top-3 h-3 w-px bg-[#d8d8dc]" />
         </div>
       </div>
       <div className="mt-2.5 flex justify-center lg:hidden">
@@ -1034,9 +1169,9 @@ function AgenticRetrievalDiagram() {
 
       <div className="hidden h-6 lg:block" aria-hidden="true">
         <div className="relative h-full">
-          <div className="absolute left-[16.667%] bottom-0 h-3 w-px bg-[#d8d8dc]" />
-          <div className="absolute left-1/2 bottom-0 h-3 w-px -translate-x-1/2 bg-[#d8d8dc]" />
-          <div className="absolute left-[83.333%] bottom-0 h-3 w-px bg-[#d8d8dc]" />
+          <div className="absolute left-[16.667%] top-0 h-3 w-px bg-[#d8d8dc]" />
+          <div className="absolute left-1/2 top-0 h-3 w-px -translate-x-1/2 bg-[#d8d8dc]" />
+          <div className="absolute left-[83.333%] top-0 h-3 w-px bg-[#d8d8dc]" />
           <div className="absolute left-[16.667%] right-[16.667%] top-3 h-px bg-[#d8d8dc]" />
           <div className="absolute left-1/2 top-3 h-3 w-px -translate-x-1/2 bg-[#d8d8dc]" />
         </div>
@@ -1064,6 +1199,15 @@ function AgenticRetrievalDiagram() {
   );
 }
 
+function DemoLabel({ icon, text }: { icon: React.ReactNode; text: string }) {
+  return (
+    <div className="flex items-center gap-2">
+      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#eaf4ff] text-[#0071e3]">{icon}</span>
+      <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#86868b]">{text}</p>
+    </div>
+  );
+}
+
 function KnowledgeAssistantDemo({ onOpenDetail }: { onOpenDetail: (detail: "characterBio") => void }) {
   const steps = [
     ["IP detected", "The Devil Wears Prada"],
@@ -1073,7 +1217,7 @@ function KnowledgeAssistantDemo({ onOpenDetail }: { onOpenDetail: (detail: "char
   ] as const;
 
   return (
-    <div className="ml-auto mt-8 w-full max-w-[36rem] overflow-hidden rounded-[1.6rem] border border-black/10 bg-[#f5f5f7] shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
+    <div className="w-full overflow-hidden rounded-[1.6rem] border border-black/10 bg-[#f5f5f7] shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
       <div className="flex h-11 items-center gap-2 border-b border-black/8 bg-white/85 px-4 backdrop-blur-2xl">
         <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
         <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
@@ -1107,18 +1251,18 @@ function KnowledgeAssistantDemo({ onOpenDetail }: { onOpenDetail: (detail: "char
 
             <div className="mt-4 max-w-[31rem] text-[11px] leading-[1.65] text-[#515154]">
               <h4 className="text-[13px] font-semibold tracking-[-0.02em] text-[#1d1d1f]">Andy Sachs, character arc</h4>
-              <div className="mt-3 space-y-2.5">
-                <div className="rounded-lg bg-[#f5f5f7] p-3">
+              <div className="mt-3 space-y-3">
+                <div>
                   <p className="text-[10px] font-semibold text-[#1d1d1f]">Initial state</p>
-                  <p className="mt-1.5 text-[10px] leading-4 text-[#86868b]">An ambitious journalist who dismisses fashion as superficial, treating the assistant job as a stepping-stone she has to endure.</p>
+                  <p className="mt-1 text-[10px] leading-4 text-[#86868b]">An ambitious journalist who dismisses fashion as superficial, treating the assistant job as a stepping-stone she has to endure.</p>
                 </div>
-                <div className="rounded-lg bg-[#f5f5f7] p-3">
+                <div>
                   <p className="text-[10px] font-semibold text-[#1d1d1f]">Turning point</p>
-                  <p className="mt-1.5 text-[10px] leading-4 text-[#86868b]">Miranda&apos;s cerulean-sweater speech exposes Andy&apos;s ignorance, revealing the professional depth of a field she had already judged.</p>
+                  <p className="mt-1 text-[10px] leading-4 text-[#86868b]">Miranda&apos;s cerulean-sweater speech exposes Andy&apos;s ignorance, revealing the professional depth of a field she had already judged.</p>
                 </div>
-                <div className="rounded-lg bg-[#f5f5f7] p-3">
+                <div>
                   <p className="text-[10px] font-semibold text-[#1d1d1f]">Transformation</p>
-                  <p className="mt-1.5 text-[10px] leading-4 text-[#86868b]">Andy gradually masters the rules of the fashion world, and the same competence that saves her career starts to cost her the relationships outside it.</p>
+                  <p className="mt-1 text-[10px] leading-4 text-[#86868b]">Andy gradually masters the rules of the fashion world, and the same competence that saves her career starts to cost her the relationships outside it.</p>
                 </div>
               </div>
 
@@ -1134,19 +1278,390 @@ function KnowledgeAssistantDemo({ onOpenDetail }: { onOpenDetail: (detail: "char
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
 
-        <div className="mt-6 rounded-xl border border-black/8 bg-[#fafafa] p-3.5">
-          <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-[#86868b]">Behind the scenes</p>
-          <div className="mt-2.5 flex flex-wrap items-center gap-1.5 text-[9.5px] text-[#6e6e73]">
-            <span className="rounded-full bg-white px-2 py-1 font-medium shadow-sm">@ IP</span>
-            <ArrowRight className="h-3 w-3 text-[#b0b0b5]" />
-            <span className="rounded-full bg-white px-2 py-1 font-medium shadow-sm">IP retrieval</span>
-            <ArrowRight className="h-3 w-3 text-[#b0b0b5]" />
-            <span className="rounded-full bg-white px-2 py-1 font-medium shadow-sm">Character biography</span>
-            <ArrowRight className="h-3 w-3 text-[#b0b0b5]" />
-            <span className="rounded-full bg-white px-2 py-1 font-medium shadow-sm">Context</span>
-            <ArrowRight className="h-3 w-3 text-[#b0b0b5]" />
-            <span className="rounded-full bg-[#111318] px-2 py-1 font-medium text-white shadow-sm">LLM analysis</span>
+function KnowledgeSearchDemo() {
+  const steps = [
+    ["Creative intent detected", "workplace humiliation, then transformation"],
+    ["Query rewritten", "humiliation, authority conflict, turning point"],
+    ["Knowledge base searched", "parallel chunk-level retrieval across multiple IPs"],
+    ["Results reranked", "strongest narrative matches selected"],
+  ] as const;
+
+  const results = [
+    {
+      work: "The Devil Wears Prada",
+      scene: "Cerulean sweater confrontation",
+      description: "Andy casually dismisses two nearly identical belts. Miranda answers by explaining the entire fashion system behind Andy\u2019s own cerulean sweater, turning the mockery into public humiliation and exposing her ignorance.",
+      relevance: "Why it works: authority uses expertise, not volume, to break the protagonist\u2019s sense of superiority.",
+    },
+    {
+      work: "Story match 02",
+      scene: "Public failure, private reckoning",
+      description: "Another workplace confrontation where public failure forces the protagonist to reconsider their attitude.",
+      relevance: "Placeholder result. Swap in a retrieved passage once live search is wired up.",
+    },
+    {
+      work: "Story match 03",
+      scene: "Confrontation, then reversal",
+      description: "Matched because the humiliation directly triggers a behavioral turning point, not simple embarrassment.",
+      relevance: "Placeholder result. Swap in a retrieved passage once live search is wired up.",
+    },
+  ] as const;
+
+  const patterns = [
+    ["01", "Authority gap", "The protagonist is confronted by someone with much greater professional credibility."],
+    ["02", "Public loss of status", "The failure is visible enough to damage the protagonist\u2019s self-image."],
+    ["03", "Humiliation becomes a turning point", "The scene does not end with embarrassment. It forces a behavioral change."],
+  ] as const;
+
+  return (
+    <div className="w-full overflow-hidden rounded-[1.6rem] border border-black/10 bg-[#f5f5f7] shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
+      <div className="flex h-11 items-center gap-2 border-b border-black/8 bg-white/85 px-4 backdrop-blur-2xl">
+        <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
+        <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
+        <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+        <span className="ml-2 text-[10px] font-medium text-[#86868b]">Alpha desktop app</span>
+      </div>
+
+      <div className="bg-white p-5 sm:p-6">
+        <div className="flex justify-end">
+          <div className="max-w-[28rem] rounded-2xl bg-[#eaf4ff] px-4 py-3">
+            <p className="text-sm leading-6 text-[#1d1d1f]">Find scenes where a junior employee is humiliated, then decides to change.</p>
+          </div>
+        </div>
+
+        <div className="mt-5 flex items-start gap-3">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#111318] font-serif text-xs italic text-white">α</span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-semibold text-[#1d1d1f]">Searching across stories&hellip;</p>
+
+            <div className="mt-3 space-y-1.5">
+              {steps.map(([verb, detail]) => (
+                <div key={verb} className="flex items-center gap-2 rounded-lg px-1 py-1 text-[10px] text-[#86868b]">
+                  <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#e8f7ee] text-[#248a3d]">
+                    <Check className="h-2.5 w-2.5" strokeWidth={3} />
+                  </span>
+                  <span><strong className="font-semibold text-[#515154]">{verb}</strong> · {detail}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-4 max-w-[31rem] text-[11px] leading-[1.65] text-[#515154]">
+              <h4 className="text-[13px] font-semibold tracking-[-0.02em] text-[#1d1d1f]">Scenes worth studying</h4>
+              <div className="mt-3 space-y-3">
+                {results.map((result) => (
+                  <div key={result.work}>
+                    <p className="text-[9px] font-semibold uppercase tracking-[0.08em] text-[#0071e3]">{result.work}</p>
+                    <p className="mt-1 text-[10px] font-semibold text-[#1d1d1f]">{result.scene}</p>
+                    <p className="mt-1.5 text-[10px] leading-4 text-[#86868b]">{result.description}</p>
+                    <p className="mt-1.5 text-[9px] leading-4 text-[#6e6e73]">{result.relevance}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-4">
+                <p className="text-[10px] font-semibold text-[#1d1d1f]">What these scenes have in common</p>
+                <div className="mt-2 space-y-1.5">
+                  {patterns.map(([id, name, description]) => (
+                    <div key={id} className="flex items-start gap-2">
+                      <span className="mt-0.5 shrink-0 text-[9px] font-semibold text-[#0071e3]">{id}</span>
+                      <p className="text-[9.5px] leading-4 text-[#6e6e73]">
+                        <strong className="font-semibold text-[#515154]">{name}.</strong> {description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function EvaluationFrameworkExplorer() {
+  const [activeLayer, setActiveLayer] = useState<EvalLayerId>("task");
+  const reduceMotion = useReducedMotion();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const layer = evalLayers[activeLayer];
+  const activeIndex = evalLayerOrder.indexOf(activeLayer);
+
+  useGSAP(
+    () => {
+      const targets = gsap.utils.toArray<HTMLElement>("[data-eval-detail]", rootRef.current);
+      gsap.killTweensOf(targets);
+      if (reduceMotion) {
+        gsap.set(targets, { clearProps: "all" });
+        return;
+      }
+      gsap.fromTo(
+        targets,
+        { autoAlpha: 0, y: 8 },
+        { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.045, ease: "power3.out", overwrite: "auto" },
+      );
+    },
+    { scope: rootRef, dependencies: [activeLayer, reduceMotion], revertOnUpdate: true },
+  );
+
+  return (
+    <div ref={rootRef} className="mt-8 overflow-hidden rounded-[2rem] border border-black/8 bg-white shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
+      <div className="flex items-center justify-between border-b border-black/8 px-6 py-5 sm:px-8">
+        <div>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Five-layer attribution stack</p>
+          <p className="mt-1.5 text-[13px] text-[#6e6e73]">Select a layer to see what it measures.</p>
+        </div>
+        <GitBranch className="h-5 w-5 shrink-0 text-[#0071e3]" />
+      </div>
+
+      <div className="grid lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
+        <div className="border-b border-black/8 p-5 sm:p-6 lg:border-b-0 lg:border-r">
+          {evalLayerOrder.map((id, index) => {
+            const item = evalLayers[id];
+            const isActive = id === activeLayer;
+            const isPassed = index < activeIndex;
+
+            return (
+              <div key={id}>
+                <button
+                  type="button"
+                  onClick={() => setActiveLayer(id)}
+                  aria-pressed={isActive}
+                  className={`flex w-full items-start gap-3 rounded-[1.1rem] border px-4 py-3.5 text-left transition active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3] motion-reduce:transition-none ${
+                    isActive
+                      ? "border-[#0071e3]/25 bg-[#eaf4ff]"
+                      : "border-transparent bg-[#f5f5f7] hover:bg-[#eeeef0]"
+                  }`}
+                >
+                  <span
+                    className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[9px] font-semibold tabular-nums transition ${
+                      isActive ? "bg-[#0071e3] text-white" : isPassed ? "bg-[#d7d7db] text-[#515154]" : "bg-white text-[#86868b]"
+                    }`}
+                  >
+                    {index + 1}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className={`block text-sm font-semibold ${isActive ? "text-[#0055b3]" : "text-[#1d1d1f]"}`}>{item.name}</span>
+                    <span className={`mt-0.5 block text-[11px] leading-4 ${isActive ? "text-[#3f7cba]" : "text-[#86868b]"}`}>{item.scope}</span>
+                  </span>
+                  <ChevronRight className={`mt-1 h-3.5 w-3.5 shrink-0 transition ${isActive ? "text-[#0071e3]" : "text-[#c7c7cc]"}`} />
+                </button>
+
+                {index < evalLayerOrder.length - 1 && (
+                  <div className="flex items-center gap-2 py-1.5 pl-[1.85rem]">
+                    <span className="h-4 w-px shrink-0 bg-[#dcdce0]" />
+                    <span className="text-[9.5px] leading-4 text-[#a1a1a6]">{item.drillPrompt}</span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="p-5 sm:p-6">
+          <p data-eval-detail className="text-[9px] font-semibold uppercase tracking-[0.16em] text-[#0071e3]">
+            {layer.name} layer · core question
+          </p>
+          <p data-eval-detail className="mt-2 text-[15px] font-semibold leading-6 tracking-[-0.02em] text-[#1d1d1f]">
+            {layer.question}
+          </p>
+
+          <div className="mt-5 space-y-4">
+            {layer.groups.map(([group, metrics], groupIndex) => (
+              <div data-eval-detail key={group}>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-[9px] font-semibold tabular-nums text-[#0071e3]">{String(groupIndex + 1).padStart(2, "0")}</span>
+                  <p className="text-[11px] font-semibold text-[#1d1d1f]">{group}</p>
+                </div>
+                <div className="mt-1.5 space-y-1 pl-[1.1rem]">
+                  {metrics.map((metric) => (
+                    <p key={metric} className="text-[10.5px] leading-[1.55] text-[#86868b]">{metric}</p>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t border-black/8 bg-[#fafafa] px-6 py-5 sm:px-8">
+        <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-[#86868b]">Four constraints on every metric</p>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {evalConstraints.map(([name, rule]) => (
+            <div key={name}>
+              <p className="text-[11px] font-semibold text-[#1d1d1f]">{name}</p>
+              <p className="mt-1 text-[10px] leading-4 text-[#86868b]">{rule}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FeedbackSignalMap() {
+  const [activeGroup, setActiveGroup] = useState<SignalGroupId | null>(null);
+  const reduceMotion = useReducedMotion();
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  const positive = signalGroups.filter((group) => group.tone === "positive");
+  const negative = signalGroups.filter((group) => group.tone === "negative");
+
+  useGSAP(
+    () => {
+      const targets = gsap.utils.toArray<HTMLElement>("[data-signal-row]", rootRef.current);
+      if (reduceMotion) {
+        gsap.set(targets, { clearProps: "all" });
+        return;
+      }
+      gsap.set(targets, { autoAlpha: 0, y: 10 });
+      ScrollTrigger.create({
+        trigger: rootRef.current,
+        start: "top 80%",
+        once: true,
+        onEnter: () => {
+          gsap.to(targets, { autoAlpha: 1, y: 0, duration: 0.42, stagger: 0.05, ease: "power3.out" });
+        },
+      });
+    },
+    { scope: rootRef, dependencies: [reduceMotion], revertOnUpdate: true },
+  );
+
+  const renderGroup = (group: (typeof signalGroups)[number]) => {
+    const isActive = activeGroup === group.id;
+    const isDimmed = activeGroup !== null && !isActive;
+    const isNegative = group.tone === "negative";
+
+    return (
+      <button
+        key={group.id}
+        type="button"
+        data-signal-row
+        onMouseEnter={() => setActiveGroup(group.id)}
+        onMouseLeave={() => setActiveGroup(null)}
+        onFocus={() => setActiveGroup(group.id)}
+        onBlur={() => setActiveGroup(null)}
+        onClick={() => setActiveGroup(isActive ? null : group.id)}
+        aria-pressed={isActive}
+        className={`w-full rounded-[1.1rem] border px-4 py-3 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3] motion-reduce:transition-none ${
+          isActive
+            ? isNegative
+              ? "border-[#d70015]/20 bg-[#fdeae9]"
+              : "border-[#0071e3]/25 bg-[#eaf4ff]"
+            : "border-black/8 bg-white hover:border-black/15"
+        } ${isDimmed ? "opacity-45" : "opacity-100"}`}
+      >
+        <div className="flex items-baseline justify-between gap-3">
+          <p className={`text-[12px] font-semibold ${isActive ? (isNegative ? "text-[#a30f12]" : "text-[#0055b3]") : "text-[#1d1d1f]"}`}>
+            {group.behavior}
+          </p>
+          <p className="shrink-0 font-mono text-[9px] text-[#86868b]">{group.event}</p>
+        </div>
+
+        <div className="mt-2 flex flex-wrap gap-1">
+          {group.points.map((point) => (
+            <span
+              key={point}
+              className={`rounded-md px-1.5 py-0.5 text-[9.5px] leading-4 transition ${
+                isActive ? (isNegative ? "bg-white text-[#a30f12]" : "bg-white text-[#0066cc]") : "bg-[#f5f5f7] text-[#86868b]"
+              }`}
+            >
+              {point}
+            </span>
+          ))}
+        </div>
+
+        {group.points.length > 1 && (
+          <p className={`mt-2 text-[9px] ${isActive ? (isNegative ? "text-[#a30f12]" : "text-[#3f7cba]") : "text-[#a1a1a6]"}`}>
+            {group.points.length} entry points, one event
+          </p>
+        )}
+      </button>
+    );
+  };
+
+  return (
+    <div ref={rootRef} className="overflow-hidden rounded-[2rem] border border-black/8 bg-white p-5 shadow-[0_22px_70px_rgba(0,0,0,0.07)] sm:p-6">
+      <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#0071e3]">Positive, 12 entry points</p>
+      <div className="space-y-2">{positive.map(renderGroup)}</div>
+
+      <p className="mb-1 mt-5 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#d70015]">Negative, 2 signals</p>
+      <div className="grid gap-2 sm:grid-cols-2">{negative.map(renderGroup)}</div>
+    </div>
+  );
+}
+
+function PatrolBotReportDemo() {
+  const scorecard = [
+    ["Event completeness", "6 / 6 events present"],
+    ["Copy point normalization", "7 / 7 sources on one event"],
+    ["DWD field coverage", "c1 to c4 confirmed"],
+    ["New commits since last run", "2 flagged for review"],
+  ] as const;
+
+  return (
+    <div className="w-full overflow-hidden rounded-[1.6rem] border border-black/10 bg-[#f5f5f7] shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
+      <div className="flex h-14 items-center gap-2.5 border-b border-black/8 bg-white/85 px-4 backdrop-blur-2xl">
+        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#0071e3] text-white"><Users className="h-3.5 w-3.5" /></span>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-[11px] font-semibold text-[#1d1d1f]">Project Alpha: Eng &amp; Product Sync</p>
+          <p className="text-[9px] text-[#86868b]">18 members</p>
+        </div>
+      </div>
+
+      <div className="bg-white p-5 sm:p-6">
+        <div className="flex items-start gap-3">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#111318] font-serif text-xs italic text-white">α</span>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-baseline gap-2">
+              <p className="text-[11px] font-semibold text-[#1d1d1f]">Instrumentation Patrol</p>
+              <p className="text-[9px] text-[#86868b]">10:00</p>
+            </div>
+
+            <div className="mt-2 max-w-[26rem] rounded-2xl bg-[#f5f5f7] px-4 py-3">
+              <p className="text-[11px] leading-5 text-[#1d1d1f]">Daily feedback instrumentation patrol, Aug 18</p>
+
+              <div className="mt-3 space-y-2">
+                {scorecard.map(([label, value]) => (
+                  <div key={label} className="flex items-center justify-between gap-3 rounded-lg bg-white px-3 py-2">
+                    <p className="text-[10px] text-[#515154]">{label}</p>
+                    <p className="text-[10px] font-semibold text-[#248a3d]">{value}</p>
+                  </div>
+                ))}
+              </div>
+
+              <p className="mt-3 text-[10px] leading-4 text-[#86868b]">Full report, event tables and call-site coverage, in thread.</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-4 flex items-start justify-end gap-3">
+          <div className="min-w-0 flex-1 text-right">
+            <div className="flex items-baseline justify-end gap-2">
+              <p className="text-[9px] text-[#86868b]">10:04</p>
+              <p className="text-[11px] font-semibold text-[#1d1d1f]">Pengwei</p>
+            </div>
+            <div className="ml-auto mt-2 max-w-[26rem] rounded-2xl bg-[#eaf4ff] px-4 py-3 text-left">
+              <p className="text-[11px] leading-5 text-[#1d1d1f]"><span className="font-semibold text-[#0071e3]">@Rell</span> Can we grab 30 minutes this afternoon to go over the tracking gaps we still need to cover?</p>
+            </div>
+          </div>
+          <span className="relative flex h-7 w-7 shrink-0 overflow-hidden rounded-full"><Image src="/images/avatars/pengwei.png" alt="" fill sizes="28px" className="object-cover" /></span>
+        </div>
+
+        <div className="mt-4 flex items-start gap-3">
+          <span className="relative flex h-7 w-7 shrink-0 overflow-hidden rounded-full"><Image src="/images/avatars/rell.png" alt="" fill sizes="28px" className="object-cover" /></span>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-baseline gap-2">
+              <p className="text-[11px] font-semibold text-[#1d1d1f]">Rell</p>
+              <p className="text-[9px] text-[#86868b]">10:05</p>
+            </div>
+            <div className="mt-2 max-w-[26rem] rounded-2xl bg-[#f5f5f7] px-4 py-3">
+              <p className="text-[11px] leading-5 text-[#1d1d1f]">Sounds good, I&apos;ll send a calendar invite.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -1902,9 +2417,19 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
             </div>
             <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">Turning structured knowledge into an intuitive creative experience.</h3>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-[#6e6e73]">
-              This is where the first two layers meet a real request. One @ mention, a visible retrieval trace, and an answer grounded in the actual character record instead of a plausible-sounding guess.
+              This is where the first two layers meet a real request. The same Agent handles two different retrieval behaviors: a named work goes straight to its full record, an open-ended creative need gets searched across the whole library.
             </p>
-            <KnowledgeAssistantDemo onOpenDetail={setDetail} />
+
+            <div className="mt-8 grid gap-8 lg:grid-cols-2">
+              <div className="space-y-3">
+                <DemoLabel icon={<AtSign className="h-3 w-3" />} text="Reference a specific story" />
+                <KnowledgeAssistantDemo onOpenDetail={setDetail} />
+              </div>
+              <div className="space-y-3">
+                <DemoLabel icon={<Search className="h-3 w-3" />} text="Search for inspiration" />
+                <KnowledgeSearchDemo />
+              </div>
+            </div>
 
             <div className="mt-8 rounded-2xl bg-[#eaf4ff] p-5 text-sm leading-7 text-[#3f5f78]">
               Boundary: I designed the entity Schema and the three-channel retrieval architecture. This does not claim I personally shipped the full production extraction and storage pipeline behind it.
@@ -1916,32 +2441,9 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
               number="05"
               label="Designing the Evaluation Framework"
               title="I designed the evaluation framework, then built what it needed to run."
-              description="A single quality score could not tell anyone where an Agent actually failed, so I designed a five-layer evaluation architecture: Task (did the end-to-end delivery satisfy the user), Query (was this one turn a good response), Agent (were orchestration and memory decisions correct), Skill (was the right capability triggered with the right parameters), and Sub-agent (did delegated work meet its own bar). Each layer traces to the next, so a failure at the top can be pushed down to the exact mechanism that caused it. I set four constraints going in: metrics inside a layer cannot overlap, every metric is attributable to AI, user, or system, every metric has a formula that real trace data can compute, and every metric holds up across versions and time."
+              description="A single quality score could not tell anyone where an Agent actually failed, so I designed a five-layer evaluation architecture. Each layer owns a different question, and each one traces to the next, so a failure at the top can be pushed down until it reaches the exact mechanism responsible. That is the difference between a score and a diagnosis."
             />
-            <div className="mt-8 rounded-[2rem] border border-black/8 bg-white p-6 shadow-[0_20px_60px_rgba(0,0,0,0.06)] sm:p-8">
-              <div className="flex items-center justify-between">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Five-layer attribution stack</p>
-                <GitBranch className="h-5 w-5 text-[#0071e3]" />
-              </div>
-              <div className="mt-6 grid gap-2 sm:grid-cols-5">
-                {[
-                  ["Task", "End-to-end delivery"],
-                  ["Query", "Single-turn response"],
-                  ["Agent", "Orchestration + memory"],
-                  ["Skill", "Trigger + parameters"],
-                  ["Sub-agent", "Delegated execution"],
-                ].map(([layer, note], index) => (
-                  <div key={layer} className="flex items-center gap-2 sm:contents">
-                    <div className="flex-1 rounded-xl bg-[#f5f5f7] p-4 sm:flex-none">
-                      <p className="text-sm font-semibold text-[#1d1d1f]">{layer}</p>
-                      <p className="mt-1 text-[11px] leading-4 text-[#86868b]">{note}</p>
-                    </div>
-                    {index < 4 && <ChevronRight className="h-4 w-4 shrink-0 text-[#b0b0b5] sm:hidden" />}
-                  </div>
-                ))}
-              </div>
-              <p className="mt-5 text-xs leading-5 text-[#86868b]">A failure found at the Task layer gets pushed down through Query, Agent, and Skill until it reaches the mechanism responsible. That is the difference between a score and a diagnosis.</p>
-            </div>
+            <EvaluationFrameworkExplorer />
 
             <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               {challengeCards.map(([title, text, Icon], index) => (
@@ -1953,90 +2455,36 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
               ))}
             </div>
 
-            <div className="mt-5 rounded-[2rem] border border-black/8 bg-white p-6 shadow-[0_22px_70px_rgba(0,0,0,0.07)] sm:p-8">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">The data layer underneath the framework</p>
-              <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">I designed the feedback instrumentation the framework needed to run on real usage.</h3>
-              <p className="mt-4 max-w-3xl text-sm leading-7 text-[#6e6e73]">Each event ties back to a session, a run, and an Agent through a shared identifier scheme, so a like, a copy, a dislike, or a stop can be traced to the exact Skill and turn that produced it. Positive signals span four event types (likes, copies, references, memory saves, and shares) across 12 interaction points. Negative signals cover two (dislikes and stopped generations).</p>
-              <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
-                {[["18", "product surfaces instrumented"], ["12", "positive touchpoints · 4 event types"], ["2", "negative signals · 2 event types"], ["6 + 4", "event types + trace contexts"]].map(([value, label]) => (
-                  <div key={label} className="rounded-xl border border-black/8 bg-white px-4 py-3"><p className="text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">{value}</p><p className="mt-1 text-[11px] text-[#86868b]">{label}</p></div>
-                ))}
+            <p className="mt-12 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">The Data Layer Underneath</p>
+            <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">The framework only works if real usage flows into it.</h3>
+            <div className="mt-3 grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-start">
+              <div className="lg:pr-4">
+                <p className="text-sm leading-7 text-[#6e6e73]">
+                  A dashboard of scores is easy. Making every score traceable back to the exact turn that produced it is the part that takes design, so I wrote the instrumentation spec across all 18 surfaces of the product myself. Out of those 18, I picked 14 entry points and defined them specifically to measure positive and negative feedback.
+                </p>
+                <p className="mt-4 text-sm leading-7 text-[#6e6e73]">
+                  The load-bearing decision was the identifier scheme. Every event carries the same four fields, mapped to fixed warehouse columns, sessionId for which conversation, runId as the join key for which run, agentId for which Agent answered, userId for which user. That is what lets a single dislike be pushed down through the five layers instead of stopping at the conclusion that users seem unhappy.
+                </p>
+                <p className="mt-4 text-sm leading-7 text-[#6e6e73]">
+                  The second decision was refusing to let events multiply. A writer can copy an AI reply from seven different places in the product. Seven separate events would have meant seven separate queries and no clean way to ask how often anyone copies anything, so they all report as one event with a source field. I also drew the privacy boundary into the spec up front, no prompts and no model output and no tool payloads, so the scheme could ship without a second review.
+                </p>
               </div>
+              <FeedbackSignalMap />
             </div>
 
-            <div className="mt-5 rounded-[2rem] border border-black/8 bg-white p-6 shadow-[0_22px_70px_rgba(0,0,0,0.07)] sm:p-8">
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Agent I built · 01</p>
-                  <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">A scheme only holds if it stays correct, so I built a bot to patrol it.</h3>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="relative flex h-3 w-3"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#30a46c] opacity-50 motion-reduce:animate-none" /><span className="relative inline-flex h-3 w-3 rounded-full bg-[#30a46c]" /></span>
-                  <span className="rounded-full bg-[#eaf8ef] px-3 py-1.5 text-xs font-semibold text-[#207a4b]">Deployed · runs daily</span>
-                </div>
-              </div>
-              <p className="mt-4 max-w-3xl text-sm leading-7 text-[#6e6e73]">
-                It cross-checks the event types, the documentation, and the analytics code for consistency, then reports coverage gaps to the work group before they become blind spots in the data.
-              </p>
-              <div className="mt-7 grid gap-3 lg:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] lg:items-center">
-                {[
-                  ["01", "Event spec", "18 surfaces · privacy boundary", Radar],
-                  ["02", "Code callsite", "Verify implementation", Code2],
-                  ["03", "Data pipeline", "Trace event to warehouse", Database],
-                  ["04", "Group report", "Changes · gaps · severity", MessageSquareText],
-                ].map(([number, title, text, Icon], index) => (
-                  <div key={number as string} className="contents">
-                    <div className="h-full rounded-[1.4rem] bg-[#f5f5f7] p-5">
-                      <div className="flex justify-between"><Icon className="h-5 w-5 text-[#0071e3]" /><span className="text-[10px] text-[#b0b0b5]">{number as string}</span></div>
-                      <p className="mt-5 text-sm font-semibold text-[#1d1d1f]">{title as string}</p>
-                      <p className="mt-2 text-xs leading-5 text-[#86868b]">{text as string}</p>
-                    </div>
-                    {index < 3 && <ArrowRight className="m-auto hidden h-4 w-4 text-[#b0b0b5] lg:block" />}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </AnimatedSection>
+            <h3 className="mt-12 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">A scheme only holds if it stays correct, so I built a bot to patrol it.</h3>
 
-          <AnimatedSection>
-            <SectionHeading
-              number="06"
-              label="Owning the Ground Truth"
-              title="I owned the ground truth, then found out it was lying to me."
-              description="The framework needed automated judgment on four things: which task a query belonged to, what the user's intent was, whether a task was complete, and whether feedback was positive or negative. Automating those judgments required a human-labeled baseline to check them against, so I owned the labeling effort end to end: what to label, how many annotators, how to resolve disagreement. I also weighed in on which model configurations to test against that baseline, three models across three context-window lengths, since a longer window means better recall at a real latency and cost tradeoff."
-            />
+            <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-start">
+              <PatrolBotReportDemo />
 
-            <div className="mt-8 rounded-[2rem] bg-[#111318] p-6 text-white shadow-[0_28px_80px_rgba(0,0,0,0.18)] sm:p-8">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">The number that should have been a red flag</p>
-                  <h3 className="mt-2 text-xl font-semibold">Eight model configurations. All of them at 100 percent.</h3>
-                </div>
-                <Split className="h-5 w-5 text-[#65b5ff]" />
+              <div className="lg:pl-2">
+                <p className="text-sm leading-7 text-[#6e6e73]">
+                  Every morning at 10:00, the Agent pulls the develop branch, then works through four checks in order. It reads the event spec to confirm all six feedback events are still declared. It greps the actual call sites to check the code matches the spec, including the rule that all seven copy entry points report through one normalized event. It reads the tracking function bodies to confirm the four trace fields are still wired into the warehouse columns. It scans commits from the last 24 hours for anything touching message actions or the analytics files, and flags what it finds.
+                </p>
+                <p className="mt-4 text-sm leading-7 text-[#6e6e73]">
+                  The result lands as a short scorecard in the group chat, not a link to a dashboard nobody opens. The effect is that instrumentation drift gets caught the morning it happens, while the commit is still fresh in someone&apos;s memory, instead of surfacing weeks later as a gap in a report nobody can explain.
+                </p>
               </div>
-              <p className="mt-4 max-w-3xl text-sm leading-6 text-white/65">
-                Three models across three context-window lengths were compared against the human-labeled baseline. Every single configuration came back perfect. That is the moment I went back into the labeling data instead of trusting the number.
-              </p>
-              <div className="mt-6 grid gap-3 sm:grid-cols-[1fr_auto_1fr_auto_1fr] sm:items-center">
-                {[
-                  ["343", "labeled turns", "Across 19 sessions"],
-                  ["19", "cross-checked", "5.5% of the dataset"],
-                  ["1", "category covered", "All 19 were the same label"],
-                ].map(([value, label, note], index) => (
-                  <div key={label} className="contents">
-                    <div className="rounded-2xl border border-white/8 bg-white/[0.055] p-5">
-                      <p className="text-3xl font-semibold tracking-[-0.04em]">{value}</p>
-                      <p className="mt-1 text-sm font-semibold text-[#a9d5ff]">{label}</p>
-                      <p className="mt-3 text-xs text-white/40">{note}</p>
-                    </div>
-                    {index < 2 && <ArrowRight className="m-auto hidden h-4 w-4 text-white/25 sm:block" />}
-                  </div>
-                ))}
-              </div>
-              <div className="mt-5 rounded-2xl border border-[#65b5ff]/20 bg-[#65b5ff]/10 p-4 text-sm leading-6 text-white/65">
-                The 100 percent was not measuring whether a model could tell a positive signal from a negative one. It could only ever say the model agreed on the easy case, because every cross-checked record happened to fall into the same feedback category. I flagged it and re-scoped the labeling work to a task-level design instead: roughly 70 sessions, six annotators, built to test task recognition and completion judgment rather than a single feedback label.
-              </div>
-              <p className="mt-4 text-[11px] leading-5 text-white/35">Ground truth is supposed to be the thing you trust without checking. I checked it anyway, and that is the habit that kept a false positive from becoming a shipped conclusion.</p>
             </div>
 
             <div className="mt-5 rounded-[2rem] border border-black/8 bg-white p-6 shadow-sm sm:p-8">
@@ -2056,9 +2504,11 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
                 ))}
               </div>
             </div>
+          </AnimatedSection>
 
+          <AnimatedSection>
             <SectionHeading
-              number="07"
+              number="06"
               label="Closing the Loop with Data"
               title="I did not just fix Skills. I proved it with data."
               description="I built and ran the analytics layer behind the product: a library of 29 user behavior metrics, funnel analysis that showed exactly where users dropped off, retention cohorts, and live feedback signals. Every finding became a product requirement, and every requirement shipped as a fix."
@@ -2133,7 +2583,7 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
 
           <AnimatedSection>
             <SectionHeading
-              number="08"
+              number="07"
               label="What This Proves"
               title="I did not start with a spec. I read the system, then improved it."
               description="I traced the runtime myself, designed what to measure, built the tools that keep the measurement honest, and proved the impact with data that three Agents I built helped collect. That is the work of someone who learns a system fast enough to change it, not just operate it."
