@@ -12,7 +12,6 @@ import {
   ArrowLeft,
   ArrowRight,
   AtSign,
-  BarChart3,
   BookOpenCheck,
   Bot,
   Braces,
@@ -41,7 +40,6 @@ import {
   Route,
   ScanSearch,
   Search,
-  ShieldCheck,
   Sparkles,
   Split,
   Users,
@@ -1671,16 +1669,19 @@ function PatrolBotReportDemo() {
 function SkillEcosystemAuditPanel() {
   const reduceMotion = useReducedMotion();
   const rootRef = useRef<HTMLDivElement>(null);
-  const countRef = useRef<HTMLParagraphElement>(null);
 
-  const scopeStats = [
-    { icon: Layers3, label: "55 Skills in catalog" },
-    { icon: Cog, label: "10 engineering dimensions" },
-    { icon: Split, label: "3 variant types analyzed" },
-    { icon: ShieldCheck, label: "Automated conflict detection" },
+  const engineeringDimensions = [
+    "Prompt Engineering patterns",
+    "LLM reasoning constraints",
+    "State management",
+    "References hierarchy / loading strategy",
+    "Isomorphic implementation / Skill families",
+    "Engineering complexity",
+    "Skill chaining & routing",
+    "Comparison with Three-Act Diagnosis / Bible",
+    "Reusable engineering patterns",
+    "API-ization roadmap",
   ] as const;
-
-  const compassIcons = [Search, Zap, ShieldCheck, BarChart3] as const;
 
   const findings = [
     {
@@ -1707,51 +1708,28 @@ function SkillEcosystemAuditPanel() {
   ] as const;
 
   const toneClasses: Record<(typeof findings)[number]["tone"], { border: string; bg: string; iconBg: string; iconText: string; label: string }> = {
-    critical: { border: "border-[#ff6b6b]/20", bg: "bg-[#fff5f5]", iconBg: "bg-white", iconText: "text-[#e5484d]", label: "text-[#e5484d]" },
-    warning: { border: "border-[#ff9500]/20", bg: "bg-[#fffaf0]", iconBg: "bg-white", iconText: "text-[#c2760c]", label: "text-[#c2760c]" },
-    info: { border: "border-[#0071e3]/15", bg: "bg-[#f5f9ff]", iconBg: "bg-white", iconText: "text-[#0071e3]", label: "text-[#0071e3]" },
+    critical: { border: "border-[#e5484d]/25", bg: "bg-white", iconBg: "bg-[#fff5f5]", iconText: "text-[#e5484d]", label: "text-[#e5484d]" },
+    warning: { border: "border-black/8", bg: "bg-white", iconBg: "bg-[#f5f5f7]", iconText: "text-[#515154]", label: "text-[#86868b]" },
+    info: { border: "border-black/8", bg: "bg-white", iconBg: "bg-[#f5f5f7]", iconText: "text-[#515154]", label: "text-[#86868b]" },
   };
 
   useGSAP(
     () => {
-      const iconTargets = gsap.utils.toArray<HTMLElement>("[data-audit-icon]", rootRef.current);
       const findingTargets = gsap.utils.toArray<HTMLElement>("[data-audit-finding]", rootRef.current);
-      const scopeTargets = gsap.utils.toArray<HTMLElement>("[data-audit-scope]", rootRef.current);
-      const ring = rootRef.current?.querySelector<HTMLElement>("[data-audit-ring]");
 
       if (reduceMotion) {
-        gsap.set([...iconTargets, ...findingTargets, ...scopeTargets, ring].filter(Boolean), { clearProps: "all" });
-        if (countRef.current) countRef.current.textContent = "55";
+        gsap.set(findingTargets, { clearProps: "all" });
         return;
       }
 
-      gsap.set(iconTargets, { autoAlpha: 0, scale: 0.6 });
       gsap.set(findingTargets, { autoAlpha: 0, y: 14 });
-      gsap.set(scopeTargets, { autoAlpha: 0, y: 8 });
-      if (ring) gsap.set(ring, { scale: 0.85, autoAlpha: 0 });
-      if (countRef.current) countRef.current.textContent = "0";
 
       ScrollTrigger.create({
         trigger: rootRef.current,
         start: "top 78%",
         once: true,
         onEnter: () => {
-          const tl = gsap.timeline();
-          if (ring) tl.to(ring, { scale: 1, autoAlpha: 1, duration: 0.5, ease: "power3.out" });
-          tl.to(iconTargets, { autoAlpha: 1, scale: 1, duration: 0.4, stagger: 0.08, ease: "power3.out" }, "-=0.25");
-          if (countRef.current) {
-            const counter = { value: 0 };
-            tl.to(counter, {
-              value: 55,
-              duration: 0.7,
-              ease: "power2.out",
-              onUpdate: () => {
-                if (countRef.current) countRef.current.textContent = String(Math.round(counter.value));
-              },
-            }, "-=0.35");
-          }
-          tl.to(scopeTargets, { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.06, ease: "power3.out" }, "-=0.3");
-          tl.to(findingTargets, { autoAlpha: 1, y: 0, duration: 0.45, stagger: 0.09, ease: "power3.out" }, "-=0.15");
+          gsap.to(findingTargets, { autoAlpha: 1, y: 0, duration: 0.45, stagger: 0.09, ease: "power3.out" });
         },
       });
     },
@@ -1759,54 +1737,22 @@ function SkillEcosystemAuditPanel() {
   );
 
   return (
-    <div ref={rootRef} className="mt-4 overflow-hidden rounded-[2rem] border border-black/8 bg-gradient-to-br from-white via-white to-[#f2f6ff] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.06)] sm:p-9">
-      <div className="grid gap-8 lg:grid-cols-[1fr_auto_1fr] lg:items-center">
-        <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Full ecosystem audit</p>
-          <h3 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">Testing the catalog, not one Skill</h3>
-          <p className="mt-3 max-w-xs text-sm leading-6 text-[#6e6e73]">Running comprehensive checks across the full catalog to make sure fast, expert, and generate variants stay cleanly distinguishable to the router.</p>
-        </div>
-
-        <div className="relative mx-auto flex h-56 w-56 shrink-0 items-center justify-center">
-          <div data-audit-ring className="absolute inset-0 rounded-full border border-black/8 bg-[conic-gradient(from_180deg,#eaf4ff,#ffffff,#eaf4ff)]" />
-          <div className="absolute inset-3 rounded-full border border-[#0071e3]/12" />
-          <div className="relative flex flex-col items-center">
-            <p ref={countRef} className="text-6xl font-semibold tracking-[-0.04em] text-[#1d1d1f]">55</p>
-            <p className="mt-1 text-xs font-semibold text-[#515154]">Skills audited</p>
-            <p className="mt-0.5 text-[10px] text-[#86868b]">10 engineering dimensions</p>
-          </div>
-          {compassIcons.map((Icon, index) => {
-            const angle = index * 90 - 45;
-            const radius = 96;
-            const x = Math.cos((angle * Math.PI) / 180) * radius;
-            const y = Math.sin((angle * Math.PI) / 180) * radius;
-            return (
-              <span
-                key={index}
-                data-audit-icon
-                className="absolute flex h-9 w-9 items-center justify-center rounded-full border border-black/8 bg-white text-[#0071e3] shadow-[0_8px_20px_rgba(0,0,0,0.08)]"
-                style={{ transform: `translate(${x}px, ${y}px)` }}
-              >
-                <Icon className="h-4 w-4" />
-              </span>
-            );
-          })}
-        </div>
-
-        <div className="space-y-2.5">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Audit scope</p>
-          {scopeStats.map((stat) => (
-            <div key={stat.label} data-audit-scope className="flex items-center gap-2.5">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-[#eaf4ff] text-[#0071e3]"><stat.icon className="h-3.5 w-3.5" /></span>
-              <span className="text-xs font-medium text-[#515154]">{stat.label}</span>
-            </div>
+    <div ref={rootRef} className="mt-4 overflow-hidden rounded-[2rem] border border-black/8 bg-white p-6 shadow-[0_8px_24px_rgba(0,0,0,0.04)] sm:p-9">
+      <div>
+        <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">10 engineering dimensions audited</p>
+        <ul className="mt-4 grid gap-x-8 gap-y-2.5 sm:grid-cols-2">
+          {engineeringDimensions.map((dim) => (
+            <li key={dim} className="flex items-baseline gap-2.5 text-sm leading-6 text-[#515154]">
+              <span className="mt-2 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[#515154]" />
+              <span>{dim}</span>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
 
       <div className="mt-9 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-[#0071e3]" />
+          <span className="h-2 w-2 rounded-full bg-[#515154]" />
           <p className="text-sm font-semibold text-[#1d1d1f]">Key findings</p>
         </div>
       </div>
@@ -1817,7 +1763,7 @@ function SkillEcosystemAuditPanel() {
             <div key={finding.label} data-audit-finding className={`rounded-[1.4rem] border ${tone.border} ${tone.bg} p-5 transition hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(0,0,0,0.06)]`}>
               <span className={`flex h-9 w-9 items-center justify-center rounded-full ${tone.iconBg} ${tone.iconText} shadow-sm`}><finding.icon className="h-4 w-4" /></span>
               <p className={`mt-3 text-[10px] font-semibold uppercase tracking-[0.13em] ${tone.label}`}>{finding.label}</p>
-              <p className="mt-2 text-sm font-semibold leading-5 text-[#1d1d1f]">{finding.title}</p>
+              <p className={`mt-2 text-sm font-semibold leading-5 text-[#1d1d1f]`}>{finding.title}</p>
               <p className="mt-2 text-xs leading-5 text-[#86868b]">{finding.body}</p>
             </div>
           );
@@ -2311,8 +2257,8 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
             <div className="mt-10 flex items-baseline justify-between gap-2">
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Where the cracks showed up, all 55 Skills together</p>
             </div>
-            <p className="mt-4 max-w-3xl text-sm leading-7 text-[#6e6e73]">
-              Running checks across the full catalog, I found trigger words colliding between Skills, fast and expert variants that were indistinguishable to the router, and check versus generate entry points stepping on each other. I did not read this in a bug report. I found it by testing the catalog myself, and I built the tool that catches it going forward.
+            <p className="mt-4 text-base leading-8 text-[#6e6e73]">
+              As the catalog grew to 55 Skills, the focus expanded from individual Skill quality to how the system behaved as a whole. I reviewed the catalog as a routing system, looking at whether Skills remained clearly defined, predictable to invoke, and maintainable as the catalog scaled. The audit created a system-level view of where quality could break down before those issues surfaced in user interactions.
             </p>
             <SkillEcosystemAuditPanel />
 
