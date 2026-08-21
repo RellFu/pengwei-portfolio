@@ -11,7 +11,6 @@ import {
   ArrowDown,
   ArrowLeft,
   ArrowRight,
-  AlertTriangle,
   AtSign,
   BookOpenCheck,
   Bot,
@@ -1257,8 +1256,9 @@ function KnowledgeBeforeAfter() {
         <GlassSurface className="flex flex-col overflow-hidden rounded-[1.9rem] p-0">
           <div className="border-b border-black/5 px-5 py-4">
             <SectionLabel>
-              Before: <span className="font-semibold text-[#1d1d1f]">Long-form documents</span>
+              Before: <span className="font-semibold text-[#1d1d1f]">Long-form story knowledge</span>
             </SectionLabel>
+            <p className="mt-1 text-[11px] leading-[1.5] text-[#86868b]">Rich in detail, difficult to query.</p>
           </div>
           <div className="flex flex-1 flex-col p-4">
             <RawMaterialPile />
@@ -1268,7 +1268,7 @@ function KnowledgeBeforeAfter() {
         <WarmSurface className="overflow-hidden rounded-[1.9rem] p-0">
           <div className="border-b border-black/5 px-5 py-4">
             <SectionLabel>
-              After: <span className="font-semibold text-[#1d1d1f]">The Schema I designed</span>
+              After: <span className="font-semibold text-[#1d1d1f]">Story knowledge schema</span>
             </SectionLabel>
           </div>
           <div className="p-4">
@@ -2099,7 +2099,7 @@ function SkillEvaluatorPanel({ onOpenDetail }: { onOpenDetail: (detail: "evaluat
           <div className="max-w-[36rem] rounded-2xl bg-[#eaf4ff] px-4 py-3">
             <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1.5 text-[11px] leading-[1.65] text-[#1d1d1f]">
               <span className="font-semibold text-[#0071e3]">@skill-evaluator</span>
-              <span>Scan the Skill catalog for description conflicts and rewrite weak descriptions.</span>
+              <span>Find conflicts. Rewrite weak descriptions.</span>
               <button
                 type="button"
                 className="inline-flex items-center gap-1.5 rounded-lg bg-white/85 px-2 py-1 transition hover:bg-white active:scale-[0.97]"
@@ -2128,18 +2128,7 @@ function SkillEvaluatorPanel({ onOpenDetail }: { onOpenDetail: (detail: "evaluat
             </div>
 
             <div className="mt-4 max-w-[30rem] text-[11px] leading-[1.65] text-[#515154]">
-              <div className="flex items-start gap-2">
-                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#fff5e6] text-[#c2760c]">
-                  <AlertTriangle className="h-3 w-3" strokeWidth={2.5} />
-                </span>
-                <p>The audit found trigger conflicts, indistinguishable variants, scope and validation gaps, and unclear domain or granularity signals.</p>
-              </div>
-              <div className="mt-3 flex items-start gap-2">
-                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#eaf4ff] text-[#0071e3]">
-                  <FileText className="h-3 w-3" />
-                </span>
-                <p>A detailed Markdown report was generated with evidence and suggested description rewrites.</p>
-              </div>
+              <p>The audit found trigger conflicts, indistinguishable variants, scope and validation gaps, and unclear domain or granularity signals. A detailed Markdown report was generated with evidence and suggested description rewrites for review.</p>
 
               <button
                 type="button"
@@ -2575,38 +2564,35 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
             </p>
             <SkillEcosystemAuditPanel />
 
-            <div className="mt-12 grid gap-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] lg:items-start">
+            <div className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-start">
+              <SkillEvaluatorPanel onOpenDetail={setDetail} />
               <div>
                 <h3 className="text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">Turning Skill Evaluation into a Skill</h3>
                 <p className="mt-4 text-base leading-8 text-[#6e6e73]">
-                  The audit methodology was then packaged into a reusable evaluator Skill. It scans Skill descriptions, runs a five-dimension diagnosis, identifies trigger conflicts and functional gaps, and produces concrete description rewrites for review. What began as manual catalog inspection became a repeatable governance workflow for maintaining Skill quality at scale.
+                  The audit methodology was then turned into a reusable skill-evaluator for catalog-level quality checks. It can scan a local Skill directory or take a CSV as input, then evaluate descriptions across five dimensions: trigger conflicts, variant distinction, scope coverage, validation gaps, and domain or granularity signals. When an issue is found, the evaluator goes beyond flagging it. It compares the description with the underlying Skill where possible, then separates the problem into a description gap, capability gap, or workflow gap. It generates concrete rewrites for description-level issues and records the findings in a Markdown report with evidence, severity, and recommended fixes. The tool stops at recommendation rather than editing Skills automatically, keeping a human review step before any change enters the catalog.
                 </p>
               </div>
-              <SkillEvaluatorPanel onOpenDetail={setDetail} />
             </div>
           </AnimatedSection>
 
           <AnimatedSection>
             <SectionHeading
               number="04"
-              label="Designing the Knowledge Base"
-              title="Build the knowledge, make it intelligent, show how a writer experiences it."
-              description="This is the other thing I own in this project besides the Skill catalog. It breaks into three layers: the knowledge design that turns raw stories into queryable fields, the Agent routing that decides which retrieval channel a question actually needs, and the moment a writer sees it work inside a real request."
+              label="Designing the Knowledge Layer"
+              title="From a story archive to knowledge an agent can actually use."
+              description="Alibaba’s entertainment business had already built a library of 4,700+ high-quality film and TV works. Much of the knowledge inside those works was stored as long-form text, limiting how precisely the Agent could retrieve, compare, and reuse it."
             />
 
-            <div className="mt-8 flex items-baseline gap-2">
-              <span className="text-[13px] font-semibold text-[#0071e3]">01</span>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Knowledge Foundation</p>
-            </div>
-            <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">Building a domain-specific knowledge base for storytelling.</h3>
+            <p className="mt-4 max-w-2xl text-base leading-8 text-[#6e6e73]">
+              I focused on three layers: designing a domain-specific storytelling schema, building the retrieval strategy across different query types, and turning the resulting knowledge into a natural conversational experience for writers.
+            </p>
+
+            <h3 className="mt-8 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">Turning story content into structured knowledge.</h3>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-[#6e6e73]">
-              The library already held 4,700-plus works, and each one arrived as prose. A work was stored as a short record, title, type, genre tags, cover, and a synopsis under 300 characters, plus a map pointing each knowledge dimension to one complete text file on object storage. A single story overview ran 3,322 words, a character biography closer to 8,000, and one work could carry tens of thousands.
+              Alibaba’s entertainment business had already accumulated 4,700+ high-quality film and TV works. I designed a storytelling knowledge schema to turn that material into structured fields the Agent could retrieve directly.
             </p>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-[#6e6e73]">
-              The information was in there. It was just paragraphs. The passage describing this world&apos;s class ecology names a top tier, an inner power circle, and an outsider at the bottom, but as prose nothing can filter on it, rank it, or line it up against another work. Recommendation and precise citation both need fields, not the hope that the right words show up in a wall of text.
-            </p>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-[#6e6e73]">
-              So I designed the entity Schema below. Every work breaks into the same four dimensions, and every field is queryable on its own, comparable across works, and readable by the Agent without inference.
+              The schema organizes knowledge across characters, relationships, worldbuilding, and plot. Characters alone use 20+ fields covering motivation, psychology, backstory, and arc, while the other dimensions capture relationship evolution, world rules, and dramatic structure. This makes the corpus searchable, comparable, and reusable for downstream creative tasks.
             </p>
             <KnowledgeFoundationDetail />
 
