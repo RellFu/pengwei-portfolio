@@ -13,10 +13,10 @@ import {
   ChevronLeft,
   ChevronRight,
   Filter,
+  Home,
   LayoutGrid,
   ListFilter,
   Plus,
-  Search,
   Settings,
   Star,
   Users,
@@ -29,91 +29,87 @@ gsap.registerPlugin(useGSAP);
 
 // ----- Top nav (rendered as a horizontal tab strip below the dark project bar) -----
 const topNavTabs = [
-  { id: "board", label: "看板" },
-  { id: "metrics", label: "指标模型" },
-  { id: "dataQuery", label: "数据查询" },
-  { id: "userBehavior", label: "用户行为分析", hasMenu: true },
-  { id: "perf", label: "应用性能监测", hasMenu: true },
-  { id: "feedback", label: "用户反馈分析", hasMenu: true },
-  { id: "alert", label: "告警&订阅", hasMenu: true },
-  { id: "agent", label: "智能体分析", hasMenu: true },
-  { id: "semantic", label: "语义数据集" },
-  { id: "dataCenter", label: "数据中心", hasMenu: true },
-  { id: "settings", label: "项目设置", hasMenu: true },
+  { id: "board", label: "Dashboards" },
+  { id: "metrics", label: "Metrics" },
+  { id: "behavior", label: "Behavior" },
+  { id: "performance", label: "Performance" },
+  { id: "datasets", label: "Datasets" },
+  { id: "settings", label: "Settings" },
 ];
 
 // ----- Sidebar items -----
 const sidebarSections = [
   {
-    title: "看板列表",
+    title: "My Dashboards",
     items: [
-      { id: "userProfile", label: "用户画像" },
-      { id: "productAnalysis", label: "产品分析" },
+      { id: "overview", label: "Overview" },
+      { id: "userProfile", label: "User Profile" },
+      { id: "productAnalysis", label: "Product Analytics" },
     ],
   },
   {
-    title: "AEM AI 剧本分析",
+    title: "Alpha Segments",
     items: [
-      { id: "h5", label: "h5致源看板" },
-      { id: "writer", label: "制片用户看板" },
-      { id: "screenwriter", label: "编剧用户看板" },
-      { id: "planner", label: "策划用户看板" },
-      { id: "director", label: "导演用户看板" },
-      { id: "other", label: "其他用户看板" },
-      { id: "spring", label: "春苗用户" },
-      { id: "compare", label: "用户对比" },
-      { id: "chat", label: "聊一幕" },
-      { id: "tool", label: "小工具" },
+      { id: "h5", label: "H5 Attribution" },
+      { id: "writer", label: "Producer Users" },
+      { id: "screenwriter", label: "Screenwriter Users" },
+      { id: "planner", label: "Planner Users" },
+      { id: "director", label: "Director Users" },
+      { id: "other", label: "Other Users" },
+      { id: "spring", label: "New Users" },
+      { id: "compare", label: "User Comparison" },
+      { id: "chat", label: "Quick Chat" },
+      { id: "tool", label: "Mini Tools" },
     ],
   },
   {
-    title: "细分行为统计",
+    title: "Segment Analytics",
     items: [
-      { id: "translate", label: "翻译-用户行为数据统计" },
-      { id: "anime", label: "动漫-用户行为数据统计" },
-      { id: "headNeck", label: "头颈编剧-用户数据统计" },
-      { id: "hainateam", label: "海纳编剧团队-使用统计" },
-      { id: "manga", label: "漫画-用户行为统计" },
-      { id: "kids", label: "少儿-用户行为数据统计" },
-      { id: "funcUser", label: "功能应用" },
-      { id: "userCompare", label: "用户对比-剧本尝试" },
-      { id: "internal", label: "剧集-内部用户行为数据统计" },
+      { id: "translate", label: "Translation: User Behavior" },
+      { id: "anime", label: "Anime: User Behavior" },
+      { id: "headNeck", label: "Lead Writers: User Data" },
+      { id: "hainateam", label: "Partner Writer Team: Usage" },
+      { id: "manga", label: "Comics: User Behavior" },
+      { id: "kids", label: "Kids: User Behavior" },
+      { id: "funcUser", label: "Feature Usage" },
+      { id: "userCompare", label: "User Comparison: Script Trials" },
+      { id: "internal", label: "Series: Internal User Behavior" },
     ],
   },
 ];
 
-// ----- Overview (default 看板) -----
+// ----- Overview (default dashboard) -----
 const overviewCards = {
   traffic: [
     {
-      title: "页面访问人数",
+      title: "Page Visitors",
       value: "18,640",
-      unit: "人",
+      unit: "users",
       dow: "-9.27%",
       dod: "-19.48%",
       isUp: false,
       series: [44, 58, 49, 72, 63, 80, 71, 88, 79, 96, 84, 100],
     },
     {
-      title: "页面访问次数",
+      title: "Page Views",
       value: "351,200",
-      unit: "次",
+      unit: "views",
       dow: "-31.74%",
       dod: "1.39%",
       isUp: true,
       series: [38, 52, 41, 66, 60, 76, 69, 82, 74, 90, 87, 96],
     },
     {
-      title: "页面访问人数均次数",
+      title: "Views per Visitor",
       value: "1.9",
-      unit: "次",
+      unit: "views",
       dow: "-24.77%",
       dod: "25.91%",
       isUp: true,
       series: [62, 78, 71, 88, 81, 96, 84, 100, 92, 96, 88, 94],
     },
     {
-      title: "停留时长平均值_按PV",
+      title: "Avg Session Time (per View)",
       value: "00:23:25",
       unit: "",
       dow: "13.51%",
@@ -124,7 +120,7 @@ const overviewCards = {
   ],
   stability: [
     {
-      title: "脚本异常率_按人",
+      title: "Client Error Rate (per User)",
       value: "82.9412",
       unit: "%",
       dow: "5.17%",
@@ -133,7 +129,7 @@ const overviewCards = {
       series: [44, 60, 51, 76, 68, 84, 76, 92, 84, 96, 88, 100],
     },
     {
-      title: "接口异常率_按次",
+      title: "API Error Rate (per Call)",
       value: "2.1523",
       unit: "%",
       dow: "-54.01%",
@@ -144,7 +140,7 @@ const overviewCards = {
   ],
   conversion: [
     {
-      title: "[不推荐] onLoad 秒开率",
+      title: "[Deprecated] Fast-Load Rate (onLoad)",
       value: "71.28",
       unit: "%",
       dow: "1.90%",
@@ -153,7 +149,7 @@ const overviewCards = {
       series: [56, 68, 60, 78, 70, 88, 80, 92, 86, 96, 88, 100],
     },
     {
-      title: "卡顿率_按人",
+      title: "Lag Rate (per User)",
       value: "0.0",
       unit: "%",
       dow: "0.00%",
@@ -167,23 +163,23 @@ const overviewCards = {
     { name: "BU-B", value: 24 },
     { name: "BU-C", value: 18 },
     { name: "BU-D", value: 12 },
-    { name: "其他", value: 8 },
+    { name: "Other", value: 8 },
   ],
   roleDist: [
-    { name: "制片", value: 32 },
-    { name: "编剧", value: 28 },
-    { name: "策划", value: 18 },
-    { name: "导演", value: 14 },
-    { name: "其他", value: 8 },
+    { name: "Producer", value: 32 },
+    { name: "Screenwriter", value: 28 },
+    { name: "Planner", value: 18 },
+    { name: "Director", value: 14 },
+    { name: "Other", value: 8 },
   ],
 };
 
-// ----- User profile (用户画像) -----
+// ----- User profile -----
 const userProfileKpis = [
-  { title: "页面访问人数", value: "18,640", unit: "人", date: "2026-06-05" },
-  { title: "页面访问次数", value: "351,200", unit: "次", date: "2026-06-05" },
-  { title: "新用户数", value: "1,240", unit: "人", date: "2026-06-05" },
-  { title: "站点活跃停留时长_平均值", value: "01:10:19", unit: "", date: "2026-06-05" },
+  { title: "Page Visitors", value: "18,640", unit: "users", date: "2026-06-05" },
+  { title: "Page Views", value: "351,200", unit: "views", date: "2026-06-05" },
+  { title: "New Users", value: "1,240", unit: "users", date: "2026-06-05" },
+  { title: "Avg Active Session Time", value: "01:10:19", unit: "", date: "2026-06-05" },
 ] as const;
 
 // Two-series daily traffic trend (12 data points, dates on x-axis)
@@ -211,7 +207,7 @@ const pageRankings = [
 // Each row is the 24-hour access intensity for that day (00:00 to 23:00)
 // Values 0-1, mapped to rgba(0,113,227, 0.05..1) blue intensity
 const heatmapData = [
-  // 00:00 — all days are quiet overnight
+  // 00:00 - all days are quiet overnight
   [0.04, 0.03, 0.04, 0.05, 0.04, 0.03, 0.02, 0.03],
   // 01:00
   [0.03, 0.02, 0.03, 0.04, 0.03, 0.02, 0.02, 0.02],
@@ -275,23 +271,23 @@ const eventRankings = [
 ] as const;
 
 const retentionRows = [
-  { date: "周五 05-29", users: 205, d1: "21.95%", d2: "55.61%", d3: "60.49%", d4: "52.20%", d5: "53.17%", d6: "43.41%" },
-  { date: "周六 05-30", users: 67, d1: "50.75%", d2: "49.25%", d3: "56.72%", d4: "49.25%", d5: "58.21%", d6: "40.30%" },
-  { date: "周日 05-31", users: 75, d1: "57.33%", d2: "54.67%", d3: "56.00%", d4: "52.00%", d5: "44.00%", d6: "" },
-  { date: "周一 06-01", users: 235, d1: "56.60%", d2: "62.34%", d3: "52.77%", d4: "44.26%", d5: "", d6: "" },
-  { date: "周二 06-02", users: 214, d1: "58.88%", d2: "58.41%", d3: "47.20%", d4: "", d5: "", d6: "" },
-  { date: "周三 06-03", users: 208, d1: "62.98%", d2: "47.12%", d3: "", d4: "", d5: "", d6: "" },
-  { date: "周四 06-04", users: 231, d1: "49.35%", d2: "", d3: "", d4: "", d5: "", d6: "" },
+  { date: "Fri 05-29", users: 205, d1: "21.95%", d2: "55.61%", d3: "60.49%", d4: "52.20%", d5: "53.17%", d6: "43.41%" },
+  { date: "Sat 05-30", users: 67, d1: "50.75%", d2: "49.25%", d3: "56.72%", d4: "49.25%", d5: "58.21%", d6: "40.30%" },
+  { date: "Sun 05-31", users: 75, d1: "57.33%", d2: "54.67%", d3: "56.00%", d4: "52.00%", d5: "44.00%", d6: "" },
+  { date: "Mon 06-01", users: 235, d1: "56.60%", d2: "62.34%", d3: "52.77%", d4: "44.26%", d5: "", d6: "" },
+  { date: "Tue 06-02", users: 214, d1: "58.88%", d2: "58.41%", d3: "47.20%", d4: "", d5: "", d6: "" },
+  { date: "Wed 06-03", users: 208, d1: "62.98%", d2: "47.12%", d3: "", d4: "", d5: "", d6: "" },
+  { date: "Thu 06-04", users: 231, d1: "49.35%", d2: "", d3: "", d4: "", d5: "", d6: "" },
 ];
 
-const retentionHead = ["日期", "用户数", "次日", "第二日", "第三日", "第四日", "第五日", "第六日", "第七日"];
+const retentionHead = ["Date", "Users", "Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"];
 
-// ----- Product analysis (产品分析) -----
+// ----- Product analysis -----
 const productKpis = [
-  { title: "当日 DAU", value: "4,512", unit: "人", change: "32.84%", isUp: true },
-  { title: "当日 TS", value: "00:45:05", unit: "", change: "", isUp: true },
-  { title: "累计活跃人数", value: "63,512", unit: "人", change: "44.35%", isUp: true },
-  { title: "累计人均 TS", value: "11:54:04", unit: "", change: "47.30%", isUp: true },
+  { title: "Today's DAU", value: "4,512", unit: "users", change: "32.84%", isUp: true },
+  { title: "Today's Session Time", value: "00:45:05", unit: "", change: "", isUp: true },
+  { title: "Cumulative Active Users", value: "63,512", unit: "users", change: "44.35%", isUp: true },
+  { title: "Cumulative Avg Session Time", value: "11:54:04", unit: "", change: "47.30%", isUp: true },
 ];
 
 // Daily DAU line chart (single series, multi-day)
@@ -300,96 +296,96 @@ const dailyAvgTs = [4680, 4521, 4426, 4603, 4500, 4418, 4312, 4335, 4485, 4617, 
 
 // Per-product module data
 const moduleDau = [
-  { name: "写一写", values: [195, 298, 256, 240, 209, 173, 169, 35, 32, 26, 33, 21] },
-  { name: "创建盒子", values: [142, 156, 132, 156, 158, 168, 161, 174, 158, 156, 168, 162] },
+  { name: "Quick Write", values: [195, 298, 256, 240, 209, 173, 169, 35, 32, 26, 33, 21] },
+  { name: "New Project", values: [142, 156, 132, 156, 158, 168, 161, 174, 158, 156, 168, 162] },
 ];
 const moduleAvgTs = [
-  { name: "写一写", values: [4580, 4410, 4526, 4615, 4618, 4617, 4518, 4426, 4518, 4518, 4611, 4612] },
-  { name: "创建盒子", values: [9615, 9628, 9815, 9835, 9734, 9815, 9618, 9620, 9718, 9715, 9618, 9611] },
+  { name: "Quick Write", values: [4580, 4410, 4526, 4615, 4618, 4617, 4518, 4426, 4518, 4518, 4611, 4612] },
+  { name: "New Project", values: [9615, 9628, 9815, 9835, 9734, 9815, 9618, 9620, 9718, 9715, 9618, 9611] },
 ];
 
 const productTables = {
   writewrite: {
-    title: "写一写",
+    title: "Quick Write",
     pageId: "project_...",
-    headers: ["#", "日期", "点击曝光事件触发数_人数", "活跃停留时长平均值_按人", "活跃停留时长长住_按人"],
+    headers: ["#", "Date", "Click/Impression Triggers (users)", "Avg Active Session Time (per User)", "Cumulative Active Time (per User)"],
     rows: [
-      { date: "05-31 周日", users: "31 人", avg: "02:46:57", long: "804:13:33" },
-      { date: "06-01 周一", users: "78 人", avg: "01:29:19", long: "110:10:17" },
-      { date: "06-02 周二", users: "73 人", avg: "01:44:22", long: "120:01:53" },
-      { date: "06-03 周三", users: "73 人", avg: "01:23:24", long: "93:08:26" },
-      { date: "06-04 周四", users: "65 人", avg: "01:43:28", long: "106:55:53" },
-      { date: "06-05 周五", users: "61 人", avg: "01:26:07", long: "83:14:52" },
-      { date: "06-06 周六", users: "38 人", avg: "01:00:01", long: "15:00:24" },
+      { date: "Sun 05-31", users: "31 users", avg: "02:46:57", long: "804:13:33" },
+      { date: "Mon 06-01", users: "78 users", avg: "01:29:19", long: "110:10:17" },
+      { date: "Tue 06-02", users: "73 users", avg: "01:44:22", long: "120:01:53" },
+      { date: "Wed 06-03", users: "73 users", avg: "01:23:24", long: "93:08:26" },
+      { date: "Thu 06-04", users: "65 users", avg: "01:43:28", long: "106:55:53" },
+      { date: "Fri 06-05", users: "61 users", avg: "01:26:07", long: "83:14:52" },
+      { date: "Sat 06-06", users: "38 users", avg: "01:00:01", long: "15:00:24" },
     ],
   },
   createbox: {
-    title: "创建盒子",
+    title: "New Project",
     pageId: "creation_...",
-    headers: ["#", "日期", "点击曝光事件触发数_人数", "活跃停留时长平均值_按人", "活跃停留时长长住_按人"],
+    headers: ["#", "Date", "Click/Impression Triggers (users)", "Avg Active Session Time (per User)", "Cumulative Active Time (per User)"],
     rows: [
-      { date: "06-01 周一", users: "7 人", avg: "00:01:22", long: "00:05:15" },
-      { date: "06-02 周二", users: "3 人", avg: "00:05:59", long: "00:11:59" },
-      { date: "06-03 周三", users: "3 人", avg: "00:07:13", long: "00:21:41" },
-      { date: "06-04 周四", users: "10 人", avg: "00:08:16", long: "01:06:14" },
-      { date: "06-05 周五", users: "9 人", avg: "00:04:01", long: "00:32:11" },
+      { date: "Mon 06-01", users: "7 users", avg: "00:01:22", long: "00:05:15" },
+      { date: "Tue 06-02", users: "3 users", avg: "00:05:59", long: "00:11:59" },
+      { date: "Wed 06-03", users: "3 users", avg: "00:07:13", long: "00:21:41" },
+      { date: "Thu 06-04", users: "10 users", avg: "00:08:16", long: "01:06:14" },
+      { date: "Fri 06-05", users: "9 users", avg: "00:04:01", long: "00:32:11" },
     ],
   },
   knowledge: {
-    title: "知识库",
+    title: "Knowledge Base",
     pageId: "kb_...",
-    headers: ["#", "日期", "点击曝光事件触发数_人数", "活跃停留时长平均值_按人"],
+    headers: ["#", "Date", "Click/Impression Triggers (users)", "Avg Active Session Time (per User)"],
     rows: [
-      { date: "10-20 周一", users: "15 人", avg: "00:25:14" },
-      { date: "10-21 周二", users: "30 人", avg: "00:14:56" },
-      { date: "10-22 周三", users: "22 人", avg: "00:13:34" },
-      { date: "10-23 周四", users: "22 人", avg: "00:13:29" },
-      { date: "10-24 周五", users: "16 人", avg: "00:16:31" },
-      { date: "10-25 周六", users: "2 人", avg: "00:13:33" },
-      { date: "10-27 周一", users: "20 人", avg: "00:18:49" },
+      { date: "Mon 10-20", users: "15 users", avg: "00:25:14" },
+      { date: "Tue 10-21", users: "30 users", avg: "00:14:56" },
+      { date: "Wed 10-22", users: "22 users", avg: "00:13:34" },
+      { date: "Thu 10-23", users: "22 users", avg: "00:13:29" },
+      { date: "Fri 10-24", users: "16 users", avg: "00:16:31" },
+      { date: "Sat 10-25", users: "2 users", avg: "00:13:33" },
+      { date: "Mon 10-27", users: "20 users", avg: "00:18:49" },
     ],
   },
   evaluate: {
-    title: "评效",
+    title: "Performance Review",
     pageId: "review_...",
-    headers: ["#", "日期", "点击曝光事件触发数_人数", "活跃停留时长平均值_按人"],
+    headers: ["#", "Date", "Click/Impression Triggers (users)", "Avg Active Session Time (per User)"],
     rows: [
-      { date: "05-31 周日", users: "24 人", avg: "02:32:10" },
-      { date: "06-01 周一", users: "54 人", avg: "01:15:57" },
-      { date: "06-02 周二", users: "57 人", avg: "01:14:51" },
-      { date: "06-03 周三", users: "49 人", avg: "01:30:36" },
-      { date: "06-04 周四", users: "50 人", avg: "01:40:37" },
-      { date: "06-05 周五", users: "42 人", avg: "01:46:54" },
-      { date: "06-06 周六", users: "10 人", avg: "01:08:37" },
+      { date: "Sun 05-31", users: "24 users", avg: "02:32:10" },
+      { date: "Mon 06-01", users: "54 users", avg: "01:15:57" },
+      { date: "Tue 06-02", users: "57 users", avg: "01:14:51" },
+      { date: "Wed 06-03", users: "49 users", avg: "01:30:36" },
+      { date: "Thu 06-04", users: "50 users", avg: "01:40:37" },
+      { date: "Fri 06-05", users: "42 users", avg: "01:46:54" },
+      { date: "Sat 06-06", users: "10 users", avg: "01:08:37" },
     ],
   },
   minitool: {
-    title: "小工具",
+    title: "Mini Tools",
     pageId: "tool_...",
-    headers: ["#", "日期", "点击曝光事件触发数_人数", "活跃停留时长平均值_按人"],
+    headers: ["#", "Date", "Click/Impression Triggers (users)", "Avg Active Session Time (per User)"],
     rows: [
-      { date: "05-31 周日", users: "26 人", avg: "01:18:01" },
-      { date: "06-01 周一", users: "17 人", avg: "00:58:26" },
-      { date: "06-02 周二", users: "15 人", avg: "00:49:21" },
-      { date: "06-03 周三", users: "15 人", avg: "00:42:18" },
-      { date: "06-04 周四", users: "24 人", avg: "01:08:13" },
-      { date: "06-05 周五", users: "13 人", avg: "00:38:14" },
+      { date: "Sun 05-31", users: "26 users", avg: "01:18:01" },
+      { date: "Mon 06-01", users: "17 users", avg: "00:58:26" },
+      { date: "Tue 06-02", users: "15 users", avg: "00:49:21" },
+      { date: "Wed 06-03", users: "15 users", avg: "00:42:18" },
+      { date: "Thu 06-04", users: "24 users", avg: "01:08:13" },
+      { date: "Fri 06-05", users: "13 users", avg: "00:38:14" },
     ],
   },
 };
 
 // Per-user ranking table
 const userRankings = [
-  { name: "周一心", time: "04:42:13" },
-  { name: "修博文", time: "03:13:21" },
-  { name: "刘强军", time: "02:19:42" },
-  { name: "高英", time: "01:44:08" },
-  { name: "宋家", time: "01:36:07" },
-  { name: "方文豪", time: "01:33:37" },
-  { name: "刘宇航", time: "01:32:58" },
-  { name: "胡蝶", time: "01:20:48" },
-  { name: "李清莲", time: "01:15:11" },
-  { name: "陈浩威", time: "01:09:41" },
+  { name: "Alex Chen", time: "04:42:13" },
+  { name: "Morgan Reed", time: "03:13:21" },
+  { name: "Jordan Liu", time: "02:19:42" },
+  { name: "Taylor Gao", time: "01:44:08" },
+  { name: "Casey Song", time: "01:36:07" },
+  { name: "Avery Fang", time: "01:33:37" },
+  { name: "Drew Liu", time: "01:32:58" },
+  { name: "Skylar Hu", time: "01:20:48" },
+  { name: "Jamie Li", time: "01:15:11" },
+  { name: "Hayden Chen", time: "01:09:41" },
 ] as const;
 
 // Retention analysis heatmap (different shape)
@@ -401,14 +397,14 @@ const retentionAnalysisData = [
   [0.48, 0.12, 0.05, 0.01, 0.005, 0, 0],
   [0.12, 0.05, 0.02, 0.005, 0, 0, 0],
 ];
-const retentionAnalysisHead = ["日期", "用户数", "次日", "第二日", "第三日", "第四日", "第五日", "第六日", "第七日"];
+const retentionAnalysisHead = ["Date", "Users", "Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"];
 const retentionAnalysisRows = [
-  { date: "周五 05-31", users: "72" },
-  { date: "周一 06-01", users: "205" },
-  { date: "周二 06-02", users: "183" },
-  { date: "周三 06-03", users: "178" },
-  { date: "周四 06-04", users: "203" },
-  { date: "周五 06-05", users: "163" },
+  { date: "Fri 05-31", users: "72" },
+  { date: "Mon 06-01", users: "205" },
+  { date: "Tue 06-02", users: "183" },
+  { date: "Wed 06-03", users: "178" },
+  { date: "Thu 06-04", users: "203" },
+  { date: "Fri 06-05", users: "163" },
 ];
 
 // ----- Helpers -----
@@ -640,7 +636,7 @@ function Donut({ data, total }: { data: { name: string; value: number }[]; total
           transform={`rotate(-90 ${cx} ${cy})`}
         />
       ))}
-      <text x={cx} y={cy - 2} textAnchor="middle" fontSize="10" fill="#86868b">用户</text>
+      <text x={cx} y={cy - 2} textAnchor="middle" fontSize="10" fill="#86868b">Users</text>
       <text x={cx} y={cy + 10} textAnchor="middle" fontSize="12" fontWeight="600" fill="#1d1d1f">{total}</text>
     </svg>
   );
@@ -675,7 +671,7 @@ function StatCard({
         <div className="flex shrink-0 items-center gap-1 text-[#a8b0bd]">
           <Star className="h-3 w-3" />
           <ChevronDown className="h-3 w-3" />
-          <span className="text-[10px]">…</span>
+          <span className="text-[10px]">&hellip;</span>
         </div>
       </div>
       <p className="mt-3 text-2xl font-semibold tabular-nums tracking-[-0.04em] text-[#1d1d1f]">
@@ -689,9 +685,9 @@ function StatCard({
         />
       </div>
       <div className="mt-2 flex items-center gap-3 text-[10px]">
-        <span className="text-[#86868b]">同比上周</span>
+        <span className="text-[#86868b]">vs Last Week</span>
         <span className={isUp ? "font-semibold text-[#207a4b]" : "font-semibold text-[#b3251f]"}>{dow}</span>
-        <span className="text-[#86868b]">环比昨日</span>
+        <span className="text-[#86868b]">vs Yesterday</span>
         <span className={isUp ? "font-semibold text-[#207a4b]" : "font-semibold text-[#b3251f]"}>{dod}</span>
       </div>
     </div>
@@ -709,7 +705,7 @@ function SectionCard({ title, icon: Icon, children, action }: { title: string; i
         <div className="flex items-center gap-1.5 text-[#a8b0bd]">
           <Star className="h-3 w-3" />
           <ChevronDown className="h-3 w-3" />
-          <span className="text-[10px]">…</span>
+          <span className="text-[10px]">&hellip;</span>
           {action}
         </div>
       </div>
@@ -740,14 +736,14 @@ function OverviewView() {
         ))}
       </div>
       <div className="grid gap-4 lg:grid-cols-[1fr_1fr]">
-        <SectionCard title="稳定性" icon={BarChart3}>
+        <SectionCard title="Stability" icon={BarChart3}>
           <div className="grid gap-3 sm:grid-cols-2">
             {overviewCards.stability.map((c) => (
               <StatCard key={c.title} {...c} />
             ))}
           </div>
         </SectionCard>
-        <SectionCard title="流转性" icon={ListFilter}>
+        <SectionCard title="Conversion" icon={ListFilter}>
           <div className="grid gap-3 sm:grid-cols-2">
             {overviewCards.conversion.map((c) => (
               <StatCard key={c.title} {...c} />
@@ -756,7 +752,7 @@ function OverviewView() {
         </SectionCard>
       </div>
       <div className="grid gap-4 lg:grid-cols-2">
-        <SectionCard title="BU 分布" icon={LayoutGrid}>
+        <SectionCard title="BU Distribution" icon={LayoutGrid}>
           <div className="flex items-center gap-4">
             <Donut data={[...overviewCards.buDist]} total={100} />
             <div className="flex-1 space-y-1.5">
@@ -770,7 +766,7 @@ function OverviewView() {
             </div>
           </div>
         </SectionCard>
-        <SectionCard title="职务分布" icon={Users}>
+        <SectionCard title="Role Distribution" icon={Users}>
           <div className="flex items-center gap-4">
             <Donut data={[...overviewCards.roleDist]} total={100} />
             <div className="flex-1 space-y-1.5">
@@ -804,7 +800,7 @@ function UserProfileView() {
               <div className="flex shrink-0 items-center gap-1 text-[#a8b0bd]">
                 <Star className="h-3 w-3" />
                 <ChevronDown className="h-3 w-3" />
-                <span className="text-[10px]">…</span>
+                <span className="text-[10px]">&hellip;</span>
               </div>
             </div>
             <p className="mt-3 text-2xl font-semibold tabular-nums tracking-[-0.04em] text-[#1d1d1f]">
@@ -816,11 +812,11 @@ function UserProfileView() {
       </div>
 
       <div data-board-item className="rounded-xl border border-black/8 bg-white">
-        <CardHeader title="流量趋势" date="2026-06-05" />
+        <CardHeader title="Traffic Trend" date="2026-06-05" />
         <div className="p-4">
           <div className="flex items-center gap-4 text-[10px] text-[#515154]">
-            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#0071e3]" /> 页面访问人数</span>
-            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#34c759]" /> 页面访问次数</span>
+            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#0071e3]" /> Page Visitors</span>
+            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#34c759]" /> Page Views</span>
           </div>
           <div className="mt-3">
             <MultiLineChart
@@ -836,7 +832,7 @@ function UserProfileView() {
 
       <div className="grid gap-4 lg:grid-cols-[1fr_1.2fr_1fr]">
         <div data-board-item className="rounded-xl border border-black/8 bg-white">
-          <CardHeader title="页面访问 TOP10" />
+          <CardHeader title="Top 10 Pages" />
           <div className="px-4 pb-4">
             {pageRankings.map((row) => (
               <div key={row.page} className="flex items-center gap-2 border-b border-black/[0.04] py-2 last:border-b-0">
@@ -848,30 +844,30 @@ function UserProfileView() {
                   <p className="text-[10px] font-semibold tabular-nums text-[#1d1d1f]">{row.pv} <span className="font-normal text-[#86868b]">pv</span></p>
                   <p className="text-[9px] tabular-nums text-[#86868b]">{row.uv} <span className="text-[#b0b0b5]">uv</span></p>
                 </div>
-                <span className={`shrink-0 text-[10px] ${row.isUp ? "text-[#207a4b]" : "text-[#b3251f]"}`}>{row.isUp ? "↑" : "↓"}</span>
+                <span className={`shrink-0 text-[10px] ${row.isUp ? "text-[#207a4b]" : "text-[#b3251f]"}`}>{row.isUp ? "\u2191" : "\u2193"}</span>
               </div>
             ))}
           </div>
         </div>
 
         <div data-board-item className="rounded-xl border border-black/8 bg-white">
-          <CardHeader title="访问分时统计" badge="不包含默认值" />
+          <CardHeader title="Hourly Traffic" badge="Excludes Defaults" />
           <div className="p-4">
             <HeatmapGrid rows={heatmapHours} cols={heatmapDays} data={heatmapData} />
             <div className="mt-3 flex items-center justify-end gap-1.5 text-[9px] text-[#86868b]">
-              <span>1-1</span>
+              <span>Low</span>
               <span className="h-2 w-3" style={{ background: "rgba(0,113,227,0.1)" }} />
               <span className="h-2 w-3" style={{ background: "rgba(0,113,227,0.35)" }} />
               <span className="h-2 w-3" style={{ background: "rgba(0,113,227,0.6)" }} />
               <span className="h-2 w-3" style={{ background: "rgba(0,113,227,0.85)" }} />
               <span className="h-2 w-3" style={{ background: "rgba(0,113,227,1)" }} />
-              <span>4-NaN</span>
+              <span>High</span>
             </div>
           </div>
         </div>
 
         <div data-board-item className="rounded-xl border border-black/8 bg-white">
-          <CardHeader title="核心事件排行 TOP10" />
+          <CardHeader title="Top 10 Events" />
           <div className="px-4 pb-4">
             {eventRankings.map((row) => (
               <div key={row.rank} className="border-b border-black/[0.04] py-2 last:border-b-0">
@@ -882,12 +878,12 @@ function UserProfileView() {
                     <p className="mt-0.5 truncate text-[9px] text-[#86868b]">{row.page}</p>
                   </div>
                   <div className="shrink-0 text-right">
-                    <p className="text-[9px] leading-4 text-[#86868b]">自定义事件触发次数_次数</p>
+                    <p className="text-[9px] leading-4 text-[#86868b]">Custom Event Triggers (count)</p>
                     <p className="text-[11px] font-semibold tabular-nums text-[#1d1d1f] underline decoration-[#86868b]/40 decoration-dotted underline-offset-2">{row.trigger}</p>
                   </div>
                 </div>
                 <div className="mt-1 flex items-baseline justify-end gap-1">
-                  <span className="text-[9px] text-[#86868b]">自定义事件触发数_人数</span>
+                  <span className="text-[9px] text-[#86868b]">Custom Event Triggers (users)</span>
                   <span className="text-[10px] font-semibold tabular-nums text-[#1d1d1f]">{row.users}</span>
                 </div>
               </div>
@@ -898,21 +894,21 @@ function UserProfileView() {
 
       <div className="grid gap-4 lg:grid-cols-[1.1fr_1fr]">
         <div data-board-item className="rounded-xl border border-black/8 bg-white">
-          <CardHeader title="访客地图" />
+          <CardHeader title="Visitor Map" />
           <div className="px-4 pb-4">
             <MiniChinaMap />
             <div className="mt-3 grid grid-cols-3 gap-2 text-[9px] text-[#515154]">
-              <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#0071e3]/20" /> 1-1</span>
-              <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#0071e3]/45" /> 1-1.4</span>
-              <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#0071e3]/70" /> 1-1.4</span>
-              <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#0071e3]" /> 1-1.4</span>
-              <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#0071e3]" /> 4-NaN</span>
+              <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#0071e3]/20" /> Low</span>
+              <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#0071e3]/45" /> Low-mid</span>
+              <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#0071e3]/70" /> Mid</span>
+              <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#0071e3]" /> Mid-high</span>
+              <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#0071e3]" /> High</span>
             </div>
           </div>
         </div>
 
         <div data-board-item className="rounded-xl border border-black/8 bg-white">
-          <CardHeader title="留存率" />
+          <CardHeader title="Retention" />
           <div className="overflow-x-auto px-4 pb-4">
             <table className="w-full min-w-[36rem] text-left">
               <thead>
@@ -975,7 +971,7 @@ function ProductAnalysisView() {
             </p>
             {k.change && (
               <div className="mt-2 flex items-center gap-2 text-[10px]">
-                <span className="text-[#86868b]">同比上周</span>
+                <span className="text-[#86868b]">vs Last Week</span>
                 <span className={k.isUp ? "font-semibold text-[#207a4b]" : "font-semibold text-[#b3251f]"}>{k.change}</span>
               </div>
             )}
@@ -985,10 +981,10 @@ function ProductAnalysisView() {
 
       <div className="grid gap-4 lg:grid-cols-2">
         <div data-board-item className="rounded-xl border border-black/8 bg-white">
-          <CardHeader title="每日 DAU" date="2026-06-06" />
+          <CardHeader title="Daily DAU" date="2026-06-06" />
           <div className="px-4 pb-4">
             <div className="flex items-center gap-3 text-[10px] text-[#515154]">
-              <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#0071e3]" /> 点击曝光事件触发人数</span>
+              <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#0071e3]" /> Click/Impression Triggers (users)</span>
             </div>
             <div className="mt-3">
               <MultiLineChart dates={["05-24", "05-25", "05-26", "05-27", "05-28", "05-29", "05-30", "05-31", "06-01", "06-02", "06-03", "06-04", "06-05", "06-06"]} series={[{ name: "DAU", values: dailyDau, color: "#0071e3" }]} />
@@ -996,10 +992,10 @@ function ProductAnalysisView() {
           </div>
         </div>
         <div data-board-item className="rounded-xl border border-black/8 bg-white">
-          <CardHeader title="日人均停留时长" date="2026-06-06" />
+          <CardHeader title="Avg Daily Session Time" date="2026-06-06" />
           <div className="px-4 pb-4">
             <div className="flex items-center gap-3 text-[10px] text-[#515154]">
-              <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#0071e3]" /> 活跃停留时长平均值_按人</span>
+              <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#0071e3]" /> Avg Active Session Time (per User)</span>
             </div>
             <div className="mt-3">
               <MultiLineChart dates={["05-24", "05-25", "05-26", "05-27", "05-28", "05-29", "05-30", "05-31", "06-01", "06-02", "06-03", "06-04", "06-05", "06-06"]} series={[{ name: "TS", values: dailyAvgTs, color: "#0071e3" }]} />
@@ -1010,9 +1006,9 @@ function ProductAnalysisView() {
 
       <div data-board-item className="rounded-xl border border-black/8 bg-white">
         <div className="flex items-center justify-between border-b border-black/8 px-4 py-2.5">
-          <p className="text-[11px] font-semibold text-[#1d1d1f]">产品模块（单天）</p>
+          <p className="text-[11px] font-semibold text-[#1d1d1f]">Product Modules (Single Day)</p>
           <div className="flex items-center gap-3 text-[10px] text-[#515154]">
-            <span className="rounded border border-black/8 bg-white px-2 py-1">页面 ID: project_...</span>
+            <span className="rounded border border-black/8 bg-white px-2 py-1">Page ID: project_...</span>
             <ChevronDown className="h-3 w-3 text-[#b0b0b5]" />
           </div>
         </div>
@@ -1021,7 +1017,7 @@ function ProductAnalysisView() {
             <div key={`dau-${m.name}`} className="rounded-lg border border-black/8 bg-[#fbfbfc]">
               <div className="flex items-center justify-between border-b border-black/[0.05] px-3 py-2">
                 <p className="text-[11px] font-semibold text-[#1d1d1f]">{m.name} DAU</p>
-                <span className="text-[9px] text-[#86868b]">点击曝光事件触发人数</span>
+                <span className="text-[9px] text-[#86868b]">Click/Impression Triggers (users)</span>
               </div>
               <div className="px-3 py-3">
                 <MultiLineChart dates={["05-24", "05-25", "05-26", "05-27", "05-28", "05-29", "05-30", "05-31", "06-01", "06-02", "06-03", "06-04"]} series={[{ name: m.name, values: m.values, color: "#0071e3" }]} />
@@ -1031,8 +1027,8 @@ function ProductAnalysisView() {
           {moduleAvgTs.map((m) => (
             <div key={`ts-${m.name}`} className="rounded-lg border border-black/8 bg-[#fbfbfc]">
               <div className="flex items-center justify-between border-b border-black/[0.05] px-3 py-2">
-                <p className="text-[11px] font-semibold text-[#1d1d1f]">{m.name} 人均停留时长</p>
-                <span className="text-[9px] text-[#86868b]">活跃停留时长平均值_按人</span>
+                <p className="text-[11px] font-semibold text-[#1d1d1f]">{m.name} Avg Session Time</p>
+                <span className="text-[9px] text-[#86868b]">Avg Active Session Time (per User)</span>
               </div>
               <div className="px-3 py-3">
                 <MultiLineChart dates={["05-24", "05-25", "05-26", "05-27", "05-28", "05-29", "05-30", "05-31", "06-01", "06-02", "06-03", "06-04"]} series={[{ name: m.name, values: m.values, color: "#0071e3" }]} />
@@ -1052,10 +1048,10 @@ function ProductAnalysisView() {
 
       <div className="grid gap-4 lg:grid-cols-2">
         <div data-board-item className="rounded-xl border border-black/8 bg-white">
-          <CardHeader title="小工具日人均停留时长" />
+          <CardHeader title="Mini Tools Avg Daily Session Time" />
           <div className="px-4 pb-3">
             <div className="flex items-center gap-3 text-[10px] text-[#515154]">
-              <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#0071e3]" /> 活跃停留时长平均值_按人</span>
+              <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#0071e3]" /> Avg Active Session Time (per User)</span>
             </div>
             <div className="mt-3">
               <MultiLineChart dates={["05-25", "05-26", "05-27", "05-28", "05-29", "05-30", "05-31", "06-01", "06-02", "06-03", "06-04", "06-05", "06-06"]} series={[{ name: "ts", values: [4380, 4426, 4515, 4618, 4617, 4526, 4438, 4518, 4426, 4526, 4518, 4526, 4426], color: "#0071e3" }]} />
@@ -1063,10 +1059,10 @@ function ProductAnalysisView() {
           </div>
         </div>
         <div data-board-item className="rounded-xl border border-black/8 bg-white">
-          <CardHeader title="小工具 DAU" />
+          <CardHeader title="Mini Tools DAU" />
           <div className="px-4 pb-3">
             <div className="flex items-center gap-3 text-[10px] text-[#515154]">
-              <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#0071e3]" /> 点击曝光事件触发人数</span>
+              <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#0071e3]" /> Click/Impression Triggers (users)</span>
             </div>
             <div className="mt-3">
               <MultiLineChart dates={["05-25", "05-26", "05-27", "05-28", "05-29", "05-30", "05-31", "06-01", "06-02", "06-03", "06-04", "06-05", "06-06"]} series={[{ name: "dau", values: [16, 17, 14, 19, 13, 16, 14, 19, 17, 19, 14, 19, 24], color: "#0071e3" }]} />
@@ -1077,37 +1073,37 @@ function ProductAnalysisView() {
 
       <div data-board-item className="rounded-xl border border-black/8 bg-white">
         <div className="flex items-center justify-between border-b border-black/8 px-4 py-2.5">
-          <p className="text-[11px] font-semibold text-[#1d1d1f]">产品模块（多天）</p>
+          <p className="text-[11px] font-semibold text-[#1d1d1f]">Product Modules (Multi-Day)</p>
           <div className="flex items-center gap-3 text-[10px] text-[#515154]">
-            <span className="rounded border border-black/8 bg-white px-2 py-1">页面 ID: project_...</span>
+            <span className="rounded border border-black/8 bg-white px-2 py-1">Page ID: project_...</span>
             <ChevronDown className="h-3 w-3 text-[#b0b0b5]" />
           </div>
         </div>
         <div className="grid gap-3 p-4 lg:grid-cols-3">
-          <ProductSimpleTable data={productTables.evaluate} title="评效" rows={1} />
-          <ProductSimpleTable data={productTables.writewrite} title="写一写" rows={1} />
-          <ProductSimpleTable data={productTables.knowledge} title="知识库" rows={1} />
+          <ProductSimpleTable data={productTables.evaluate} title="Performance Review" rows={1} />
+          <ProductSimpleTable data={productTables.writewrite} title="Quick Write" rows={1} />
+          <ProductSimpleTable data={productTables.knowledge} title="Knowledge Base" rows={1} />
         </div>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
         <div data-board-item className="rounded-xl border border-black/8 bg-white">
-          <CardHeader title="每日用户使用排行榜" />
+          <CardHeader title="Daily User Leaderboard" />
           <div className="px-4 pb-4">
             <table className="w-full text-left">
               <thead>
                 <tr className="text-[9px] font-semibold uppercase tracking-[0.06em] text-[#86868b]">
                   <th className="py-2 pr-2 text-center">#</th>
-                  <th className="py-2 pr-2">日期</th>
-                  <th className="py-2 pr-2">用户名</th>
-                  <th className="py-2 pr-2 text-right">活跃停留时长平均值_按人</th>
+                  <th className="py-2 pr-2">Date</th>
+                  <th className="py-2 pr-2">Username</th>
+                  <th className="py-2 pr-2 text-right">Avg Active Session Time (per User)</th>
                 </tr>
               </thead>
               <tbody>
                 {userRankings.map((u, idx) => (
                   <tr key={`${u.name}-${idx}`} className="border-t border-black/[0.04] text-[10px]">
                     <td className="py-2 pr-2 text-center text-[#515154]">{idx + 1}</td>
-                    <td className="py-2 pr-2 text-[#1d1d1f]">06-06 周六</td>
+                    <td className="py-2 pr-2 text-[#1d1d1f]">Sat 06-06</td>
                     <td className="py-2 pr-2">
                       <span className="text-[#1d1d1f]">{u.name}</span>
                     </td>
@@ -1119,7 +1115,7 @@ function ProductAnalysisView() {
           </div>
         </div>
         <div data-board-item className="rounded-xl border border-black/8 bg-white">
-          <CardHeader title="留存分析" />
+          <CardHeader title="Retention Analysis" />
           <div className="overflow-x-auto px-4 pb-4">
             <table className="w-full min-w-[36rem] text-left">
               <thead>
@@ -1166,7 +1162,7 @@ function ProductTable({ data }: { data: { title: string; pageId: string; headers
       <div className="flex items-center justify-between border-b border-black/8 px-4 py-2.5">
         <p className="text-[11px] font-semibold text-[#1d1d1f]">{data.title}</p>
         <div className="flex items-center gap-3 text-[10px] text-[#515154]">
-          <span className="rounded border border-black/8 bg-white px-2 py-1">页面 ID: {data.pageId}</span>
+          <span className="rounded border border-black/8 bg-white px-2 py-1">Page ID: {data.pageId}</span>
           <ChevronDown className="h-3 w-3 text-[#b0b0b5]" />
         </div>
       </div>
@@ -1192,12 +1188,12 @@ function ProductTable({ data }: { data: { title: string; pageId: string; headers
           </tbody>
         </table>
         <div className="mt-2 flex items-center justify-between text-[10px] text-[#86868b]">
-          <span>每页显示 10</span>
+          <span>10 per page</span>
           <span>Total: {data.rows.length}</span>
           <div className="flex items-center gap-1">
-            <button className="rounded border border-black/8 bg-white px-2 py-0.5 text-[10px]">&lt; 上一页</button>
+            <button className="rounded border border-black/8 bg-white px-2 py-0.5 text-[10px]">&lt; Previous</button>
             <button className="rounded bg-[#0071e3] px-2 py-0.5 text-[10px] text-white">1</button>
-            <button className="rounded border border-black/8 bg-white px-2 py-0.5 text-[10px]">下一页 &gt;</button>
+            <button className="rounded border border-black/8 bg-white px-2 py-0.5 text-[10px]">Next &gt;</button>
           </div>
         </div>
       </div>
@@ -1254,7 +1250,7 @@ function Sidebar({
     <aside className={`hidden shrink-0 border-r border-black/8 bg-[#f7f7f8] transition-[width] duration-200 lg:flex lg:flex-col ${collapsed ? "w-[3.5rem]" : "w-[14rem]"}`}>
       <div className="flex items-center justify-between border-b border-black/8 px-3 py-2">
         {!collapsed && (
-          <p className="text-[10px] font-semibold text-[#1d1d1f]">AEM AI 剧本分析</p>
+          <p className="text-[10px] font-semibold text-[#1d1d1f]">Alpha Dashboard</p>
         )}
         <button
           type="button"
@@ -1273,14 +1269,14 @@ function Sidebar({
             )}
             <div className="space-y-0.5">
               {section.items.map((item) => {
-                const isMainBoard = item.id === "userProfile" || item.id === "productAnalysis";
+                const isMainBoard = item.id === "overview" || item.id === "userProfile" || item.id === "productAnalysis";
                 const isActive = view === item.id;
                 return (
                   <button
                     key={item.id}
                     type="button"
                     onClick={() => {
-                      if (item.id === "userProfile" || item.id === "productAnalysis") {
+                      if (item.id === "overview" || item.id === "userProfile" || item.id === "productAnalysis") {
                         setView(item.id);
                       }
                     }}
@@ -1291,10 +1287,14 @@ function Sidebar({
                         : isMainBoard
                           ? "text-[#1d1d1f] hover:bg-black/[0.04]"
                           : "text-[#6e6e73] hover:bg-black/[0.03]"
-                    } ${!isMainBoard ? "cursor-default" : "cursor-pointer"}`}
+                    } ${!isMainBoard ? "cursor-default" : "cursor-pointer"} ${item.id === "overview" ? "font-semibold" : ""}`}
                     disabled={!isMainBoard}
                   >
-                    <LayoutGrid className="h-3 w-3 shrink-0" />
+                    {item.id === "overview" ? (
+                      <Home className="h-3 w-3 shrink-0" />
+                    ) : (
+                      <LayoutGrid className="h-3 w-3 shrink-0" />
+                    )}
                     {! collapsed && (
                       <>
                         <span className="flex-1 truncate">{item.label}</span>
@@ -1311,10 +1311,10 @@ function Sidebar({
       {!collapsed && (
         <div className="flex shrink-0 items-center gap-2 border-t border-black/8 px-3 py-2">
           <button type="button" className="flex items-center gap-1 rounded px-2 py-1 text-[10px] text-[#0071e3] hover:bg-[#0071e3]/8">
-            <Plus className="h-3 w-3" /> 新建看板
+            <Plus className="h-3 w-3" /> New Dashboard
           </button>
           <button type="button" className="flex items-center gap-1 rounded px-2 py-1 text-[10px] text-[#0071e3] hover:bg-[#0071e3]/8">
-            <Settings className="h-3 w-3" /> 编辑目录
+            <Settings className="h-3 w-3" /> Edit Folders
           </button>
         </div>
       )}
@@ -1322,27 +1322,17 @@ function Sidebar({
   );
 }
 
-// ----- TopBar (dark) -----
+// ----- TopBar (translucent) -----
 function TopBar() {
   return (
-    <div className="flex h-10 items-center gap-3 border-b border-black/8 bg-[#1d1d1f] px-6 text-white">
-      <div className="flex items-center gap-2 rounded border border-white/15 bg-white/5 px-2 py-1 text-[11px]">
-        <span className="flex h-4 w-4 items-center justify-center rounded bg-white/15 text-[8px]">A</span>
-        <span className="font-semibold">Alpha</span>
-        <ChevronDown className="h-3 w-3 opacity-60" />
-      </div>
-      <div className="hidden flex-1 items-center gap-2 text-[10px] text-white/60 lg:flex">项目名称</div>
-      <div className="ml-auto flex items-center gap-3 text-white/70">
-        <div className="hidden items-center gap-2 rounded bg-white/8 px-2 py-1 text-[10px] text-white/70 lg:flex">
-          <Search className="h-3 w-3" />
-          <span>按产品 URL/名称/ID 搜索项目、空间</span>
-        </div>
+    <div className="flex h-10 items-center gap-3 border-b border-black/[0.06] bg-white/75 px-6 backdrop-blur-md text-[#6e6e73]">
+      <div className="ml-auto flex items-center gap-3">
         <Plus className="h-3.5 w-3.5" />
         <Calendar className="h-3.5 w-3.5" />
         <Bell className="h-3.5 w-3.5" />
         <Settings className="h-3.5 w-3.5" />
-        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/15 text-[9px] font-semibold">强</span>
-        <span className="ml-1 rounded bg-[#0071e3] px-1.5 py-0.5 text-[9px] font-semibold">AEM AI</span>
+        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#f5f5f7] text-[9px] font-semibold text-[#1d1d1f]">PW</span>
+        <span className="ml-1 rounded bg-[#0071e3] px-1.5 py-0.5 text-[9px] font-semibold text-white">Alpha</span>
       </div>
     </div>
   );
@@ -1351,7 +1341,7 @@ function TopBar() {
 // ----- NavTabs (light) -----
 function NavTabs({ setView }: { setView: (v: BoardId) => void }) {
   return (
-    <div className="flex items-center gap-1 overflow-x-auto border-b border-black/8 bg-white px-3 py-1.5">
+    <div className="flex items-center gap-1 border-b border-black/8 bg-white px-3 py-1.5">
       {topNavTabs.map((tab) => {
         const isActive = tab.id === "board";
         return (
@@ -1361,10 +1351,9 @@ function NavTabs({ setView }: { setView: (v: BoardId) => void }) {
             onClick={() => {
               if (tab.id === "board") setView("overview");
             }}
-            className={`relative flex shrink-0 items-center gap-1 px-2.5 py-1.5 text-[11px] transition active:scale-[0.97] motion-reduce:transition-none ${isActive ? "font-semibold text-[#1d1d1f]" : "font-medium text-[#515154] hover:text-[#1d1d1f]"}`}
+            className={`relative flex items-center px-2.5 py-1.5 text-[11px] transition active:scale-[0.97] motion-reduce:transition-none ${isActive ? "font-semibold text-[#1d1d1f]" : "font-medium text-[#515154] hover:text-[#1d1d1f]"}`}
           >
             <span>{tab.label}</span>
-            {tab.hasMenu && <ChevronDown className="h-3 w-3 opacity-60" />}
             {isActive && <span className="absolute inset-x-2 -bottom-1.5 h-0.5 rounded-full bg-[#0071e3]" />}
           </button>
         );
@@ -1414,21 +1403,21 @@ export function AnalyticsDashboardSimulator() {
             <div className="flex items-center justify-between border-b border-black/8 px-4 py-2.5">
               <div className="flex items-center gap-2">
                 <p className="text-[11px] font-semibold text-[#1d1d1f]">
-                  {view === "overview" && "看板 · 总览"}
-                  {view === "userProfile" && "用户画像"}
-                  {view === "productAnalysis" && "产品分析"}
+                  {view === "overview" && "Dashboards \u00b7 Overview"}
+                  {view === "userProfile" && "User Profile"}
+                  {view === "productAnalysis" && "Product Analytics"}
                 </p>
                 <span className="text-[#d2d2d7]">/</span>
                 <p className="text-[10px] text-[#86868b]">
-                  {view === "overview" && "总流量、稳定性、流转性总览"}
-                  {view === "userProfile" && "用户行为、留存、地域分布"}
-                  {view === "productAnalysis" && "各产品模块的 DAU、停留时长与排行"}
+                  {view === "overview" && "Traffic, stability, and conversion at a glance"}
+                  {view === "userProfile" && "Behavior, retention, and geographic distribution"}
+                  {view === "productAnalysis" && "DAU, session time, and rankings by module"}
                 </p>
               </div>
               <div className="flex items-center gap-3 text-[10px] text-[#515154]">
-                <span className="rounded-md border border-black/8 bg-white px-2 py-1">日期 20260605</span>
+                <span className="rounded-md border border-black/8 bg-white px-2 py-1">Date: 2026-06-05</span>
                 <span className="flex items-center gap-1.5 rounded-md border border-black/8 bg-white px-2 py-1">
-                  <Filter className="h-3 w-3 text-[#0071e3]" /> 已选 1 项
+                  <Filter className="h-3 w-3 text-[#0071e3]" /> 1 filter applied
                 </span>
               </div>
             </div>
@@ -1443,7 +1432,7 @@ export function AnalyticsDashboardSimulator() {
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3 px-1">
         <p className="text-[10px] leading-5 text-[#86868b]">
-          Interactive dashboard simulation · 数据已脱敏 · Internal boards and identifiers are not reproduced
+          Interactive dashboard simulation &middot; Data anonymized &middot; Internal boards and identifiers are not reproduced
         </p>
         <span className="text-[9px] text-[#b0b0b5]">Representative, desensitized for portfolio use</span>
       </div>
