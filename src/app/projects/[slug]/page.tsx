@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { AlibabaAiQualityCaseStudy } from "@/components/alibaba-ai-quality-case-study";
 import { ByteDanceAiToolsCaseStudy } from "@/components/bytedance-ai-tools-case-study";
 import { CaseStudyPage } from "@/components/case-study-page";
 import { MerchantOnboardingCaseStudy } from "@/components/merchant-onboarding-case-study";
@@ -43,6 +44,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   if (slug === "ai-merchant-onboarding-agent") {
     return <MerchantOnboardingCaseStudy project={project} />;
+  }
+
+  if (slug === "alibaba-creative-ai-quality-system") {
+    return <AlibabaAiQualityCaseStudy project={project} />;
   }
 
   if (slug === "bytedance-ai-procurement-tools") {

@@ -12,3 +12,12 @@
 - "dozed off" 比 "fell asleep" 更口语地道（美国职场幽默常用）
 - "AI product manager requirements review" 语法别扭，改成 "an AI-product requirements review"（复合形容词 + 名词）
 - 更正上面一条："AI-product requirements review" 仍然不地道。美国科技公司 PM+研发的需求评审环节标准说法是 PRD review（最高频）/ requirements review / spec review，不会把 "AI-product" 当复合形容词去修饰。想保留 AI 味用 "a requirements review for an AI feature"。portfolio 那句建议改成 "dozed off during a PRD review"
+
+## 2026-08-23
+
+- "在高度上居中" → "centered vertically" / "vertically centered"（CSS 背景下面试/和产品对齐评审场景最常见的说法；"在高度上居中"字面对译是 "centered in height"，母语者几乎不会这么说）
+- "这个位置不要出现滑动杆" → "no scrollbar here" / "remove the scrollbar at this position"（"滑动杆"是中文前端俗称，英美 Web 工程师几乎只说 scrollbar；强调"不该出现"用 no visible scrollbar / hide the scrollbar，口语化 drop the scrollbar 也行）
+
+## 2026-08-18
+
+- "我们今天下午拉个会对一下埋点" → "Can we grab 30 minutes this afternoon to go over the tracking gaps we still need to cover?"（约会用 grab + 时长，比 "have a meeting" 随意自然；"对一下" 用 go over；"埋点" 在美式职场口语里不会直译成 buried points，用 tracking gaps/instrumentation gaps）
