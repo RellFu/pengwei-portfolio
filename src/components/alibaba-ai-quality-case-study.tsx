@@ -14,17 +14,14 @@ import {
   AtSign,
   BookOpenCheck,
   Bot,
-  Braces,
   CalendarClock,
   Check,
-  CheckCircle2,
   ChevronRight,
   CircleUserRound,
   Cloud,
   Code2,
   Cog,
   Database,
-  Eye,
   FileText,
   Folder,
   GitBranch,
@@ -32,18 +29,15 @@ import {
   Info,
   LockKeyhole,
   MessageSquareText,
-  Network,
   Route,
-  ScanSearch,
   Search,
-  Sparkles,
   Split,
   Users,
   Wrench,
   X,
   Zap,
 } from "lucide-react";
-import { AnimatedSection, FadeInCard } from "@/components/animated-section";
+import { AnimatedSection } from "@/components/animated-section";
 import { GlassSurface, SectionLabel, WarmSurface } from "@/components/design-system";
 import { AnalyticsDashboardSimulator } from "@/components/analytics-dashboard-simulator";
 import { PhaiProductSimulator } from "@/components/phai-product-simulator";
@@ -238,20 +232,6 @@ const signalGroups = [
   },
 ] as const;
 
-const failureModes = [
-  ["Intent drift", "Missed a requested change or pursued the wrong subtask."],
-  ["Creative quality", "Layout, readability, repetition, or narrative structure failed."],
-  ["Execution failure", "Dependencies, files, tools, or long-horizon context broke the workflow."],
-] as const;
-
-const qualityLoop = [
-  ["Observe", "Behavior · feedback · traces", Eye],
-  ["Diagnose", "Task · query · Agent layer", ScanSearch],
-  ["Formalize", "Expert judgment into a Skill", Braces],
-  ["Validate", "Real cases · rubric calibration", CheckCircle2],
-  ["Operationalize", "Recurring quality infrastructure", CalendarClock],
-] as const;
-
 function SectionHeading({
   number,
   label,
@@ -268,11 +248,11 @@ function SectionHeading({
     <div className="max-w-3xl">
       {showEyebrow && (
         <div className="flex items-baseline gap-2">
-          <span className="text-[13px] font-semibold text-[#0071e3]">{number}</span>
-          <span className="text-[13px] font-medium text-[#86868b]">{label}</span>
+          <span className="text-[13px] font-semibold tracking-[0.02em] text-[#0071e3]">{number}</span>
+          <span className="text-[13px] font-medium tracking-[0.01em] text-[#86868b]">{label}</span>
         </div>
       )}
-      <h2 className="mt-2 text-[2rem] font-semibold leading-[1.05] tracking-[-0.04em] text-[#1d1d1f] sm:text-[2.5rem]">
+      <h2 className="mt-2 text-[2rem] font-semibold tracking-tight text-[#1d1d1f] md:text-[2.5rem] md:leading-[1.06]">
         {title}
       </h2>
       {description && (
@@ -2416,16 +2396,16 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
       <div className="mx-auto flex w-full max-w-7xl flex-col px-6 pb-20 pt-6 sm:px-8 lg:px-12">
         <div className="mb-8">
           <Link
-            href="/#internship"
+            href="/"
             className="inline-flex min-h-11 items-center gap-2 rounded-full border border-black/10 bg-white/80 px-4 py-2.5 text-sm font-medium text-[#6e6e73] shadow-[0_8px_24px_rgba(0,0,0,0.06)] backdrop-blur-xl transition hover:text-[#1d1d1f] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3] motion-reduce:transition-none"
           >
-            <ArrowLeft className="h-4 w-4" /> Back to Experience
+            <ArrowLeft className="h-4 w-4" /> Back to Home
           </Link>
         </div>
 
-        <section className="grid min-h-[38rem] items-center gap-10 lg:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)]">
-          <AnimatedSection>
-            <h1 className="text-4xl font-semibold leading-[1.12] tracking-[-0.04em] text-[#1d1d1f] sm:text-5xl md:text-6xl">
+        <section className="grid items-center gap-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+          <AnimatedSection className="max-w-2xl">
+            <h1 className="text-4xl font-semibold tracking-tight text-[#1d1d1f] sm:text-5xl md:text-6xl md:leading-[1.12]">
               <span className="block">Alibaba</span>
               <span className="block">Screenwriting</span>
               <span className="block bg-gradient-to-r from-[#0071e3] via-[#af52de] via-[#ff2d55] to-[#ff9500] bg-clip-text text-transparent">
@@ -2438,40 +2418,48 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
           </AnimatedSection>
 
           <AnimatedSection>
-            <div className="rounded-[2rem] border border-black/8 bg-white/80 p-6 shadow-[0_28px_80px_rgba(0,0,0,0.09)] backdrop-blur-xl sm:p-8">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#86868b]">Alpha product anatomy</p>
-                  <p className="mt-2 text-lg font-semibold text-[#1d1d1f]">One request, many systems</p>
-                </div>
-                <Bot className="h-6 w-6 text-[#0071e3]" />
+            <div className="relative mx-auto w-full max-w-[600px]">
+              <div className="overflow-hidden rounded-[1.6rem] shadow-[0_28px_80px_rgba(0,0,0,0.10)]">
+                <Image
+                  src="/images/alibaba-hero-screenwriter.png"
+                  alt="A screenwriter sitting at a clean white desk typing on a closed laptop, smiling softly, with a white coffee mug beside the laptop"
+                  width={2048}
+                  height={1366}
+                  className="h-auto w-full object-cover drop-shadow-[0_20px_60px_rgba(0,0,0,0.10)]"
+                />
               </div>
-              <div className="mt-7 grid items-stretch gap-3 sm:grid-cols-[1fr_auto_1.2fr_auto_1fr]">
-                {[
-                  ["INPUT", "Creative task", MessageSquareText],
-                  ["AGENT", "Alpha runtime", Network],
-                  ["OUTPUT", "Creative artifact", Sparkles],
-                ].map(([label, value, Icon], index) => (
-                  <div key={label as string} className="contents">
-                    <div className={`rounded-2xl p-5 ${index === 1 ? "bg-[#111318] text-white" : "bg-[#f5f5f7] text-[#1d1d1f]"}`}>
-                      <Icon className={`h-5 w-5 ${index === 1 ? "text-[#65b5ff]" : "text-[#0071e3]"}`} />
-                      <p className={`mt-6 text-[9px] font-semibold tracking-[0.16em] ${index === 1 ? "text-white/40" : "text-[#86868b]"}`}>{label as string}</p>
-                      <p className="mt-1 text-sm font-semibold">{value as string}</p>
-                    </div>
-                    {index < 2 && <ChevronRight className="m-auto hidden h-5 w-5 text-[#b0b0b5] sm:block" />}
-                  </div>
-                ))}
-              </div>
-              <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-5">
-                {["Files", "Tools", "Skills", "Sub-agents", "Knowledge"].map((item) => (
-                  <span key={item} className="rounded-xl border border-black/8 px-3 py-3 text-center text-[11px] font-medium text-[#6e6e73]">{item}</span>
-                ))}
-              </div>
+
+              {[
+                { text: "Add a beat here", color: "#0071e3", position: "left-[-2%] top-[6%] md:left-[2%] md:top-[8%]", duration: 9, delay: 0 },
+                { text: "Build the tension", color: "#af52de", position: "left-[2%] top-[48%] md:left-[3%] md:top-[46%]", duration: 11, delay: 1.6 },
+                { text: "Run @Three-Act Diagnosis", color: "#ff9500", position: "right-[2%] top-[26%] md:right-[3%] md:top-[24%]", duration: 8, delay: 3.4 },
+                { text: "Find a comp title", color: "#ff2d55", position: "right-[2%] top-[55%] md:right-[3%] md:top-[54%]", duration: 10, delay: 5.2 },
+              ].map((bubble) => (
+                <motion.div
+                  key={bubble.text}
+                  initial={{ opacity: 0, scale: 0.92 }}
+                  animate={{
+                    opacity: [0, 1, 1, 0, 0],
+                    scale: [0.92, 1, 1, 0.96, 0.92],
+                    y: [6, 0, -4, 0, 6],
+                  }}
+                  transition={{
+                    duration: bubble.duration,
+                    times: [0, 0.06, 0.28, 0.36, 1],
+                    repeat: Infinity,
+                    delay: bubble.delay,
+                    ease: "easeInOut",
+                  }}
+                  className={`absolute whitespace-nowrap rounded-[1.05rem] border border-white/55 bg-[#cfe1f7]/65 px-3.5 py-2 text-[12px] font-medium leading-relaxed text-[#1a3a6e] shadow-[0_10px_26px_rgba(20,60,120,0.10)] backdrop-blur-xl ${bubble.position}`}
+                >
+                  {bubble.text}
+                </motion.div>
+              ))}
             </div>
           </AnimatedSection>
         </section>
 
-        <div className="mt-16 grid min-w-0 gap-20 lg:mt-20 lg:gap-28">
+        <div className="mt-20 grid min-w-0 gap-16">
           <AnimatedSection>
             <SectionHeading
               number="01"
@@ -2514,7 +2502,7 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
               <SkillDiagnosisPanel onOpenDetail={setDetail} />
             </div>
 
-            <h3 className="mt-10 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">Auditing Skills at Catalog Scale</h3>
+            <h3 className="mt-12 text-xl font-semibold tracking-[-0.03em] text-[#1d1d1f]">Auditing Skills at Catalog Scale</h3>
             <p className="mt-4 text-base leading-8 text-[#6e6e73]">
               As the catalog grew to 55 Skills, the focus expanded from individual Skill quality to how the system behaved as a whole. I reviewed the catalog as a routing system, looking at whether Skills remained clearly defined, predictable to invoke, and maintainable as the catalog scaled. The audit created a system-level view of where quality could break down before those issues surfaced in user interactions.
             </p>
@@ -2533,6 +2521,8 @@ export function AlibabaAiQualityCaseStudy({ project }: Props) {
 
           <AnimatedSection>
             <SectionHeading
+              number="04"
+              label="Designing the Knowledge Layer"
               title="From a story archive to knowledge an agent can actually use."
               description="Before the Agent could reason with stories, the library had to become queryable. The work split into three layers: designing a domain-specific storytelling schema, building the retrieval strategy across query types, and turning the resulting knowledge into a natural conversational experience for writers."
             />
