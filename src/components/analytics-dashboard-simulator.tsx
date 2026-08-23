@@ -684,11 +684,11 @@ function StatCard({
           color={isUp ? "#34c759" : "#ff3b30"}
         />
       </div>
-      <div className="mt-2 flex items-center gap-3 text-[10px]">
-        <span className="text-[#86868b]">vs Last Week</span>
-        <span className={isUp ? "font-semibold text-[#207a4b]" : "font-semibold text-[#b3251f]"}>{dow}</span>
-        <span className="text-[#86868b]">vs Yesterday</span>
-        <span className={isUp ? "font-semibold text-[#207a4b]" : "font-semibold text-[#b3251f]"}>{dod}</span>
+      <div className="mt-2 grid grid-cols-2 gap-x-2 gap-y-0.5 text-[10px]">
+        <span className="text-[#86868b]">Last Wk</span>
+        <span className="text-right text-[#86868b]">Yest</span>
+        <span className={`whitespace-nowrap tabular-nums font-semibold ${isUp ? "text-[#207a4b]" : "text-[#b3251f]"}`}>{dow}</span>
+        <span className={`whitespace-nowrap tabular-nums text-right font-semibold ${isUp ? "text-[#207a4b]" : "text-[#b3251f]"}`}>{dod}</span>
       </div>
     </div>
   );
@@ -1261,7 +1261,7 @@ function Sidebar({
           {collapsed ? <ChevronRight className="h-3.5 w-3.5" /> : <ChevronLeft className="h-3.5 w-3.5" />}
         </button>
       </div>
-      <div className="flex-1 overflow-y-auto p-2">
+      <div className="flex-1 overflow-y-auto p-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {sidebarSections.map((section) => (
           <div key={section.title} className="mb-3">
             {!collapsed && (
@@ -1428,13 +1428,6 @@ export function AnalyticsDashboardSimulator() {
             </div>
           </main>
         </div>
-      </div>
-
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 px-1">
-        <p className="text-[10px] leading-5 text-[#86868b]">
-          Interactive dashboard simulation &middot; Data anonymized &middot; Internal boards and identifiers are not reproduced
-        </p>
-        <span className="text-[9px] text-[#b0b0b5]">Representative, desensitized for portfolio use</span>
       </div>
     </div>
   );

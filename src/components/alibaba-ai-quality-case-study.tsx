@@ -245,7 +245,7 @@ function SectionHeading({
 }) {
   const showEyebrow = number || label;
   return (
-    <div className="max-w-3xl">
+    <div>
       {showEyebrow && (
         <div className="flex items-baseline gap-2">
           <span className="text-[13px] font-semibold tracking-[0.02em] text-[#0071e3]">{number}</span>
@@ -949,27 +949,6 @@ function ArchitectureDetail() {
   );
 }
 
-const SCRIPT_PAGE = `INT. OFFICE - DAY
-
-ANDY sits at her desk.
-MIRANDA enters.
-
-        MIRANDA
-  We need that story
-  by noon.
-
-        ANDY
-  Yes, Miranda.
-     (beat)
-  I'll have it.
-
-EXT. STREET - DAY
-
-Andy walks quickly
-through the crowd.
-
-        FADE OUT.`;
-
 const PAPER_LINE_WIDTHS = [96, 88, 92, 74, 90, 84, 66, 94, 80, 88] as const;
 
 function PaperLines({ count, seed = 0 }: { count: number; seed?: number }) {
@@ -1005,7 +984,7 @@ function PileSheet({
     <div
       data-pile-front
       data-rotate={rotate}
-      className="absolute overflow-hidden rounded-xl border border-black/[0.06] bg-white p-3 shadow-[0_8px_22px_rgba(0,0,0,0.10)]"
+      className="absolute overflow-hidden rounded-xl border border-black/[0.06] bg-white p-3.5 shadow-[0_8px_22px_rgba(0,0,0,0.10)]"
       style={{ left, top, width, zIndex: z, transform: `rotate(${rotate}deg)` }}
     >
       {children}
@@ -1017,16 +996,25 @@ function RawMaterialPile() {
   const reduceMotion = useReducedMotion();
   const rootRef = useRef<HTMLDivElement>(null);
 
-  const backSheets = [
-    { left: "-8%", top: "1%", rotate: -13, width: "54%", lines: 7 },
+  type BackSheet = {
+    left: string;
+    top: string;
+    rotate: number;
+    width: string;
+    lines: number;
+    heading?: string;
+  };
+
+  const backSheets: BackSheet[] = [
+    { left: "-8%", top: "1%", rotate: -13, width: "54%", lines: 6, heading: "RUNWAY / masthead notes" },
     { left: "50%", top: "-5%", rotate: 9, width: "52%", lines: 6 },
-    { left: "60%", top: "20%", rotate: -6, width: "48%", lines: 8 },
-    { left: "-12%", top: "33%", rotate: 11, width: "52%", lines: 7 },
-    { left: "20%", top: "57%", rotate: -10, width: "56%", lines: 8 },
-    { left: "58%", top: "60%", rotate: 6, width: "50%", lines: 7 },
-    { left: "2%", top: "78%", rotate: 4, width: "60%", lines: 6 },
-    { left: "44%", top: "84%", rotate: -4, width: "54%", lines: 5 },
-  ] as const;
+    { left: "60%", top: "18%", rotate: -6, width: "46%", lines: 5, heading: "Miranda Priestly / draft profile" },
+    { left: "-12%", top: "30%", rotate: 11, width: "50%", lines: 7 },
+    { left: "22%", top: "62%", rotate: -10, width: "54%", lines: 5, heading: "Andy Sachs / intake notes" },
+    { left: "60%", top: "58%", rotate: 6, width: "48%", lines: 6 },
+    { left: "0%", top: "80%", rotate: 4, width: "58%", lines: 5, heading: "professional recognition / arc log" },
+    { left: "46%", top: "86%", rotate: -4, width: "50%", lines: 5 },
+  ];
 
   useGSAP(
     () => {
@@ -1073,58 +1061,113 @@ function RawMaterialPile() {
           key={`${sheet.left}-${sheet.top}`}
           data-pile-back
           data-rotate={sheet.rotate}
-          className="absolute rounded-xl border border-black/[0.05] bg-white/85 p-3 shadow-[0_4px_14px_rgba(0,0,0,0.06)]"
+          className="absolute rounded-xl border border-black/[0.05] bg-white/80 p-3 shadow-[0_4px_14px_rgba(0,0,0,0.06)]"
           style={{ left: sheet.left, top: sheet.top, width: sheet.width, zIndex: index, transform: `rotate(${sheet.rotate}deg)` }}
         >
+          {sheet.heading && (
+            <p className="font-mono text-[6.5px] font-semibold uppercase tracking-[0.12em] text-[#b0b0b5]">
+              {sheet.heading}
+            </p>
+          )}
           <PaperLines count={sheet.lines} seed={index * 3} />
         </div>
       ))}
 
-      <PileSheet left="-3%" top="7%" rotate={-7} width="57%" z={20}>
-        <p className="font-mono text-[10px] font-semibold text-[#1d1d1f]">script</p>
-        <p className="mt-2 whitespace-pre font-mono text-[7px] leading-[1.55] text-[#6e6e73]">{SCRIPT_PAGE}</p>
-      </PileSheet>
-
-      <PileSheet left="32%" top="2%" rotate={4} width="55%" z={21}>
-        <p className="text-[10px] font-semibold text-[#1d1d1f]">synopsis</p>
-        <p className="mt-2 font-mono text-[7px] leading-[1.6] text-[#6e6e73]">
-          Andy Sachs, a recent college graduate, lands a job as assistant to the powerful editor in chief of Runway magazine. Over time she navigates the demanding world of fashion journalism, struggles with identity and values, and ultimately chooses her own path.
+      {/* Document 1 / Story Overview (most visible, near top, low rotation) */}
+      <PileSheet left="8%" top="3%" rotate={-4} width="60%" z={24}>
+        <p className="text-[10px] font-semibold text-[#1d1d1f]">Story Overview</p>
+        <p className="mt-1.5 font-mono text-[6.5px] font-semibold uppercase tracking-[0.12em] text-[#86868b]">
+          working draft · v2
         </p>
-        <PaperLines count={5} seed={2} />
+        <p className="mt-2 text-center font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-[#1d1d1f]">
+          The Devil Wears Prada
+        </p>
+        <p className="mt-2 font-mono text-[7.5px] leading-[1.6] text-[#515154]">
+          Andy Sachs, an aspiring journalist, takes a job as Miranda Priestly&apos;s second assistant at Runway. She enters the fashion world with open contempt, but repeated failures gradually force her to learn its rules and reconsider her assumptions.
+        </p>
+        <p className="mt-1.5 font-mono text-[7.5px] leading-[1.6] text-[#515154]">
+          Later: professional growth begins to conflict with her life outside work.
+        </p>
+        <PaperLines count={3} seed={1} />
       </PileSheet>
 
-      <PileSheet left="6%" top="38%" rotate={-2} width="56%" z={22}>
-        <p className="text-[10px] font-semibold text-[#1d1d1f]">character notes</p>
-        <div className="mt-2 space-y-1.5 font-mono text-[7px] leading-[1.5] text-[#6e6e73]">
-          <div>
-            <p className="font-semibold text-[#515154]">Andy Sachs</p>
-            <p>Smart, earnest, hard-working. Needs growth in confidence.</p>
-          </div>
-          <div>
-            <p className="font-semibold text-[#515154]">Miranda Priestly</p>
-            <p>Commanding, perfectionist, intimidating.</p>
-          </div>
-          <div>
-            <p className="font-semibold text-[#515154]">Nigel</p>
-            <p>Witty, loyal, creative director.</p>
-          </div>
-          <div>
-            <p className="font-semibold text-[#515154]">Nate Cooper</p>
-            <p>Warm, supportive, grounded.</p>
-          </div>
-        </div>
+      {/* Document 2 / Character Biography (most visible, lower right) */}
+      <PileSheet left="38%" top="32%" rotate={5} width="58%" z={25}>
+        <p className="text-[10px] font-semibold text-[#1d1d1f]">Character Biography</p>
+        <p className="mt-1.5 font-mono text-[6.5px] font-semibold uppercase tracking-[0.12em] text-[#86868b]">
+          one of several overlapping
+        </p>
+        <p className="mt-2 font-mono text-[8.5px] font-semibold text-[#1d1d1f]">Andy Sachs</p>
+        <p className="mt-1.5 font-mono text-[7.5px] leading-[1.6] text-[#515154]">
+          Smart, ambitious, idealistic, highly adaptable.
+        </p>
+        <p className="mt-1.5 font-mono text-[7.5px] leading-[1.6] text-[#515154]">
+          She wants to survive one year at Runway and use the experience to move into serious journalism. Her confidence initially comes with a strong sense of superiority toward the fashion industry.
+        </p>
+        <p className="mt-2 font-mono text-[7px] font-semibold uppercase tracking-[0.1em] text-[#515154]">Core tension</p>
+        <p className="mt-1 font-mono text-[7.5px] leading-[1.6] text-[#515154]">
+          ambition, recognition, professional identity.
+        </p>
+        <p className="mt-1.5 font-mono text-[6.5px] italic text-[#86868b]">
+          see also: relationship notes, scene notes
+        </p>
       </PileSheet>
 
-      <PileSheet left="43%" top="52%" rotate={7} width="54%" z={23}>
-        <p className="text-[10px] font-semibold text-[#1d1d1f]">story materials</p>
-        <p className="mt-2 font-mono text-[7px] font-semibold text-[#515154]">Key Scenes / Ideas</p>
-        <div className="mt-1 space-y-[3px] font-mono text-[7px] leading-[1.5] text-[#6e6e73]">
-          {["Andy's interview", "First day at Runway", "The cerulean speech", "Meeting the designers", "Paris Fashion Week", "The choice"].map((item) => (
-            <p key={item}>&middot; {item}</p>
-          ))}
-        </div>
-        <p className="mt-2 font-mono text-[7px] font-semibold text-[#515154]">Notes</p>
-        <PaperLines count={4} seed={5} />
+      {/* Document 3 / Relationship Notes (partly covered, mid layer) */}
+      <PileSheet left="-4%" top="40%" rotate={-8} width="52%" z={22}>
+        <p className="text-[10px] font-semibold text-[#1d1d1f]">Relationship Notes</p>
+        <p className="mt-1.5 font-mono text-[6.5px] font-semibold uppercase tracking-[0.12em] text-[#86868b]">
+          Andy / Miranda
+        </p>
+        <p className="mt-2 font-mono text-[7.5px] leading-[1.6] text-[#515154]">
+          Begins with an extreme power imbalance. Miranda largely ignores Andy, then tests her with increasingly difficult demands.
+        </p>
+        <p className="mt-1.5 font-mono text-[7.5px] leading-[1.6] text-[#515154]">
+          Andy&apos;s attitude shifts from fear and resistance toward professional respect. Miranda&apos;s recognition only appears after Andy learns how to operate inside the system.
+        </p>
+        <p className="mt-2 font-mono text-[6.5px] text-[#86868b]">
+          cf. character change · run 32
+        </p>
+        <p className="mt-1 font-mono text-[6.5px] text-[#86868b]">
+          cf. professional recognition · run 41
+        </p>
+      </PileSheet>
+
+      {/* Document 4 / Scene Notes (slightly rotated, overlaps another) */}
+      <PileSheet left="44%" top="68%" rotate={9} width="50%" z={26}>
+        <p className="text-[9.5px] font-semibold text-[#1d1d1f]">Scene Notes</p>
+        <p className="mt-1 font-mono text-[6.5px] font-semibold uppercase tracking-[0.12em] text-[#86868b]">
+          cerulean sweater scene
+        </p>
+        <p className="mt-2 font-mono text-[7.5px] leading-[1.6] text-[#515154]">
+          Andy laughs at what appears to be an insignificant fashion choice. Miranda traces Andy&apos;s own sweater through the fashion industry and exposes how little Andy understands about the field she dismisses.
+        </p>
+        <p className="mt-1.5 font-mono text-[7.5px] leading-[1.6] text-[#515154]">
+          Function: humiliation, worldview correction, early turning point.
+        </p>
+        <p className="mt-1.5 font-mono text-[6.5px] text-[#86868b]">
+          (miranda priestly / professional recognition begins)
+        </p>
+      </PileSheet>
+
+      {/* Document 5 / Plot / Beat Notes (quick working notes, lower layer) */}
+      <PileSheet left="6%" top="70%" rotate={-3} width="46%" z={21}>
+        <p className="text-[9.5px] font-semibold text-[#1d1d1f]">Plot / Beat Notes</p>
+        <p className="mt-1 font-mono text-[6.5px] font-semibold uppercase tracking-[0.12em] text-[#86868b]">
+          character progression
+        </p>
+        <ul className="mt-1.5 space-y-[2px] font-mono text-[7.5px] leading-[1.55] text-[#515154]">
+          <li>· Outsider enters Runway</li>
+          <li>· Struggles with unfamiliar rules</li>
+          <li>· Hurricane task fails</li>
+          <li>· Nigel confronts her attitude</li>
+          <li>· Andy changes how she works</li>
+          <li>· Professional recognition increases</li>
+          <li>· Personal relationships begin to fracture</li>
+        </ul>
+        <p className="mt-1.5 font-mono text-[6.5px] italic text-[#86868b]">
+          (andy sachs / character change)
+        </p>
       </PileSheet>
     </div>
   );
