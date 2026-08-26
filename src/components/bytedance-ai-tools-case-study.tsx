@@ -5,8 +5,10 @@ import Link from "next/link";
 import {
   ArrowLeft,
   CircleAlert,
-  UserRound,
+  Pause,
+  Play,
   RotateCcw,
+  UserRound,
 } from "lucide-react";
 import gsap from "gsap";
 import { GlassSurface } from "@/components/design-system";
@@ -343,11 +345,15 @@ const RAG_EDGES = [
 function RagFlowDiagram({
   activeStep,
   onReplay,
+  onTogglePause,
   isPlaying,
+  isPaused,
 }: {
   activeStep: number;
   onReplay: () => void;
+  onTogglePause: () => void;
   isPlaying: boolean;
+  isPaused: boolean;
 }) {
   const svgRef = useRef<SVGSVGElement | null>(null);
 
@@ -431,16 +437,34 @@ function RagFlowDiagram({
         <p className="text-[13px] text-[#86868b]">
           {RAG_STEP_CAPTIONS[activeStep]}
         </p>
-        <button
-          type="button"
-          onClick={onReplay}
-          className="flex shrink-0 items-center gap-1.5 rounded-full border border-black/[0.08] bg-white/80 px-3 py-1.5 text-[12px] font-medium text-[#1d1d1f] transition-colors duration-200 hover:bg-white active:scale-[0.97]"
-        >
-          <RotateCcw
-            className={`h-3 w-3 ${isPlaying ? "text-[#0071e3]" : "text-[#86868b]"}`}
-          />
-          Replay
-        </button>
+        <div className="flex shrink-0 items-center gap-1.5">
+          {isPlaying && (
+            <button
+              type="button"
+              onClick={onTogglePause}
+              aria-label={isPaused ? "Resume walkthrough" : "Pause walkthrough"}
+              aria-pressed={isPaused}
+              className="flex items-center gap-1.5 rounded-full border border-black/[0.08] bg-white/80 px-3 py-1.5 text-[12px] font-medium text-[#1d1d1f] transition-colors duration-200 hover:bg-white active:scale-[0.97]"
+            >
+              {isPaused ? (
+                <Play className="h-3 w-3 text-[#0071e3]" />
+              ) : (
+                <Pause className="h-3 w-3 text-[#0071e3]" />
+              )}
+              {isPaused ? "Resume" : "Pause"}
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={onReplay}
+            className="flex items-center gap-1.5 rounded-full border border-black/[0.08] bg-white/80 px-3 py-1.5 text-[12px] font-medium text-[#1d1d1f] transition-colors duration-200 hover:bg-white active:scale-[0.97]"
+          >
+            <RotateCcw
+              className={`h-3 w-3 ${isPlaying ? "text-[#0071e3]" : "text-[#86868b]"}`}
+            />
+            Replay
+          </button>
+        </div>
       </div>
 
       <div className="overflow-x-auto">
@@ -1180,6 +1204,7 @@ function RagWalkthrough({
     prefersReducedMotion() ? RAG_TOTAL_STEPS : 0,
   );
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
   useEffect(() => {
@@ -1190,8 +1215,14 @@ function RagWalkthrough({
     // comfortable reading cadence, then hold on the final state.
     const tl = gsap.timeline({
       paused: true,
-      onStart: () => setIsPlaying(true),
-      onComplete: () => setIsPlaying(false),
+      onStart: () => {
+        setIsPlaying(true);
+        setIsPaused(false);
+      },
+      onComplete: () => {
+        setIsPlaying(false);
+        setIsPaused(false);
+      },
     });
 
     for (let step = 1; step <= RAG_TOTAL_STEPS; step += 1) {
@@ -1230,7 +1261,20 @@ function RagWalkthrough({
       return;
     }
     setActiveStep(0);
+    setIsPaused(false);
     tl.restart(true);
+  }, []);
+
+  const handleTogglePause = useCallback(() => {
+    const tl = timelineRef.current;
+    if (!tl) return;
+    if (tl.paused()) {
+      tl.resume();
+      setIsPaused(false);
+    } else {
+      tl.pause();
+      setIsPaused(true);
+    }
   }, []);
 
   return (
@@ -1238,7 +1282,9 @@ function RagWalkthrough({
       <RagFlowDiagram
         activeStep={activeStep}
         onReplay={handleReplay}
+        onTogglePause={handleTogglePause}
         isPlaying={isPlaying}
+        isPaused={isPaused}
       />
       <div className="grid gap-8 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1fr)] lg:items-start lg:gap-12">
         <div className="lg:sticky lg:top-8 flex flex-col gap-6">
