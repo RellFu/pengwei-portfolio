@@ -2,13 +2,16 @@
 
 import { useState, useEffect, useLayoutEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowLeft,
   CircleAlert,
   Pause,
   Play,
+  Plus,
   RotateCcw,
   UserRound,
+  X,
 } from "lucide-react";
 import gsap from "gsap";
 import { GlassSurface } from "@/components/design-system";
@@ -40,10 +43,7 @@ const toolProjects: ToolProject[] = [
       "An AI pricing reference tool that structures historical sourcing records and retrieves comparable cases by talent, collaboration type, tier, and budget, then returns a reference price range. It also folds in audience signals and public-information summaries to support talent classification.",
     shipped:
       "I developed the workflow end to end: prompt-based field extraction from historical sourcing records, Python/Playwright data collection, pandas-based Excel batch processing, knowledge-base ingestion, and an AI query workflow for retrieving comparable cases.",
-    metrics: [
-      { value: "10x", label: "Faster consultation" },
-      { value: "90%+", label: "Case coverage accuracy" },
-    ],
+    metrics: [],
     previewType: "agent" as const,
   },
   {
@@ -1342,9 +1342,11 @@ function MetricRow({
 function NarrativeBlock({
   title,
   body,
+  trailing,
 }: {
   title: string;
   body: string;
+  trailing?: React.ReactNode;
 }) {
   return (
     <div>
@@ -1352,6 +1354,80 @@ function NarrativeBlock({
         {title}
       </p>
       <p className="mt-2 text-base leading-8 text-[#6e6e73]">{body}</p>
+      {trailing ? <div className="mt-3">{trailing}</div> : null}
+    </div>
+  );
+}
+
+function WorkflowDiagramReveal({
+  label,
+  src,
+  alt,
+  width,
+  height,
+}: {
+  label: string;
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={() => setExpanded(true)}
+        aria-expanded={expanded}
+        className="inline-flex items-center gap-2 rounded-full border border-black/[0.08] bg-white/80 px-3.5 py-2 text-[12px] font-medium text-[#1d1d1f] transition-colors duration-200 hover:bg-white active:scale-[0.97]"
+      >
+        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#0071e3] text-white">
+          <Plus className="h-3 w-3 stroke-[2.4]" />
+        </span>
+        {label}
+      </button>
+
+      <div
+        className={`fixed inset-0 z-40 transition duration-300 ${
+          expanded ? "pointer-events-auto" : "pointer-events-none"
+        }`}
+      >
+        <button
+          type="button"
+          aria-label="Close diagram"
+          onClick={() => setExpanded(false)}
+          className={`absolute inset-0 bg-[rgba(0,0,0,0.18)] backdrop-blur-md transition duration-300 ${
+            expanded ? "opacity-100" : "opacity-0"
+          }`}
+        />
+
+        <div className="absolute inset-0 flex items-center justify-center px-4 py-8 sm:px-6">
+          <div
+            className={`relative max-h-[calc(100vh-80px)] w-full max-w-4xl overflow-y-auto rounded-[1.6rem] bg-white p-3 shadow-[0_40px_120px_rgba(0,0,0,0.24)] transition duration-300 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:p-4 ${
+              expanded
+                ? "translate-y-0 scale-100 opacity-100"
+                : "translate-y-4 scale-[0.98] opacity-0"
+            }`}
+          >
+            <button
+              type="button"
+              aria-label="Close diagram"
+              onClick={() => setExpanded(false)}
+              className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-[#0071e3] text-white transition duration-150 hover:scale-[1.03] active:scale-90"
+            >
+              <X className="h-4 w-4" />
+            </button>
+            <Image
+              src={src}
+              alt={alt}
+              width={width}
+              height={height}
+              className="w-full rounded-[1.1rem]"
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -1468,6 +1544,17 @@ export function ByteDanceAiToolsCaseStudy({
                       <NarrativeBlock
                         title={item.shippedTitle ?? "How I shipped it"}
                         body={item.shipped}
+                        trailing={
+                          item.index === "01" ? (
+                            <WorkflowDiagramReveal
+                              label="Learn more"
+                              src="/images/celebrity-pricing-benchmark-workflow.png"
+                              alt="Celebrity Pricing Benchmark Bot Workflow: three stages, historical data structuring, current celebrity signals, and a conversational agent layer that combines both into a pricing benchmark"
+                              width={1536}
+                              height={1024}
+                            />
+                          ) : undefined
+                        }
                       />
                     </div>
 
