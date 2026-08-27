@@ -35,6 +35,10 @@ const byteDanceProject = featuredProjects.find(
   (project) => project.slug === "bytedance-ai-procurement-tools",
 );
 
+const mediaProject = featuredProjects.find(
+  (project) => project.slug === "media-international-communications",
+);
+
 const capabilityIcons = {
   ai: Bot,
   data: ChartNoAxesColumn,
@@ -376,6 +380,45 @@ export default function Home() {
             ) : null}
           </div>
         </AnimatedSection>
+
+        {mediaProject ? (
+          <AnimatedSection id="project-experience" className="space-y-10">
+            <SectionHeading
+              eyebrow="Project experience"
+              title={mediaProject.title}
+              description={mediaProject.summary}
+            />
+            <div className="grid gap-7 md:grid-cols-2">
+              <FadeInCard className="h-full rounded-[2rem] border border-black/10 bg-white/88 p-7 shadow-[0_28px_90px_rgba(0,0,0,0.12)] backdrop-blur-xl sm:p-8">
+                <div className="flex h-full flex-col">
+                  <div className="relative mb-7 aspect-[16/9] overflow-hidden rounded-[1.4rem] border border-black/5 bg-[#f5f5f7]">
+                    <Image
+                      src="/media-screenshots/reporter-hero.png"
+                      alt="On-location reporting setup"
+                      fill
+                      sizes="(min-width: 768px) 50vw, 100vw"
+                      className="object-cover"
+                    />
+                  </div>
+                  <p className="text-[11px] font-semibold tracking-[0.18em] text-[#0071e3]">
+                    {mediaProject.type}
+                  </p>
+                  <p className="mt-4 max-w-xl text-base leading-8 text-[#6e6e73]">
+                    {mediaProject.summary}
+                  </p>
+                  <div className="mt-auto pt-8">
+                    <Link
+                      href={`/projects/${mediaProject.slug}`}
+                      className="inline-flex min-h-11 items-center justify-center rounded-full bg-[#0071e3] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(0,113,227,0.24)] transition hover:bg-[#0077ed] active:scale-[0.97]"
+                    >
+                      View Details
+                    </Link>
+                  </div>
+                </div>
+              </FadeInCard>
+            </div>
+          </AnimatedSection>
+        ) : null}
 
         <AnimatedSection id="skills" className="space-y-10">
           <SectionHeading

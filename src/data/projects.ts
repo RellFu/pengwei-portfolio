@@ -453,6 +453,68 @@ export const featuredProjects: CaseStudyProject[] = [
     reflection:
       "This project further confirmed that building a RAG product isn't just about whether the answer reads smoothly—it's about whether the evidence holds up, whether it degrades gracefully on failure, and whether the evaluation can support continuous iteration.",
   },
+{
+    slug: "media-international-communications",
+    title: "Media, Content & Audience Growth",
+    type: "Media Operations / International Communications / Content Strategy",
+    summary:
+      "Worked across journalism, growth operations, and international social media, exploring how stories and products reach the right audiences. From reporting on AI to building content-led acquisition and platform-native communication.",
+    overview:
+      "Before moving into AI product internships, I worked on international content operations, English-language editorial production, and AI/technology research at media and communications organizations including The Paper, People's Daily New Media Center, and Hainan International Communication Center. This cluster is not the centerpiece of my U.S. PM narrative. Its role is to show that, alongside technical training and later AI product internships, I also bring audience insight, cross-cultural storytelling, and structured research skills from earlier media work. For U.S. applications targeting consumer products, creator tools, content platforms, or global-user roles, this experience strengthens the broader story of how I think about products that have to land with real users.",
+    problem:
+      "Pure technical or AI-product signals don't fully cover what consumer-product PM roles need. Companies like TikTok and other global To C products also value audience empathy, content judgment, cross-cultural communication, and operational awareness of distribution channels. This case study consolidates earlier media and communications work to show how those skills were developed alongside my AI product training.",
+    role:
+      "Across three organizations, I contributed to international content operations, English-language editorial production, and AI/technology research. This included producing and editing bilingual content for overseas social platforms, supporting English-language publishing workflows at People's Daily New Media Center's English app, and researching AI industry topics such as AIGC video tools, Chinese AI globalization, and AI compute infrastructure at The Paper.",
+    solution:
+      "I split this experience into three reinforcing workstreams. International content operations across overseas social platforms and English-language media channels. Bilingual editorial production and interview support for English-language publishing workflows. AI and technology research and topic synthesis. Together, these workstreams built a foundation in audience insight, cross-cultural communication, and structured research that complements my later AI product internships.",
+    capabilities: [
+      "Bilingual Content Production",
+      "International Communications",
+      "Cross-cultural Storytelling",
+      "AI/Technology Research",
+      "Editorial Workflow",
+      "Audience Insight",
+      "Content Operations",
+    ],
+    metrics: [
+      { label: "Languages produced in", value: "EN / ZH" },
+      { label: "Overseas platforms covered", value: "FB, X, WeChat" },
+      { label: "Organizations contributed to", value: "3" },
+      { label: "AI topic areas researched", value: "Multiple" },
+    ],
+    impact: [
+      "Produced and edited bilingual content for overseas-facing campaigns across Facebook, X/Twitter, and WeChat channels.",
+      "Supported English-language publishing workflows at People's Daily New Media Center's English app, including translation, editing, and interview preparation.",
+      "Researched AI industry topics including AIGC video tools, Chinese AI globalization, multimodal AI, AI compute infrastructure, and DeepSeek, and synthesized findings into structured briefs and interview outlines.",
+      "Contributed to international communications initiatives including Hainan International Communication Center outputs for cross-cultural audiences.",
+      "Built audience insight and editorial judgment that later informed consumer-product AI work.",
+    ],
+    architecture: [
+      {
+        title: "International Content Operations",
+        description:
+          "Produced and edited bilingual articles and videos for overseas social platforms, tracking audience engagement across campaigns.",
+      },
+      {
+        title: "Bilingual Editorial Production",
+        description:
+          "Supported English-language publishing workflows, including translation, editing, subtitles, and interview preparation for international communications projects.",
+      },
+      {
+        title: "AI & Technology Research",
+        description:
+          "Researched and synthesized AI industry topics into structured briefs, interview outlines, and reporting notes for technology journalism.",
+      },
+    ],
+    keyDecisions: [
+      "Treat earlier media work as a transferable-signal layer, not as a competing primary narrative.",
+      "Use confirmed organization names and documented outputs to keep the case study honest and verifiable.",
+      "Connect media experience to consumer-product PM outcomes rather than presenting it as standalone journalism.",
+    ],
+    reflection:
+      "This cluster taught me that media, communications, and product work share a common discipline: turning audience context into structured output that people actually engage with. Producing content for cross-cultural audiences, building interview outlines for ambiguous technical topics, and tracking engagement across platforms all trained the same instincts that later showed up in AI product work, where understanding user intent, structuring the workflow, and measuring outcomes are the whole game.",
+  },
+
 ];
 
 export const projectMap = Object.fromEntries(

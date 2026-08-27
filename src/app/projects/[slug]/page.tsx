@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { AlibabaAiQualityCaseStudy } from "@/components/alibaba-ai-quality-case-study";
 import { ByteDanceAiToolsCaseStudy } from "@/components/bytedance-ai-tools-case-study";
 import { CaseStudyPage } from "@/components/case-study-page";
+import { MediaCaseStudy } from "@/components/media-case-study";
 import { MerchantOnboardingCaseStudy } from "@/components/merchant-onboarding-case-study";
 import { featuredProjects, projectMap } from "@/data/projects";
 
@@ -52,6 +53,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   if (slug === "bytedance-ai-procurement-tools") {
     return <ByteDanceAiToolsCaseStudy project={project} />;
+  }
+
+  if (slug === "media-international-communications") {
+    return <MediaCaseStudy project={project} />;
   }
 
   return <CaseStudyPage project={project} />;
