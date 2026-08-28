@@ -84,14 +84,11 @@ const copy = {
     title: "Internships Building Vertical AI Products",
     description:
       "Three AI product problems: building a quality system for creative agents, redesigning an end-to-end merchant workflow, and shipping a portfolio of procurement tools.",
-    alibabaLens: "QUALITY SYSTEM",
     alibabaTitle: "Alibaba Creative AI Quality Loop",
     alibabaDescription: "Connected product analytics, layered Agent evaluation, and expert-workflow productization for a creative AI agent.",
-    didiLens: "END-TO-END WORKFLOW",
     didiTitle: "DiDi Merchant Onboarding Agent",
     didiDescription:
       "Rebuilt the merchant onboarding flow around WhatsApp and a multi-agent workflow.",
-    byteLens: "0→1 TOOL PORTFOLIO",
     byteTitle: "ByteDance Procurement AI",
     byteDescription:
       "Built three AI tools for product normalization, supplier comparison, and pricing consultation.",
@@ -256,7 +253,6 @@ export default function Home() {
             {alibabaProject ? (
               <FadeInCard className="h-full rounded-[2rem] border border-black/10 bg-white/88 p-7 shadow-[0_28px_90px_rgba(0,0,0,0.12)] backdrop-blur-xl sm:p-8">
                 <div className="flex h-full flex-col">
-                  <p className="text-[11px] font-semibold tracking-[0.18em] text-[#0071e3]">{t.projects.alibabaLens}</p>
                   <h3 className="mt-4 text-3xl font-semibold tracking-tight text-[#1d1d1f]">{t.projects.alibabaTitle}</h3>
                   <p className="mt-4 max-w-xl text-base leading-8 text-[#6e6e73]">{t.projects.alibabaDescription}</p>
                   <div className="mt-auto pt-8"><Link href={`/projects/${alibabaProject.slug}`} className="inline-flex min-h-11 items-center justify-center rounded-full bg-[#0071e3] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(0,113,227,0.24)] transition hover:bg-[#0077ed] active:scale-[0.97]">{t.projects.button}</Link></div>
@@ -266,7 +262,6 @@ export default function Home() {
             {merchantOnboardingProject ? (
               <FadeInCard delay={0.06} className="h-full rounded-[2rem] border border-black/10 bg-white/88 p-7 shadow-[0_28px_90px_rgba(0, 0, 0,0.12)] backdrop-blur-xl sm:p-8">
                 <div className="flex h-full flex-col">
-                  <p className="text-[11px] font-semibold tracking-[0.18em] text-[#0071e3]">{t.projects.didiLens}</p>
                   <h3 className="mt-4 text-3xl font-semibold tracking-tight text-[#1d1d1f]">
                     {t.projects.didiTitle}
                   </h3>
@@ -291,7 +286,6 @@ export default function Home() {
                 className="h-full rounded-[2rem] border border-black/10 bg-white/88 p-7 shadow-[0_28px_90px_rgba(0, 0, 0,0.12)] backdrop-blur-xl sm:p-8"
               >
                 <div className="flex h-full flex-col">
-                  <p className="text-[11px] font-semibold tracking-[0.18em] text-[#0071e3]">{t.projects.byteLens}</p>
                   <h3 className="mt-4 text-3xl font-semibold tracking-tight text-[#1d1d1f]">
                     {t.projects.byteTitle}
                   </h3>
