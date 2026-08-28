@@ -1,17 +1,13 @@
 "use client";
 
-import { useMemo } from "react";
 import {
   Bot,
-  ChartNoAxesColumn,
-  Code2,
   FlaskConical,
   GraduationCap,
   Heart,
   Mail,
   MessagesSquare,
   Smartphone,
-  Target,
 } from "lucide-react";
 import { AnimatedSection, FadeInCard } from "@/components/animated-section";
 import { WarmSurface } from "@/components/design-system";
@@ -39,13 +35,6 @@ const mediaProject = featuredProjects.find(
   (project) => project.slug === "media-international-communications",
 );
 
-const capabilityIcons = {
-  ai: Bot,
-  data: ChartNoAxesColumn,
-  engineering: Code2,
-  business: Target,
-} as const;
-
 const achievementIcons = {
   bot: Bot,
   phone: Smartphone,
@@ -64,7 +53,7 @@ const copy = {
       <span className="text-[#0071e3]">products</span>.
     </>
   ),
-  heroNav: ["Education", "Experience", "Capabilities", "Contact"],
+  heroNav: ["Education", "Internship", "Project", "Contact"],
   education: {
     eyebrow: "Education",
     title: "Strong Foundations in AI and Computer Science",
@@ -91,7 +80,7 @@ const copy = {
     ],
   },
   projects: {
-    eyebrow: "Experience",
+    eyebrow: "Internship",
     title: "Internships Building Vertical AI Products",
     description:
       "Three AI product problems: building a quality system for creative agents, redesigning an end-to-end merchant workflow, and shipping a portfolio of procurement tools.",
@@ -108,55 +97,6 @@ const copy = {
       "Built three AI tools for product normalization, supplier comparison, and pricing consultation.",
     button: "View Details",
   },
-  skills: {
-    eyebrow: "Capabilities",
-    title: "Cross-functional: Product, Engineering & Analytics",
-    description:
-      "Spanning agent design, RAG workflows, analytics, and product engineering, with the ability to turn business problems into AI solutions that can be launched, evaluated, and iterated.",
-    cards: [
-      {
-        key: "ai",
-        title: "AI Product & Agents",
-        items: [
-          "Multi-Agent Design",
-          "RAG Workflow",
-          "Prompt Guardrails",
-          "Agent Evaluation",
-          "Bad Case Review",
-          "Automated Monitoring",
-        ],
-      },
-      {
-        key: "data",
-        title: "Analytics & Evaluation",
-        items: [
-          "ETL Pipeline",
-          "Conversation Analysis",
-          "Metric Definition",
-          "Experiment Analysis",
-          "Gold Task Set",
-          "Latency Analysis",
-        ],
-      },
-      {
-        key: "engineering",
-        title: "Product Engineering",
-        items: ["Python", "SQL", "TypeScript", "Next.js", "FastAPI", "JSON Schema"],
-      },
-      {
-        key: "business",
-        title: "Business Delivery",
-        items: [
-          "Requirement Breakdown",
-          "Workflow Redesign",
-          "Cross-functional Collaboration",
-          "Post-launch Review",
-          "Cost Optimization",
-          "Efficiency Gains",
-        ],
-      },
-    ],
-  },
   contact: {
     eyebrow: "Contact",
     title: "Let's build great AI products together",
@@ -170,15 +110,6 @@ const achievementIconKeys = ["bot", "phone", "lab", "teach", "care", "language"]
 
 export default function Home() {
   const t = copy;
-
-  const capabilityCards = useMemo(
-    () =>
-      t.skills.cards.map((card) => ({
-        ...card,
-        icon: capabilityIcons[card.key],
-      })),
-    [t.skills.cards],
-  );
 
   return (
     <main className="relative overflow-hidden">
@@ -195,7 +126,7 @@ export default function Home() {
               {[
                 { href: "#education", label: t.heroNav[0] },
                 { href: "#internship", label: t.heroNav[1] },
-                { href: "#skills", label: t.heroNav[2] },
+                { href: "#project-experience", label: t.heroNav[2] },
                 { href: "#contact", label: t.heroNav[3] },
               ].map((item) => (
                 <a
@@ -384,7 +315,7 @@ export default function Home() {
         {mediaProject ? (
           <AnimatedSection id="project-experience" className="space-y-10">
             <SectionHeading
-              eyebrow="Project experience"
+              eyebrow="Project"
               title={mediaProject.title}
               description={mediaProject.summary}
             />
@@ -419,49 +350,6 @@ export default function Home() {
             </div>
           </AnimatedSection>
         ) : null}
-
-        <AnimatedSection id="skills" className="space-y-10">
-          <SectionHeading
-            eyebrow={t.skills.eyebrow}
-            title={t.skills.title}
-            description={t.skills.description}
-          />
-          <div className="grid gap-6 md:grid-cols-2">
-            {capabilityCards.map((card, index) => {
-              const Icon = card.icon;
-
-              return (
-                <FadeInCard
-                  key={card.title}
-                  delay={index * 0.06}
-                  className="h-full rounded-[2rem] border border-black/10 bg-white/88 p-6 shadow-[0_20px_70px_rgba(0, 0, 0,0.08)] backdrop-blur-xl sm:p-7"
-                >
-                  <div className="flex h-full flex-col">
-                    <div className="flex items-center gap-4">
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#f5f5f7] text-[#0071e3]">
-                        <Icon className="h-5 w-5" />
-                      </div>
-                      <h3 className="text-xl font-semibold tracking-tight text-[#1d1d1f]">
-                        {card.title}
-                      </h3>
-                    </div>
-
-                    <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
-                      {card.items.map((skill) => (
-                        <div
-                          key={skill}
-                          className="rounded-2xl border border-black/5 bg-[#f5f5f7]/45 px-3 py-2.5 text-center text-sm font-medium text-[#515154]"
-                        >
-                          {skill}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </FadeInCard>
-              );
-            })}
-          </div>
-        </AnimatedSection>
 
         <AnimatedSection id="contact" className="pb-8">
           <WarmSurface className="p-8 backdrop-blur-2xl md:p-10">
