@@ -253,7 +253,7 @@ export default function Home() {
             {alibabaProject ? (
               <FadeInCard className="h-full rounded-[2rem] border border-black/10 bg-white/88 p-7 shadow-[0_28px_90px_rgba(0,0,0,0.12)] backdrop-blur-xl sm:p-8">
                 <div className="flex h-full flex-col">
-                  <img src="/logos/alibaba.svg" alt="Alibaba" className="mt-4 h-8 w-auto max-w-[150px]" />
+                  <img src="/logos/alibaba.svg" alt="Alibaba" className="mt-4 h-10 w-auto" />
                   <h3 className="mt-3 whitespace-pre-line text-3xl font-semibold tracking-tight text-[#1d1d1f]">{t.projects.alibabaTitle}</h3>
                   <p className="mt-4 max-w-xl text-base leading-8 text-[#6e6e73]">{t.projects.alibabaDescription}</p>
                   <div className="mt-auto pt-8"><Link href={`/projects/${alibabaProject.slug}`} className="inline-flex min-h-11 items-center justify-center rounded-full bg-[#0071e3] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(0,113,227,0.24)] transition hover:bg-[#0077ed] active:scale-[0.97]">{t.projects.button}</Link></div>
@@ -263,7 +263,7 @@ export default function Home() {
             {merchantOnboardingProject ? (
               <FadeInCard delay={0.06} className="h-full rounded-[2rem] border border-black/10 bg-white/88 p-7 shadow-[0_28px_90px_rgba(0, 0, 0,0.12)] backdrop-blur-xl sm:p-8">
                 <div className="flex h-full flex-col">
-                  <img src="/logos/didi.svg" alt="DiDi" className="mt-4 h-8 w-auto max-w-[150px]" />
+                  <img src="/logos/didi.svg" alt="DiDi" className="mt-4 h-10 w-auto" />
                   <h3 className="mt-3 whitespace-pre-line text-3xl font-semibold tracking-tight text-[#1d1d1f]">
                     {t.projects.didiTitle}
                   </h3>
@@ -288,7 +288,7 @@ export default function Home() {
                 className="h-full rounded-[2rem] border border-black/10 bg-white/88 p-7 shadow-[0_28px_90px_rgba(0, 0, 0,0.12)] backdrop-blur-xl sm:p-8"
               >
                 <div className="flex h-full flex-col">
-                  <img src="/logos/bytedance.webp" alt="ByteDance" className="mt-4 h-8 w-auto max-w-[150px]" />
+                  <img src="/logos/bytedance.svg" alt="ByteDance" className="mt-4 h-10 w-auto" />
                   <h3 className="mt-3 whitespace-pre-line text-3xl font-semibold tracking-tight text-[#1d1d1f]">
                     {t.projects.byteTitle}
                   </h3>
