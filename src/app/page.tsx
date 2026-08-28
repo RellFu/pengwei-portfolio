@@ -17,7 +17,7 @@ import { AnimatedSection, FadeInCard } from "@/components/animated-section";
 import { WarmSurface } from "@/components/design-system";
 import { SectionHeading } from "@/components/section-heading";
 import { featuredProjects } from "@/data/projects";
-import headshotImage from "../../AIheadshot/headshot.png";
+import headshotImage from "../../AIheadshot/headshot-blue.png";
 import cucLogo from "../../school_logos/Communication_Univ_of_China_Logo.svg";
 import ucsdLogo from "../../school_logos/Seal_of_the_University_of_California,_San_Diego.svg";
 import Image from "next/image";
