@@ -48,7 +48,8 @@ const copy = {
     <>
       Hi, I&apos;m Pengwei Fu.
       <br />
-      I build reliable <span className="text-[#0071e3]">AI</span>{" "}
+      I build reliable <span className="text-[#0071e3]">AI</span>
+      <br />
       <span className="text-[#0071e3]">products</span>.
     </>
   ),
