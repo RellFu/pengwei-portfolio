@@ -345,7 +345,7 @@ function DefaultSection({ section }: DefaultSectionProps) {
 
       <div className="space-y-6">
         {section.problem ? (
-          <p className="max-w-3xl text-base leading-7 text-[#515154] md:text-lg md:leading-8">
+          <p className="max-w-none text-base leading-7 text-[#515154] md:text-lg md:leading-8">
             <span className="font-semibold text-[#1d1d1f]">Problem. </span>
             {section.problem}
           </p>
@@ -438,7 +438,7 @@ function GrowthCaseStudySection({ section }: { section: Section }) {
     <section ref={containerRef} className="space-y-8">
       <SectionHeader section={section} />
 
-      <p className="max-w-3xl text-base leading-7 text-[#6e6e73] md:text-lg md:leading-8">
+      <p className="max-w-none text-base leading-7 text-[#6e6e73] md:text-lg md:leading-8">
         {gc.intro}
       </p>
 
@@ -540,7 +540,7 @@ function OfficialMediaSection({ section }: { section: Section }) {
           {section.heading}
         </h2>
 
-        <p className="mt-5 max-w-2xl text-base leading-7 text-[#6e6e73] md:text-[17px] md:leading-8">
+        <p className="mt-5 max-w-none text-base leading-7 text-[#6e6e73] md:text-[17px] md:leading-8">
           {om.intro}
         </p>
       </div>
@@ -552,7 +552,7 @@ function OfficialMediaSection({ section }: { section: Section }) {
 
       {/* Screen 02: social media content display */}
       <div className="om-reveal">
-        <p className="max-w-2xl text-base leading-7 text-[#6e6e73] md:text-[17px] md:leading-8">
+        <p className="max-w-none text-base leading-7 text-[#6e6e73] md:text-[17px] md:leading-8">
           {om.socialBlock.description}
         </p>
 
@@ -925,12 +925,12 @@ function MediaPortfolioSection({ section }: { section: Section }) {
     <section className="space-y-8">
       <SectionHeader section={section} />
 
-      <p className="max-w-3xl text-base leading-7 text-[#6e6e73] md:text-lg md:leading-8">
+      <p className="max-w-none text-base leading-7 text-[#6e6e73] md:text-lg md:leading-8">
         {role}
       </p>
 
       {responsibilities ? (
-        <div className="max-w-3xl rounded-2xl border-l-2 border-[#0071e3] bg-[#f5f5f7]/60 px-5 py-4 text-[15px] leading-7 text-[#515154]">
+        <div className="max-w-none rounded-2xl border-l-2 border-[#0071e3] bg-[#f5f5f7]/60 px-5 py-4 text-[15px] leading-7 text-[#515154]">
           {responsibilities}
         </div>
       ) : null}

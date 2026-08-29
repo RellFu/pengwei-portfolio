@@ -2,15 +2,14 @@
 
 import {
   Bot,
+  BookOpen,
   FlaskConical,
   GraduationCap,
   Heart,
   Mail,
-  MessagesSquare,
-  Smartphone,
+  Trophy,
 } from "lucide-react";
 import { AnimatedSection, FadeInCard } from "@/components/animated-section";
-import { WarmSurface } from "@/components/design-system";
 import { SectionHeading } from "@/components/section-heading";
 import { featuredProjects } from "@/data/projects";
 import headshotImage from "../../AIheadshot/headshot-blue.png";
@@ -36,12 +35,12 @@ const mediaProject = featuredProjects.find(
 );
 
 const achievementIcons = {
+  trophy: Trophy,
   bot: Bot,
-  phone: Smartphone,
   lab: FlaskConical,
-  teach: GraduationCap,
+  book: BookOpen,
   care: Heart,
-  language: MessagesSquare,
+  grad: GraduationCap,
 } as const;
 
 const copy = {
@@ -56,9 +55,9 @@ const copy = {
   heroNav: ["Education", "Internship", "Project", "Contact"],
   education: {
     eyebrow: "Education",
-    title: "Strong Foundations in AI and Computer Science",
+    title: "Solid Foundations in Computer Science and AI",
     description:
-      "A strong AI and CS foundation, now focused on AI systems, intelligent products, and data-driven applications — continuing at UCSD.",
+      "Developed a strong technical foundation across computer science, machine learning, and AI through coursework and applied projects.",
     cucSchool: "Communication University of China",
     ucsdDegree: "M.S. in Computer Science and Engineering (CS75)",
     ucsdDescription: "Incoming M.S. student, Fall 2026.",
@@ -67,43 +66,65 @@ const copy = {
     cucDescription: (
       <>
         <strong className="font-semibold text-[#515154]">Key Coursework: </strong>
-        Machine Learning, Computer Vision, NLP, Deep Learning, AIGC, Software Engineering, Operating Systems, Databases, Computer Systems, and Intro to AI
+        Machine Learning, Deep Learning, Computer Vision, NLP, Generative AI, Software Engineering, Operating Systems, Databases, and Computer Systems
       </>
     ),
     achievements: [
-      "National Innovation Program — Digital Human Project",
-      "First Prize for an AI Health Assistant Product",
+      "Gold Award, National Innovation Project",
+      "National First Prize, AI Competition",
       "Research Assistant, Intelligent Media Lab",
       "Teaching Assistant, Computational Thinking",
       "AI Education Volunteer, UN She × Digital Future",
-      "IELTS 7.5",
+      "Beijing Outstanding Graduate",
     ],
   },
   projects: {
+    heading: "Cross-Disciplinary Projects",
+    subhead:
+      "Selected work spanning media, product thinking, and full-stack AI development, from audience growth to agentic applications.",
     eyebrow: "Internship",
-    title: "Internships Building Vertical AI Products",
+    title: "AI Products, From Infrastructure to Workflows",
     description:
-      "Three AI product problems: building a quality system for creative agents, redesigning an end-to-end merchant workflow, and shipping a portfolio of procurement tools.",
+      "Internship work spanning AI infrastructure, creative agents, merchant onboarding, and enterprise procurement.",
     alibabaTitle: "Screenwriting\nCo-Author Agent",
-    alibabaDescription: "Connected product analytics, layered Agent evaluation, and expert-workflow productization for a creative AI agent.",
+    alibabaDescription: "Made a screenwriting agent more reliable through reusable Skills, grounded knowledge, and systematic evaluation.",
     didiTitle: "Merchant\nOnboarding Agent",
     didiDescription:
-      "Rebuilt the merchant onboarding flow around WhatsApp and a multi-agent workflow.",
+      "Reworked merchant onboarding around a WhatsApp AI agent, replacing a long manual signup flow.",
     byteTitle: "Procurement\nAI Tools",
     byteDescription:
-      "Built three AI tools for product normalization, supplier comparison, and pricing consultation.",
+      "Delivered three procurement AI products: Talent Pricing Agent, SKU Matching Workflow, and Quote AI Summary.",
+    tencentTitle: "Edge AI Infrastructure\nAI Gateway",
+    tencentDescription:
+      "Designed EdgeOne AI Gateway capabilities that made model access faster, safer, and easier to manage.",
+    campusTitle: "New-Student Onboarding Agent",
+    campusDescription:
+      "Built a Python RAG support agent for incoming students with grounded citations, serving 1,000 students and up to 200 questions a day.",
+    campusUrl:
+      "https://github.com/cuchic-community-lab/campus-onboarding-copilot",
+    csvTitle: "Multi-Agent Data Analysis Platform",
+    csvDescription:
+      "Built a TypeScript dual-agent CSV analysis app with Claude Agent SDK and custom MCP tools, streaming cited charts.",
+    csvUrl: "https://github.com/RellFu/csv-analyze",
     button: "View Details",
   },
   contact: {
     eyebrow: "Contact",
     title: "Let's build great AI products together",
     description:
-      "I work on AI agents, intelligent workflows, and RAG. Happy to talk through case studies, new roles, or how applied AI gets from design to production.",
-    secondaryButton: "Get in Touch",
+      "Open to roles, internships, and project collaborations in AI and applied products. Happy to chat anytime.",
+    secondaryButton: "LinkedIn",
   },
 } as const;
 
-const achievementIconKeys = ["bot", "phone", "lab", "teach", "care", "language"] as const;
+const achievementIconKeys = [
+  "trophy",
+  "bot",
+  "lab",
+  "book",
+  "care",
+  "grad",
+] as const;
 
 export default function Home() {
   const t = copy;
@@ -112,8 +133,8 @@ export default function Home() {
     <main className="relative overflow-hidden">
       <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,#ffffff_0%,#f5f5f7_100%)]" />
 
-      <section className="mx-auto flex min-h-[720px] w-full max-w-6xl flex-col px-6 pb-10 pt-6 sm:px-8 lg:min-h-[760px] lg:px-12">
-        <div className="grid items-center gap-10 py-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(360px,0.85fr)] lg:gap-14 lg:py-16">
+      <section className="mx-auto flex min-h-[100svh] w-full max-w-6xl flex-col items-center justify-center px-6 pb-12 pt-6 sm:px-8 lg:px-12">
+        <div className="grid w-full items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(360px,0.85fr)] lg:gap-14">
           <AnimatedSection className="max-w-3xl">
             <h1 className="mt-6 max-w-4xl text-[2.55rem] font-semibold tracking-tight text-[#1d1d1f] sm:text-[3.05rem] md:text-[4.1rem] md:leading-[1.08]">
               {t.heroTitle}
@@ -249,21 +270,43 @@ export default function Home() {
             title={t.projects.title}
             description={t.projects.description}
           />
-          <div className="grid gap-7 xl:grid-cols-3">
+          <div className="grid gap-7 md:grid-cols-2">
+            <FadeInCard className="h-full rounded-[2rem] border border-black/10 bg-white/88 p-7 backdrop-blur-xl sm:p-8">
+              <div className="flex h-full flex-col items-start">
+                <img src="/logos/tencent.png" alt="Tencent" className="mt-4 block h-8 w-auto shrink-0 self-start" />
+                <h3 className="mt-3 whitespace-pre-line text-3xl font-semibold tracking-tight text-[#1d1d1f]">
+                  {t.projects.tencentTitle}
+                </h3>
+                <p className="mt-4 max-w-xl text-base leading-8 text-[#6e6e73]">
+                  {t.projects.tencentDescription}
+                </p>
+                <div className="mt-auto pt-8">
+                  <button
+                    type="button"
+                    aria-disabled="true"
+                    title="Case study coming soon"
+                    onClick={(e) => e.preventDefault()}
+                    className="inline-flex min-h-11 cursor-not-allowed items-center justify-center rounded-full bg-[#0071e3] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#0077ed] active:scale-[0.97]"
+                  >
+                    {t.projects.button}
+                  </button>
+                </div>
+              </div>
+            </FadeInCard>
             {alibabaProject ? (
-              <FadeInCard className="h-full rounded-[2rem] border border-black/10 bg-white/88 p-7 shadow-[0_28px_90px_rgba(0,0,0,0.12)] backdrop-blur-xl sm:p-8">
-                <div className="flex h-full flex-col">
-                  <img src="/logos/alibaba.svg" alt="Alibaba" className="mt-4 h-10 w-auto" />
+              <FadeInCard delay={0.06} className="h-full rounded-[2rem] border border-black/10 bg-white/88 p-7 backdrop-blur-xl sm:p-8">
+                <div className="flex h-full flex-col items-start">
+                  <img src="/logos/alibaba.svg" alt="Alibaba" className="mt-4 block h-8 w-auto shrink-0 self-start" />
                   <h3 className="mt-3 whitespace-pre-line text-3xl font-semibold tracking-tight text-[#1d1d1f]">{t.projects.alibabaTitle}</h3>
                   <p className="mt-4 max-w-xl text-base leading-8 text-[#6e6e73]">{t.projects.alibabaDescription}</p>
-                  <div className="mt-auto pt-8"><Link href={`/projects/${alibabaProject.slug}`} className="inline-flex min-h-11 items-center justify-center rounded-full bg-[#0071e3] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(0,113,227,0.24)] transition hover:bg-[#0077ed] active:scale-[0.97]">{t.projects.button}</Link></div>
+                  <div className="mt-auto pt-8"><Link href={`/projects/${alibabaProject.slug}`} className="inline-flex min-h-11 items-center justify-center rounded-full bg-[#0071e3] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#0077ed] active:scale-[0.97]">{t.projects.button}</Link></div>
                 </div>
               </FadeInCard>
             ) : null}
             {merchantOnboardingProject ? (
-              <FadeInCard delay={0.06} className="h-full rounded-[2rem] border border-black/10 bg-white/88 p-7 shadow-[0_28px_90px_rgba(0, 0, 0,0.12)] backdrop-blur-xl sm:p-8">
-                <div className="flex h-full flex-col">
-                  <img src="/logos/didi.svg" alt="DiDi" className="mt-4 h-10 w-auto" />
+              <FadeInCard delay={0.12} className="h-full rounded-[2rem] border border-black/10 bg-white/88 p-7 backdrop-blur-xl sm:p-8">
+                <div className="flex h-full flex-col items-start">
+                  <img src="/logos/didi.svg" alt="DiDi" className="mt-4 block h-8 w-auto shrink-0 self-start" />
                   <h3 className="mt-3 whitespace-pre-line text-3xl font-semibold tracking-tight text-[#1d1d1f]">
                     {t.projects.didiTitle}
                   </h3>
@@ -273,7 +316,7 @@ export default function Home() {
                   <div className="mt-auto pt-8">
                     <Link
                       href={`/projects/${merchantOnboardingProject.slug}`}
-                      className="inline-flex items-center justify-center rounded-full bg-[#0071e3] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(0, 113, 227,0.24)] transition hover:bg-[#0077ed] active:scale-[0.97]"
+                      className="inline-flex items-center justify-center rounded-full bg-[#0071e3] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#0077ed] active:scale-[0.97]"
                     >
                       {t.projects.button}
                     </Link>
@@ -284,11 +327,11 @@ export default function Home() {
 
             {byteDanceProject ? (
               <FadeInCard
-                delay={0.12}
-                className="h-full rounded-[2rem] border border-black/10 bg-white/88 p-7 shadow-[0_28px_90px_rgba(0, 0, 0,0.12)] backdrop-blur-xl sm:p-8"
+                delay={0.18}
+                className="h-full rounded-[2rem] border border-black/10 bg-white/88 p-7 backdrop-blur-xl sm:p-8"
               >
-                <div className="flex h-full flex-col">
-                  <img src="/logos/bytedance.svg" alt="ByteDance" className="mt-4 h-10 w-auto" />
+                <div className="flex h-full flex-col items-start">
+                  <img src="/logos/bytedance.svg" alt="ByteDance" className="mt-4 block h-8 w-auto shrink-0 self-start" />
                   <h3 className="mt-3 whitespace-pre-line text-3xl font-semibold tracking-tight text-[#1d1d1f]">
                     {t.projects.byteTitle}
                   </h3>
@@ -298,7 +341,7 @@ export default function Home() {
                   <div className="mt-auto pt-8">
                     <Link
                       href={`/projects/${byteDanceProject.slug}`}
-                      className="inline-flex items-center justify-center rounded-full bg-[#0071e3] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(0, 113, 227,0.24)] transition hover:bg-[#0077ed] active:scale-[0.97]"
+                      className="inline-flex items-center justify-center rounded-full bg-[#0071e3] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#0077ed] active:scale-[0.97]"
                     >
                       {t.projects.button}
                     </Link>
@@ -313,34 +356,67 @@ export default function Home() {
           <AnimatedSection id="project-experience" className="space-y-10">
             <SectionHeading
               eyebrow="Project"
-              title={mediaProject.title}
-              description={mediaProject.summary}
+              title={t.projects.heading}
+              description={t.projects.subhead}
             />
-            <div className="grid gap-7 md:grid-cols-2">
-              <FadeInCard className="h-full rounded-[2rem] border border-black/10 bg-white/88 p-7 shadow-[0_28px_90px_rgba(0,0,0,0.12)] backdrop-blur-xl sm:p-8">
-                <div className="flex h-full flex-col">
-                  <div className="relative mb-7 aspect-[16/9] overflow-hidden rounded-[1.4rem] border border-black/5 bg-[#f5f5f7]">
-                    <Image
-                      src="/media-screenshots/reporter-hero.png"
-                      alt="On-location reporting setup"
-                      fill
-                      sizes="(min-width: 768px) 50vw, 100vw"
-                      className="object-cover"
-                    />
-                  </div>
-                  <p className="text-[11px] font-semibold tracking-[0.18em] text-[#0071e3]">
-                    {mediaProject.type}
-                  </p>
+            <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+              <FadeInCard className="h-full rounded-[2rem] border border-black/10 bg-white/88 p-7 backdrop-blur-xl sm:p-8">
+                <div className="flex h-full flex-col items-start">
+                  <h3 className="whitespace-pre-line text-3xl font-semibold tracking-tight text-[#1d1d1f]">
+                    {mediaProject.title}
+                  </h3>
                   <p className="mt-4 max-w-xl text-base leading-8 text-[#6e6e73]">
                     {mediaProject.summary}
                   </p>
                   <div className="mt-auto pt-8">
                     <Link
                       href={`/projects/${mediaProject.slug}`}
-                      className="inline-flex min-h-11 items-center justify-center rounded-full bg-[#0071e3] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(0,113,227,0.24)] transition hover:bg-[#0077ed] active:scale-[0.97]"
+                      className="inline-flex min-h-11 items-center justify-center rounded-full bg-[#0071e3] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#0077ed] active:scale-[0.97]"
                     >
                       View Details
                     </Link>
+                  </div>
+                </div>
+              </FadeInCard>
+
+              <FadeInCard delay={0.06} className="h-full rounded-[2rem] border border-black/10 bg-white/88 p-7 backdrop-blur-xl sm:p-8">
+                <div className="flex h-full flex-col items-start">
+                  <h3 className="whitespace-pre-line text-3xl font-semibold tracking-tight text-[#1d1d1f]">
+                    {t.projects.campusTitle}
+                  </h3>
+                  <p className="mt-4 max-w-xl text-base leading-8 text-[#6e6e73]">
+                    {t.projects.campusDescription}
+                  </p>
+                  <div className="mt-auto pt-8">
+                    <a
+                      href={t.projects.campusUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex min-h-11 items-center justify-center rounded-full bg-[#0071e3] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#0077ed] active:scale-[0.97]"
+                    >
+                      {t.projects.button}
+                    </a>
+                  </div>
+                </div>
+              </FadeInCard>
+
+              <FadeInCard delay={0.12} className="h-full rounded-[2rem] border border-black/10 bg-white/88 p-7 backdrop-blur-xl sm:p-8">
+                <div className="flex h-full flex-col items-start">
+                  <h3 className="whitespace-pre-line text-3xl font-semibold tracking-tight text-[#1d1d1f]">
+                    {t.projects.csvTitle}
+                  </h3>
+                  <p className="mt-4 max-w-xl text-base leading-8 text-[#6e6e73]">
+                    {t.projects.csvDescription}
+                  </p>
+                  <div className="mt-auto pt-8">
+                    <a
+                      href={t.projects.csvUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex min-h-11 items-center justify-center rounded-full bg-[#0071e3] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#0077ed] active:scale-[0.97]"
+                    >
+                      {t.projects.button}
+                    </a>
                   </div>
                 </div>
               </FadeInCard>
@@ -349,32 +425,37 @@ export default function Home() {
         ) : null}
 
         <AnimatedSection id="contact" className="pb-8">
-          <WarmSurface className="p-8 backdrop-blur-2xl md:p-10">
-            <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
-              <div>
-                <SectionHeading
-                  eyebrow={t.contact.eyebrow}
-                  title={t.contact.title}
-                  description={t.contact.description}
-                />
-              </div>
-              <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-                <a
-                  href="mailto:rell_fu@outlook.com"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#0071e3] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#0077ed] active:scale-[0.97]"
-                >
-                  <Mail className="h-4 w-4" />
-                  rell_fu@outlook.com
-                </a>
-                <a
-                  href="mailto:rell_fu@outlook.com?subject=Portfolio%20Inquiry%20for%20Pengwei%20Fu"
-                  className="inline-flex items-center justify-center rounded-full border border-black/10 bg-white/75 px-6 py-3 text-sm font-semibold text-[#1d1d1f] transition hover:border-black/10 hover:bg-[#f5f5f7]"
-                >
-                  {t.contact.secondaryButton}
-                </a>
-              </div>
+          <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+            <div>
+              <SectionHeading
+                eyebrow={t.contact.eyebrow}
+                title={t.contact.title}
+                description={t.contact.description}
+              />
             </div>
-          </WarmSurface>
+            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+              <a
+                href="mailto:pengwei_fu@outlook.com"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#0071e3] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#0077ed] active:scale-[0.97]"
+              >
+                <Mail className="h-4 w-4" />
+                pengwei_fu@outlook.com
+              </a>
+              <a
+                href="https://www.linkedin.com/in/pengweifu/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#0071e3] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#0077ed] active:scale-[0.97]"
+              >
+                <img
+                  src="/logos/linkedin-white.svg"
+                  alt=""
+                  className="h-5 w-auto shrink-0"
+                />
+                {t.contact.secondaryButton}
+              </a>
+            </div>
+          </div>
         </AnimatedSection>
       </div>
     </main>

@@ -12,7 +12,7 @@ export function SectionHeading({
   description,
 }: SectionHeadingProps) {
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-none">
       <SectionLabel className="mb-4">{eyebrow}</SectionLabel>
       <h2 className="text-3xl font-semibold tracking-tight text-[#1d1d1f] md:text-4xl">
         {title}

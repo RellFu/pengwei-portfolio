@@ -455,10 +455,10 @@ export const featuredProjects: CaseStudyProject[] = [
   },
 {
     slug: "media-international-communications",
-    title: "Media, Content & Audience Growth",
+    title: "Media, Content & User Growth",
     type: "Media Operations / International Communications / Content Strategy",
     summary:
-      "Worked across journalism, growth operations, and international social media, exploring how stories and products reach the right audiences. From reporting on AI to building content-led acquisition and platform-native communication.",
+      "A collection of projects spanning journalism, social media operations, and content-led growth across newsrooms and digital platforms.",
     overview:
       "Before moving into AI product internships, I worked on international content operations, English-language editorial production, and AI/technology research at media and communications organizations including The Paper, People's Daily New Media Center, and Hainan International Communication Center. This cluster is not the centerpiece of my U.S. PM narrative. Its role is to show that, alongside technical training and later AI product internships, I also bring audience insight, cross-cultural storytelling, and structured research skills from earlier media work. For U.S. applications targeting consumer products, creator tools, content platforms, or global-user roles, this experience strengthens the broader story of how I think about products that have to land with real users.",
     problem:
