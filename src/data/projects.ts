@@ -175,7 +175,7 @@ export const featuredProjects: CaseStudyProject[] = [
       {
         title: "Post-signup conversion drop-off",
         description:
-          "Many merchants signed up but abandoned before completing document review, causing significant drop-off between registration and approval.",
+          "Many merchants signed up but abandoned before completing document review, resulting in a 37% post-signup drop-off.",
       },
     ],
     funnelSteps: [

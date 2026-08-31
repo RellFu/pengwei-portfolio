@@ -29,6 +29,14 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             idx = os.path.join(raw, "index.html")
             if os.path.isfile(idx):
                 return idx
+            # 目录没有 index.html：Next 16 export 会给每个 slug 同时生成
+            # /projects/<slug>.html 和 /projects/<slug>/（放 debug txt）。
+            # 此时把 clean URL 映射到同级 <slug>.html，避免目录列表。
+            bare = raw.rstrip("/")
+            if not os.path.splitext(bare)[1]:
+                html = bare + ".html"
+                if os.path.isfile(html):
+                    return html
 
         # 文件已存在，直接返回
         if os.path.exists(raw):
