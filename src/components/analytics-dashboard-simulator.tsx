@@ -8,22 +8,30 @@ import { provinceIntensity } from "./china-provinces-intensity";
 import {
   BarChart3,
   Bell,
+  Bookmark,
   Calendar,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  CircleStop,
+  Copy as CopyIcon,
   Filter,
   Home,
   LayoutGrid,
   ListFilter,
   Plus,
+  Quote,
   Settings,
+  Share2,
+  Sparkles,
   Star,
+  ThumbsDown,
+  ThumbsUp,
   Users,
 } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
 
-type BoardId = "overview" | "userProfile" | "productAnalysis";
+type BoardId = "overview" | "userProfile" | "productAnalysis" | "feedbackQuality";
 
 gsap.registerPlugin(useGSAP);
 
@@ -45,6 +53,7 @@ const sidebarSections = [
       { id: "overview", label: "Overview" },
       { id: "userProfile", label: "User Profile" },
       { id: "productAnalysis", label: "Product Analytics" },
+      { id: "feedbackQuality", label: "Feedback & Quality" },
     ],
   },
   {
@@ -407,6 +416,71 @@ const retentionAnalysisRows = [
   { date: "Fri 06-05", users: "163" },
 ];
 
+// ----- Feedback & Quality -----
+const feedbackKpis = [
+  { title: "Positive Feedback Rate", value: "48.6", unit: "%", change: "+4.2% vs last week", isUp: true },
+  { title: "Negative Feedback Rate", value: "7.8", unit: "%", change: "-1.3% vs last week", isUp: true },
+  { title: "Feedback-Engaged Runs", value: "3,842", unit: "", change: "+12.6% vs last week", isUp: true },
+  { title: "Users Giving Feedback", value: "1,126", unit: "", change: "+8.4% vs last week", isUp: true },
+] as const;
+
+const feedbackTrendDates = ["05-24", "05-25", "05-26", "05-27", "05-28", "05-29", "05-30", "05-31", "06-01", "06-02", "06-03", "06-04", "06-05", "06-06"];
+const feedbackTrendPositive = [42.1, 43.0, 44.2, 43.8, 45.1, 44.6, 45.8, 46.3, 46.0, 47.2, 47.8, 48.1, 48.3, 48.6];
+const feedbackTrendNegative = [9.8, 9.3, 9.0, 8.9, 8.4, 8.6, 8.2, 8.0, 8.4, 7.9, 7.6, 7.7, 7.8, 7.8];
+
+const positiveSignals = [
+  { name: "Like", value: 1284 },
+  { name: "Copy", value: 5932 },
+  { name: "Reference", value: 1476 },
+  { name: "Save to Memory", value: 612 },
+  { name: "Share", value: 344 },
+];
+
+const negativeSignals = [
+  { name: "Dislike", value: 428 },
+  { name: "Stop Generating", value: 219 },
+];
+
+const copyKpis = [
+  { title: "Total Copy Events", value: "5,932" },
+  { title: "Users Who Copied", value: "1,018" },
+  { title: "Copy Rate", value: "31.4%" },
+];
+
+const copyByEntryPoint = [
+  { name: "Message Action Bar", value: 1750, pct: "29.5%" },
+  { name: "Selection Toolbar", value: 1320, pct: "22.3%" },
+  { name: "Group Message", value: 840, pct: "14.2%" },
+  { name: "Code Block", value: 522, pct: "8.8%" },
+  { name: "Keyboard Shortcut", value: 620, pct: "10.5%" },
+  { name: "File Preview: View Mode", value: 510, pct: "8.6%" },
+  { name: "File Preview: Edit Mode", value: 370, pct: "6.2%" },
+];
+
+const referenceKpis = [
+  { title: "Total References", value: "1,476" },
+  { title: "Users Referencing", value: "486" },
+  { title: "Reference Rate", value: "9.7%" },
+];
+
+const referenceBySource = [
+  { name: "Whole Message", value: 932, pct: "63.1%" },
+  { name: "Selected Passage", value: 544, pct: "36.9%" },
+];
+
+const negativeFeedbackCards = [
+  { name: "Dislike", value: "428", unit: "events", note: "5.1% of eligible runs", trend: [11.2, 10.6, 10.1, 9.8, 9.4, 8.9, 8.5, 8.1, 7.8, 7.4, 6.9, 6.4, 5.8, 5.1] },
+  { name: "Stop Generating", value: "219", unit: "events", note: "2.7% of eligible runs", trend: [4.6, 4.3, 4.1, 3.9, 3.8, 3.6, 3.4, 3.3, 3.1, 3.0, 2.9, 2.8, 2.7, 2.7] },
+];
+
+const feedbackByModule = [
+  { module: "Quick Write", positive: 56.8, negative: 5.4 },
+  { module: "New Project", positive: 51.2, negative: 6.1 },
+  { module: "Knowledge Base", positive: 47.5, negative: 4.8 },
+  { module: "Performance Review", positive: 38.9, negative: 10.7 },
+  { module: "Mini Tools", positive: 44.6, negative: 7.2 },
+];
+
 // ----- Helpers -----
 function Sparkline({
   values,
@@ -639,6 +713,71 @@ function Donut({ data, total }: { data: { name: string; value: number }[]; total
       <text x={cx} y={cy - 2} textAnchor="middle" fontSize="10" fill="#86868b">Users</text>
       <text x={cx} y={cy + 10} textAnchor="middle" fontSize="12" fontWeight="600" fill="#1d1d1f">{total}</text>
     </svg>
+  );
+}
+
+function RankedBars({
+  items,
+  color = "#0071e3",
+}: {
+  items: { name: string; value: number; sub?: string }[];
+  color?: string;
+}) {
+  const max = Math.max(...items.map((i) => i.value), 1);
+  return (
+    <div className="space-y-2.5">
+      {items.map((item) => (
+        <div key={item.name}>
+          <div className="flex items-center justify-between text-[10px]">
+            <span className="text-[#515154]">{item.name}</span>
+            <span className="font-semibold tabular-nums text-[#1d1d1f]">
+              {item.value.toLocaleString()}
+              {item.sub && <span className="ml-1.5 font-normal text-[#86868b]">{item.sub}</span>}
+            </span>
+          </div>
+          <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-[#f0f0f2]">
+            <div
+              className="h-full rounded-full"
+              style={{ width: `${(item.value / max) * 100}%`, background: color }}
+            />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function SplitBar({
+  segments,
+}: {
+  segments: { name: string; value: number; pct: string; color: string }[];
+}) {
+  return (
+    <div>
+      <div className="flex h-3 w-full overflow-hidden rounded-full bg-[#f0f0f2]">
+        {segments.map((s) => (
+          <div key={s.name} style={{ width: s.pct, background: s.color }} />
+        ))}
+      </div>
+      <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[10px]">
+        {segments.map((s) => (
+          <span key={s.name} className="flex items-center gap-1.5">
+            <span className="h-2 w-2 shrink-0 rounded-sm" style={{ background: s.color }} />
+            <span className="text-[#515154]">{s.name}</span>
+            <span className="font-semibold tabular-nums text-[#1d1d1f]">{s.pct}</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Annotation({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="mt-3 flex items-start gap-1.5 text-[10px] italic text-[#86868b]">
+      <Quote className="mt-0.5 h-3 w-3 shrink-0 text-[#b0b0b5]" />
+      <span>{children}</span>
+    </p>
   );
 }
 
@@ -1156,6 +1295,181 @@ function ProductAnalysisView() {
   );
 }
 
+// ----- View: Feedback & Quality -----
+function FeedbackQualityView() {
+  const copyMax = Math.max(...copyByEntryPoint.map((c) => c.value));
+  return (
+    <div className="space-y-4 p-4 sm:p-5">
+      {/* 1. Feedback Overview */}
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {feedbackKpis.map((k) => (
+          <div key={k.title} data-board-item className="rounded-xl border border-black/8 bg-white p-4">
+            <p className="text-[11px] font-semibold text-[#1d1d1f]">{k.title}</p>
+            <p className="mt-0.5 text-[10px] text-[#86868b]">2026-06-06</p>
+            <p className="mt-3 text-2xl font-semibold tabular-nums tracking-[-0.04em] text-[#1d1d1f]">
+              {k.value}
+              {k.unit && <span className="ml-1 text-[11px] font-medium text-[#86868b]">{k.unit}</span>}
+            </p>
+            <div className="mt-2 flex items-center gap-1.5 text-[10px]">
+              <span className={`font-semibold ${k.isUp ? "text-[#207a4b]" : "text-[#b3251f]"}`}>{k.change}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div data-board-item className="rounded-xl border border-black/8 bg-white">
+        <CardHeader title="Feedback Trend" date="2026-06-06" />
+        <div className="px-4 pb-4">
+          <div className="flex items-center gap-4 text-[10px] text-[#515154]">
+            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#0071e3]" /> Positive Feedback Rate</span>
+            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-[#ff9500]" /> Negative Feedback Rate</span>
+          </div>
+          <div className="mt-3">
+            <MultiLineChart
+              dates={feedbackTrendDates}
+              series={[
+                { name: "positive", values: feedbackTrendPositive, color: "#0071e3" },
+                { name: "negative", values: feedbackTrendNegative, color: "#ff9500" },
+              ]}
+            />
+          </div>
+          <p className="mt-2 text-[9px] text-[#86868b]">Positive Feedback Rate = share of eligible Agent runs with at least one positive signal. Negative Feedback Rate = share with at least one negative signal.</p>
+        </div>
+      </div>
+
+      {/* 2. Signal Breakdown */}
+      <SectionCard title="Behavioral Signal Breakdown" icon={Sparkles}>
+        <div className="grid gap-4 lg:grid-cols-2">
+          <div>
+            <p className="mb-2 flex items-center gap-1.5 text-[10px] font-semibold text-[#207a4b]">
+              <ThumbsUp className="h-3 w-3" /> Positive Signals
+            </p>
+            <RankedBars items={positiveSignals} color="#0071e3" />
+          </div>
+          <div>
+            <p className="mb-2 flex items-center gap-1.5 text-[10px] font-semibold text-[#b3251f]">
+              <ThumbsDown className="h-3 w-3" /> Negative Signals
+            </p>
+            <RankedBars items={negativeSignals} color="#ff9500" />
+          </div>
+        </div>
+      </SectionCard>
+
+      {/* 3. Copy Analysis */}
+      <div data-board-item className="rounded-xl border border-black/8 bg-white">
+        <div className="flex items-center justify-between border-b border-black/8 px-4 py-2.5">
+          <div className="flex items-center gap-2">
+            <CopyIcon className="h-3.5 w-3.5 text-[#86868b]" />
+            <div>
+              <p className="text-[11px] font-semibold text-[#1d1d1f]">Copy Analysis</p>
+              <p className="text-[9px] text-[#86868b]">Where users reuse Agent-generated content</p>
+            </div>
+          </div>
+        </div>
+        <div className="p-4">
+          <div className="grid gap-3 sm:grid-cols-3">
+            {copyKpis.map((k) => (
+              <div key={k.title} className="rounded-lg border border-black/8 bg-[#fbfbfc] p-3">
+                <p className="text-[10px] text-[#86868b]">{k.title}</p>
+                <p className="mt-1.5 text-lg font-semibold tabular-nums text-[#1d1d1f]">{k.value}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 text-[10px] font-semibold text-[#1d1d1f]">Copy by Entry Point</p>
+          <div className="mt-2.5">
+            <RankedBars items={copyByEntryPoint.map((c) => ({ name: c.name, value: c.value, sub: c.pct }))} color="#0071e3" />
+          </div>
+          <Annotation>One event, seven sources. Same behavior (message_copy.click), different entry point.</Annotation>
+        </div>
+      </div>
+
+      {/* 4. Reference Analysis */}
+      <div data-board-item className="rounded-xl border border-black/8 bg-white">
+        <div className="flex items-center justify-between border-b border-black/8 px-4 py-2.5">
+          <div className="flex items-center gap-2">
+            <Bookmark className="h-3.5 w-3.5 text-[#86868b]" />
+            <div>
+              <p className="text-[11px] font-semibold text-[#1d1d1f]">Reference Analysis</p>
+              <p className="text-[9px] text-[#86868b]">How users carry Agent output into the next interaction</p>
+            </div>
+          </div>
+        </div>
+        <div className="p-4">
+          <div className="grid gap-3 sm:grid-cols-3">
+            {referenceKpis.map((k) => (
+              <div key={k.title} className="rounded-lg border border-black/8 bg-[#fbfbfc] p-3">
+                <p className="text-[10px] text-[#86868b]">{k.title}</p>
+                <p className="mt-1.5 text-lg font-semibold tabular-nums text-[#1d1d1f]">{k.value}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 text-[10px] font-semibold text-[#1d1d1f]">By Entry Point</p>
+          <div className="mt-2.5">
+            <SplitBar
+              segments={referenceBySource.map((r, i) => ({ ...r, color: i === 0 ? "#0071e3" : "#5ac8fa" }))}
+            />
+          </div>
+          <Annotation>Whole-message references indicate reuse of a complete response, while selected-passage references indicate more targeted reuse.</Annotation>
+        </div>
+      </div>
+
+      {/* 5. Negative Feedback */}
+      <SectionCard title="Negative Feedback" icon={CircleStop}>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {negativeFeedbackCards.map((c) => (
+            <div key={c.name} className="rounded-lg border border-black/8 bg-[#fbfbfc] p-3">
+              <div className="flex items-center justify-between">
+                <p className="flex items-center gap-1.5 text-[11px] font-semibold text-[#1d1d1f]">
+                  {c.name === "Dislike" ? <ThumbsDown className="h-3 w-3 text-[#b3251f]" /> : <CircleStop className="h-3 w-3 text-[#b3251f]" />}
+                  {c.name}
+                </p>
+              </div>
+              <p className="mt-2 text-xl font-semibold tabular-nums text-[#1d1d1f]">
+                {c.value} <span className="text-[10px] font-medium text-[#86868b]">{c.unit}</span>
+              </p>
+              <p className="text-[10px] text-[#86868b]">{c.note}</p>
+              <div className="mt-2">
+                <Sparkline values={c.trend} color="#ff3b30" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+
+      {/* 6. Feedback by Product Module */}
+      <div data-board-item className="rounded-xl border border-black/8 bg-white">
+        <CardHeader title="Feedback by Product Module" />
+        <div className="px-4 pb-4">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="text-[9px] font-semibold uppercase tracking-[0.06em] text-[#86868b]">
+                <th className="py-2 pr-2">Module</th>
+                <th className="py-2 pr-2 text-right">Positive Rate</th>
+                <th className="py-2 pr-2 text-right">Negative Rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              {feedbackByModule.map((row) => {
+                const flagged = row.module === "Performance Review";
+                return (
+                  <tr
+                    key={row.module}
+                    className={`border-t border-black/[0.04] text-[10px] ${flagged ? "bg-[#fff9f0]" : ""}`}
+                  >
+                    <td className="py-2 pr-2 text-[#1d1d1f]">{row.module}</td>
+                    <td className="py-2 pr-2 text-right tabular-nums text-[#207a4b]">{row.positive.toFixed(1)}%</td>
+                    <td className={`py-2 pr-2 text-right tabular-nums ${flagged ? "font-semibold text-[#b3251f]" : "text-[#b3251f]"}`}>{row.negative.toFixed(1)}%</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ProductTable({ data }: { data: { title: string; pageId: string; headers: string[]; rows: Record<string, string>[] } }) {
   return (
     <div data-board-item className="rounded-xl border border-black/8 bg-white">
@@ -1269,14 +1583,14 @@ function Sidebar({
             )}
             <div className="space-y-0.5">
               {section.items.map((item) => {
-                const isMainBoard = item.id === "overview" || item.id === "userProfile" || item.id === "productAnalysis";
+                const isMainBoard = item.id === "overview" || item.id === "userProfile" || item.id === "productAnalysis" || item.id === "feedbackQuality";
                 const isActive = view === item.id;
                 return (
                   <button
                     key={item.id}
                     type="button"
                     onClick={() => {
-                      if (item.id === "overview" || item.id === "userProfile" || item.id === "productAnalysis") {
+                      if (item.id === "overview" || item.id === "userProfile" || item.id === "productAnalysis" || item.id === "feedbackQuality") {
                         setView(item.id);
                       }
                     }}
@@ -1406,12 +1720,14 @@ export function AnalyticsDashboardSimulator() {
                   {view === "overview" && "Dashboards \u00b7 Overview"}
                   {view === "userProfile" && "User Profile"}
                   {view === "productAnalysis" && "Product Analytics"}
+                  {view === "feedbackQuality" && "Feedback & Quality"}
                 </p>
                 <span className="text-[#d2d2d7]">/</span>
                 <p className="text-[10px] text-[#86868b]">
                   {view === "overview" && "Traffic, stability, and conversion at a glance"}
                   {view === "userProfile" && "Behavior, retention, and geographic distribution"}
                   {view === "productAnalysis" && "DAU, session time, and rankings by module"}
+                  {view === "feedbackQuality" && "Behavioral signals on Agent output quality"}
                 </p>
               </div>
               <div className="flex items-center gap-3 text-[10px] text-[#515154]">
@@ -1425,6 +1741,7 @@ export function AnalyticsDashboardSimulator() {
               {view === "overview" && <OverviewView />}
               {view === "userProfile" && <UserProfileView />}
               {view === "productAnalysis" && <ProductAnalysisView />}
+              {view === "feedbackQuality" && <FeedbackQualityView />}
             </div>
           </main>
         </div>
