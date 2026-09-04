@@ -48,7 +48,7 @@ type DetailType = "script" | "report" | "characterBio" | "evaluatorReport" | nul
 type ProductScenarioId = "diagnose" | "bible" | "brief";
 type InspectorTab = "artifact" | "trace" | "knowledge" | "files";
 type CapabilityId = "context" | "skills" | "knowledge" | "action" | "orchestration";
-type EvalLayerId = "task" | "query" | "agent" | "skill" | "subagent";
+type EvalLayerId = "task" | "query" | "agent" | "subagent";
 type SignalGroupId = "like" | "copy" | "reference" | "memory" | "share" | "dislike" | "stop";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -124,7 +124,7 @@ const evalLayers = {
     name: "Query",
     scope: "Single-turn response",
     question: "Was this one turn a good response?",
-    drillPrompt: "Wrong orchestration, wrong memory, or wrong delegation?",
+    drillPrompt: "Was the failure in understanding or internal execution?",
     groups: [
       ["Intent understanding", ["Intent recognition accuracy", "Context linking accuracy across prior turns"]],
       ["Response strategy", ["Action choice, execute or ask back or decompose or refuse", "Granularity match against what the user asked for"]],
@@ -134,25 +134,13 @@ const evalLayers = {
   },
   agent: {
     name: "Agent",
-    scope: "Orchestration and memory",
-    question: "Did the Agent organize and schedule its own internal resources correctly?",
-    drillPrompt: "Wrong route, wrong parameters, or wrong execution?",
+    scope: "Memory, delegation, and capability calls",
+    question: "Did the Agent manage memory, delegation, and capability calls correctly?",
+    drillPrompt: "If work was delegated, inspect the sub-agent.",
     groups: [
       ["Memory strategy", ["Long-term memory, write decision accuracy, granularity, recall rate, precision, staleness handling, conflict resolution", "Short-term memory, context retention, decay detection, contradictory citations, window management", "Memory self-iteration, trigger timing, consolidation quality, eviction accuracy, post-iteration effect"]],
       ["Sub-agent orchestration", ["Delegation decision accuracy, whether the work should have been handed off at all", "Sub-agent selection accuracy and task description clarity", "Result integration quality and parallel utilization"]],
-      ["Call orchestration", ["Combination optimality, no redundant calls and nothing missing", "Sequence correctness against real dependencies", "Context handoff completeness between consecutive calls"]],
-    ],
-  },
-  skill: {
-    name: "Skill",
-    scope: "Trigger and execution",
-    question: "Should it have been called? Was it called correctly? Did the result hold up?",
-    drillPrompt: "If work was delegated, keep going down.",
-    groups: [
-      ["Routing decision", ["Trigger recall, of the cases that warranted it, how many fired", "Trigger precision, of the cases that fired, how many warranted it", "Skill selection accuracy once triggering was correct"]],
-      ["Parameter construction", ["Completeness of required parameters", "Value accuracy and schema compliance"]],
-      ["Execution result", ["Execution success rate and result correctness", "Result adoption rate, whether the Agent actually used what came back"]],
-      ["Call health", ["Per-call latency and token cost", "Redundant call rate, split into repeat calls and steps that contributed nothing", "Futile retry rate and result usefulness"]],
+      ["Skill / Tool calls", ["Routing and selection accuracy, parameter quality, execution correctness, call health, and result adoption"]],
     ],
   },
   subagent: {
@@ -170,7 +158,7 @@ const evalLayers = {
   },
 } as const;
 
-const evalLayerOrder: EvalLayerId[] = ["task", "query", "agent", "skill", "subagent"];
+const evalLayerOrder: EvalLayerId[] = ["task", "query", "agent", "subagent"];
 
 const signalGroups = [
   {
